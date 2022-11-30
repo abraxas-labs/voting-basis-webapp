@@ -1,0 +1,28 @@
+<vo-lib-dialog>
+  <h1 header translate>SECONDARY_ELECTION.CREATE</h1>
+
+  <div content class="form mr-3">
+    <bc-dropdown class="full-width"
+                 [label]="'SECONDARY_ELECTION.PRIMARY_ELECTION' | translate"
+                 [items]="primaryElections | keyvalue"
+                 [clearable]="false"
+                 [required]="true"
+                 displayExpr="value"
+                 valueExpr="key"
+                 [(value)]="secondaryElection.primaryElectionId"></bc-dropdown>
+    <bc-dropdown class="full-width"
+                 [label]="'SECONDARY_ELECTION.TYPE' | translate"
+                 [items]="electionTypes"
+                 [clearable]="false"
+                 [required]="true"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [(value)]="secondaryElection.type"></bc-dropdown>
+    <vo-lib-button-bar footer
+                    [canSave]="canSave"
+                    [sticky]="false"
+                    (save)="save()"
+                    [saveLabel]="'APP.NEXT' | translate"
+                    (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

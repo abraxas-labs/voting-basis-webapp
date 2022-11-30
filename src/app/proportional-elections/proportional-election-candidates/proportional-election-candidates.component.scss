@@ -1,0 +1,39 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+.cell-container {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flex {
+  display: flex;
+  justify-content: flex-end;
+
+  bc-spinner {
+    vertical-align: middle;
+    margin-right: 0.5rem;
+  }
+}
+
+.error {
+  color: $color-error;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mat-column-actions {
+  width: 3rem;
+}

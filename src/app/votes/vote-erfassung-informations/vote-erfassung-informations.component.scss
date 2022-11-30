@@ -1,0 +1,20 @@
+.dropdown-checkbox-container {
+  display: flex;
+
+  bc-dropdown {
+    flex: 1;
+    margin-right: 1rem;
+  }
+
+  bc-checkbox {
+    align-self: flex-end;
+  }
+}
+
+.ballot-numbers {
+  display: flex;
+}
+
+.review-procedure {
+  display: flex;
+}

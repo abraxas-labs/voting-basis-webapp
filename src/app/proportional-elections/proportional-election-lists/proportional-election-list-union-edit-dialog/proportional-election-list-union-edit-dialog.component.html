@@ -1,0 +1,25 @@
+<vo-lib-dialog>
+  <h1 header>
+    {{
+    !isNew
+      ? ('PROPORTIONAL_ELECTION.' + listUnionTitleType + '.EDIT' | translate)
+      : ('PROPORTIONAL_ELECTION.' + listUnionTitleType + '.NEW' | translate)
+    }}
+  </h1>
+
+  <div content class="form mr-3">
+    <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.LIST_UNION.DESCRIPTION' | translate"
+                  [maxlength]="255"
+                  [(value)]="data.description"
+                  [singleLanguageInput]="true"></app-translated-formfield>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                    [canSave]="canSave"
+                    [saving]="saving"
+                    [sticky]="false"
+                    (save)="save()"
+                    (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

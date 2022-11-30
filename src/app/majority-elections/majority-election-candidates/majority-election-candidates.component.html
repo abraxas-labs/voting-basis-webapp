@@ -1,0 +1,43 @@
+<bc-spinner class="block" *ngIf="loading; else candidateOverview"></bc-spinner>
+<ng-template #candidateOverview>
+  <h2 translate [translateParams]="{name: (currentMajorityElection?.shortDescription | getTranslation)}">
+    MAJORITY_ELECTION.CANDIDATE.TITLE_DESCRIPTION
+  </h2>
+  <div class="flex">
+    <bc-button variant="tertiary"
+               icon="plus"
+               [label]="'MAJORITY_ELECTION.CANDIDATE.NEW' | translate"
+               [disabled]="locked"
+               (buttonClick)="createCandidate()"></bc-button>
+    <bc-button *ngIf="currentMajorityElection"
+               variant="tertiary"
+               icon="download"
+               [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES' | translate"
+               [disabled]="locked"
+               (buttonClick)="importCandidates()"
+               class="ml-2"></bc-button>
+
+  </div>
+
+  <app-majority-election-candidate-list [candidates]="expandedCandidates"
+                                        [testingPhaseEnded]="testingPhaseEnded"
+                                        [locked]="locked"
+                                        (candidatesReordered)="reorderCandidates($event)"
+                                        (edit)="editCandidate($event)"
+                                        (delete)="deleteCandidate($event)"
+                                        class="mb-2">
+  </app-majority-election-candidate-list>
+
+  <app-secondary-majority-election-candidates *ngFor="let secondaryMajorityElection of secondaryElections"
+                                              [testingPhaseEnded]="testingPhaseEnded"
+                                              [secondaryMajorityElection]="secondaryMajorityElection">
+  </app-secondary-majority-election-candidates>
+
+  <app-majority-election-ballot-group-overview *ngIf="currentMajorityElection"
+                                               [testingPhaseEnded]="testingPhaseEnded"
+                                               [locked]="locked"
+                                               [loadBallotGroupsInitially]="loadDependencies"
+                                               [majorityElection]="currentMajorityElection"
+                                               [secondaryMajorityElections]="secondaryElections">
+  </app-majority-election-ballot-group-overview>
+</ng-template>

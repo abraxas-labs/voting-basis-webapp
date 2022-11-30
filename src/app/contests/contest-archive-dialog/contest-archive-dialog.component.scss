@@ -1,0 +1,11 @@
+div.buttons {
+  display: flex;
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  > :not(:first-child) {
+    margin-left: 0.5rem;
+  }
+}

@@ -1,0 +1,33 @@
+<h2 class="mb-0 mt-2" translate>COUNTING_CIRCLE.DETAIL.AUTHORITY_ADDRESS</h2>
+<bc-text
+  [label]="'COUNTING_CIRCLE.DETAIL.STREET' | translate"
+  [disabled]="disabled"
+  [(value)]="authority.street"
+></bc-text>
+
+<div class="full-width form-field">
+  <bc-text
+    class="flex-shrink-3"
+    [label]="'COUNTING_CIRCLE.DETAIL.ZIP' | translate"
+    [disabled]="disabled"
+    [(value)]="authority.zip"
+  ></bc-text>
+  <bc-text
+    class="ml-2"
+    [label]="'COUNTING_CIRCLE.DETAIL.CITY' | translate"
+    [disabled]="disabled"
+    [(value)]="authority.city"
+  ></bc-text>
+</div>
+<bc-text
+  [label]="'CONTACT_PERSON.PHONE' | translate"
+  type="phone"
+  [disabled]="disabled"
+  [(value)]="authority.phone"
+></bc-text>
+<bc-text
+  [label]="'CONTACT_PERSON.EMAIL' | translate"
+  type="email"
+  [disabled]="disabled"
+  [(value)]="authority.email"
+></bc-text>

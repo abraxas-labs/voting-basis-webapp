@@ -1,0 +1,61 @@
+div[left] {
+  min-width: 20rem;
+  padding-bottom: 5rem;
+}
+
+div[right] {
+  padding-bottom: 5rem;
+  min-width: 20rem;
+}
+
+::ng-deep .list-union-description span.main-list {
+  font-weight: bold;
+}
+
+div.buttons {
+  display: flex;
+  justify-content: flex-end;
+
+  > :not(:first-child) {
+    margin-left: 0.5rem;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+}
+
+// stylelint-disable-next-line
+.mat-column-orderNumber {
+  width: 15%;
+}
+
+// stylelint-disable-next-line
+.mat-column-shortDescription {
+  width: 20%;
+}
+
+// stylelint-disable-next-line
+.mat-column-blankRowCount {
+  width: 15%;
+}
+
+// stylelint-disable-next-line
+.mat-column-listUnionDescription {
+  width: 25%;
+}
+
+// stylelint-disable-next-line
+.mat-column-subListUnionDescription {
+  width: 25%;
+}
+
+.mat-column-actions {
+  width: 4rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}

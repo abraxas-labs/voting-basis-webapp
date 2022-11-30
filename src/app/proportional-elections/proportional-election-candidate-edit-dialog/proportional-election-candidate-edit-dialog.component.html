@@ -1,0 +1,92 @@
+<vo-lib-dialog>
+  <h1 header>{{!isNew ? ('PROPORTIONAL_ELECTION.CANDIDATE.EDIT' | translate) : ('PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate)}}</h1>
+
+  <div content class="form mr-3">
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NUMBER' | translate"
+             [required]="true"
+             [disabled]="testingPhaseEnded"
+             [(value)]="data.number"></bc-text>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.FIRST_NAME' | translate"
+             [required]="true"
+             [maxlength]="100"
+             [(value)]="data.firstName"></bc-text>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.LAST_NAME' | translate"
+             [required]="true"
+             [maxlength]="100"
+             [(value)]="data.lastName"></bc-text>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.POLITICAL_FIRST_NAME' | translate"
+             [placeholder]="data.firstName"
+             [maxlength]="100"
+             [(value)]="data.politicalFirstName"></bc-text>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.POLITICAL_LAST_NAME' | translate"
+             [placeholder]="data.lastName"
+             [maxlength]="100"
+             [(value)]="data.politicalLastName"></bc-text>
+
+    <bc-date [label]="'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate"
+             [required]="true"
+             [error]="!isDateOfBirthValid()"
+             [value]="data.dateOfBirth | date"
+             (valueChange)="dateOfBirth = $event"></bc-date>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH_YEAR' | translate"
+             [disabled]="true"
+             [value]="data.dateOfBirth.getFullYear().toString()"></bc-text>
+
+    <bc-dropdown class="full-width"
+                 [label]="'SEX_TYPE.TITLE' | translate"
+                 [items]="sexTypes"
+                 [clearable]="false"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [(value)]="data.sex"></bc-dropdown>
+
+    <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.CANDIDATE.OCCUPATION' | translate"
+                              [optional]="true"
+                              [maxlength]="250"
+                              [(value)]="data.occupation"
+                              [singleLanguageInput]="true"></app-translated-formfield>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.TITLE' | translate"
+             [maxlength]="50"
+             [(value)]="data.title"></bc-text>
+
+    <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.CANDIDATE.OCCUPATION_TITLE' | translate"
+                              [optional]="true"
+                              [maxlength]="250"
+                              [(value)]="data.occupationTitle"
+                              [singleLanguageInput]="true"></app-translated-formfield>
+
+    <bc-checkbox [(checked)]="data.incumbent" [label]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"></bc-checkbox>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate"
+             [(value)]="data.zipCode"></bc-text>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate"
+             [required]="true"
+             [(value)]="data.locality"></bc-text>
+
+    <bc-dropdown class="full-width"
+                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE.PARTY' | translate"
+                 [items]="parties"
+                 [clearable]="false"
+                 [required]="true"
+                 displayExpr="shortDescriptionTranslated"
+                 [disabled]="testingPhaseEnded"
+                 [(value)]="selectedParty"></bc-dropdown>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [canSave]="canSave"
+                       [saving]="saving"
+                       [sticky]="false"
+                       (save)="save()"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

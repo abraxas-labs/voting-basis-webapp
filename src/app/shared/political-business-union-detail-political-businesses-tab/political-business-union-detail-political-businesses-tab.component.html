@@ -1,0 +1,21 @@
+<bc-spinner class="block" *ngIf="loading; else showPoliticalBusinesses"></bc-spinner>
+<ng-template #showPoliticalBusinesses>
+  <bc-advanced-table class="w-full" [dataSource]="dataSource">
+    <ng-container bcColumnDef="politicalBusinessNumber">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS.NUMBER' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.politicalBusinessNumber }}</td>
+    </ng-container>
+    <ng-container bcColumnDef="shortDescription">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
+    </ng-container>
+    <ng-container bcColumnDef="domainOfInfluenceName">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.domainOfInfluence.name }}</td>
+    </ng-container>
+
+    <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+    <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+  </bc-advanced-table>
+</ng-template>
+<bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>

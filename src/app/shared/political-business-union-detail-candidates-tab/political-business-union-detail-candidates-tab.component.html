@@ -1,0 +1,47 @@
+<bc-spinner class="block" *ngIf="loading; else showCandidates"></bc-spinner>
+<ng-template #showCandidates>
+  <bc-advanced-table class="w-full" [dataSource]="dataSource">
+    <ng-container bcColumnDef="number">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.number }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="lastName">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.lastName }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="firstName">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.firstName }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="dateOfBirth">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.dateOfBirth | date }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="sex">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.SEX' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element">
+        <div class="cell-container">{{'SEX_TYPE.' + element.sex | translate}}</div>
+      </td>
+    </ng-container>
+    <ng-container bcColumnDef="title">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.TITLE' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.title }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="incumbent">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.INCUMBENT' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><bc-icon *ngIf="element.incumbent" icon="checkmark"></bc-icon></td>
+    </ng-container>
+    <ng-container bcColumnDef="zipCode">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.ZIP_CODE' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.zipCode }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="locality">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.locality }}</div></td>
+    </ng-container>
+
+    <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+    <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+  </bc-advanced-table>
+</ng-template>
+<bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>

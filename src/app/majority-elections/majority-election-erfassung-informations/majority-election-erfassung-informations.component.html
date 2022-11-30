@@ -1,0 +1,75 @@
+<div class="form">
+
+  <div class="dropdown-checkbox-container">
+    <bc-dropdown [label]="'MAJORITY_ELECTION.RESULT_ENTRY.TITLE' | translate"
+                 [disabled]="testingPhaseEnded"
+                 [items]="resultEntryChoices"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [(value)]="data.resultEntry"></bc-dropdown>
+    <bc-checkbox [(checked)]="data.enforceResultEntryForCountingCircles"
+                 [label]="'MAJORITY_ELECTION.ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES' | translate"
+                 [disabled]="locked"></bc-checkbox>
+  </div>
+
+  <ng-container *ngIf="data.resultEntry === resultEntryType.MAJORITY_ELECTION_RESULT_ENTRY_DETAILED">
+    <bc-number [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_SIZE' | translate"
+               [disabled]="testingPhaseEnded"
+               [(value)]="ballotBundleSize"></bc-number>
+    <bc-number [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_SAMPLE_SIZE' | translate"
+               [disabled]="testingPhaseEnded"
+               [max]="data.ballotBundleSize"
+               [(value)]="ballotBundleSampleSize"></bc-number>
+    <div class="flex-container">
+      <div>
+        <bc-label class="full-width" [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
+        <bc-checkbox class="mt-2 ml-2"
+                     [(checked)]="data.automaticBallotBundleNumberGeneration"
+                     [disabled]="testingPhaseEnded"
+                     [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.AUTOMATIC' | translate"
+                     (checkedChange)="refreshBallotNumberGenerationChoices()"></bc-checkbox>
+      </div>
+
+      <div>
+        <bc-label class="full-width" [label]="'MAJORITY_ELECTION.BALLOT_NUMBER_GENERATION.TITLE' | translate"></bc-label>
+        <bc-radio-button-group class="mt-2 ml-2"
+                               orientation="vertical"
+                               [items]="ballotNumberGenerationChoices"
+                               [(value)]="data.ballotNumberGeneration">
+        </bc-radio-button-group>
+      </div>
+    </div>
+
+    <div class="flex-container">
+      <div>
+        <bc-label class="full-width" [label]="'MAJORITY_ELECTION.AUTOMATIC_EMPTY_VOTE_COUNTING.TITLE' | translate"></bc-label>
+        <bc-radio-button-group class="mt-2 ml-2"
+                               orientation="vertical"
+                               [items]="automaticEmptyVoteCountingChoices"
+                               [(value)]="data.automaticEmptyVoteCounting"
+                               [disabled]="testingPhaseEnded">
+        </bc-radio-button-group>
+      </div>
+      <bc-checkbox class="mt-4 ml-2"
+                   [(checked)]="data.enforceEmptyVoteCountingForCountingCircles"
+                   [label]="'MAJORITY_ELECTION.ENFORCE_EMPTY_VOTE_COUNTING_FOR_COUNTING_CIRCLES' | translate"
+                   [disabled]="locked"></bc-checkbox>
+    </div>
+    <div class="flex-container">
+      <div>
+        <bc-label class="full-width" [label]="'MAJORITY_ELECTION.REVIEW_PROCEDURE.TITLE' | translate"></bc-label>
+        <bc-radio-button-group class="mt-2 ml-2"
+                               [items]="reviewProcedureChoices"
+                               orientation="vertical"
+                               [(value)]="data.reviewProcedure"
+                               [disabled]="testingPhaseEnded">
+        </bc-radio-button-group>
+      </div>
+      <bc-checkbox class="mt-4 ml-2"
+                   [(checked)]="data.enforceReviewProcedureForCountingCircles"
+                   [label]="'MAJORITY_ELECTION.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
+                   [disabled]="testingPhaseEnded"></bc-checkbox>
+    </div>
+  </ng-container>
+</div>

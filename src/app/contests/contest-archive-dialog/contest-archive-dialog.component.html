@@ -1,0 +1,23 @@
+<vo-lib-dialog [contentLoading]="false">
+  <h1 header>{{'CONTEST.ARCHIVE.TITLE' | translate}}</h1>
+
+  <div content class="form mb-2 mr-3">
+    <bc-date [label]="'CONTEST.ARCHIVE.TITLE_PER' | translate"
+                  [required]="true"
+                  [value]="archivePer | date"
+                  (valueChange)="archivePerString = $event"></bc-date>
+  </div>
+
+  <div footer class="mr-3 mt-2 buttons">
+    <bc-button [label]="'APP.CANCEL' | translate" (buttonClick)="cancel()"></bc-button>
+    <div class="spacer"></div>
+    <bc-button [label]="'CONTEST.ARCHIVE.ACTION_NOW' | translate" (buttonClick)="archivePer = undefined; save()"></bc-button>
+
+    <vo-lib-inline-spinner [loading]="saving">
+      <bc-button [label]="'CONTEST.ARCHIVE.ACTION_PER' | translate"
+                 (buttonClick)="save()"
+                 [disabled]="!archivePer || (archivePer | amIsBefore: now) || (archivePer | amIsBefore: contest.date)"
+                 variant="primary"></bc-button>
+    </vo-lib-inline-spinner>
+  </div>
+</vo-lib-dialog>

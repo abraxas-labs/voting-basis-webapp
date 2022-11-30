@@ -1,0 +1,925 @@
+{
+  "APP": {
+    "APPLICATION_TITLE": "VOTING Basis-Services",
+    "LOGOUT": "Logout",
+    "USER_PLACEHOLDER": "User",
+    "TENANT_PLACEHOLDER": "Mandant",
+    "TENANT_SWITCH": "Mandant wechseln",
+    "SEARCH": "Suchen",
+    "SAVED": "Gespeichert",
+    "DELETE": "Löschen",
+    "DELETED": "Gelöscht",
+    "MORE": "mehr",
+    "MENU_TOGGLE": "menu",
+    "BACK": "Zurück",
+    "NEXT": "Weiter",
+    "FINISH": "Abschliessen",
+    "CANCEL": "Abbrechen",
+    "OPTIONAL": "optional"
+  },
+  "ACTIONS": {
+    "EDIT": "Bearbeiten",
+    "DELETE": "Löschen",
+    "OPEN": "Öffnen",
+    "SAVE": "Speichern",
+    "ASSIGN": "Zuordnen",
+    "RENAME": "Umbenennen",
+    "EXPORT": "Exportieren",
+    "APPLY": "Übernehmen",
+    "CLOSE": "Schliessen"
+  },
+  "NAV": {
+    "DOMAIN_OF_INFLUENCE": "Wahlkreise",
+    "COUNTING_CIRCLE": "Auszählungskreise",
+    "VOTING_CONTEST": "Urnengänge",
+    "ACTIVITY": "Aktivitäten",
+    "CANTON_SETTINGS": "Kantonale Einstellungen"
+  },
+  "ERROR_MESSAGES": {
+    "NonUniqueCandidateNumberException": "Die Kandidaten/innen-Nummer ist bereits vergeben.",
+    "ContestWithExistingPoliticalBusinessesException": "Der Urnengang beinhaltet eingerichtete Geschäfte. Bitte löschen Sie zuerst die Geschäfte.",
+    "CountingCircleInScheduledMergeException": "Der Auszählungskreis befindet sich in einer Fusion und ist nicht bearbeitbar.",
+    "CountingCirclesInScheduledMergeException": "Einer der gewählten Auszählungskreise befindet sich in einer Fusion und ist nicht verwendbar.",
+    "CountingCircleMergerAlreadyActiveException": "Fusion der Auszählungskreise wurde bereits aktiviert und kann nicht mehr bearbeitet werden.",
+    "ContestSetAsPreviousContestException": "Der Urnengang wird als Vergleich für Plausibilisierungen verwendet und kann daher nicht gelöscht werden.",
+    "ContestInMergeSetAsPreviousContestException": "Ein Urnengang der für diesen Urnengang zusammengeführt wird, wird als Vergleich für Plausibilisierungen verwendet und kann daher nicht zusammengeführt werden.",
+    "MajorityElectionWithExistingSecondaryElectionsException": "Eine Wahl mit Nebenwahlen kann nicht gelöscht werden. Bitte zuerst sämtliche Nebenwahlen löschen."
+  },
+  "CONTACT_PERSON": {
+    "PHONE": "Telefon",
+    "EMAIL": "E-Mail",
+    "MOBILE_PHONE": "Mobile",
+    "FAMILY_NAME": "Name",
+    "FIRST_NAME": "Vorname",
+    "TITLE": "Kontaktperson"
+  },
+  "COUNTING_CIRCLE": {
+    "TITLE": "Auszählungskreise",
+    "NEW": "Auszählungskreis erstellen",
+    "CONFIRM_DELETE": "Sind Sie sicher, dass der Auszählungskreis gelöscht werden soll?",
+    "NAME": "Bezeichnung",
+    "BFS": "BFS-Nummer",
+    "CODE": "Code",
+    "SORT_NUMBER": "Sortierungsnummer",
+    "NAME_FOR_PROTOCOL": "Bezeichnung für Protokoll",
+    "AUTHORITY": "Behörde",
+    "DOMAIN_OF_INFLUENCE": {
+      "ASSIGNMENT": "Wahlkreis-Zuordnung",
+      "EMPTY": "Keine Wahlkreise zugeordnet"
+    },
+    "STATE": "Status",
+    "STATES": {
+      "1": "Aktiv",
+      "2": "Gelöscht",
+      "3": "Fusioniert"
+    },
+    "MODIFIED_ON": "Zuletzt geändert",
+    "DETAIL": {
+      "AUTHORITY": "zuständige Behörde",
+      "AUTHORITY_ADDRESS": "Adresse der zuständigen Behörde",
+      "STREET": "Strasse",
+      "ZIP": "PLZ",
+      "CITY": "Ort",
+      "CONTACT_PERSON_DURING_EVENT": "Vor und während der Abstimmung/Wahl",
+      "CONTACT_PERSON_AFTER_EVENT": "nach dem Schliessen des Wahlbüros",
+      "SAME_CONTACT_PERSON": "gleiche Kontaktdaten wie vor/während der Abstimmung/Wahl"
+    },
+    "MERGE": {
+      "TITLE": "Fusionen",
+      "DETAIL": {
+        "TITLE": "Fusionierte Auszählungskreise",
+        "NAME": "Bezeichnung",
+        "BFS": "BFS-Nummer",
+        "CODE": "Code",
+        "ACTIVE_FROM": "Fusion per",
+        "MERGED_COUNTING_CIRCLES": "Fusioniert aus",
+        "NO_DATA": "Keine Fusionen vorhanden…",
+        "NEW": "Fusion erstellen",
+        "CONFIRM_DELETE": "Sind Sie sicher, dass die Fusion gelöscht werden soll?"
+      },
+      "EDIT": {
+        "TITLE": "Fusion bearbeiten",
+        "TITLE_NEW": "Fusion auslösen",
+        "SELECT_STEP": "Auszählungskreise wählen",
+        "GENERAL_INFORMATIONS_STEP": "Allgemeine Angaben",
+        "SELECT": "Fusionierte Auszählungskreise wählen",
+        "SELECTED": "Zur Fusion markiert",
+        "COPY_FROM": "Datenübernahme"
+      }
+    }
+  },
+  "DOMAIN_OF_INFLUENCE": {
+    "TITLE": "Wahlkreise",
+    "NEW": "Wahlkreis erstellen",
+    "EDIT": "Wahlkreis bearbeiten",
+    "CONFIRM_DELETE": "Sind Sie sicher, dass der Wahlkreis gelöscht werden soll?",
+    "NAME": "Bezeichnung",
+    "SHORT_NAME": "Kurzbezeichnung",
+    "TYPE": "Geschäftsebene",
+    "CANTON": "Kanton",
+    "AUTHORITY": "Behörde",
+    "BFS": "BFS-Nummer",
+    "CODE": "Code",
+    "SORT_NUMBER": "Sortierungsnummer",
+    "NAME_FOR_PROTOCOL": "Bezeichnung für Protokoll",
+    "NO_DOMAIN_OF_INFLUENCE_SELECTED": "Kein Wahlkreis ausgewählt",
+    "COUNTING_CIRCLE": {
+      "ASSIGN": "Auszählungskreise zuordnen",
+      "ASSIGN_SELECTED": "Ausgewählte Auszählungskreise",
+      "ASSIGN_SELECTED_OVERVIEW": "Zugeordnete Auszählungskreise",
+      "INHERITED_OVERVIEW": "Hoch-aggregierte Auszählungskreise"
+    },
+    "TYPES": {
+      "1": "Bund",
+      "2": "Kanton",
+      "3": "Bezirk",
+      "4": "Gemeinde",
+      "5": "Stadtkreis",
+      "6": "Schulgemeinde",
+      "7": "Kirchgemeinde",
+      "8": "Ortsbürgergemeinde",
+      "9": "Korporation",
+      "10": "Andere"
+    },
+    "SHORT_TYPES": {
+      "1": "CH",
+      "2": "CT",
+      "3": "BZ",
+      "4": "MU",
+      "5": "SK",
+      "6": "SC",
+      "7": "KI",
+      "8": "OG",
+      "9": "KO",
+      "10": "AN"
+    },
+    "PARTY": {
+      "TITLE": "Parteien und andere Gruppierungen",
+      "NAME": "Bezeichnung",
+      "SHORT_DESCRIPTION": "Kürzel",
+      "ADD": "Partei oder andere Gruppierung hinzufügen...",
+      "NO_DATA": "Keine Parteien vorhanden...",
+      "NEW": "Partei erstellen",
+      "EDIT": "Partei bearbeiten"
+    },
+    "STIMMUNTERLAGEN": {
+      "TITLE": "Stimmunterlagen",
+      "RESPONSIBLE_FOR_VOTING_CARDS": "Wahlkreis generiert Stimmrechtsausweise",
+      "VOTING_CARD_SHIPPING_FRANKING": {
+        "1": "B1 Post",
+        "2": "B2 Post",
+        "3": "A Post",
+        "4": "GAS A Post",
+        "5": "GAS B Post",
+        "6": "ohne Frankatur"
+      },
+      "VOTING_CARD_SHIPPING_METHOD": {
+        "1": "Druck / Verpackung und Versand an Bürger",
+        "2": "Druck / Verpackung und Versand an Gemeinde",
+        "3": "Nur Druck und Versand an Gemeinde"
+      },
+      "VOTING_CARD_RETURN_ADDRESS": {
+        "TITLE": "Rücksendeadresse",
+        "ADDRESS_LINE_1": "Adresszeile 1",
+        "ADDRESS_LINE_2": "Adresszeile 2",
+        "STREET": "Strasse",
+        "ADDRESS_ADDITION": "Adresszusatz",
+        "ZIP_CODE": "PLZ",
+        "CITY": "Ort",
+        "COUNTRY": "Land"
+      },
+      "VOTING_CARD_PRINT_DATA": {
+        "TITLE": "Druckdatenangaben",
+        "SHIPPING_AWAY": "Versand Hinweg",
+        "SHIPPING_RETURN": "Versand Rückweg",
+        "SHIPPING_METHOD": "Versandart"
+      },
+      "PRINTING_CENTER": {
+        "TITLE": "Produktionszentrum",
+        "EXTERNAL": "Extern",
+        "EXTERNAL_EAI_MESSAGE_TYPE": "Meldungstyp"
+      },
+      "LOGO": {
+        "TITLE": "Logo",
+        "UPLOAD": {
+          "DRAG": "Logo hierher ziehen",
+          "OR": "oder…",
+          "CHOOSE_FILE": "Logo zum Hochladen auswählen",
+          "REMOVE": "Logo entfernen"
+        },
+        "ERRORS": {
+          "NON_ALLOWED_TYPE": "Nur png und svg Dateien sind erlaubt",
+          "SIZE_LIMIT": "Das Logo ist zu gross. Es sind max. 3MB erlaubt"
+        },
+        "PREVIEW": {
+          "ALT": "Logo von {{name}}"
+        },
+        "NO_LOGO": "Kein Logo vorhanden"
+      }
+    },
+    "AUSMITTLUNG": {
+      "TITLE": "Ausmittlung",
+      "EXPORT_CONFIGURATION": {
+        "TITLE": "Schnittstellen",
+        "DESCRIPTION": "Bezeichnung",
+        "EAI_MESSAGE_TYPE": "Meldungstyp",
+        "ASSIGN_OPEN": "Exports zuordnen…",
+        "ASSIGN": "Exports zuordnen",
+        "ADD": "Schnittstelle hinzufügen…",
+        "NO_DATA": "Keine Schnittstellen definiert…"
+      },
+      "PLAUSIBILISATION_CONFIGURATION": {
+        "TITLE": "Plausibilisierungs-Cockpit",
+        "THRESHOLD": "Schwellenwert in %",
+        "COMPARISON_VOTER_PARTICIPATION_CONFIGURATION": {
+          "TITLE": "Vergleich der Stimmbeteiligung zur Vorlage mit der höchsten Stimmbeteiligung:",
+          "MAIN_LEVEL": "Hauptebene",
+          "COMPARISON_LEVEL": "Vergleichsebene",
+          "ADD": "Vergleich hinzufügen...",
+          "REMOVE": "entfernen"
+        },
+        "COMPARISON_COUNT_OF_VOTERS_CONFIGURATION": {
+          "TITLE": "Vergleich der Anzahl Stimmberechtigten zum vorhergehenden Urnengang (Schwellenwerte in %):",
+          "ASSIGN": "Auszählungskreise einer Kategorie zuordnen...",
+          "CATEGORY": "Kategorie",
+          "CATEGORIES": {
+            "1": "Kategorie A",
+            "2": "Kategorie B",
+            "3": "Kategorie C"
+          },
+          "DIALOG_TITLE": "Auszählungskreise einer Kategorie zuordnen"
+        },
+        "COMPARISON_VOTING_CHANNEL_CONFIGURATION": {
+          "TITLE": "Verteilung der Stimmkanäle verglichen mit dem letzten Urnengang pro Auszählungskreis (Schwellenwerte in %):"
+        },
+        "COMPARISON_VALID_VOTING_CARDS_WITH_ACCOUNTED_BALLOTS_THRESHOLD_PERCENT": {
+          "TITLE": "Überprüfung der relativen Differenz der gültigen Stimmrechtsausweise mit der Anzahl gültiger Stimmzettel (Schwellenwert in %):"
+        }
+      }
+    }
+  },
+  "CONTEST": {
+    "TITLE": "Urnengänge",
+    "NEW": "Urnengang hinzufügen",
+    "EDIT": "Urnengang bearbeiten",
+    "CONFIRM_DELETE": "Sind Sie sicher, dass der Urnengang gelöscht werden soll?",
+    "PAST_CONTESTS": "Vergangene Urnengänge",
+    "ARCHIVED_CONTESTS": "Archivierte Urnengänge",
+    "DATE": "Datum",
+    "POLITICAL_BUSINESSES": "Erfasste Geschäfte",
+    "CONTEST_DATE": "Abstimmungstermin",
+    "PRECONFIGURED_DATE": "Blanko-Abstimmungstermin",
+    "OWN_CONTEST": "Durch meine Behörde verwaltet",
+    "OWNER": "Zuständige Behörde",
+    "CREATE_FROM_PRECONFIGURED_DATE": "Urnengang eröffnen",
+    "CUSTOM_DATE": "Anderer Abstimmungstermin",
+    "DESCRIPTION": "Bezeichnung",
+    "END_OF_TESTING_PHASE": "Testphase bis",
+    "CHOOSE_CUSTOM_DATE": "anderen Termin auswählen",
+    "DOMAIN_OF_INFLUENCE": "Wahlkreis auf der höchsten Hierarchiestufe, auf der Geschäfte stattfinden (wird benötigt, um Abhängigkeiten zu anderen Urnengängen zu prüfen):",
+    "E_VOTING": "E-Voting",
+    "E_VOTING_FROM": "E-Voting Zeitraum von",
+    "E_VOTING_TO": "E-Voting Zeitraum bis",
+    "AVAILABILITY": "Urnengang-Verfügbarkeit",
+    "ALREADY_EXISTS": "Es findet bereits ein Urnengang an diesem Termin statt!",
+    "CLOSE_TO_OTHER_CONTEST_DATE_QUESTION": "Es findet bereits ein Urnengang in dieser Zeitspanne statt (4 Wochen vor und danach)! Das Wahl- und Abstimmungsmaterial könnte sich überschneiden.",
+    "CLOSE_TO_OTHER_CONTEST_DATE_CONFIRMATION": "Trotzdem erstellen",
+    "SAME_AS_PRE_CONFIGURED_DATE_QUESTION": "An diesem Termin ist ein Blanko-Abstimmungstermin hinterlegt.",
+    "SAME_AS_PRE_CONFIGURED_DATE_CONFIRMATION": "Blanko-Abstimmungstermin übernehmen",
+    "EXISTS_ON_CHILD_TENANT_QUESTION": "An diesem Datum besteht bereits ein Urnengang auf einer abhängigen, untergeordneten Geschäftsebene.",
+    "EXISTS_ON_CHILD_TENANT_CONFIRMATION": "Urnengang übernehmen und Geschäfte zusammenführen",
+    "POLITICAL_BUSINESS_UNION_MANAGE": "Geschäftsverbindungen verwalten",
+    "DETAIL": {
+      "FROM": "Urnengang vom "
+    },
+    "ARCHIVE": {
+      "ACTION": "Archivieren",
+      "ACTION_NOW": "Jetzt archivieren",
+      "ACTION_PER": "Archivierung planen",
+      "TITLE": "Urnengang archivieren",
+      "TITLE_PER": "Archivieren per",
+      "DONE": "Urnengang archiviert",
+      "DONE_PER": "Archivierung geplant"
+    },
+    "PAST_UNLOCK": {
+      "ACTION": "Entsperren",
+      "TITLE": "Urnengang entsperren?",
+      "DESCRIPTION": "Der Urnengang wurde am {{date}} um 23.59 Uhr für die Erfassung gesperrt. Zu diesem Zeitpunkt wurde der Signaturprozess ausgesetzt/beendet. Damit die Nachvollziehbarkeit gewährleistet ist, muss der Urnengang aktiv freigegeben werden. Möchten Sie den Urnengang entsperren und den Signaturprozess erneut bis heute um 23.59 Uhr starten?",
+      "SAVE": "Urnengang entsperren"
+    },
+    "COUNTING_CIRCLES": {
+      "DESCRIPTION": "Bezeichnung",
+      "E_VOTING": "E-Voting"
+    },
+    "PREVIOUS_CONTEST": "Urnengang zum Vergleich von Plausibilisierungen",
+    "STATE": "Status",
+    "STATES": {
+      "0": "",
+      "1": "Testphase",
+      "2": "Aktiv",
+      "3": "Vergangen (Gesperrt)",
+      "4": "Vergangen (Entsperrt)",
+      "5": "Archiviert"
+    }
+  },
+  "POLITICAL_BUSINESS": {
+    "NEW": "Geschäft hinzufügen",
+    "VOTE": "Abstimmung",
+    "MAJORITY_ELECTION": "Majorzwahl",
+    "PROPORTIONAL_ELECTION": "Proporzwahl",
+    "SECONDARY_ELECTION": "Nebenwahl",
+    "NUMBER": "Geschäfts-Nr.",
+    "SHORT_DESCRIPTION": "Kurzbezeichnung",
+    "OFFICIAL_DESCRIPTION": "Offizielle Bezeichnung",
+    "INTERNAL_DESCRIPTION": "Spaltentitel (Protokoll)",
+    "DOMAIN_OF_INFLUENCE": "Wahlkreis",
+    "DOMAIN_OF_INFLUENCE_TYPE": "Geschäftsebene",
+    "REPORT_LEVEL": "Reporting-Ebene (Zwischensummierung auf Protokoll)",
+    "OWN_POLITICAL_BUSINESS": "Durch meine Behörde verwaltet",
+    "OWNER": "Zuständige Behörde",
+    "CONFIRM_DELETE": "Sind Sie sicher, dass das Geschäft gelöscht werden soll?",
+    "TYPE": {
+      "TITLE": "Geschäftstyp",
+      "1": "Abstimmung",
+      "2": "Majorzwahl",
+      "3": "Proporzwahl",
+      "4": "Majorzwahl"
+    },
+    "SWISS_ABROAD_VOTING_RIGHT": {
+      "TITLE": "Auslandschweizer",
+      "TYPES": {
+        "1": "Stimmberechtigt, als separater Auszählungskreis geführt",
+        "2": "Stimmberechtigt, auf jedem Auszählungskreis geführt",
+        "3": "Nicht stimmberechtigt"
+      }
+    },
+    "GENERAL_INFORMATION": "Allgemeine Angaben",
+    "ENABLE_TITLE": "Zur Ergebniserfassung freigeben",
+    "RESULT_ENTRY_INFORMATION": "Erfassungsweise"
+  },
+  "POLITICAL_BUSINESS_UNION": {
+    "TITLE": "Geschäftsverbindungen",
+    "ADD": "Geschäftsverbindungen hinzufügen",
+    "ASSIGN": "Geschäfte zuordnen",
+    "DESCRIPTION": "Bezeichnung",
+    "TYPE": "Geschäftstyp",
+    "NEW": "Geschäftsverbindung erstellen",
+    "EDIT": "Geschäftsverbindung umbenennen",
+    "OWN_POLITICAL_BUSINESS_UNION": "Durch meine Behörde verwaltet",
+    "CONFIRM_DELETE": "Diese Geschäftsverbindung wirklich löschen?",
+    "TYPES": {
+      "1": "Proporzwahl",
+      "2": "Majorzwahl"
+    },
+    "POLITICAL_BUSINESSES": {
+      "ASSIGN": "Geschäfte zuordnen",
+      "SELECTED": "Ausgewählte Geschäfte",
+      "NUMBER": "Geschäfts-Nr.",
+      "SHORT_DESCRIPTION": "Kurzbezeichnung"
+    },
+    "DETAIL": {
+      "TITLE": "Zugeordnete Geschäfte",
+      "POLITICAL_BUSINESSES": "Geschäfte",
+      "CANDIDATES": "Kandidierende",
+      "LISTS": "Listen"
+    }
+  },
+  "PROPORTIONAL_ELECTION_UNION": {
+    "UNION_LIST": {
+      "ORDER_NUMBER": "Listen-Nr.",
+      "SHORT_DESCRIPTION": "Kurzbezeichnung",
+      "POLITICAL_BUSINESS_NUMBERS": "Zugewiesen zu (Geschäfts-Nr.)",
+      "LIST_COUNT": "Anzahl Listen"
+    }
+  },
+  "VOTE": {
+    "NEW": "Abstimmung hinzufügen",
+    "EDIT": "Abstimmung bearbeiten",
+    "RESULT_ALGORITHM": {
+      "TITLE": "Berechnungsverfahren",
+      "TYPES": {
+        "1": "Mehrheit der Stimmenden",
+        "2": "Einstimmigkeit aller beteiligten Auszählungskreise",
+        "3": "Mehrheit aller beteiligten Auszählungskreise"
+      }
+    },
+    "BALLOT": {
+      "TITLE": "Vorlage"
+    },
+    "BALLOT_TYPE": {
+      "TITLE": "Abstimmungstyp",
+      "TYPES": {
+        "1": "Einfache Vorlage",
+        "2": "Varianten-Vorlage"
+      }
+    },
+    "QUESTION": {
+      "TITLE_STANDARD" : "Frage",
+      "TITLE_VARIANT_FIRST" : "Frage 1",
+      "TITLE_VARIANT" : "Frage {{number}} (Gegenvorschlag / Variante {{number}})",
+      "ADD": "weitere Frage hinzufügen"
+    },
+    "TIE_BREAK_QUESTION": {
+      "TITLE": "Stichfrage(n)",
+      "SINGLE_TITLE": "Stichfrage {{number}} (Frage {{question1Number}} / Frage {{question2Number}})",
+      "HAS_TIE_BREAK_QUESTIONS": "Vorlage mit Stichfrage(n)"
+    },
+    "RESULT_ENTRY": {
+      "TITLE": "Erfassungsweise",
+      "TYPES": {
+        "1": "Endresultate (Die Resultate werden direkt von den Wahlverantwortlichen erfasst)",
+        "2": "Detailerfassung (Bundweise Erfassung einzelner Stimmzettel durch mehrere Erfasserinnen und Erfasser)"
+      }
+    },
+    "ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen",
+    "BALLOT_BUNDLE_SAMPLE_SIZE_PERCENT": "Stichprobengrösse in Prozent",
+    "BALLOT_BUNDLE_NUMBER_GENERATION": {
+      "TITLE": "Vergabe Bundnummer",
+      "AUTOMATIC": "Automatisch",
+      "MANUAL": "Manuell"
+    },
+    "REVIEW_PROCEDURE": {
+      "TITLE": "Erfassungsweise (Kontrolle)",
+      "TYPES": {
+        "1": "Elektronisch",
+        "2": "Physisch"
+      }
+    },
+    "ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+  },
+  "SEX_TYPE": {
+    "TITLE": "Geschlecht",
+    "1": "männlich",
+    "2": "weiblich",
+    "3": "unbestimmt"
+  },
+  "PROPORTIONAL_ELECTION": {
+    "NEW": "Proporzwahl hinzufügen",
+    "EDIT": "Proporzwahl bearbeiten",
+    "NUMBER_OF_MANDATES": "Anzahl Sitze",
+    "BALLOT_BUNDLE_SIZE": "Bundgrösse",
+    "BALLOT_BUNDLE_SAMPLE_SIZE": "Stichprobengrösse",
+    "MANDATE_ALGORITHM": {
+      "TITLE": "Sitzverteilung",
+      "TYPES": {
+        "1": "Berechnung nach Hagenbach-Bischoff",
+        "2": "Doppelter Pukelsheim (5%-Quorum (X-Wahlkreise))",
+        "3": "Doppelter Pukelsheim (0%-Quorum (1-Wahlkreise))"
+      }
+    },
+    "AUTOMATIC_EMPTY_VOTE_COUNTING": {
+      "TITLE": "Erfassung leere Zeilen",
+      "AUTOMATIC": "Automatisch",
+      "MANUAL": "Manuell"
+    },
+    "ENFORCE_EMPTY_VOTE_COUNTING_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen",
+    "BALLOT_BUNDLE_NUMBER_GENERATION": {
+      "TITLE": "Vergabe Bundnummer",
+      "AUTOMATIC": "Automatisch"
+    },
+    "BALLOT_NUMBER_GENERATION": {
+      "TITLE": "Vergabe Wahlzettelnummer",
+      "TYPES": {
+        "1": "Neubeginn bei jedem Bund (z.B. 1-25)",
+        "2": "Fortlaufend über alle Bunde (z.B. 1-25, 26-50, 51-75, …)"
+      }
+    },
+    "LIST_STEP": "Kandidierende & Listen",
+    "LIST": {
+      "TITLE": "Listen",
+      "NEW": "Liste hinzufügen",
+      "EDIT": "Liste bearbeiten",
+      "NO_LIST_SELECTED": "Keine Liste ausgewählt",
+      "ORDER_NUMBER": "Listennummer",
+      "DESCRIPTION": "Bezeichnung",
+      "SHORT_DESCRIPTION": "Kurzbezeichnung",
+      "BLANK_ROW_COUNT": "Leere Zeilen",
+      "CONFIRM_DELETE": "Diese Liste wirklich löschen?"
+    },
+    "LIST_UNION": {
+      "TITLE": "Listenverbindungen",
+      "DESCRIPTION": "Bezeichnung",
+      "NUMBER": "LV-Nr",
+      "LIST_ENUMERATION": "Listenverbindung",
+      "SUB_LIST_UNION_ENUMERATION": "Unterlisten",
+      "ADD": "Listenverbindung hinzufügen",
+      "NEW": "Listenverbindung erstellen",
+      "EDIT": "Listenverbindung umbenennen",
+      "MANAGE": "Listenverbindungen verwalten",
+      "CONFIRM_DELETE": "Diese Listenverbindung wirklich löschen?",
+      "LISTS": {
+        "NUMBER": "Listen-Nr",
+        "SHORT_DESCRIPTION": "Kurzbezeichnung",
+        "ASSIGN": "Listen zuordnen",
+        "SELECTED": "Ausgewählte Listen"
+      },
+      "MAIN_LIST": {
+        "TITLE": "Stammliste",
+        "EDIT": "Stammliste bearbeiten",
+        "SET": "Stammliste festlegen"
+      }
+    },
+    "SUB_LIST_UNION": {
+      "TITLE": "Unterlistenverbindungen",
+      "DESCRIPTION": "Bezeichnung",
+      "NUMBER": "ULV-Nr",
+      "LIST_ENUMERATION": "Unterlistenverbindung",
+      "ADD": "Unterlistenverbindung hinzufügen",
+      "NEW": "Unterlistenverbindung erstellen",
+      "EDIT": "Unterlistenverbindung umbenennen",
+      "CONFIRM_DELETE": "Diese Unterlistenverbindung wirklich löschen?",
+      "LISTS": {
+        "NUMBER": "Listen-Nr",
+        "SHORT_DESCRIPTION": "Kurzbezeichnung",
+        "ASSIGN": "Unterlisten zuordnen",
+        "SELECTED": "Ausgewählte Unterlisten"
+      },
+      "MAIN_LIST": {
+        "TITLE": "Stammliste",
+        "SET": "Stammliste festlegen"
+      }
+    },
+    "CANDIDATE": {
+      "NEW": "Kandidat/in hinzufügen",
+      "EDIT": "Kandidat/in bearbeiten",
+      "CONFIRM_DELETE": "Diese Kandidat/in wirklich löschen?",
+      "POSITION": "Position",
+      "NUMBER": "Kandidaten/innen-Nummer",
+      "NUMBER_SHORT": "Kand-Nr.",
+      "FIRST_NAME": "Amtlicher Vorname",
+      "LAST_NAME": "Amtlicher Name",
+      "POLITICAL_FIRST_NAME": "Politischer Vorname",
+      "POLITICAL_LAST_NAME": "Politischer Name",
+      "DATE_OF_BIRTH": "Geburtsdatum",
+      "DATE_OF_BIRTH_YEAR": "Geburtsjahr",
+      "SEX": "Geschlecht",
+      "OCCUPATION": "Beruf",
+      "TITLE": "Titel",
+      "OCCUPATION_TITLE": "Titel und Berufsbezeichnung",
+      "INCUMBENT": "Bisher",
+      "ZIP_CODE": "PLZ",
+      "LOCALITY": "Wohnort",
+      "ACCUMULATE": "Kandidat/in kumulieren",
+      "REMOVE_ACCUMULATION": "Kumulation entfernen",
+      "SAME_CANDIDATE_COUNT_AS_ALLOWED": "Die erfassten Kandidierenden stimmen mit der Anzahl leere Zeilen und der Anzahl Sitze überein.",
+      "COUNT_OF_CANDIDATES_SINGLE": "Es ist 1 Listenplatz besetzt.",
+      "COUNT_OF_CANDIDATES_PLURAL": "Es sind {{current}} Listenplätze besetzt.",
+      "MORE_CANDIDATES_THAN_ALLOWED_SINGLE": "Erlaubt ist nur 1 Listenplatz.",
+      "MORE_CANDIDATES_THAN_ALLOWED_PLURAL": "Erlaubt sind nur {{max}} Listenplätze.",
+      "LESS_CANDIDATES_THAN_ALLOWED_SINGLE": "Sie müssen noch 1 Listenplatz vergeben.",
+      "LESS_CANDIDATES_THAN_ALLOWED_PLURAL": "Sie müssen noch {{diff}} Listenplätze vergeben.",
+      "PARTY": "Partei"
+    },
+    "REVIEW_PROCEDURE": {
+      "TITLE": "Erfassungsweise (Kontrolle)",
+      "TYPES": {
+        "1": "Elektronisch",
+        "2": "Physisch"
+      }
+    },
+    "ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+  },
+  "MAJORITY_ELECTION": {
+    "NEW": "Majorzwahl hinzufügen",
+    "EDIT": "Majorzwahl bearbeiten",
+    "NUMBER_OF_MANDATES": "Anzahl Sitze",
+    "INDIVIDUAL_EMPTY_BALLOTS_ALLOWED": "Amtlich leerer Wahlzettel",
+    "INVALID_VOTES": "Ungültige Stimmen (Erfassung zu Statistikzwecken)",
+    "BALLOT_BUNDLE_SIZE": "Bundgrösse",
+    "BALLOT_BUNDLE_SAMPLE_SIZE": "Stichprobengrösse",
+    "MANDATE_ALGORITHM": {
+      "TITLE": "Massgebliches Mehr",
+      "TYPES": {
+        "1": "Absolutes Mehr",
+        "2": "Relatives Mehr"
+      }
+    },
+    "AUTOMATIC_EMPTY_VOTE_COUNTING": {
+      "TITLE": "Erfassung leere Zeilen",
+      "AUTOMATIC": "Automatisch",
+      "MANUAL": "Manuell"
+    },
+    "ENFORCE_EMPTY_VOTE_COUNTING_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen",
+    "RESULT_ENTRY": {
+      "TITLE": "Erfassungsweise",
+      "TYPES": {
+        "1": "Endresultate (Total der Kandidierenden-Stimmen)",
+        "2": "Detailerfassung (Einzelne Wahlzettel und Wahlzettel-Gruppen)"
+      }
+    },
+    "ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen",
+    "BALLOT_BUNDLE_NUMBER_GENERATION": {
+      "TITLE": "Vergabe Bundnummer",
+      "AUTOMATIC": "Automatisch"
+    },
+    "BALLOT_NUMBER_GENERATION": {
+      "TITLE": "Vergabe Wahlzettelnummer",
+      "TYPES": {
+        "1": "Neubeginn bei jedem Bund (z.B. 1-25)",
+        "2": "Fortlaufend über alle Bunde (z.B. 1-25, 26-50, 51-75, …)"
+      }
+    },
+    "CANDIDATE_STEP": "Kandidierende",
+    "CANDIDATE": {
+      "TITLE_DESCRIPTION": "Kandidierende ({{name}})",
+      "NEW": "Kandidat/in hinzufügen",
+      "EDIT": "Kandidat/in bearbeiten",
+      "CONFIRM_DELETE": "Diese Kandidat/in wirklich löschen?",
+      "POSITION": "Position",
+      "NUMBER": "Kandidaten/innen-Nummer",
+      "NUMBER_SHORT": "Kand-Nr.",
+      "FIRST_NAME": "Amtlicher Vorname",
+      "LAST_NAME": "Amtlicher Name",
+      "POLITICAL_FIRST_NAME": "Politischer Vorname",
+      "POLITICAL_LAST_NAME": "Politischer Name",
+      "DATE_OF_BIRTH": "Geburtsdatum",
+      "DATE_OF_BIRTH_YEAR": "Geburtsjahr",
+      "SEX": "Geschlecht",
+      "OCCUPATION": "Beruf",
+      "TITLE": "Titel",
+      "OCCUPATION_TITLE": "Titel und Berufsbezeichnung",
+      "PARTY": "Partei",
+      "INCUMBENT": "Bisher",
+      "ZIP_CODE": "PLZ",
+      "LOCALITY": "Wohnort",
+      "INDIVIDUAL_PLACEHOLDER": "Vereinzelte",
+      "INDIVIDUAL_COUNT": "Anzahl Vereinzelte"
+    },
+    "BALLOT_GROUP": {
+      "TITLE": "Wahlzettel-Gruppen",
+      "NEW": "Wahlzettel-Gruppe hinzufügen",
+      "EDIT": "Wahlzettel-Gruppe bearbeiten",
+      "CONFIRM_DELETE": "Wahlzettel-Gruppe wirklich löschen?",
+      "POSITION": "Nr.",
+      "SHORT_DESCRIPTION": "Kurzbezeichnung",
+      "DESCRIPTION": "Bezeichnung",
+      "BLANK_ROWS": "Leere Zeilen",
+      "BALLOT_GROUP_CANDIDATES": "Kandidierende der Wahlzettel-Gruppe",
+      "NO_BALLOT_GROUP_SELECTED": "Keine Wahlzettel-Gruppe ausgewählt",
+      "ASSIGN_CANDIDATES": "Kandidierende zuordnen",
+      "ASSIGNED_CANDIDATES": "Zugeordnete Kandidierende",
+      "FILL_BLANK_ROWS": "Leere Zeilen Nebenwahl ergänzen",
+      "BALLOT_GROUP_WITHOUT_ELECTION_WARNING": "Bitte ergänzen Sie die Anzahl leere Zeilen der Nebenwahl für folgende Wahlzettel-Gruppen: {{ballotGroups}}",
+      "WRONG_CANDIDATE_COUNT_WARNING": "Bei folgenden Wahlen stimmt die Anzahl Kandidierende nicht mit der Anzahl leerer Zeilen überein: {{elections}}"
+    },
+    "REVIEW_PROCEDURE": {
+      "TITLE": "Erfassungsweise (Kontrolle)",
+      "TYPES": {
+        "1": "Elektronisch",
+        "2": "Physisch"
+      }
+    },
+    "ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+  },
+  "ELECTION_GROUP": {
+    "TITLE": "Wahlgruppen",
+    "EDIT": "Wahlgruppe bearbeiten",
+    "NUMBER": "Nr.",
+    "DESCRIPTION": "Bezeichnung",
+    "PRIMARY_ELECTION": "Hauptwahl",
+    "SECONDARY_ELECTIONS": "Nebenwahl(en)"
+  },
+  "SECONDARY_ELECTION": {
+    "CREATE": "Nebenwahl erstellen",
+    "PRIMARY_ELECTION": "Hauptwahl",
+    "TYPE": "Wahlsystem",
+    "MAJORITY": {
+      "NEW": "Nebenwahl hinzufügen (Majorzwahl)",
+      "EDIT": "Nebenwahl bearbeiten (Majorzwahl)",
+      "ALLOWED_CANDIDATES": {
+        "TITLE": "Kandidierende",
+        "1": "Müssen in der Hauptwahl sein",
+        "2": "Können in der Hauptwahl sein",
+        "3": "Dürfen nicht in der Hauptwahl sein"
+      },
+      "SELECT_CANDIDATE_FROM_PRIMARY": "Aus der Hauptwahl hinzufügen"
+    }
+  },
+  "STEPPER": {
+    "NEXT": "Weiter"
+  },
+  "EXPORTS": {
+    "TITLE": "Exportieren",
+    "TEMPLATE_TITLE": "{{entity}} ({{format}}, {{description}})",
+    "DESCRIPTION": "Export",
+    "SELECTED": "Ausgewählte Exports",
+    "FILE_FORMAT": "Format",
+    "SUCCESS": "Export erfolgreich"
+  },
+  "IMPORT": {
+    "FILE": "Datei importieren",
+    "DRAG_FILE": "Datei hierher ziehen",
+    "OR": "oder…",
+    "CHOOSE_FILE": "Datei zum Hochladen auswählen",
+    "CHOSEN_FILES": "Ausgewählte Dateien",
+    "FILENAME": "Dateiname",
+    "E_CH_STANDARD": "eCH-Datenstandard",
+    "TYPES": {
+      "1": "eCH-0159 - Schnittstellenstandard Abstimmungen",
+      "2": "eCH-0157 - Schnittstellenstandard Wahlen"
+    },
+    "IMPORT_CONTEST": "Urnengang importieren",
+    "IMPORT_POLITICAL_BUSINESS": "Geschäft(e) importieren",
+    "IMPORT_MAJORITY_ELECTION_CANDIDATES": "Kandidierende importieren",
+    "IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES": "Listen/Kandidierende importieren",
+    "POLITICAL_BUSINESS_INFOS": "Geschäftsinformationen",
+    "CONTEST_INFOS": "Urnenganginformationen",
+    "IMPORT_SUCCESSFUL": "Die importierten Daten werden verarbeitet. Dies kann etwas Zeit in Anspruch nehmen."
+  },
+  "HISTORIZATION": {
+    "CURRENT_STATUS": "Aktueller Stand",
+    "STATUS_PER": "Per Stichtag",
+    "DOMAIN_OF_INFLUENCE": {
+      "SUFFIX": {
+        "ACTIVE": "zuletzt geändert {{ modifiedOn }}",
+        "DELETED": "{{ createdOn }} bis {{ deletedOn }}"
+      }
+    },
+    "INCLUDE_DELETED": {
+      "DOMAIN_OF_INFLUENCE": "Gelöschte Wahlkreise",
+      "COUNTING_CIRCLE": "Gelöschte Auszählungskreise"
+    }
+  },
+  "CANTON_SETTINGS": {
+    "TITLE": "Kantonale Einstellungen",
+    "NAME": "Kanton",
+    "SHORT_NAME": "Kürzel",
+    "AUTHORITY": "Zuständige Behörde",
+    "NEW": "Kantonale Einstellungen erstellen",
+    "EDIT": "Kantonale Einstellungen bearbeiten",
+    "PROPORTIONAL_ELECTION": "Proporzwahl",
+    "MAJORITY_ELECTION": {
+      "TITLE": "Majorzwahl",
+      "ABSOLUTE_MAJORITY_ALGORITHM": "Berechungsverfahren",
+      "ABSOLUTE_MAJORITY_ALGORITHMS": {
+        "1": "Absolutes Mehr (gültige Stimmzettel geteilt durch zwei, nächsthöhere Zahl)",
+        "2": "Absolutes Mehr (Kandidatenstimmen geteilt durch doppelte Sitzzahl, nächsthöhere Zahl)"
+      },
+      "INVALID_VOTES": "Ungültige Stimmen"
+    },
+    "GENERAL": "Allgemein",
+    "SWISS_ABROAD_VOTING_RIGHT": {
+      "TITLE": "Auslandschweizerinnen und Auslandschweizer",
+      "DOMAIN_OF_INFLUENCE_TYPES": "Stimmrecht auf folgenden Geschäftsebenen"
+    },
+    "POLITICAL_BUSINESS_UNIONS": {
+      "TITLE": "Geschäftsverbindungen"
+    },
+    "CANTON": {
+      "NAMES": {
+        "1": "St. Gallen",
+        "2": "Thurgau",
+        "3": "Zürich"
+      },
+      "SHORT_NAMES": {
+        "1": "SG",
+        "2": "TG",
+        "3": "ZH"
+      }
+    },
+    "VOTING_CARDS": {
+      "TITLE": "Erfassung Stimmrechtsausweise",
+      "NONE_SELECTED": "Mind. eine von Art Stimmrechtsausweise muss erfasst werden."
+    },
+    "VOTING_DOCUMENTS": {
+      "TITLE": "Stimmunterlagen",
+      "E_VOTING_EAI_MESSAGE_TYPE": "E-Voting Meldungstyp"
+    },
+    "COUNTING_CIRCLE": {
+      "TITLE": "Auszählungskreis",
+      "PROTOCOL_SORT": {
+        "TITLE": "Sortierung in Protokoll",
+        "TYPES": {
+          "1": "Nach Sortierungsnummer",
+          "2": "Alphabetisch"
+        }
+      }
+    },
+    "DOMAIN_OF_INFLUENCE": {
+      "TITLE": "Wahlkreis",
+      "PROTOCOL_SORT": {
+        "TITLE": "Sortierung in Protokoll",
+        "TYPES": {
+          "1": "Nach Sortierungsnummer",
+          "2": "Alphabetisch"
+        }
+      }
+    }
+  },
+  "VOTING_CHANNELS": {
+    "1": "Urne",
+    "2": "Brieflich",
+    "2_VALID": "Brieflich gültig",
+    "2_INVALID": "Brieflich ungültig",
+    "3": "Elektronisch",
+    "4": "Vorzeitig"
+  },
+  "ACTIVITY": {
+    "TITLE": "Aktivitäten",
+    "EVENT_NAME": "Aktivität",
+    "TIMESTAMP": "Am",
+    "USER": "Ausgeführt durch",
+    "TENANT": "Behörde",
+    "EVENT": {
+      "CountingCircleCreated": "Auszählungskreis angelegt",
+      "CountingCircleUpdated": "Auszählungskreis editiert",
+      "CountingCircleDeleted": "Auszählungskreis gelöscht",
+      "CountingCircleMerged": "Auszählungskreis fusioniert",
+      "CountingCirclesMergerScheduled": "Auszählungskreise Fusion geplant",
+      "CountingCirclesMergerScheduleUpdated": "Auszählungskreise Fusion editiert",
+      "CountingCirclesMergerActivated": "Auszählungskreise Fusion durchgeführt",
+      "CountingCirclesMergerScheduleDeleted": "Auszählungskreise Fusion gelöscht",
+      "DomainOfInfluenceCreated": "Wahlkreis angelegt",
+      "DomainOfInfluenceUpdated": "Wahlkreis editiert",
+      "DomainOfInfluenceCountingCirclesUpdated": "Auszählungskreise zugeordnet",
+      "DomainOfInfluenceContactPersonUpdated": "Wahlkreis Kontaktperson editiert",
+      "DomainOfInfluenceVotingCardDataUpdated": "Wahlkreis Rücksendeadresse und Druckdatenangaben editiert",
+      "DomainOfInfluencePlausibilisationConfigurationUpdated": "Wahlkreis Plausibilisierungs-Einstellungen editiert",
+      "DomainOfInfluenceDeleted": "Wahlkreis gelöscht",
+      "DomainOfInfluenceLogoUpdated": "Wahlkreis-Logo editiert",
+      "DomainOfInfluenceLogoDeleted": "Wahlkreis-Logo gelöscht",
+      "ContestCreated": "Urnengang eingerichtet",
+      "ContestUpdated": "Urnengang editiert",
+      "ContestDeleted": "Urnengang gelöscht",
+      "ContestPastLocked": "Urnengang vergangen (gesperrt)",
+      "ContestPastUnlocked": "Urnengang vergangen (entsperrt)",
+      "ContestArchived": "Urnengang archiviert",
+      "ContestTestingPhaseEnded": "Urnengang Testphase beendet",
+      "ContestsMerged": "Urnengänge zusammengeführt",
+      "VoteCreated": "Abstimmung Schritt 1 eingerichtet",
+      "VoteUpdated": "Abstimmung Schritt 1 editiert",
+      "VoteActiveStateUpdated": "Abstimmung Ergebniserfassung Freigabe editiert",
+      "VoteCountingCircleOptionsUpdated": "Abstimmung Schritt 3 Einstellungen je Auszählungskreis editiert",
+      "VoteDeleted": "Abstimmung gelöscht",
+      "VoteToNewContestMoved": "Abstimmung in neuen Urnengang verschoben",
+      "BallotCreated": "Abstimmung Schritt 2 Vorlage angelegt",
+      "BallotUpdated": "Abstimmung Schritt 2 Vorlage editiert",
+      "BallotDeleted": "Abstimmung Schritt 2 Vorlage gelöscht",
+      "ProportionalElectionCreated": "Proporzwahl Schritt 1 eingerichtet",
+      "ProportionalElectionUpdated": "Proporzwahl Schritt 1 editiert",
+      "ProportionalElectionActiveStateUpdated": "Proporzwahl Ergebniserfassung Freigabe editiert",
+      "ProportionalElectionCountingCircleOptionsUpdated": "Proporzwahl Schritt 4 Einstellungen je Auszählungskreis editiert",
+      "ProportionalElectionDeleted": "Proporzwahl gelöscht",
+      "ProportionalElectionToNewContestMoved": "Proporzwahl in neuen Urnengang verschoben",
+      "ProportionalElectionListCreated": "Proporzwahl Schritt 2 Liste eingerichtet",
+      "ProportionalElectionListUpdated": "Proporzwahl Schritt 2 Liste editiert",
+      "ProportionalElectionListsReordered": "Proporzwahl Schritt 2 Listen neu geordnet",
+      "ProportionalElectionListDeleted": "Proporzwahl Schritt 2 Liste gelöscht",
+      "ProportionalElectionListUnionCreated": "Proporzwahl Schritt 2 Listenverbindung eingerichtet",
+      "ProportionalElectionListUnionUpdated": "Proporzwahl Schritt 2 Listenverbindung editiert",
+      "ProportionalElectionListUnionsReordered": "Proporzwahl Schritt 2 Listenverbindungen neu geordnet",
+      "ProportionalElectionListUnionEntriesUpdated": "Proporzwahl Schritt 2 Listen einer Listenverbindung zugeordnet",
+      "ProportionalElectionListUnionMainListUpdated": "Proporzwahl Schritt 2 Stammliste einer Unter-Listenverbindung definiert",
+      "ProportionalElectionListUnionDeleted": "Proporzwahl Schritt 2 Listenverbindung gelöscht",
+      "ProportionalElectionCandidateCreated": "Proporzwahl Schritt 2 Kandidat/in eingerichtet",
+      "ProportionalElectionCandidateUpdated": "Proporzwahl Schritt 2 Kandidat/in editiert",
+      "ProportionalElectionCandidatesReordered": "Proporzwahl Schritt 2 Kandidierende neu geordnet",
+      "ProportionalElectionCandidateDeleted": "Proporzwahl Schritt 2 Kandidat/in gelöscht",
+      "MajorityElectionCreated": "Majorzgeschäft Schritt 1 eingerichtet",
+      "MajorityElectionUpdated": "Majorzgeschäft Schritt 1 oder 3 editiert",
+      "MajorityElectionActiveStateUpdated": "Majorzgeschäft Ergebniserfassung Freigabe editiert",
+      "MajorityElectionCountingCircleOptionsUpdated": "Majorzgeschäft Schritt 4 Einstellungen je Auszählungskreis editiert",
+      "MajorityElectionDeleted": "Majorzgeschäft gelöscht",
+      "MajorityElectionToNewContestMoved": "Majorzgeschäft in neuen Urnengang verschoben",
+      "MajorityElectionCandidateCreated": "Majorzgeschäft Schritt 2 Kandidat/in Majorzwahl eingerichtet",
+      "MajorityElectionCandidateUpdated": "Majorzgeschäft Schritt 2 Kandidat/in Majorzwahl editiert",
+      "MajorityElectionCandidatesReordered": "Majorzgeschäft Schritt 2 Kandidierende Majorzwahl neu geordnet",
+      "MajorityElectionCandidateDeleted": "Majorzgeschäft Schritt 2 Kandidat/in Majorzwahl gelöscht",
+      "MajorityElectionBallotGroupCreated": "Majorzgeschäft Schritt 2 Wahlzettel-Gruppe eingerichtet",
+      "MajorityElectionBallotGroupUpdated": "Majorzgeschäft Schritt 2 Wahlzettel-Gruppe editiert",
+      "MajorityElectionBallotGroupCandidatesUpdated": "Majorzgeschäft Schritt 2 Kandidierende einer Wahlzettel-Gruppe zugeordnet",
+      "MajorityElectionBallotGroupDeleted": "Majorzgeschäft Schritt 2 Wahlzettel-Gruppe gelöscht",
+      "SecondaryMajorityElectionCreated": "Nebenwahl Schritt 1 eingerichtet",
+      "SecondaryMajorityElectionUpdated": "Nebenwahl Schritt 1 editiert",
+      "SecondaryMajorityElectionActiveStateUpdated": "Nebenwahl Ergebniserfassung Freigabe editiert",
+      "SecondaryMajorityElectionDeleted": "Nebenwahl gelöscht",
+      "SecondaryMajorityElectionCandidateCreated": "Nebenwahl Schritt 2 Kandidat/in erfasst",
+      "SecondaryMajorityElectionCandidateUpdated": "Nebenwahl Schritt 2 Kandidat/in editiert",
+      "SecondaryMajorityElectionCandidatesReordered": "Nebenwahl Schritt 2 Kandidierende neu geordnet",
+      "SecondaryMajorityElectionCandidateDeleted": "Nebenwahl Schritt 2 Kandidat/in gelöscht",
+      "SecondaryMajorityElectionCandidateReferenceCreated": "Nebenwahl Schritt 2 Kandidat/in aus Hauptwahl referenziert",
+      "SecondaryMajorityElectionCandidateReferenceUpdated": "Nebenwahl Schritt 2 Kandidat/in editiert",
+      "SecondaryMajorityElectionCandidateReferenceDeleted": "Nebenwahl Schritt 2 Kandidat/in gelöscht",
+      "ElectionGroupCreated": "Wahlgruppe erstellt",
+      "ElectionGroupUpdated": "Wahlgruppe editiert",
+      "ElectionGroupDeleted": "Wahlgruppe gelöscht",
+      "ProportionalElectionUnionCreated": "Geschäftsverbindung eingerichtet",
+      "ProportionalElectionUnionUpdated": "Geschäftsverbindung editiert",
+      "ProportionalElectionUnionEntriesUpdated": "Geschäftsverbindung gelöscht",
+      "ProportionalElectionUnionDeleted": "Geschäfte einer Geschäftsverbindung zugeordnet",
+      "ProportionalElectionUnionToNewContestMoved": "Geschäftsverbindung in neuen Urnengang verschoben",
+      "MajorityElectionUnionCreated": "Geschäftsverbindung eingerichtet",
+      "MajorityElectionUnionUpdated": "Geschäftsverbindung editiert",
+      "MajorityElectionUnionDeleted": "Geschäftsverbindung gelöscht",
+      "MajorityElectionUnionToNewContestMoved": "Geschäftsverbindung in neuen Urnengang verschoben",
+      "MajorityElectionUnionEntriesUpdated": "Geschäfte einer Geschäftsverbindung zugeordnet",
+      "ContestCountingCircleOptionsUpdated": "Urnengangseinstellungen eines Auszählungskreis editiert",
+      "ExportConfigurationCreated": "Schnittstellendefinition erstellt",
+      "ExportConfigurationUpdated": "Schnittstellendefinition editiert",
+      "ExportConfigurationDeleted": "Schnittstellendefinition gelöscht",
+      "DomainOfInfluencePartyCreated": "Partei oder andere Gruppierung erstellt",
+      "DomainOfInfluencePartyUpdated": "Partei oder andere Gruppierung editiert",
+      "DomainOfInfluencePartyDeleted": "Partei oder andere Gruppierung gelöscht"
+    }
+  }
+}

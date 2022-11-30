@@ -1,0 +1,43 @@
+<ng-template #notAuthenticated>
+  <div class="p-4">
+    <h1 translate>COMMON.LOADING</h1>
+    <bc-spinner></bc-spinner>
+  </div>
+</ng-template>
+
+<bc-app-layout *ngIf="theme">
+  <bc-app-header-bar-iam
+    *ngIf="hasTenant; else nonIamHeader"
+    [link]="['/', theme]"
+    [title]="'APP.APPLICATION_TITLE' | translate"
+    (tenantChanged)="switchTenant()"
+    logo="VO"
+  ></bc-app-header-bar-iam>
+  <ng-template #nonIamHeader>
+    <bc-app-header-bar [link]="['/', theme]" [title]="'APP.APPLICATION_TITLE' | translate" logo="VO"></bc-app-header-bar>
+  </ng-template>
+
+  <app-side-nav *ngIf="!loading && hasTenant; else notAuthenticated">
+    <div>
+      <router-outlet></router-outlet>
+    </div>
+  </app-side-nav>
+
+</bc-app-layout>
+<bc-snackbar #snackbar horizontalPosition="right" verticalPosition="top" [action]="'ACTIONS.CLOSE' | translate"></bc-snackbar>
+
+<ng-template #notAuthenticated>
+  <div class="no-permissions-container" *ngIf="!loading; else appLoading">
+    <p translate>APP.NO_PERMISSIONS</p>
+    <div>
+      <bc-button (buttonClick)="reload()" [label]="'APP.RELOAD' | translate"></bc-button>
+      <bc-button class="ml-2" (buttonClick)="logout()" [label]="'APP.LOGOUT' | translate"></bc-button>
+    </div>
+  </div>
+
+  <ng-template #appLoading>
+    <div class="spinner-container">
+      <bc-spinner size="large"></bc-spinner>
+    </div>
+  </ng-template>
+</ng-template>

@@ -1,0 +1,15 @@
+<ng-container>
+  <bc-tab-bar>
+    <bc-tab [label]="'POLITICAL_BUSINESS_UNION.DETAIL.POLITICAL_BUSINESSES' | translate">
+      <app-political-business-union-detail-political-businesses-tab [politicalBusinessUnion]="politicalBusinessUnion">
+      </app-political-business-union-detail-political-businesses-tab>
+    </bc-tab>
+    <bc-tab [label]="'POLITICAL_BUSINESS_UNION.DETAIL.CANDIDATES' | translate">
+      <app-political-business-union-detail-candidates-tab [politicalBusinessUnion]="politicalBusinessUnion">
+      </app-political-business-union-detail-candidates-tab>
+    </bc-tab>
+    <bc-tab *ngIf="listTab" [label]="'POLITICAL_BUSINESS_UNION.DETAIL.LISTS' | translate">
+      <ng-container *ngTemplateOutlet="listTab"></ng-container>
+    </bc-tab>
+  </bc-tab-bar>
+</ng-container>

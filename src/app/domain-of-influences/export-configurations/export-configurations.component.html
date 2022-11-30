@@ -1,0 +1,36 @@
+<ng-container *ngFor="let config of (configurations || []); let index = index">
+  <bc-text
+    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.DESCRIPTION' | translate"
+    [required]="true"
+    [disabled]="disabled"
+    [(value)]="config.description"></bc-text>
+  <bc-text
+    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.EAI_MESSAGE_TYPE' | translate"
+    [required]="true"
+    [disabled]="disabled"
+    [(value)]="config.eaiMessageType"></bc-text>
+  <bc-button
+    *ngIf="!disabled; else empty"
+    variant="tertiary"
+    icon="plus"
+    class="pt-3"
+    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ASSIGN_OPEN' | translate"
+    (buttonClick)="assign(config)"></bc-button>
+  <bc-icon
+    *ngIf="!disabled; else empty"
+    icon="trash"
+    iconColor="error"
+    class="pt-2 clickable"
+    (click)="remove(index)"></bc-icon>
+</ng-container>
+<p class="no-data" *ngIf="disabled">{{'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.NO_DATA' | translate}}</p>
+<bc-button
+  *ngIf="!disabled"
+  variant="tertiary"
+  icon="plus"
+  [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ADD' | translate"
+  (buttonClick)="add()"></bc-button>
+
+<ng-template #empty>
+  <div></div>
+</ng-template>

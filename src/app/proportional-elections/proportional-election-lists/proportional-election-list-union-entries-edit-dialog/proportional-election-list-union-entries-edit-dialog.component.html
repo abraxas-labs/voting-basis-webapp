@@ -1,0 +1,76 @@
+<vo-lib-dialog>
+  <h1 header>{{'PROPORTIONAL_ELECTION.' + listUnionTitleType + '.LISTS.ASSIGN' | translate}}</h1>
+  <div content class="grid">
+    <div>
+      <bc-advanced-table class="w-full" [dataSource]="dataSource">
+        <ng-container bcColumnDef="select">
+          <th bc-header-cell *bcHeaderCellDef>
+            <bc-checkbox
+              class="ml-2 mb-0"
+              (checkedChange)="toggleAllRows($event)"
+              [checked]="selection.hasValue() && isAllSelected"
+              [indeterminate]="selection.hasValue() && !isAllSelected"
+            >
+            </bc-checkbox>
+          </th>
+          <td bc-cell *bcCellDef="let element">
+            <bc-checkbox
+              class="ml-2"
+              (checkedChange)="toggleRowWithValue(element, $event)"
+              [checked]="selection.isSelected(element)"
+            >
+            </bc-checkbox>
+          </td>
+        </ng-container>
+        <ng-container bcColumnDef="orderNumber">
+          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.' + listUnionTitleType + '.LISTS.NUMBER' | translate }}</th>
+          <td bc-cell *bcCellDef="let element">{{ element.orderNumber }}</td>
+        </ng-container>
+        <ng-container bcColumnDef="shortDescription">
+          <th bc-header-cell *bcHeaderCellDef>
+            {{ 'PROPORTIONAL_ELECTION.' + listUnionTitleType + '.LISTS.SHORT_DESCRIPTION' | translate }}
+          </th>
+          <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
+        </ng-container>
+
+        <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+        <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="toggleRow(row)"></tr>
+      </bc-advanced-table>
+      <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+    </div>
+    <bc-divider orientation="vertical" class="ml-4"></bc-divider>
+    <div>
+      <h2 translate class="mb-0">{{'PROPORTIONAL_ELECTION.' + listUnionTitleType + '.LISTS.SELECTED' | translate}}</h2>
+
+      <bc-advanced-table class="w-full" [dataSource]="selection.selected">
+        <ng-container bcColumnDef="orderNumber">
+          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.' + listUnionTitleType + '.LISTS.NUMBER' | translate }}</th>
+          <td bc-cell *bcCellDef="let element">{{ element.orderNumber }}</td>
+        </ng-container>
+        <ng-container bcColumnDef="shortDescription">
+          <th bc-header-cell *bcHeaderCellDef>
+            {{ 'PROPORTIONAL_ELECTION.' + listUnionTitleType + '.LISTS.SHORT_DESCRIPTION' | translate }}
+          </th>
+          <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
+        </ng-container>
+        <ng-container bcColumnDef="actions">
+          <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+          <td bc-cell *bcCellDef="let element">
+            <bc-icon class="clickable" (click)="selection.deselect(element)" icon="remove"></bc-icon>
+          </td>
+        </ng-container>
+
+        <tr bc-header-row *bcHeaderRowDef="columnsSelected"></tr>
+        <tr bc-advanced-table-row *bcRowDef="let row; columns: columnsSelected"></tr>
+      </bc-advanced-table>
+    </div>
+  </div>
+
+  <vo-lib-button-bar footer
+                     (save)="save()"
+                     [saving]="saving"
+                     [sticky]="true"
+                     [saveLabel]="'ACTIONS.ASSIGN' | translate"
+                     (cancel)="cancel()">
+  </vo-lib-button-bar>
+</vo-lib-dialog>

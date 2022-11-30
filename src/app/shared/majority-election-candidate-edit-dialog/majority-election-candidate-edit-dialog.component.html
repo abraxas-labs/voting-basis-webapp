@@ -1,0 +1,15 @@
+<vo-lib-dialog>
+  <h1 header>{{!isNew ? ('MAJORITY_ELECTION.CANDIDATE.EDIT' | translate) : ('MAJORITY_ELECTION.CANDIDATE.NEW' | translate)}}</h1>
+
+  <app-majority-election-candidate-edit content [candidate]="data" [testingPhaseEnded]="testingPhaseEnded">
+  </app-majority-election-candidate-edit>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                    [canSave]="canSave"
+                    [saving]="saving"
+                    [sticky]="false"
+                    (save)="save()"
+                    (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

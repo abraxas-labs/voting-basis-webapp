@@ -1,0 +1,14 @@
+<div class="flex mb-3">
+  <bc-radio-button-group
+    [items]="statusChoices"
+    [value]="isCurrentStatus"
+    (valueChange)="setCurrentStatus($event)"
+  ></bc-radio-button-group>
+  <bc-date class="px-3" [value]="date" [disabled]="isCurrentStatus" (valueChange)="dateString = $event"></bc-date>
+  <bc-checkbox
+    class="px-4"
+    [checked]="includeDeleted"
+    (checkedChange)="includeDeleted = $event; emitFilterChange()"
+    [label]="includeDeletedLabel | translate"
+  ></bc-checkbox>
+</div>

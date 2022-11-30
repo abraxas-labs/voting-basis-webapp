@@ -1,0 +1,45 @@
+<h2 translate>MAJORITY_ELECTION.BALLOT_GROUP.BALLOT_GROUP_CANDIDATES</h2>
+
+<bc-spinner *ngIf="loading; else content" class="block"></bc-spinner>
+<ng-template #content>
+  <div *ngIf="ballotGroupValue && !!primaryBallotGroupEntry; else noBallotGroupSelected">
+    <div class="flex">
+      <bc-button variant="tertiary"
+                 icon="plus"
+                 class="my-2"
+                 [label]="'MAJORITY_ELECTION.BALLOT_GROUP.ASSIGN_CANDIDATES' | translate"
+                 *ngIf="!forSecondaryElection"
+                 [disabled]="readonly"
+                 (buttonClick)="assignCandidates()"></bc-button>
+    </div>
+
+    <h3>{{majorityElection.shortDescription | getTranslation}}</h3>
+    <app-majority-election-ballot-group-candidates [majorityElection]="majorityElection"
+                                                   [candidateEntry]="primaryBallotGroupEntry.candidates">
+    </app-majority-election-ballot-group-candidates>
+
+    <ng-container *ngFor="let secondaryGroup of secondaryBallotGroupEntries">
+      <h3>{{secondaryGroup.election.shortDescription | getTranslation}}</h3>
+      <div class="flex">
+        <bc-button class="my-2"
+                   variant="tertiary"
+                   icon="plus"
+                   [label]="'MAJORITY_ELECTION.BALLOT_GROUP.ASSIGN_CANDIDATES' | translate"
+                   [disabled]="readonly"
+                   (buttonClick)="assignCandidates()"></bc-button>
+
+      </div>
+      <app-majority-election-ballot-group-candidates [secondaryMajorityElection]="secondaryGroup.election"
+                                                     [candidateEntry]="secondaryGroup.candidates">
+      </app-majority-election-ballot-group-candidates>
+    </ng-container>
+
+    <p class="error my-2" *ngIf="invalidBallotGroupEntriesError">
+      {{ 'MAJORITY_ELECTION.BALLOT_GROUP.WRONG_CANDIDATE_COUNT_WARNING' | translate: { elections: invalidBallotGroupEntriesError } }}
+    </p>
+  </div>
+</ng-template>
+<ng-template #noBallotGroupSelected>
+  <span class="no-items-message" translate>MAJORITY_ELECTION.BALLOT_GROUP.NO_BALLOT_GROUP_SELECTED</span>
+</ng-template>
+

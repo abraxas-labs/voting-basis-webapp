@@ -1,0 +1,94 @@
+<div class="grid">
+  <div left>
+    <bc-spinner class="block" *ngIf="loading; else listOverview"></bc-spinner>
+    <ng-template #listOverview>
+      <h2 translate>PROPORTIONAL_ELECTION.LIST.TITLE</h2>
+
+      <div class="buttons">
+        <bc-button variant="tertiary"
+                   icon="plus"
+                   [disabled]="testingPhaseEnded"
+                   [label]="'PROPORTIONAL_ELECTION.LIST.NEW' | translate"
+                   (buttonClick)="createList()"></bc-button>
+
+        <bc-button [disabled]="testingPhaseEnded"
+                   variant="tertiary"
+                   icon="download"
+                   [label]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
+                   (buttonClick)="importListsAndCandidates()"></bc-button>
+
+        <bc-button variant="tertiary"
+                   (buttonClick)="manageListUnions()"
+                   [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate"
+                   [disabled]="testingPhaseEnded"></bc-button>
+      </div>
+
+      <bc-advanced-table class="w-full" [dataSource]="lists">
+        <ng-container bcColumnDef="orderNumber">
+          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate }}</th>
+          <td bc-cell *bcCellDef="let element">{{ element.orderNumber }}</td>
+        </ng-container>
+        <ng-container bcColumnDef="shortDescription">
+          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate }}</th>
+          <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
+        </ng-container>
+        <ng-container bcColumnDef="blankRowCount">
+          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate }}</th>
+          <td bc-cell *bcCellDef="let element">{{ element.blankRowCount }}</td>
+        </ng-container>
+        <ng-container bcColumnDef="listUnionDescription">
+          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate }}</th>
+          <td bc-cell *bcCellDef="let element"><ng-container *ngTemplateOutlet="listUnionDescriptionCol"></ng-container></td>
+        </ng-container>
+        <ng-container bcColumnDef="subListUnionDescription">
+          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate }}</th>
+          <td bc-cell *bcCellDef="let element"><ng-container *ngTemplateOutlet="listUnionDescriptionCol"></ng-container></td>
+        </ng-container>
+        <ng-container bcColumnDef="actions">
+          <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+          <td bc-cell *bcCellDef="let element">
+            <div *ngIf="!locked" class="actions">
+              <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
+              <bc-icon *ngIf="!testingPhaseEnded"
+                       (click)="deleteList(element); $event.stopPropagation()"
+                       icon="trash"
+                       iconColor="error"></bc-icon>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+        <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="selectList(row)"></tr>
+
+        <ng-template #listUnionDescriptionCol let-element="element">
+          <!-- List union descriptions are validated on the server, they do not contain user-controlled HTML.
+             It is safe to display the description directly as HTML -->
+          <div class="list-union-description" [innerHTML]="element | getTranslation | safeHtml"></div>
+        </ng-template>
+      </bc-advanced-table>
+    </ng-template>
+  </div>
+
+  <bc-divider orientation="vertical" class="ml-4"></bc-divider>
+
+  <div right>
+    <ng-container *ngIf="selectedList; else noListSelected">
+      <h2>{{ selectedList.shortDescription | getTranslation }}</h2>
+      <app-proportional-election-candidates
+        [list]="selectedList"
+        [testingPhaseEnded]="testingPhaseEnded"
+        [locked]="locked"
+        (candidateCreated)="candidateCreated(selectedList, $event)"
+        (candidateDeleted)="candidateDeleted(selectedList, $event)"
+        (candidateUpdated)="candidateAccumulationUpdated(selectedList, $event.candidate.accumulated, $event.wasAccumulated)"
+        [maxCandidateCount]="proportionalElection.numberOfMandates - selectedList.blankRowCount"
+        [parties]="parties"
+      >
+      </app-proportional-election-candidates>
+    </ng-container>
+    <ng-template #noListSelected>
+      <p class="no-items-message"
+         translate>PROPORTIONAL_ELECTION.LIST.NO_LIST_SELECTED</p>
+    </ng-template>
+  </div>
+</div>

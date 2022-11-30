@@ -1,0 +1,129 @@
+<vo-lib-page [contentLoading]="loading"
+             [header]="('CONTEST.DETAIL.FROM' | translate) + ((contest?.date || '') | date:'dd.MM.yyyy')"
+             [showBackButton]="true"
+             [backButtonNavigateCommands]="['../']">
+  <div class="flex">
+    <bc-button [matMenuTriggerFor]="menu"
+               variant="tertiary"
+               icon="plus"
+               [disabled]="contest.testingPhaseEnded"
+               [label]="'POLITICAL_BUSINESS.NEW' | translate"></bc-button>
+
+    <mat-menu #menu="matMenu">
+      <vo-lib-action-menu-item (click)="createVote()" text="POLITICAL_BUSINESS.VOTE"></vo-lib-action-menu-item>
+      <vo-lib-action-menu-item (click)="createMajorityElection()" text="POLITICAL_BUSINESS.MAJORITY_ELECTION"></vo-lib-action-menu-item>
+      <vo-lib-action-menu-item (click)="createProportionalElection()"
+                               text="POLITICAL_BUSINESS.PROPORTIONAL_ELECTION"></vo-lib-action-menu-item>
+      <vo-lib-action-menu-item (click)="createSecondaryElection()" text="POLITICAL_BUSINESS.SECONDARY_ELECTION"></vo-lib-action-menu-item>
+    </mat-menu>
+
+    <bc-button [disabled]="contest.testingPhaseEnded"
+               variant="tertiary"
+               icon="download"
+               (buttonClick)="importPoliticalBusinesses()"
+               [label]="'IMPORT.IMPORT_POLITICAL_BUSINESS' | translate"
+               class="ml-2"></bc-button>
+
+    <bc-button *ngIf="cantonDefaults?.enabledPoliticalBusinessUnionTypesList.length > 0"
+               variant="tertiary"
+               icon="building"
+               (buttonClick)="managePoliticalBusinessUnions()"
+               [label]="'CONTEST.POLITICAL_BUSINESS_UNION_MANAGE' | translate"
+               [disabled]="contest.testingPhaseEnded"></bc-button>
+  </div>
+
+  <bc-advanced-table class="w-full" [dataSource]="dataSource">
+    <ng-container bcColumnDef="number">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.NUMBER' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.politicalBusinessNumber }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="shortDescription">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.shortDescription | getTranslation }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="officialDescription">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.officialDescription | getTranslation }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="domainOfInfluenceType">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE_TYPE' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element">
+        <div class="overflow">{{ 'DOMAIN_OF_INFLUENCE.TYPES.' + element.domainOfInfluence.type | translate }}</div>
+      </td>
+    </ng-container>
+    <ng-container bcColumnDef="domainOfInfluenceName">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.domainOfInfluence.name }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="type">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.TYPE.TITLE' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element">
+        <div class="overflow">{{ 'POLITICAL_BUSINESS.TYPE.' + element.politicalBusinessType | translate }}</div>
+      </td>
+    </ng-container>
+    <ng-container bcColumnDef="enable">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.ENABLE_TITLE' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element">
+        <bc-checkbox [checked]="element.active"
+                     class="ml-2"
+                     [disabled]="!ownsPoliticalBusiness(element) || contest.testingPhaseEnded"
+                     (click)="activeStateChange(element, !element.active); $event.stopPropagation()">
+        </bc-checkbox>
+      </td>
+    </ng-container>
+    <ng-container bcColumnDef="owner">
+      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.OWNER' | translate }}</span></th>
+      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.domainOfInfluence.authorityName }}</div></td>
+    </ng-container>
+    <ng-container bcColumnDef="ownerDescription">
+      <th bc-header-cell *bcHeaderCellDef></th>
+      <td bc-cell *bcCellDef="let element">
+        <div class="overflow" *ngIf="ownsPoliticalBusiness(element)" translate>POLITICAL_BUSINESS.OWN_POLITICAL_BUSINESS</div>
+      </td>
+    </ng-container>
+
+    <ng-container bcColumnDef="actions">
+      <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+      <td bc-cell *bcCellDef="let element">
+        <vo-lib-action-menu *ngIf="element.domainOfInfluence.secureConnectId === tenantId">
+          <vo-lib-action-menu-item
+            icon="edit"
+            text="ACTIONS.EDIT"
+            *ngIf="!contest.locked; else viewMenuItem"
+            (click)="open(element)"
+          ></vo-lib-action-menu-item>
+          <ng-template #viewMenuItem>
+            <vo-lib-action-menu-item icon="eye" text="ACTIONS.OPEN" (click)="open(element)"></vo-lib-action-menu-item>
+          </ng-template>
+          <vo-lib-action-menu-item
+            icon="trash"
+            text="ACTIONS.DELETE"
+            *ngIf="!contest.testingPhaseEnded"
+            (click)="delete(element)"
+          ></vo-lib-action-menu-item>
+          <vo-lib-action-menu-item
+            icon="download"
+            text="ACTIONS.EXPORT"
+            *ngIf="element.politicalBusinessType !== politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION"
+            (click)="export(element)"
+          ></vo-lib-action-menu-item>
+        </vo-lib-action-menu>
+      </td>
+    </ng-container>
+
+    <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+    <tr bc-advanced-table-row
+        *bcRowDef="let row; columns: columns"
+        [selectable]="row.domainOfInfluence.secureConnectId === tenantId"
+        (rowSelected)="open(row)">
+    </tr>
+  </bc-advanced-table>
+  <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+
+    <ng-container *ngIf="contest.id && electionGroups.length > 0">
+      <h2 class="mt-5" translate>ELECTION_GROUP.TITLE</h2>
+      <app-election-group-overview [readonly]="contest.testingPhaseEnded"
+                                   [electionGroups]="electionGroups">
+      </app-election-group-overview>
+    </ng-container>
+  </vo-lib-page>

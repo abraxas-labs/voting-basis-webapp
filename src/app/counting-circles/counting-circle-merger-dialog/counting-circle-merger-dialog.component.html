@@ -1,0 +1,34 @@
+<vo-lib-dialog [contentLoading]="false">
+  <h1 header>{{(isNew ? 'COUNTING_CIRCLE.MERGE.EDIT.TITLE_NEW' : 'COUNTING_CIRCLE.MERGE.EDIT.TITLE') | translate}}</h1>
+
+  <div content>
+    <bc-simple-stepper #stepper
+                            content
+                            labelPosition="bottom"
+                            linear>
+      <bc-simple-step [label]="'COUNTING_CIRCLE.MERGE.EDIT.SELECT_STEP' | translate" [status]="status">
+        <ng-container>
+          <app-counting-circle-merger-select [selectableCountingCircles]="selectableCountingCircles"
+                                             [selectedCountingCircles]="merger.mergedCountingCircles"
+                                             (selectedCountingCirclesChange)="merger.mergedCountingCircles = $event; updateStatus()">
+          </app-counting-circle-merger-select>
+        </ng-container>
+      </bc-simple-step>
+
+      <bc-simple-step [label]="'COUNTING_CIRCLE.MERGE.EDIT.GENERAL_INFORMATIONS_STEP' | translate" [disabled]="status !== 'complete'">
+        <ng-container>
+          <app-counting-circle-merger-general-informations [merger]="merger">
+          </app-counting-circle-merger-general-informations>
+        </ng-container>
+      </bc-simple-step>
+    </bc-simple-stepper>
+  </div>
+
+  <vo-lib-button-bar footer
+                     [canSave]="currentStepCanSave"
+                     (save)="completeCurrentStep()"
+                     [saveLabel]="currentStepSaveLabels[stepper.selectedIndex] | translate"
+                     [saving]="saving"
+                     (cancel)="cancel()">
+  </vo-lib-button-bar>
+</vo-lib-dialog>

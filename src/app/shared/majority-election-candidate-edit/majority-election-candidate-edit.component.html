@@ -1,0 +1,119 @@
+<div class="form mr-3" *ngIf="candidate">
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.NUMBER' | translate"
+    [required]="true"
+    [disabled]="testingPhaseEnded || isCandidateReference"
+    [(value)]="candidate.number"
+  ></bc-text>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate"
+    [required]="true"
+    [maxlength]="100"
+    [disabled]="isCandidateReference"
+    [(value)]="candidate.firstName"
+  ></bc-text>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate"
+    [required]="true"
+    [maxlength]="100"
+    [disabled]="isCandidateReference"
+    [(value)]="candidate.lastName"
+  ></bc-text>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.POLITICAL_FIRST_NAME' | translate"
+    [maxlength]="100"
+    [disabled]="isCandidateReference"
+    [placeholder]="candidate.firstName"
+    [(value)]="candidate.politicalFirstName"
+  ></bc-text>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.POLITICAL_LAST_NAME' | translate"
+    [maxlength]="100"
+    [disabled]="isCandidateReference"
+    [placeholder]="candidate.lastName"
+    [(value)]="candidate.politicalLastName"
+  ></bc-text>
+
+  <bc-date
+    [label]="'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate"
+    [required]="true"
+    [disabled]="isCandidateReference"
+    [error]="candidate.dateOfBirth !== undefined && !isDateOfBirthValid()"
+    [value]="candidate.dateOfBirth | date: 'yyyy-MM-dd'"
+    (valueChange)="dateOfBirth = $event"
+  ></bc-date>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH_YEAR' | translate"
+    [disabled]="true"
+    [value]="'' + (candidate.dateOfBirth?.getFullYear() || '')"
+  ></bc-text>
+
+  <bc-dropdown
+    class="full-width"
+    [label]="'SEX_TYPE.TITLE' | translate"
+    [items]="sexTypes"
+    [clearable]="false"
+    [disabled]="isCandidateReference"
+    displayExpr="description"
+    valueExpr="value"
+    [required]="true"
+    [(value)]="candidate.sex"
+  ></bc-dropdown>
+
+  <app-translated-formfield
+    [label]="'MAJORITY_ELECTION.CANDIDATE.OCCUPATION' | translate"
+    [optional]="true"
+    [maxlength]="250"
+    [disabled]="isCandidateReference"
+    [singleLanguageInput]="true"
+    [(value)]="candidate.occupation"
+  ></app-translated-formfield>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.TITLE' | translate"
+    [maxlength]="50"
+    [disabled]="isCandidateReference"
+    [(value)]="candidate.title"
+  ></bc-text>
+
+  <app-translated-formfield
+    [label]="'MAJORITY_ELECTION.CANDIDATE.OCCUPATION_TITLE' | translate"
+    [optional]="true"
+    [maxlength]="250"
+    [disabled]="isCandidateReference"
+    [singleLanguageInput]="true"
+    [(value)]="candidate.occupationTitle"
+  ></app-translated-formfield>
+
+  <app-translated-formfield
+    [label]="'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate"
+    [maxlength]="12"
+    [disabled]="isCandidateReference"
+    [singleLanguageInput]="true"
+    [(value)]="candidate.party"
+  ></app-translated-formfield>
+
+  <!-- incumbent may be edited even if this is a candidate reference -->
+  <bc-checkbox
+    [(checked)]="candidate.incumbent"
+    [label]="'MAJORITY_ELECTION.CANDIDATE.INCUMBENT' | translate"
+  ></bc-checkbox>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.ZIP_CODE' | translate"
+    [disabled]="isCandidateReference"
+    [(value)]="candidate.zipCode"
+  ></bc-text>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate"
+    [required]="true"
+    [disabled]="isCandidateReference"
+    [(value)]="candidate.locality"
+  ></bc-text>
+</div>

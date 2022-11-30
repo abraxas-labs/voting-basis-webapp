@@ -1,0 +1,50 @@
+<div class="form">
+
+  <div class="dropdown-checkbox-container">
+    <bc-dropdown [label]="'VOTE.RESULT_ENTRY.TITLE' | translate"
+                 [disabled]="testingPhaseEnded || !isVariantsBallot"
+                 [items]="resultEntryChoices"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [(value)]="data.resultEntry"></bc-dropdown>
+    <bc-checkbox [(checked)]="data.enforceResultEntryForCountingCircles"
+                 class="mb-1"
+                 [label]="'VOTE.ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES' | translate"
+                 [disabled]="locked || !isVariantsBallot"></bc-checkbox>
+  </div>
+
+  <ng-container *ngIf="data.resultEntry === resultEntryType.VOTE_RESULT_ENTRY_DETAILED">
+    <bc-number [label]="'VOTE.BALLOT_BUNDLE_SAMPLE_SIZE_PERCENT' | translate"
+                  [disabled]="testingPhaseEnded"
+                  [max]="100"
+                  [(value)]="ballotBundleSampleSizePercent"></bc-number>
+    <div class="ballot-numbers">
+      <div>
+        <bc-label class="full-width" [label]="'VOTE.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
+        <bc-radio-button-group class="mt-2"
+                               [items]="automaticBallotBundleNumberGenerationChoices"
+                               orientation="vertical"
+                               [(value)]="data.automaticBallotBundleNumberGeneration"
+                               [disabled]="testingPhaseEnded">
+        </bc-radio-button-group>
+      </div>
+    </div>
+
+    <div class="review-procedure">
+      <div>
+        <bc-label class="full-width" [label]="'VOTE.REVIEW_PROCEDURE.TITLE' | translate"></bc-label>
+        <bc-radio-button-group class="mt-2"
+                               [items]="reviewProcedureChoices"
+                               orientation="vertical"
+                               [(value)]="data.reviewProcedure"
+                               [disabled]="testingPhaseEnded">
+        </bc-radio-button-group>
+      </div>
+      <bc-checkbox class="mt-4 ml-5"
+                   [(checked)]="data.enforceReviewProcedureForCountingCircles"
+                   [label]="'VOTE.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
+                   [disabled]="testingPhaseEnded"></bc-checkbox>
+    </div>
+  </ng-container>
+</div>

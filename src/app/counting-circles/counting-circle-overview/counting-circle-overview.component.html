@@ -1,0 +1,57 @@
+<vo-lib-page [contentLoading]="loading" header="COUNTING_CIRCLE.TITLE">
+  <div class="ml-3">
+    <app-historization-filter-bar [includeDeletedLabel]="'HISTORIZATION.INCLUDE_DELETED.COUNTING_CIRCLE'"
+                                  (filterChange)="historizationFilterChange($event)"></app-historization-filter-bar>
+
+    <div class="flex" *ngIf="!historizationFilter.date && isAdmin">
+      <bc-button variant="tertiary"
+                 [label]="'COUNTING_CIRCLE.NEW' | translate"
+                 icon="plus"
+                 (buttonClick)="create()"></bc-button>
+      <bc-button variant="tertiary"
+                 (buttonClick)="openMergers()"
+                 [label]="'COUNTING_CIRCLE.MERGE.TITLE' | translate"
+                 icon="group"></bc-button>
+    </div>
+
+    <bc-advanced-table class="w-full" [dataSource]="data">
+      <ng-container bcColumnDef="name">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="bfs">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.bfs }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="code">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.CODE' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.code }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="authority">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.responsibleAuthority.name }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="modifiedOn">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.MODIFIED_ON' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.modifiedOn | date:'short' }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="state">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.STATE' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{'COUNTING_CIRCLE.STATES.' + element.state | translate}}</td>
+      </ng-container>
+
+      <ng-container bcColumnDef="actions">
+        <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+        <td bc-cell *bcCellDef="let element">
+          <bc-icon *ngIf="!element.deletedOn && isAdmin"
+                   (click)="delete(element); $event.stopPropagation()"
+                   icon="trash"
+                   iconColor="error"></bc-icon>
+        </td>
+      </ng-container>
+
+      <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+      <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="show(row)" ></tr>
+    </bc-advanced-table>
+  </div>
+</vo-lib-page>

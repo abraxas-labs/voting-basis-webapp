@@ -1,0 +1,33 @@
+<vo-lib-page [contentLoading]="loading"
+             header="CANTON_SETTINGS.TITLE">
+  <div class="flex">
+    <bc-button *ngIf="isAdmin"
+               variant="tertiary"
+               icon="plus"
+               [label]="'CANTON_SETTINGS.NEW' | translate"
+               (buttonClick)="createOrEdit()"></bc-button>
+  </div>
+
+  <bc-advanced-table class="w-full" [dataSource]="cantonSettingsList">
+
+    <ng-container bcColumnDef="name">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'CANTON_SETTINGS.NAME' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{'CANTON_SETTINGS.CANTON.NAMES.' + element.canton | translate}}</td>
+    </ng-container>
+
+    <ng-container bcColumnDef="shortName">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'CANTON_SETTINGS.SHORT_NAME' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{'CANTON_SETTINGS.CANTON.SHORT_NAMES.' + element.canton | translate}}</td>
+    </ng-container>
+
+    <ng-container bcColumnDef="authority">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'CANTON_SETTINGS.AUTHORITY' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.authorityName }}</td>
+    </ng-container>
+
+    <tr bc-header-row *bcHeaderRowDef="['name', 'shortName', 'authority']"></tr>
+    <tr bc-advanced-table-row *bcRowDef="let row; columns: ['name', 'shortName', 'authority']"
+        [selectable]="true"
+        (rowSelected)="createOrEdit(row)"></tr>
+  </bc-advanced-table>
+</vo-lib-page>

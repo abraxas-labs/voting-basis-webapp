@@ -1,0 +1,16 @@
+<vo-lib-dialog [contentLoading]="false">
+  <h1 header>{{'CONTEST.PAST_UNLOCK.TITLE' | translate}}</h1>
+
+  <div content class="form mb-2 mr-3">
+    {{('CONTEST.PAST_UNLOCK.DESCRIPTION' | translate: {date: contest.date | date:'dd.MM.yyyy'})}}
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [saveLabel]="'CONTEST.PAST_UNLOCK.SAVE' | translate"
+                       (save)="save()"
+                       [saving]="saving"
+                       [cancelLabel]="'APP.CANCEL' | translate"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

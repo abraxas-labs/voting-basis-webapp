@@ -1,0 +1,18 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+.tree-row {
+  .disabled {
+    color: $color-grey-4;
+    font-style: italic;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+}
+
+.flex {
+  display: flex;
+  justify-content: flex-end;
+}

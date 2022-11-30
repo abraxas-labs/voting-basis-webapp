@@ -1,0 +1,73 @@
+<vo-lib-page [contentLoading]="loading"
+             [header]="!isNew && data?.name || 'COUNTING_CIRCLE.NEW'"
+             [showBackButton]="true">
+  <div class="grid">
+    <div *ngIf="data" class="content form">
+      <bc-text [label]="'COUNTING_CIRCLE.NAME' | translate"
+               [required]="true"
+               [maxlength]="100"
+               [disabled]="!isAdmin"
+               [(value)]="data.name"></bc-text>
+      <bc-text [label]="'COUNTING_CIRCLE.NAME_FOR_PROTOCOL' | translate"
+               [maxlength]="100"
+               [disabled]="!isAdmin"
+               [(value)]="data.nameForProtocol"></bc-text>
+      <bc-text [label]="'COUNTING_CIRCLE.BFS' | translate"
+               [required]="true"
+               [disabled]="!isAdmin"
+               [(value)]="data.bfs"></bc-text>
+      <bc-text [label]="'COUNTING_CIRCLE.CODE' | translate"
+               [maxlength]="10"
+               [disabled]="!isAdmin"
+               [(value)]="data.code"></bc-text>
+      <bc-number [label]="'COUNTING_CIRCLE.SORT_NUMBER' | translate"
+                 [max]="999999999"
+                 [min]="0"
+                 [error]="data.sortNumber < 0 || data.sortNumber > 999999999"
+                 [disabled]="!isAdmin"
+                 [(value)]="data.sortNumber"></bc-number>
+
+      <vo-lib-tenant-selection label="COUNTING_CIRCLE.DETAIL.AUTHORITY"
+                               [disabled]="!isAdmin"
+                               [(selectedTenant)]="selectedResponsibleAuthority"></vo-lib-tenant-selection>
+
+      <app-authority-address-edit [authority]="data.responsibleAuthority!"
+                                  [disabled]="!isResponsibleAuthorityOrAdmin"></app-authority-address-edit>
+
+      <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
+      <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_DURING_EVENT</span>
+      <app-contact-person-edit class="form"
+                               [disabled]="!isResponsibleAuthorityOrAdmin"
+                               [contactPerson]="data.contactPersonDuringEvent"></app-contact-person-edit>
+
+      <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
+      <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_AFTER_EVENT</span>
+      <bc-checkbox class="ml-2"
+        [label]="'COUNTING_CIRCLE.DETAIL.SAME_CONTACT_PERSON' | translate"
+                   [disabled]="!isResponsibleAuthorityOrAdmin"
+                   [(checked)]="data.contactPersonSameDuringEventAsAfter"></bc-checkbox>
+      <app-contact-person-edit *ngIf="!data.contactPersonSameDuringEventAsAfter"
+                               class="form"
+                               [disabled]="!isResponsibleAuthorityOrAdmin"
+                               [contactPerson]="data.contactPersonAfterEvent"></app-contact-person-edit>
+      <vo-lib-button-bar *ngIf="isResponsibleAuthorityOrAdmin"
+                         (cancel)="cancel()"
+                         [saving]="saving"
+                         [canSave]="canSave"
+                         (save)="save()"></vo-lib-button-bar>
+    </div>
+
+    <div>
+      <h2 translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.ASSIGNMENT</h2>
+      <bc-spinner *ngIf="loading; else domainOfInfluencesList"></bc-spinner>
+      <ng-template #domainOfInfluencesList>
+        <ng-container *ngIf="domainOfInfluences.length; else domainOfInfluencesEmpty">
+          <p class="my-1" *ngFor="let domainOfInfluence of domainOfInfluences">{{ domainOfInfluence.name }}</p>
+        </ng-container>
+        <ng-template #domainOfInfluencesEmpty>
+          <p class="my-1 no-items-message" translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.EMPTY</p>
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+</vo-lib-page>

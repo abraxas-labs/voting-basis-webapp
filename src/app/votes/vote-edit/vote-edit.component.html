@@ -1,0 +1,65 @@
+<vo-lib-page [contentLoading]="initialLoading"
+             [header]="isNew ? 'VOTE.NEW' : 'VOTE.EDIT'"
+             [showBackButton]="true"
+             [backButtonNavigateCommands]="['../../']">
+  <bc-simple-stepper #stepper
+                          labelPosition="bottom"
+                          linear>
+    <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
+      <ng-container *ngIf="data.contestId">
+        <app-vote-general-informations #step1
+                                       [data]="data"></app-vote-general-informations>
+        <div class="stepper-footer">
+          <vo-lib-inline-spinner class="align-right"
+                                 position="left"
+                                 [loading]="stepLoading">
+            <bc-button variant="primary"
+                       [disabled]="!step1.canSave || stepLoading"
+                       [label]="'APP.NEXT' | translate"
+                       (buttonClick)="submitVote()"></bc-button>
+          </vo-lib-inline-spinner>
+        </div>
+      </ng-container>
+    </bc-simple-step>
+
+    <bc-simple-step [label]="'VOTE.BALLOT.TITLE' | translate" [disabled]="!step1?.canSave || stepLoading">
+      <app-vote-ballot #step2
+                       [data]="data.ballots"
+                       [testingPhaseEnded]="testingPhaseEnded"
+                       [locked]="locked"
+                       [eVoting]="eVoting">
+      </app-vote-ballot>
+
+      <div class="stepper-footer">
+        <bc-button [label]="'APP.BACK' | translate" (buttonClick)="stepper.previous()"></bc-button>
+
+        <vo-lib-inline-spinner position="left"
+                               [loading]="stepLoading">
+          <bc-button variant="primary"
+                     [label]="'APP.NEXT' | translate"
+                     [disabled]="!step2.canSave || stepLoading"
+                     (buttonClick)="submitBallots()"></bc-button>
+        </vo-lib-inline-spinner>
+      </div>
+    </bc-simple-step>
+
+    <bc-simple-step [label]="'POLITICAL_BUSINESS.RESULT_ENTRY_INFORMATION' | translate"
+                    [disabled]="!step1?.canSave || !step2.canSave || stepLoading">
+      <app-vote-erfassung-informations #step3
+                                       [testingPhaseEnded]="testingPhaseEnded"
+                                       [locked]="locked"
+                                       [isVariantsBallot]="isVariantsBallot"
+                                       [data]="data">
+      </app-vote-erfassung-informations>
+
+      <div class="stepper-footer">
+        <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>
+
+        <bc-button variant="primary"
+                   [disabled]="!step3.canSave"
+                   [label]="'APP.FINISH' | translate"
+                   (buttonClick)="submitErfassungInformations()"></bc-button>
+      </div>
+    </bc-simple-step>
+  </bc-simple-stepper>
+</vo-lib-page>

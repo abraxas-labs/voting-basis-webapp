@@ -1,0 +1,22 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.buttons {
+  display: flex;
+  justify-content: flex-end;
+
+  > :not(:first-child) {
+    margin-left: 0.5rem;
+  }
+}
+
+.mat-column-actions {
+  width: 4rem;
+}

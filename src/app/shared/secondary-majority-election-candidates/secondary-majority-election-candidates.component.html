@@ -1,0 +1,35 @@
+<bc-spinner class="block" *ngIf="loading; else candidateOverview"></bc-spinner>
+<ng-template #candidateOverview>
+  <h2 class="mt-4">
+    {{
+    'MAJORITY_ELECTION.CANDIDATE.TITLE_DESCRIPTION'
+      | translate: { name: (currentSecondaryMajorityElection?.shortDescription | getTranslation) }
+    }}
+  </h2>
+  <div class="flex">
+    <bc-button variant="tertiary"
+               icon="plus"
+               [disabled]="locked"
+               [label]="'MAJORITY_ELECTION.CANDIDATE.NEW' | translate"
+               (buttonClick)="createCandidate()"></bc-button>
+  </div>
+
+  <app-majority-election-candidate-list [candidates]="expandedCandidates"
+                                        [testingPhaseEnded]="testingPhaseEnded"
+                                        [locked]="locked"
+                                        (candidatesReordered)="reorderCandidates($event)"
+                                        (edit)="editCandidate($event)"
+                                        (delete)="deleteCandidate($event)"
+                                        class="mb-2">
+  </app-majority-election-candidate-list>
+
+  <app-majority-election-ballot-group-overview *ngIf="showBallotGroups && majorityElection && currentSecondaryMajorityElection"
+                                               [testingPhaseEnded]="testingPhaseEnded"
+                                               [locked]="locked"
+                                               [loadBallotGroupsInitially]="true"
+                                               [majorityElection]="majorityElection"
+                                               [secondaryMajorityElections]="secondaryMajorityElections"
+                                               [forSecondaryElection]="currentSecondaryMajorityElection">
+  </app-majority-election-ballot-group-overview>
+
+</ng-template>

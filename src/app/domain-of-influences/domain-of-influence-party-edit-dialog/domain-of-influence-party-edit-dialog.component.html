@@ -1,0 +1,20 @@
+<vo-lib-dialog>
+  <h1 header>{{!isNew ? ('DOMAIN_OF_INFLUENCE.PARTY.EDIT' | translate) : ('DOMAIN_OF_INFLUENCE.PARTY.NEW' | translate)}}</h1>
+
+  <div content class="form mr-3 my-2">
+    <app-translated-textarea [label]="'DOMAIN_OF_INFLUENCE.PARTY.NAME' | translate"
+                             [(value)]="party.name"
+                             [maxlength]="100"></app-translated-textarea>
+
+    <app-translated-formfield [label]="'DOMAIN_OF_INFLUENCE.PARTY.SHORT_DESCRIPTION' | translate"
+                              [(value)]="party.shortDescription"
+                              [maxlength]="12"></app-translated-formfield>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [canSave]="canSave"
+                       (save)="save()"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

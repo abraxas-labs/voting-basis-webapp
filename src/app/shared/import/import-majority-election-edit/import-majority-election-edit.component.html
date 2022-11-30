@@ -1,0 +1,46 @@
+<bc-expansion-panel [header]="data.politicalBusinessNumber + ': ' + (data.officialDescription | getTranslation)" [expanded]="true">
+  <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
+           [required]="true"
+           [(value)]="data.politicalBusinessNumber"></bc-text>
+
+  <bc-dropdown class="full-width"
+               *ngIf="domainOfInfluenceTypes.length > 1"
+               [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
+               [items]="domainOfInfluenceTypes"
+               [clearable]="false"
+               displayExpr="description"
+               valueExpr="value"
+               [required]="true"
+               [(value)]="selectedDomainOfInfluenceType"></bc-dropdown>
+
+  <bc-dropdown class="full-width"
+               *ngIf="selectedDomainOfInfluenceType"
+               [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
+               displayExpr="name"
+               [required]="true"
+               [(value)]="selectedDomainOfInfluence"
+               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
+
+  <bc-dropdown class="full-width"
+               [items]="domainOfInfluenceLevels"
+               displayExpr="desc"
+               valueExpr="level"
+               [required]="true"
+               [(value)]="data.reportDomainOfInfluenceLevel"
+               [label]="'POLITICAL_BUSINESS.REPORT_LEVEL' | translate"></bc-dropdown>
+
+  <bc-dropdown class="full-width"
+               [label]="'MAJORITY_ELECTION.MANDATE_ALGORITHM.TITLE' | translate"
+               [items]="mandateAlgorithms"
+               displayExpr="description"
+               valueExpr="value"
+               [required]="true"
+               [(value)]="data.mandateAlgorithm"></bc-dropdown>
+
+  <div class="button-container">
+    <bc-button variant="primary"
+               [label]="'ACTIONS.APPLY' | translate"
+               [disabled]="!data.politicalBusinessNumber || !data.domainOfInfluenceId || data.reportDomainOfInfluenceLevel === undefined"
+               (buttonClick)="apply()"></bc-button>
+  </div>
+</bc-expansion-panel>

@@ -1,0 +1,18 @@
+<vo-lib-dialog>
+  <h1 header translate>PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.EDIT</h1>
+
+  <div content class="form mr-3">
+    <bc-dropdown class="full-width"
+                 [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.TITLE' | translate"
+                 [items]="lists"
+                 [required]="true"
+                 displayExpr="orderNumber"
+                 valueExpr="id"
+                 [(value)]="data.proportionalElectionMainListId"></bc-dropdown>
+    <vo-lib-button-bar footer
+                       [saving]="saving"
+                       [sticky]="false"
+                       (save)="save()"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

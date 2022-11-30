@@ -1,0 +1,7 @@
+.flex-container {
+  display: flex;
+
+  :first-child {
+    width: 16rem;
+  }
+}

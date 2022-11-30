@@ -1,0 +1,16 @@
+<bc-nav-layout >
+  <bc-nav-drawer [opened]="true" [autoFocus]="false" [disableClose]="true" mode="side">
+      <bc-nav-item [label]="'NAV.VOTING_CONTEST' | translate" [routerLink]="['/', theme, 'contests']">
+      </bc-nav-item>
+      <bc-nav-item [label]="'NAV.COUNTING_CIRCLE' | translate" [routerLink]="['/', theme, 'counting-circles']">
+      </bc-nav-item>
+      <bc-nav-item [label]="'NAV.DOMAIN_OF_INFLUENCE' | translate" [routerLink]="['/', theme, 'domain-of-influences']">
+      </bc-nav-item>
+      <bc-nav-item [label]="'NAV.ACTIVITY' | translate" [routerLink]="['/', theme, 'activities']">
+      </bc-nav-item>
+      <bc-nav-item [label]="'NAV.CANTON_SETTINGS' | translate" [routerLink]="['/', theme, 'canton-settings']">
+      </bc-nav-item>
+  </bc-nav-drawer>
+
+  <ng-content></ng-content>
+</bc-nav-layout>

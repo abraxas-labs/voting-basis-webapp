@@ -1,0 +1,9 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+h3:not(:first-child) {
+  margin-top: 2rem !important;
+}
+
+::ng-deep bc-icon:hover {
+  color: $color-error;
+}

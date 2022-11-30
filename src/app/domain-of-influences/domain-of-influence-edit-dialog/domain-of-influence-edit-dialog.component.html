@@ -1,0 +1,101 @@
+<vo-lib-dialog>
+  <h1 header>{{!isNew ? ('DOMAIN_OF_INFLUENCE.EDIT' | translate) : ('DOMAIN_OF_INFLUENCE.NEW' | translate)}}</h1>
+
+  <div content class="form mr-3 my-2">
+    <bc-text [label]="'DOMAIN_OF_INFLUENCE.NAME' | translate"
+             [required]="true"
+             [maxlength]="100"
+             [disabled]="readonly || !isAdmin"
+             [(value)]="data.name"></bc-text>
+
+    <bc-text [label]="'DOMAIN_OF_INFLUENCE.SHORT_NAME' | translate"
+             [required]="true"
+             [maxlength]="5"
+             [disabled]="readonly || !isAdmin"
+             [(value)]="data.shortName"></bc-text>
+
+    <bc-text [label]="'DOMAIN_OF_INFLUENCE.NAME_FOR_PROTOCOL' | translate"
+             [maxlength]="100"
+             [disabled]="readonly || !isAdmin"
+             [(value)]="data.nameForProtocol"></bc-text>
+
+    <bc-text [label]="'DOMAIN_OF_INFLUENCE.BFS' | translate"
+             [disabled]="readonly || !isAdmin"
+             [(value)]="data.bfs"></bc-text>
+
+    <bc-text [label]="'DOMAIN_OF_INFLUENCE.CODE' | translate"
+             [maxlength]="10"
+             [disabled]="readonly || !isAdmin"
+             [(value)]="data.code"></bc-text>
+
+    <bc-number [label]="'DOMAIN_OF_INFLUENCE.SORT_NUMBER' | translate"
+               [max]="999999999"
+               [min]="0"
+               [error]="data.sortNumber < 0 || data.sortNumber > 999999999"
+               [disabled]="readonly || !isAdmin"
+               [(value)]="data.sortNumber"></bc-number>
+
+    <vo-lib-tenant-selection label="DOMAIN_OF_INFLUENCE.AUTHORITY"
+                             [disabled]="readonly || !isAdmin"
+                             [(selectedTenant)]="selectedTenant"></vo-lib-tenant-selection>
+
+    <bc-dropdown *ngIf="domainOfInfluenceCantons.length"
+                 class="full-width"
+                 [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
+                 [items]="domainOfInfluenceCantons"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [disabled]="readonly || !isAdmin"
+                 [(value)]="data.canton"></bc-dropdown>
+
+    <bc-dropdown class="full-width"
+                 [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
+                 [items]="domainOfInfluenceTypes"
+                 [disabled]="!!data.id || readonly || !isAdmin"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [(value)]="data.type"></bc-dropdown>
+
+    <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
+    <app-contact-person-edit class="form"
+                             [disabled]="readonly"
+                             [contactPerson]="data.contactPerson!"></app-contact-person-edit>
+
+    <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.PARTY.TITLE</h2>
+    <app-domain-of-influence-parties [(parties)]="data.parties" [disabled]="readonly"></app-domain-of-influence-parties>
+
+    <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.TITLE</h2>
+    <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.TITLE</h3>
+    <app-export-configurations [disabled]="readonly || !isAdmin"
+                               [(configurations)]="data.exportConfigurationsList"
+                               class="mb-4"></app-export-configurations>
+
+    <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.PLAUSIBILISATION_CONFIGURATION.TITLE</h3>
+    <app-plausibilisation-configuration [disabled]="readonly"
+                                        [domainOfInfluence]="data"
+                                        [domainOfInfluenceType]="data.type"></app-plausibilisation-configuration>
+
+    <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.TITLE</h2>
+    <bc-checkbox
+      [disabled]="readonly || !isAdmin"
+      [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.RESPONSIBLE_FOR_VOTING_CARDS' | translate"
+      [(checked)]="data.responsibleForVotingCards"></bc-checkbox>
+    <app-domain-of-influence-voting-card-data-edit *ngIf="data.responsibleForVotingCards"
+                                                   [disabled]="readonly"
+                                                   [domainOfInfluence]="data"
+                                                   (logoChanged)="logoChanged = true; updatedLogo = $event">
+    </app-domain-of-influence-voting-card-data-edit>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [canSave]="canSave"
+                       [saving]="saving"
+                       [sticky]="false"
+                       [hasSaveButton]="!readonly"
+                       (save)="save()"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

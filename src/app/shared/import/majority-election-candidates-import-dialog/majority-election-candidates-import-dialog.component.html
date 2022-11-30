@@ -1,0 +1,19 @@
+<vo-lib-dialog [contentLoading]="fileSelect.loading">
+  <h1 header translate>IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES</h1>
+
+  <app-import-file-select content
+                          #fileSelect
+                          [importTypes]="importTypes"
+                          (importsChange)="importFilesChanged($event)">
+  </app-import-file-select>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [saveLabel]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES' | translate"
+                       (save)="save()"
+                       [canSave]="canSave"
+                       [saving]="saving"
+                       [cancelLabel]="'APP.CANCEL' | translate"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

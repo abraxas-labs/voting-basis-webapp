@@ -1,0 +1,22 @@
+@use '@abraxas/voting-lib/style/spacing' as *;
+
+.form {
+  @extend .mx-1;
+
+  // stylelint-disable-next-line
+  > *:not(:first-child):not(h4) {
+    @extend .mt-2;
+  }
+
+  h4 {
+    @extend .mt-4;
+  }
+
+  .form-field {
+    display: flex;
+
+    > *:not(:first-child) {
+      margin-left: 0.4rem;
+    }
+  }
+}

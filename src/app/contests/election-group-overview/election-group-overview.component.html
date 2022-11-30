@@ -1,0 +1,30 @@
+<bc-advanced-table class="w-full" [dataSource]="electionGroups">
+  <ng-container bcColumnDef="number">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'ELECTION_GROUP.NUMBER' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="description">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'ELECTION_GROUP.DESCRIPTION' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.description }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="primaryBusinessNumber">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'ELECTION_GROUP.PRIMARY_ELECTION' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.primaryMajorityElection.politicalBusinessNumber }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="secondaryElections">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'ELECTION_GROUP.SECONDARY_ELECTIONS' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">
+      <div class="cell-container">{{ getSecondaryElectionPoliticalBusinessNumbers(element) }}</div>
+    </td>
+  </ng-container>
+
+  <ng-container bcColumnDef="actions">
+    <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+    <td bc-cell *bcCellDef="let element">
+      <bc-icon *ngIf="!readonly && canEdit(element)" class="clickable" (click)="edit(element)" icon="edit"></bc-icon>
+    </td>
+  </ng-container>
+
+  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+</bc-advanced-table>

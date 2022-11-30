@@ -1,0 +1,58 @@
+<div class="grid">
+  <div>
+    <h2 translate>IMPORT.FILE</h2>
+
+    <bc-dropdown [label]="'IMPORT.E_CH_STANDARD' | translate"
+                 [items]="importTypeItemDescriptions"
+                 [(value)]="selectedEchType"
+                 [required]="true"
+                 displayExpr="description"
+                 valueExpr="value"
+                 class="mb-2">
+    </bc-dropdown>
+
+    <div class="file-container" [class.dragging]="draggingFiles">
+      <div>
+        <p translate>IMPORT.DRAG_FILE</p>
+        <p translate>IMPORT.OR</p>
+        <input #fileInput
+               type="file"
+               (change)="addFilesFromEvent($event)"
+               accept=".xml"
+               [multiple]="true">
+        <bc-button (buttonClick)="fileInput.click()"
+                   [label]="'IMPORT.CHOOSE_FILE' | translate"
+                   variant="tertiary"
+                   icon="upload"></bc-button>
+      </div>
+    </div>
+  </div>
+  <bc-divider orientation="vertical" class="ml-4"></bc-divider>
+  <div>
+    <h2 translate>IMPORT.CHOSEN_FILES</h2>
+
+    <bc-advanced-table class="w-full" [dataSource]="dataSource">
+      <ng-container bcColumnDef="filename">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'IMPORT.FILENAME' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.fileName }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="type">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'IMPORT.E_CH_STANDARD' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">
+          <div class="truncate mr-4">
+            {{ 'IMPORT.TYPES.' + element.importType | translate }}
+          </div>
+        </td>
+      </ng-container>
+      <ng-container bcColumnDef="actions">
+        <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+        <td bc-cell *bcCellDef="let element">
+          <bc-icon class="clickable" (click)="removeFile(element)" icon="trash" iconColor="error"></bc-icon>
+        </td>
+      </ng-container>
+
+      <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+      <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+    </bc-advanced-table>
+  </div>
+</div>

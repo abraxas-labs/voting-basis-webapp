@@ -1,0 +1,50 @@
+.mat-column-number {
+  width: 5%;
+}
+
+// stylelint-disable-next-line
+.mat-column-shortDescription {
+  width: 15%;
+}
+
+// stylelint-disable-next-line
+.mat-column-officialDescription {
+  width: 25%;
+}
+
+// stylelint-disable-next-line
+.mat-column-domainOfInfluenceType {
+  width: 8%;
+}
+
+// stylelint-disable-next-line
+.mat-column-domainOfInfluenceName {
+  width: 8%;
+}
+
+.mat-column-type {
+  width: 8%;
+}
+
+.mat-column-enable {
+  width: 10%;
+}
+
+.mat-column-owner {
+  width: 12%;
+}
+
+// stylelint-disable-next-line
+.mat-column-ownerDescription {
+  width: 12%;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

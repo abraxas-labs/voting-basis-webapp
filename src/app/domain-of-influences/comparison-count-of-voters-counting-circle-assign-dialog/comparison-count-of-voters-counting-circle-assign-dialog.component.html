@@ -1,0 +1,36 @@
+<vo-lib-dialog>
+  <h1 header>{{ translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.DIALOG_TITLE' | translate}}</h1>
+
+  <div content class="form mr-3 my-3">
+    <bc-advanced-table class="w-full" [dataSource]="dataSource">
+      <ng-container bcColumnDef="name">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="category">
+        <th bc-header-cell *bcHeaderCellDef>{{ translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.CATEGORY' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">
+          <bc-dropdown class="full-width"
+                       [items]="categoryItems"
+                       [disabled]="disabled"
+                       [clearable]="true"
+                       [required]="true"
+                       displayExpr="description"
+                       valueExpr="value"
+                       [(value)]="element.category"></bc-dropdown>
+        </td>
+      </ng-container>
+
+      <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+      <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+    </bc-advanced-table>
+    <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       (cancel)="cancel()"
+                       (save)="apply()"
+                       [saveLabel]="(disabled ? 'ACTIONS.CLOSE' : 'ACTIONS.ASSIGN') | translate"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

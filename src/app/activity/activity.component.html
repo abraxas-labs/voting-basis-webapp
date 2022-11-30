@@ -1,0 +1,30 @@
+<vo-lib-page [contentLoading]="false" header="ACTIVITY.TITLE">
+  <bc-advanced-table class="w-full" [dataSource]="dataSource">
+    <ng-container bcColumnDef="eventName">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'ACTIVITY.EVENT_NAME' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ 'ACTIVITY.EVENT.' + element.eventName | translate }}</td>
+    </ng-container>
+
+    <ng-container bcColumnDef="timestamp">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'ACTIVITY.TIMESTAMP' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.timestamp | date:'short' }}</td>
+    </ng-container>
+
+    <ng-container bcColumnDef="user">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'ACTIVITY.USER' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.eventUser.firstName }} {{ element.eventUser.lastName }}</td>
+    </ng-container>
+
+    <ng-container bcColumnDef="tenantName">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'ACTIVITY.TENANT' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.eventTenant.tenantName }}</td>
+    </ng-container>
+
+    <tr bc-header-row *bcHeaderRowDef="['eventName', 'timestamp', 'user', 'tenantName']"></tr>
+    <tr bc-advanced-table-row *bcRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']"></tr>
+  </bc-advanced-table>
+
+  <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+
+  <bc-spinner *ngIf="dataSource.loading"></bc-spinner>
+</vo-lib-page>

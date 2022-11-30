@@ -1,0 +1,82 @@
+@use '~normalize.css/normalize';
+@use '@abraxas/voting-lib/style' as *;
+@use './sharedStyles';
+
+body {
+  margin: 0;
+}
+
+.block {
+  display: block !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.no-items-message {
+  font-style: italic;
+}
+
+.flex-shrink-3 {
+  flex-shrink: 3;
+}
+
+.flex {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.no-data {
+  font-style: italic;
+}
+
+.mat-dialog-container {
+  overflow: visible !important;
+
+  // custom dialog component needs to be flex to have a fixed child height
+  > * {
+    display: flex;
+  }
+}
+
+.mat-step-header {
+  // disable material stepping by mat-step click
+  pointer-events: none !important;
+
+  .mat-step-icon {
+    color: $color-white !important;
+    background-color: $color-primary;
+  }
+
+  &[aria-selected='true'] ~ .mat-step-header .mat-step-icon {
+    background-color: rgba(0 0 0 / 54%) !important;
+  }
+}
+
+.stepper-footer {
+  @extend .mt-4;
+
+  display: flex;
+  justify-content: space-between;
+
+  .align-right {
+    margin-left: auto;
+  }
+}
+
+.step-content {
+  @extend .mt-4;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.snackbar {
+  margin-top: 5rem !important;
+}

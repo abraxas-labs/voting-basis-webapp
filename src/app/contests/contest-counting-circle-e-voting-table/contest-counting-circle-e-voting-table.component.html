@@ -1,0 +1,29 @@
+<bc-advanced-table class="w-full" [dataSource]="dataSource">
+  <ng-container bcColumnDef="description">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.COUNTING_CIRCLES.DESCRIPTION' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.countingCircle.name }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="eVoting">
+    <th bc-header-cell *bcHeaderCellDef>
+      <div class="e-voting-header">
+        <bc-checkbox
+          class="ml-2"
+          [checked]="allEVoting"
+          (checkedChange)="allEVoting !== $event ? setAllEVoting($event) : undefined"></bc-checkbox>
+        <span class="ml-1">{{'CONTEST.COUNTING_CIRCLES.E_VOTING' | translate}}</span>
+      </div>
+    </th>
+    <td bc-cell *bcCellDef="let element">
+      <bc-checkbox
+        class="ml-2"
+        [checked]="element.eVoting"
+        (checkedChange)="element.eVoting !== $event ? (element.eVoting = $event) : undefined; updateAllEVoting()"></bc-checkbox>
+    </td>
+  </ng-container>
+
+  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"
+      [selectable]="true"
+      (rowSelected)="row.eVoting = !row.eVoting; updateAllEVoting()"></tr>
+</bc-advanced-table>
+<bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>

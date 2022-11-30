@@ -1,0 +1,14 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+.content {
+  max-width: 30rem;
+}
+
+.subtitle {
+  color: $color-grey-3;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}

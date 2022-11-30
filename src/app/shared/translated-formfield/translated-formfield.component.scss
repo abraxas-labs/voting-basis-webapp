@@ -1,0 +1,16 @@
+:host {
+  margin-top: 0.5rem;
+  display: block;
+}
+
+.formfield-container {
+  display: flex;
+
+  .field {
+    width: 100%;
+
+    &:not(:last-child) {
+      margin-right: 0.2rem;
+    }
+  }
+}

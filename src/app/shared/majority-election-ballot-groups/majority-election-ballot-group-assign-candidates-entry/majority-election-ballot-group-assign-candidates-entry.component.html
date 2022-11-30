@@ -1,0 +1,91 @@
+<div class="container">
+  <div class="left">
+    <bc-advanced-table class="w-full" [dataSource]="dataSource">
+      <ng-container bcColumnDef="select">
+        <th bc-header-cell *bcHeaderCellDef>
+          <bc-checkbox
+            class="ml-2 mb-0"
+            (checkedChange)="toggleAllRows($event)"
+            [checked]="selection.hasValue() && isAllSelected"
+            [indeterminate]="selection.hasValue() && !isAllSelected"
+          >
+          </bc-checkbox>
+        </th>
+        <td bc-cell *bcCellDef="let element">
+          <bc-checkbox
+            class="ml-2"
+            (checkedChange)="toggleRowWithValue(element, $event)"
+            [checked]="selection.isSelected(element)"
+          >
+          </bc-checkbox>
+        </td>
+      </ng-container>
+      <ng-container bcColumnDef="number">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="lastName">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.lastName }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="firstName">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.firstName }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="dateOfBirth">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.dateOfBirth | date }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="sex">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.SEX' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">
+          <div class="cell-container">{{'SEX_TYPE.' + element.sex | translate}}</div>
+        </td>
+      </ng-container>
+      <ng-container bcColumnDef="party">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.party | getTranslation }}</td>
+      </ng-container>
+
+      <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+      <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="toggleRow(row)"></tr>
+    </bc-advanced-table>
+    <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+  </div>
+
+  <div class="right">
+    <h3 translate class="mb-0">MAJORITY_ELECTION.BALLOT_GROUP.ASSIGNED_CANDIDATES</h3>
+
+    <bc-advanced-table class="w-full" [dataSource]="selection.selected">
+      <ng-container bcColumnDef="number">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="lastName">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.lastName }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="firstName">
+        <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</th>
+        <td bc-cell *bcCellDef="let element">{{ element.firstName }}</td>
+      </ng-container>
+      <ng-container bcColumnDef="actions">
+        <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+        <td bc-cell *bcCellDef="let element">
+          <bc-icon class="clickable" (click)="selection.deselect(element)" icon="remove"></bc-icon>
+        </td>
+      </ng-container>
+
+      <tr bc-header-row *bcHeaderRowDef="columnsSelected"></tr>
+      <tr bc-advanced-table-row *bcRowDef="let row; columns: columnsSelected"></tr>
+    </bc-advanced-table>
+
+    <bc-number class="mt-2"
+               *ngIf="entry"
+               [label]="'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate"
+               [min]="0"
+               [max]="entry.election.numberOfMandates - entry.entry.blankRowCount"
+               [ngModel]="entry.entry.individualCandidatesVoteCount"
+               (ngModelChange)="entry.entry.individualCandidatesVoteCount = $event"></bc-number>
+  </div>
+</div>

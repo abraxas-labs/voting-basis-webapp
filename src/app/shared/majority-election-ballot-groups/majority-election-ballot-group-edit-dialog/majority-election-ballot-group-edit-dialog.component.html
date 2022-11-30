@@ -1,0 +1,34 @@
+<vo-lib-dialog>
+  <h1 header>{{(isNew ? 'MAJORITY_ELECTION.BALLOT_GROUP.NEW' : 'MAJORITY_ELECTION.BALLOT_GROUP.EDIT') | translate }}</h1>
+
+  <div content class="form mr-3">
+    <bc-text [label]="'MAJORITY_ELECTION.BALLOT_GROUP.SHORT_DESCRIPTION' | translate"
+             [required]="true"
+             [(value)]="ballotGroup.shortDescription"></bc-text>
+
+    <div class="form-group">
+      <bc-label [label]="'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate"></bc-label>
+      <bc-textarea [required]="true"
+                   class="full-width"
+                   [(value)]="ballotGroup.description"></bc-textarea>
+    </div>
+
+    <div *ngFor="let election of elections">
+      <h2>{{election.shortDescription | getTranslation}}</h2>
+      <bc-number [label]="'MAJORITY_ELECTION.BALLOT_GROUP.BLANK_ROWS' | translate"
+                 [required]="true"
+                 [min]="0"
+                 [max]="election.numberOfMandates"
+                 [value]="ballotGroup | majorityElectionBallotGroupBlankRows:election.id"
+                 (valueChange)="setBlankRows(election.id, +$event)"></bc-number>
+    </div>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [canSave]="canSave"
+                       (save)="save()"
+                       [saving]="saving"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

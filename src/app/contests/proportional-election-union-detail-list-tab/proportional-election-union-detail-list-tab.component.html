@@ -1,0 +1,25 @@
+<bc-spinner class="block" *ngIf="loading; else showUnionLists"></bc-spinner>
+<ng-template #showUnionLists>
+  <bc-advanced-table class="w-full" [dataSource]="dataSource">
+    <ng-container bcColumnDef="orderNumber">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION_UNION.UNION_LIST.ORDER_NUMBER' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.orderNumber }}</td>
+    </ng-container>
+    <ng-container bcColumnDef="shortDescription">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION_UNION.UNION_LIST.SHORT_DESCRIPTION' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
+    </ng-container>
+    <ng-container bcColumnDef="politicalBusinessNumbers">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION_UNION.UNION_LIST.POLITICAL_BUSINESS_NUMBERS' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.politicalBusinessNumbers }}</td>
+    </ng-container>
+    <ng-container bcColumnDef="listCount">
+      <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION_UNION.UNION_LIST.LIST_COUNT' | translate }}</th>
+      <td bc-cell *bcCellDef="let element">{{ element.listCount }}</td>
+    </ng-container>
+
+    <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+    <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+  </bc-advanced-table>
+</ng-template>
+<bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>

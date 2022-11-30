@@ -1,0 +1,67 @@
+<bc-advanced-table class="w-full mb-2" [dataSource]="candidates">
+  <ng-container bcColumnDef="position">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.POSITION' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.position }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="number">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="lastName">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.lastName }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="firstName">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.firstName }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="dateOfBirth">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.dateOfBirth | date }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="sex">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.SEX' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">
+      <div class="cell-container">
+        <ng-container *ngIf="element.sex !== undefined">{{'SEX_TYPE.' + element.sex | translate}}</ng-container>
+      </div>
+    </td>
+  </ng-container>
+  <ng-container bcColumnDef="title">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.TITLE' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.title }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="party">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.party | getTranslation }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="incumbent">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.INCUMBENT' | translate }}</th>
+    <td bc-cell *bcCellDef="let element"><bc-icon *ngIf="element.incumbent" icon="checkmark"></bc-icon></td>
+  </ng-container>
+  <ng-container bcColumnDef="zipCode">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.ZIP_CODE' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.zipCode }}</td>
+  </ng-container>
+  <ng-container bcColumnDef="locality">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.locality }}</td>
+  </ng-container>
+
+  <ng-container bcColumnDef="actions">
+    <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+    <td bc-cell *bcCellDef="let element">
+      <div class="flex">
+        <bc-icon *ngIf="element.id && !locked" class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
+        <bc-icon *ngIf="element.id && !testingPhaseEnded && !locked"
+                 class="clickable ml-2"
+                 (click)="delete.emit(element)"
+                 icon="trash"
+                 iconColor="error"></bc-icon>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+</bc-advanced-table>

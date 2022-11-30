@@ -1,0 +1,101 @@
+<vo-lib-dialog [contentLoading]="loading">
+  <h1 header>{{!isNew ? ('CONTEST.EDIT' | translate) : ('CONTEST.NEW' | translate)}}</h1>
+
+  <div content class="form mr-3">
+    <bc-dropdown *ngIf="domainOfInfluences.length !== 1"
+                 [items]="domainOfInfluences"
+                 [disabled]="!isNew"
+                 displayExpr="name"
+                 valueExpr="id"
+                 [required]="true"
+                 [value]="data.domainOfInfluenceId"
+                 (valueChange)="updateDomainOfInfluenceId($event)"
+                 [label]="'CONTEST.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
+
+    <ng-container *ngIf="isNew; else editDate">
+      <bc-dropdown [label]="'CONTEST.PRECONFIGURED_DATE' | translate"
+                   [disabled]="customDateSelected || testingPhaseEnded"
+                   [items]="preconfiguredDates"
+                   [value]="selectedPreconfiguredDate"
+                   [required]="true"
+                   (valueChange)="updateSelectedPreconfiguredDate($event)"
+                   displayExpr="displayValue"></bc-dropdown>
+      <bc-checkbox [(checked)]="customDateSelected"
+                   [disabled]="testingPhaseEnded"
+                   [label]="'CONTEST.CHOOSE_CUSTOM_DATE' | translate"></bc-checkbox>
+      <bc-date [label]="'CONTEST.CUSTOM_DATE' | translate"
+                    [disabled]="!customDateSelected || testingPhaseEnded"
+                    [required]="customDateSelected"
+                    [value]="data.date | date"
+                    (valueChange)="updateDate($event)"></bc-date>
+    </ng-container>
+    <ng-template #editDate>
+      <bc-date [label]="'CONTEST.CONTEST_DATE' | translate"
+                    [required]="true"
+                    [disabled]="testingPhaseEnded"
+                    [value]="data.date | date"
+                    (valueChange)="updateDate($event)"></bc-date>
+    </ng-template>
+
+    <app-translated-formfield [label]="'CONTEST.DESCRIPTION' | translate"
+                              [disabled]="testingPhaseEnded"
+                              [maxlength]="100"
+                              [(value)]="data.description"
+                              [singleLanguageInput]="true"></app-translated-formfield>
+    <bc-date [label]="'CONTEST.END_OF_TESTING_PHASE' | translate"
+                  [disabled]="testingPhaseEnded"
+                  [required]="true"
+                  [error]="
+                    data.endOfTestingPhase !== undefined &&
+                    data.date !== undefined &&
+                    (data.endOfTestingPhase < now || data.endOfTestingPhase > data.date)
+                  "
+                  [value]="data.endOfTestingPhase | date"
+                  (valueChange)="endOfTestingPhaseString = $event"></bc-date>
+
+    <bc-spinner class="block" size="1.5rem" *ngIf="pastContestsLoading; else pastContestsDropdown"></bc-spinner>
+    <ng-template #pastContestsDropdown>
+      <bc-dropdown *ngIf="pastContests.length > 0"
+                   [disabled]="testingPhaseEnded"
+                   [items]="pastContests"
+                   displayExpr="dateString"
+                   valueExpr="id"
+                   [required]="true"
+                   [(value)]="data.previousContestId"
+                   [label]="'CONTEST.PREVIOUS_CONTEST' | translate"></bc-dropdown>
+    </ng-template>
+
+    <bc-checkbox [(checked)]="data.eVoting"
+                 [disabled]="testingPhaseEnded"
+                 [label]="'CONTEST.E_VOTING' | translate"
+                 (checkedChange)="loadCountingCircleOptionsIfNeeded()"></bc-checkbox>
+
+    <ng-container *ngIf="data.eVoting">
+      <bc-date [label]="'CONTEST.E_VOTING_FROM' | translate"
+                    [disabled]="testingPhaseEnded"
+                    [required]="true"
+                    [value]="data.eVotingFrom | date"
+                    (valueChange)="eVotingFromString = $event"></bc-date>
+
+      <bc-date [label]="'CONTEST.E_VOTING_TO' | translate"
+                    [disabled]="testingPhaseEnded"
+                    [required]="true"
+                    [value]="data.eVotingTo | date"
+                    (valueChange)="eVotingToString = $event"></bc-date>
+
+      <bc-spinner *ngIf="countingCircleOptionsLoading"></bc-spinner>
+      <div *ngIf="countingCircleOptions" class="mt-2">
+        <app-contest-counting-circle-e-voting-table [options]="countingCircleOptions"></app-contest-counting-circle-e-voting-table>
+      </div>
+    </ng-container>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [canSave]="canSave"
+                       [saving]="saving"
+                       [sticky]="false"
+                       (save)="save()"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

@@ -1,0 +1,99 @@
+<bc-advanced-table class="w-full" [dataSource]="dataSource">
+  <ng-container bcColumnDef="date">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.DATE' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.date | date }}</td>
+  </ng-container>
+
+  <ng-container bcColumnDef="endOfTestingPhase">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.END_OF_TESTING_PHASE' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.endOfTestingPhase | date:'short' }}</td>
+  </ng-container>
+
+  <ng-container bcColumnDef="archivePer">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.ARCHIVE.TITLE_PER' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{ element.archivePer | date:'short' }}</td>
+  </ng-container>
+
+  <ng-container bcColumnDef="state">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.STATE' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{'CONTEST.STATES.' + (!!element.state ? element.state : 0) | translate}}</td>
+  </ng-container>
+
+  <ng-container bcColumnDef="owner">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.OWNER' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">{{element.domainOfInfluence?.authorityName}}</td>
+  </ng-container>
+
+  <ng-container bcColumnDef="pcd">
+    <th bc-header-cell *bcHeaderCellDef class="pcd-header"></th>
+    <td bc-cell *bcCellDef="let element">
+      <span *ngIf="element.isPreconfiguredDate" translate class="pcd">CONTEST.PRECONFIGURED_DATE</span>
+      <span *ngIf="element | ownsContest:domainOfInfluences" translate class="pcd">CONTEST.OWN_CONTEST</span>
+    </td>
+  </ng-container>
+
+  <ng-container bcColumnDef="politicalBusinesses">
+    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.POLITICAL_BUSINESSES' | translate }}</th>
+    <td bc-cell *bcCellDef="let element">
+      <div class="my-1" *ngFor="let detail of element.contestEntriesDetails">
+        {{'DOMAIN_OF_INFLUENCE.TYPES.' + detail.domainOfInfluenceType | translate}}: {{detail.contestEntriesCount}}
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container bcColumnDef="actions">
+    <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+    <td bc-cell *bcCellDef="let element">
+      <vo-lib-action-menu>
+        <vo-lib-action-menu-item
+          *ngIf="!element.isPreconfiguredDate"
+          (click)="view.emit(element)"
+          icon="eye"
+          text="ACTIONS.OPEN">
+        </vo-lib-action-menu-item>
+        <vo-lib-action-menu-item
+          *ngIf="element.isPreconfiguredDate"
+          (click)="create.emit(element)"
+          icon="plus"
+          text="CONTEST.CREATE_FROM_PRECONFIGURED_DATE">
+        </vo-lib-action-menu-item>
+        <vo-lib-action-menu-item
+          *ngIf="element | canEditContest:domainOfInfluences"
+          (click)="edit.emit(element)"
+          icon="edit"
+          text="ACTIONS.EDIT">
+        </vo-lib-action-menu-item>
+        <vo-lib-action-menu-item
+          *ngIf="element.state === contestStates.CONTEST_STATE_PAST_LOCKED"
+          (click)="archive.emit(element)"
+          icon="archive"
+          text="CONTEST.ARCHIVE.ACTION">
+        </vo-lib-action-menu-item>
+        <vo-lib-action-menu-item
+          *ngIf="element.state === contestStates.CONTEST_STATE_PAST_LOCKED"
+          (click)="pastUnlock.emit(element)"
+          icon="unlock"
+          text="CONTEST.PAST_UNLOCK.ACTION">
+        </vo-lib-action-menu-item>
+        <vo-lib-action-menu-item
+          *ngIf="element | canDeleteContest:domainOfInfluences"
+          (click)="delete.emit(element)"
+          icon="trash"
+          text="ACTIONS.DELETE">
+        </vo-lib-action-menu-item>
+        <vo-lib-action-menu-item
+          *ngIf="!element.isPreconfiguredDate"
+          (click)="export.emit(element)"
+          icon="download"
+          text="ACTIONS.EXPORT">
+        </vo-lib-action-menu-item>
+      </vo-lib-action-menu>
+    </td>
+  </ng-container>
+
+  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"
+      [selectable]="true"
+      (rowSelected)="!row.isPreconfiguredDate ? view.emit(row) : undefined"></tr>
+</bc-advanced-table>
+<bc-table-paginator *ngIf="showPaginator" [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>

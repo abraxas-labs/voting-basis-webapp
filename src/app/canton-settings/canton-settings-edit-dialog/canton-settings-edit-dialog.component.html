@@ -1,0 +1,117 @@
+<vo-lib-dialog>
+  <h1 header>{{!isNew ? ('CANTON_SETTINGS.EDIT' | translate) : ('CANTON_SETTINGS.NEW' | translate)}}</h1>
+
+  <div content class="form mr-3 my-2">
+    <bc-dropdown class="full-width"
+                 [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
+                 [items]="cantons"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [disabled]="readonly || !isNew"
+                 [(value)]="data.canton"></bc-dropdown>
+
+    <vo-lib-tenant-selection label="CANTON_SETTINGS.AUTHORITY"
+                             [disabled]="readonly"
+                             [(selectedTenant)]="selectedTenant"></vo-lib-tenant-selection>
+
+    <h2 class="mb-1" translate>CANTON_SETTINGS.COUNTING_CIRCLE.TITLE</h2>
+    <bc-label class="full-width" [label]="'CANTON_SETTINGS.COUNTING_CIRCLE.PROTOCOL_SORT.TITLE' | translate"></bc-label>
+    <bc-radio-button-group class="mb-3"
+                           orientation="vertical"
+                           [items]="protocolCountingCircleSortTypeChoices"
+                           [(value)]="data.protocolCountingCircleSortType"></bc-radio-button-group>
+
+    <h2 class="mb-1" translate>CANTON_SETTINGS.DOMAIN_OF_INFLUENCE.TITLE</h2>
+    <bc-label class="full-width" [label]="'CANTON_SETTINGS.DOMAIN_OF_INFLUENCE.PROTOCOL_SORT.TITLE' | translate"></bc-label>
+    <bc-radio-button-group class="mb-3"
+                           orientation="vertical"
+                           [items]="protocolDomainOfInfluenceSortTypeChoices"
+                           [(value)]="data.protocolDomainOfInfluenceSortType"></bc-radio-button-group>
+
+    <h2 class="mb-1" translate>CANTON_SETTINGS.PROPORTIONAL_ELECTION</h2>
+
+    <label></label>
+    <bc-checkbox *ngFor="let proportionalElectionMandateAlgorithm of proportionalElectionMandateAlgorithms.items"
+                 [checked]="proportionalElectionMandateAlgorithm.checked"
+                 (checkedChange)="proportionalElectionMandateAlgorithms.updateChecked(proportionalElectionMandateAlgorithm, $event)"
+                 [label]="proportionalElectionMandateAlgorithm.item.description"
+                 class="full-width"
+                 [disabled]="readonly">
+    </bc-checkbox>
+
+    <h2 class="mb-1" translate>CANTON_SETTINGS.MAJORITY_ELECTION.TITLE</h2>
+
+    <bc-dropdown class="full-width"
+                 [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.ABSOLUTE_MAJORITY_ALGORITHM' | translate"
+                 [items]="majorityElectionAbsoluteMajorityAlgorithms"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [disabled]="readonly"
+                 [(value)]="data.majorityElectionAbsoluteMajorityAlgorithm"></bc-dropdown>
+
+    <bc-checkbox [(checked)]="data.majorityElectionInvalidVotes"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.INVALID_VOTES' | translate"></bc-checkbox>
+
+    <h2 class="mb-1" translate>CANTON_SETTINGS.GENERAL</h2>
+
+    <bc-label class="mt-2 full-width" [label]="'CANTON_SETTINGS.POLITICAL_BUSINESS_UNIONS.TITLE' | translate"></bc-label>
+    <bc-checkbox *ngFor="let unionType of politicalBusinessUnionTypes.items"
+                 [checked]="unionType.checked"
+                 (checkedChange)="politicalBusinessUnionTypes.updateChecked(unionType, $event)"
+                 [disabled]="readonly"
+                 [label]="unionType.item.description"
+                 class="full-width">
+    </bc-checkbox>
+
+    <bc-dropdown class="full-width"
+                 [label]="'CANTON_SETTINGS.SWISS_ABROAD_VOTING_RIGHT.TITLE' | translate"
+                 [items]="swissAbroadVotingRights"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [disabled]="readonly"
+                 [(value)]="data.swissAbroadVotingRight"></bc-dropdown>
+
+    <bc-label class="mt-2 full-width"
+              [label]="'CANTON_SETTINGS.SWISS_ABROAD_VOTING_RIGHT.DOMAIN_OF_INFLUENCE_TYPES' | translate"></bc-label>
+    <bc-checkbox *ngFor="let swissAbroadVotingRightDomainOfInfluenceType of swissAbroadVotingRightDomainOfInfluenceTypes.items"
+                 [checked]="swissAbroadVotingRightDomainOfInfluenceType.checked"
+                 (checkedChange)="
+                  swissAbroadVotingRightDomainOfInfluenceTypes.updateChecked(swissAbroadVotingRightDomainOfInfluenceType, $event)
+                 "
+                 [disabled]="readonly"
+                 [label]="swissAbroadVotingRightDomainOfInfluenceType.item.description"
+                 class="full-width">
+    </bc-checkbox>
+
+    <h2 class="mb-1" translate>CANTON_SETTINGS.VOTING_CARDS.TITLE</h2>
+    <p *ngIf="!votingCardChannels.atLeastOneChecked"
+       class="error mb-1 mt-0">{{'CANTON_SETTINGS.VOTING_CARDS.NONE_SELECTED' | translate}}</p>
+    <bc-checkbox *ngFor="let votingCardChannel of votingCardChannels.items"
+                 [checked]="votingCardChannel.checked"
+                 (checkedChange)="votingCardChannels.updateChecked(votingCardChannel, $event)"
+                 [disabled]="readonly"
+                 [label]="votingCardChannel.item.description"
+                 class="full-width">
+    </bc-checkbox>
+
+    <h2 class="mb-1" translate>CANTON_SETTINGS.VOTING_DOCUMENTS.TITLE</h2>
+    <bc-text [label]="'CANTON_SETTINGS.VOTING_DOCUMENTS.E_VOTING_EAI_MESSAGE_TYPE' | translate"
+             [disabled]="readonly"
+             [required]="true"
+             [(value)]="data.votingDocumentsEVotingEaiMessageType"></bc-text>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [canSave]="canSave"
+                       [saving]="saving"
+                       [sticky]="false"
+                       [hasSaveButton]="!readonly"
+                       (save)="save()"
+                       (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

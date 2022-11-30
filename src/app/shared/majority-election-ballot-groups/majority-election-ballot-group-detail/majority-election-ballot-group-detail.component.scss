@@ -1,0 +1,10 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+.error {
+  color: $color-error;
+}
+
+.flex {
+  display: flex;
+  justify-content: flex-end;
+}

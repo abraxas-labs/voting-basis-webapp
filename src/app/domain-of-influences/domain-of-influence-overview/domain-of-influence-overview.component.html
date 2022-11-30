@@ -1,0 +1,83 @@
+<vo-lib-page [contentLoading]="false" header="DOMAIN_OF_INFLUENCE.TITLE">
+  <div class="grid">
+    <div>
+      <app-historization-filter-bar [includeDeletedLabel]="'HISTORIZATION.INCLUDE_DELETED.DOMAIN_OF_INFLUENCE'"
+                                    (filterChange)="historizationFilterChange($event)"></app-historization-filter-bar>
+
+      <bc-spinner class="block" *ngIf="loading; else domainOfInfluencesList"></bc-spinner>
+      <ng-template #domainOfInfluencesList>
+        <vo-lib-searchable-tree-navigation *ngIf="tree"
+                                           [nodes]="tree.nodes"
+                                           (selectedNodeChange)="nodeSelect($event)"
+                                           (nodeEdit)="nodeEdit($event, false)"
+                                           (nodeInfo)="nodeEdit($event, true)"
+                                           (nodeDelete)="nodeDelete($event)"
+                                           [editModeEnabled]="true"
+                                           [addLabel]="'DOMAIN_OF_INFLUENCE.NEW'"
+                                           [showAdd]="isAdmin && !historizationFilter.date"
+                                           (addClicked)="create()"
+                                           [rowTemplate]="doiTreeRowTemplate"></vo-lib-searchable-tree-navigation>
+
+        <ng-template #doiTreeRowTemplate let-node>
+          <span class="tree-row">
+            <span [class.disabled]="!!node.data.deletedOn">{{ node.displayName }}</span>
+            <span class="disabled pl-3">({{
+              !node.data.deletedOn
+                ? ('HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.ACTIVE'
+                  | translate: { modifiedOn: node.data.modifiedOn | date: 'yyyy-MM-dd / HH:mm' })
+                : ('HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.DELETED'
+                  | translate
+                  : {
+                    createdOn: node.data.createdOn | date: 'yyyy-MM-dd / HH:mm',
+                    deletedOn: node.data.deletedOn | date: 'yyyy-MM-dd / HH:mm'
+                  })
+              }})</span>
+          </span>
+        </ng-template>
+      </ng-template>
+    </div>
+    <bc-divider class="ml-4" orientation="vertical"></bc-divider>
+    <div>
+      <h2 translate>DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN_SELECTED_OVERVIEW</h2>
+
+      <bc-spinner *ngIf="loadingDetail; else countingCircleDetail" class="block"></bc-spinner>
+      <ng-template #countingCircleDetail>
+        <ng-container *ngIf="selectedDomainOfInfluence; else noDomainOfInfluenceSelected">
+          <div class="flex">
+            <vo-lib-inline-spinner position="right"
+                                   [loading]="loadingAssignableCountingCircles">
+              <bc-button *ngIf="isAdmin && !selectedDomainOfInfluence.deletedOn && !historizationFilter.date"
+                         variant="tertiary"
+                         icon="plus"
+                         class="my-2"
+                         [label]="'DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN' | translate"
+                         (buttonClick)="assignCountingCircles()">
+              </bc-button>
+            </vo-lib-inline-spinner>
+          </div>
+          <bc-advanced-table class="w-full" [dataSource]="selectedDomainOfInfluenceCountingCircles">
+            <ng-container bcColumnDef="name">
+              <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</th>
+              <td bc-cell *bcCellDef="let element">{{ element.name }}</td>
+            </ng-container>
+            <ng-container bcColumnDef="bfs">
+              <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</th>
+              <td bc-cell *bcCellDef="let element">{{ element.bfs }}</td>
+            </ng-container>
+            <ng-container bcColumnDef="authority">
+              <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</th>
+              <td bc-cell *bcCellDef="let element">{{ element.responsibleAuthority.name }}</td>
+            </ng-container>
+
+            <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+            <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+          </bc-advanced-table>
+        </ng-container>
+      </ng-template>
+      <ng-template #noDomainOfInfluenceSelected>
+                  <span class="no-items-message"
+                        translate>DOMAIN_OF_INFLUENCE.NO_DOMAIN_OF_INFLUENCE_SELECTED</span>
+      </ng-template>
+    </div>
+  </div>
+</vo-lib-page>

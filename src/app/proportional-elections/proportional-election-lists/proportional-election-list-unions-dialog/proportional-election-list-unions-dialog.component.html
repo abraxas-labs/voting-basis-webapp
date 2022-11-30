@@ -1,0 +1,124 @@
+<vo-lib-dialog>
+  <h1 header translate>PROPORTIONAL_ELECTION.LIST_UNION.TITLE</h1>
+  <div class="grid" content>
+    <div class="pt-5">
+      <bc-spinner class="block" *ngIf="loading; else listUnionOverview"></bc-spinner>
+      <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+      <ng-template #listUnionOverview>
+        <div class="buttons">
+          <bc-button variant="tertiary"
+                     icon="plus"
+                     [label]="'PROPORTIONAL_ELECTION.LIST_UNION.ADD' | translate"
+                     (buttonClick)="createListUnion()"></bc-button>
+          <bc-button *ngIf="selectedListUnion && lists.length && selectedListUnion.proportionalElectionListIds.length"
+                     [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.SET' | translate"
+                     variant="tertiary"
+                     (buttonClick)="updateMainList(selectedListUnion)"></bc-button>
+          <bc-button *ngIf="selectedListUnion && lists.length"
+                     variant="tertiary"
+                     [label]="'PROPORTIONAL_ELECTION.LIST_UNION.LISTS.ASSIGN' | translate"
+                     (buttonClick)="updateAssignedLists(selectedListUnion)"></bc-button>
+        </div>
+
+        <bc-advanced-table class="w-full" [dataSource]="dataSource">
+          <ng-container bcColumnDef="number">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.NUMBER' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="description">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.DESCRIPTION' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.description | getTranslation }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="listEnumeration">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.LIST_ENUMERATION' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.proportionalElectionListEnumeration }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="subListUnionEnumeration">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.SUB_LIST_UNION_ENUMERATION' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.proportionalElectionSubListUnionEnumeration }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="mainListNumber">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.TITLE' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.proportionalElectionMainListNumber }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="actions">
+            <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+            <td bc-cell *bcCellDef="let element">
+              <div class="actions">
+                <bc-icon (click)="editListUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
+                <bc-icon (click)="deleteListUnion(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+          <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="selectListUnion(row)"></tr>
+        </bc-advanced-table>
+      </ng-template>
+
+    </div>
+
+    <bc-divider orientation="vertical" class="ml-4"></bc-divider>
+
+    <div>
+      <ng-container *ngIf="selectedListUnion">
+        <h2>{{('PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate)}} {{selectedListUnion.position}}</h2>
+
+        <div class="buttons">
+          <bc-button variant="tertiary"
+                     icon="plus"
+                     [label]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.ADD' | translate"
+                     (buttonClick)="createListUnion(selectedListUnion)"></bc-button>
+          <bc-button *ngIf="selectedSubListUnion && lists.length && selectedSubListUnion.proportionalElectionListIds.length"
+                     variant="tertiary"
+                     [label]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.MAIN_LIST.SET' | translate"
+                     (buttonClick)="updateMainList(selectedSubListUnion)"></bc-button>
+          <bc-button *ngIf="selectedSubListUnion && lists.length"
+                     variant="tertiary"
+                     [label]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.LISTS.ASSIGN' | translate"
+                     (buttonClick)="updateAssignedLists(selectedSubListUnion)"></bc-button>
+        </div>
+
+        <bc-advanced-table class="w-full" [dataSource]="dataSourceSubLists">
+          <ng-container bcColumnDef="number">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.NUMBER' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="description">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.DESCRIPTION' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.description | getTranslation }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="listEnumeration">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.LIST_ENUMERATION' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.proportionalElectionListEnumeration }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="mainListNumber">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.MAIN_LIST.TITLE' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.proportionalElectionMainListNumber }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="actions">
+            <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+            <td bc-cell *bcCellDef="let element">
+              <div class="actions">
+                <bc-icon (click)="editListUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
+                <bc-icon (click)="deleteListUnion(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr bc-header-row *bcHeaderRowDef="columnsSubList"></tr>
+          <tr bc-advanced-table-row *bcRowDef="let row; columns: columnsSubList"
+              [selectable]="true"
+              (rowSelected)="selectSubListUnion(row)"></tr>
+        </bc-advanced-table>
+      </ng-container>
+    </div>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar [sticky]="false"
+                       [saveLabel]="'APP.FINISH' | translate"
+                       (cancel)="close()"
+                       (save)="close()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

@@ -1,0 +1,33 @@
+<vo-lib-dialog [contentLoading]="step1Content.loading">
+  <h1 header translate>IMPORT.IMPORT_POLITICAL_BUSINESS</h1>
+
+  <bc-simple-stepper #stepper
+                          content
+                          labelPosition="bottom"
+                          linear
+                          (selectionChange)="stepChange($event)">
+    <bc-simple-step #step1 [label]="'IMPORT.FILE' | translate">
+      <app-import-file-select #step1Content
+                              (importsChange)="importFilesChanged($event); step1.status = !!contestImport ? 'complete' : 'open'">
+      </app-import-file-select>
+    </bc-simple-step>
+    <bc-simple-step [label]="'IMPORT.POLITICAL_BUSINESS_INFOS' | translate"
+                    [disabled]="step1.status !== 'complete'" [status]="step2Content?.allValid ? 'complete' : 'open'">
+      <app-import-political-businesses #step2Content
+                                       *ngIf="contestImport"
+                                       [contestImport]="contestImport"
+                                       [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
+      </app-import-political-businesses>
+    </bc-simple-step>
+  </bc-simple-stepper>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [saveLabel]="(lastStep ? 'IMPORT.IMPORT_POLITICAL_BUSINESS' : 'APP.NEXT') | translate"
+                       (save)="lastStep ? save() : stepper.next()"
+                       [canSave]="firstStep ? !!contestImport : step2Content?.allValid"
+                       [saving]="saving"
+                       [cancelLabel]="(firstStep ? 'APP.CANCEL' : 'APP.BACK') | translate"
+                       (cancel)="firstStep ? cancel() : stepper.previous()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

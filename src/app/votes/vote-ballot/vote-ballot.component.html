@@ -1,0 +1,77 @@
+<div class="form">
+  <ng-container *ngFor="let ballot of data">
+    <app-translated-formfield *ngIf="data.length > 1"
+                  [label]="'VOTE.BALLOT.DESCRIPTION' | translate"
+                  [disabled]="locked"
+                  [optional]="true"
+                  [maxlength]="255"
+                  [(value)]="ballot.description"
+                  [singleLanguageInput]="!eVoting"></app-translated-formfield>
+
+    <bc-dropdown class="full-width"
+                 [items]="ballotTypes"
+                 [label]="'VOTE.BALLOT_TYPE.TITLE' | translate"
+                 [disabled]="testingPhaseEnded"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [required]="true"
+                 [value]="ballot.ballotType"
+                 (valueChange)="ballotTypeChange(ballot, $event)"></bc-dropdown>
+
+    <ng-container *ngFor="let ballotQuestion of ballot.ballotQuestions">
+      <div class="form-group">
+
+        <bc-label
+          [label]="
+            (ballot.ballotType === BallotType.BALLOT_TYPE_STANDARD_BALLOT
+              ? 'VOTE.QUESTION.TITLE_STANDARD'
+              : ballotQuestion.number === 1
+              ? 'VOTE.QUESTION.TITLE_VARIANT_FIRST'
+              : 'VOTE.QUESTION.TITLE_VARIANT'
+            ) | translate: ballotQuestion
+          "
+        ></bc-label>
+        <bc-icon
+          *ngIf="ballot.ballotType !== BallotType.BALLOT_TYPE_STANDARD_BALLOT && ballotQuestion.number > 2 && !testingPhaseEnded"
+          class="clickable ml-1"
+          icon="trash"
+          iconColor="error"
+          (click)="removeQuestion(ballotQuestion, ballot)"></bc-icon>
+        <app-translated-textarea
+                     [disabled]="locked"
+                     [maxlength]="700"
+                     [(value)]="ballotQuestion.question"
+                     class="full-width"
+                     [singleLanguageInput]="!eVoting">
+        </app-translated-textarea>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="ballot.ballotType === BallotType.BALLOT_TYPE_VARIANTS_BALLOT">
+      <bc-button *ngIf="canAddQuestion(ballot) && !testingPhaseEnded"
+                 [label]="'VOTE.QUESTION.ADD' | translate"
+                 variant="tertiary"
+                 icon="plus"
+                 (buttonClick)="addQuestion(ballot)"
+                 class="block"></bc-button>
+
+      <h3 translate class="my-2">VOTE.TIE_BREAK_QUESTION.TITLE</h3>
+      <bc-checkbox [(checked)]="ballot.hasTieBreakQuestions"
+                   [disabled]="testingPhaseEnded"
+                   [label]="'VOTE.TIE_BREAK_QUESTION.HAS_TIE_BREAK_QUESTIONS' | translate"
+                   (checkedChange)="updateTieBreakQuestions(ballot)"></bc-checkbox>
+
+      <ng-container *ngFor="let ballotTieBreakQuestion of ballot.tieBreakQuestions">
+        <div class="form-group">
+          <app-translated-textarea [label]="'VOTE.TIE_BREAK_QUESTION.SINGLE_TITLE' | translate: ballotTieBreakQuestion"
+                                   [disabled]="locked"
+                                   [maxlength]="700"
+                                   [(value)]="ballotTieBreakQuestion.question"
+                                   class="full-width"
+                                   [singleLanguageInput]="!eVoting">
+          </app-translated-textarea>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

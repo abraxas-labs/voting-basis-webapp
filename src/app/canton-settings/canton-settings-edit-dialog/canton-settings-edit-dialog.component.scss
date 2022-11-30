@@ -1,0 +1,9 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+.error {
+  color: $color-error;
+}
+
+bc-checkbox {
+  margin-left: 0;
+}

@@ -1,0 +1,10 @@
+<bc-button *ngIf="!disabled"
+           variant="tertiary"
+           icon="plus"
+           [label]="'DOMAIN_OF_INFLUENCE.PARTY.ADD' | translate"
+           (buttonClick)="addParty()"></bc-button>
+
+<app-domain-of-influence-party-table [parties]="parties"
+                                     [disabled]="disabled"
+                                     (edit)="editParty($event)"
+                                     (delete)="deleteParty($event)"></app-domain-of-influence-party-table>

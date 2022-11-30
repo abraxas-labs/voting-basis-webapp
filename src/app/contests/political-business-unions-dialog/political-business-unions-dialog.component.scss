@@ -1,0 +1,18 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mat-column-actions {
+  width: 4rem;
+}

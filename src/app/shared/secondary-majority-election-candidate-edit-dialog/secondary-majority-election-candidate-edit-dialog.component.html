@@ -1,0 +1,56 @@
+<vo-lib-dialog [contentLoading]="loading">
+  <h1 header>{{!isNew ? ('MAJORITY_ELECTION.CANDIDATE.EDIT' | translate) : ('MAJORITY_ELECTION.CANDIDATE.NEW' | translate)}}</h1>
+
+  <ng-container content [ngSwitch]="secondaryMajorityElection.allowedCandidates">
+    <ng-container *ngSwitchCase="allowedCandidateTypes.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MUST_EXIST_IN_PRIMARY_ELECTION">
+      <bc-dropdown class="full-width mb-4"
+                   [label]="'SECONDARY_ELECTION.MAJORITY.SELECT_CANDIDATE_FROM_PRIMARY' | translate"
+                   [items]="majorityElectionCandidates"
+                   [disabled]="!isNew"
+                   [clearable]="false"
+                   [required]="true"
+                   displayExpr="displayName"
+                   [(value)]="selectedMajorityElectionCandidate"></bc-dropdown>
+
+      <app-majority-election-candidate-edit [candidate]="selectedMajorityElectionCandidate"
+                                            [isCandidateReference]="true">
+      </app-majority-election-candidate-edit>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="allowedCandidateTypes.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MAY_EXIST_IN_PRIMARY_ELECTION">
+      <bc-checkbox [(checked)]="selectCandidateFromPrimaryElection" [disabled]="!isNew">
+        {{'SECONDARY_ELECTION.MAJORITY.SELECT_CANDIDATE_FROM_PRIMARY' | translate}}
+      </bc-checkbox>
+      <bc-dropdown class="full-width mb-4"
+                   [items]="majorityElectionCandidates"
+                   [clearable]="false"
+                   [required]="true"
+                   [disabled]="!selectCandidateFromPrimaryElection || !isNew"
+                   displayExpr="displayName"
+                   [(value)]="selectedMajorityElectionCandidate"></bc-dropdown>
+
+      <app-majority-election-candidate-edit *ngIf="!selectCandidateFromPrimaryElection"
+                                            [candidate]="candidate"
+                                            [testingPhaseEnded]="testingPhaseEnded">
+      </app-majority-election-candidate-edit>
+      <app-majority-election-candidate-edit *ngIf="selectCandidateFromPrimaryElection"
+                                            [candidate]="selectedMajorityElectionCandidate"
+                                            [isCandidateReference]="true">
+      </app-majority-election-candidate-edit>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="allowedCandidateTypes.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MUST_NOT_EXIST_IN_PRIMARY_ELECTION">
+      <app-majority-election-candidate-edit [candidate]="candidate" [testingPhaseEnded]="testingPhaseEnded">
+      </app-majority-election-candidate-edit>
+    </ng-container>
+  </ng-container>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                    [canSave]="canSave"
+                    [saving]="saving"
+                    [sticky]="false"
+                    (save)="save()"
+                    (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

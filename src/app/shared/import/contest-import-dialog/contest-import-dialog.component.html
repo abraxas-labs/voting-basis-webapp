@@ -1,0 +1,41 @@
+<vo-lib-dialog [contentLoading]="step1Content.loading || step2Content.loading">
+  <h1 header>{{ 'IMPORT.IMPORT_CONTEST' | translate }}</h1>
+
+  <bc-simple-stepper #stepper
+                          content
+                          labelPosition="bottom"
+                          linear
+                          (selectionChange)="stepChange($event)">
+    <bc-simple-step #step1 [label]="'IMPORT.FILE' | translate">
+      <app-import-file-select #step1Content
+                              (importsChange)="importFiles = $event; step1.status = importFiles.length > 0 ? 'complete' : 'open'">
+      </app-import-file-select>
+    </bc-simple-step>
+    <bc-simple-step #step2
+                    [label]="'IMPORT.CONTEST_INFOS' | translate"
+                    [disabled]="step1.status !== 'complete'">
+      <app-import-contest-edit #step2Content
+                               [importFiles]="importFiles"
+                               (contestImport)="setContestImport($event); step2.status = contestImport !== undefined ? 'complete' : 'open'">
+      </app-import-contest-edit>
+    </bc-simple-step>
+    <bc-simple-step [label]="'IMPORT.POLITICAL_BUSINESS_INFOS' | translate"
+                    [disabled]="step2.status !== 'complete'" [status]="step3Content?.allValid ? 'complete' : 'open'">
+      <app-import-political-businesses #step3Content
+                                       *ngIf="contestDomainOfInfluenceId"
+                                       [contestImport]="contestImport"
+                                       [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
+      </app-import-political-businesses>
+    </bc-simple-step>
+  </bc-simple-stepper>
+
+  <div footer>
+    <vo-lib-button-bar footer
+                       [saveLabel]="(lastStep ? 'IMPORT.IMPORT_CONTEST' : 'APP.NEXT') | translate"
+                       (save)="lastStep ? save() : stepper.next()"
+                       [canSave]="firstStep ? importFiles.length > 0 : lastStep ? step3Content?.allValid : contestImport !== undefined"
+                       [saving]="saving"
+                       [cancelLabel]="(firstStep ? 'APP.CANCEL' : 'APP.BACK') | translate"
+                       (cancel)="firstStep ? cancel() : stepper.previous()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

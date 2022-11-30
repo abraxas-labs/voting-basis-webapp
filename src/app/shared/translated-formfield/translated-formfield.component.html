@@ -1,0 +1,23 @@
+<bc-label [optional]="optional" [optionalText]="'APP.OPTIONAL' | translate" [label]="label"></bc-label>
+
+<div class="formfield-container">
+  <ng-container *ngIf="singleLanguageInput; else multiLanguageInput">
+    <div class="field">
+      <ng-container *ngTemplateOutlet="formInput; context: {$implicit: currentLanguage}"></ng-container>
+    </div>
+  </ng-container>
+  <ng-template #multiLanguageInput>
+    <div class="field" *ngFor="let lang of languages">
+      <bc-label [label]="lang"></bc-label>
+      <ng-container *ngTemplateOutlet="formInput; context: {$implicit: lang}"></ng-container>
+    </div>
+  </ng-template>
+
+  <ng-template #formInput let-language>
+    <bc-text [value]="translations.get(language)"
+                  (valueChange)="translationChanged(language, $event)"
+                  [placeholder]="placeholder"
+                  [disabled]="disabled"
+                  [maxlength]="maxlength"></bc-text>
+  </ng-template>
+</div>

@@ -1,0 +1,42 @@
+<div class=form>
+  <bc-dropdown class="full-width"
+               [label]="'COUNTING_CIRCLE.MERGE.EDIT.COPY_FROM' | translate"
+               [items]="merger.mergedCountingCircles"
+               [clearable]="false"
+               displayExpr="name"
+               valueExpr="id"
+               [required]="true"
+               [value]="merger.copyFromCountingCircleId"
+               (valueChange)="copyFromChange($event)"></bc-dropdown>
+
+  <bc-date [label]="'COUNTING_CIRCLE.MERGE.DETAIL.ACTIVE_FROM' | translate"
+           [required]="true"
+           [value]="merger.activeFrom | date"
+           (valueChange)="setActiveFrom($event)"></bc-date>
+
+  <bc-text [label]="'COUNTING_CIRCLE.NAME' | translate"
+           [required]="true"
+           [maxlength]="100"
+           [(value)]="merger.newCountingCircle.name"></bc-text>
+  <bc-text [label]="'COUNTING_CIRCLE.NAME_FOR_PROTOCOL' | translate"
+           [maxlength]="100"
+           [(value)]="merger.newCountingCircle.nameForProtocol"></bc-text>
+  <bc-text [label]="'COUNTING_CIRCLE.BFS' | translate"
+           [required]="true"
+           [(value)]="merger.newCountingCircle.bfs"></bc-text>
+  <bc-text [label]="'COUNTING_CIRCLE.CODE' | translate"
+           [maxlength]="10"
+           [(value)]="merger.newCountingCircle.code"></bc-text>
+  <bc-number [label]="'COUNTING_CIRCLE.SORT_NUMBER' | translate"
+             [max]="999999999"
+             [min]="0"
+             [error]="merger.newCountingCircle.sortNumber < 0 || merger.newCountingCircle.sortNumber > 999999999"
+             [(value)]="merger.newCountingCircle.sortNumber"></bc-number>
+
+  <vo-lib-tenant-selection label="COUNTING_CIRCLE.AUTHORITY"
+                           [(selectedTenant)]="selectedResponsibleAuthority"></vo-lib-tenant-selection>
+
+  <app-authority-address-edit [authority]="merger.newCountingCircle.responsibleAuthority"
+                              [disabled]="false">
+  </app-authority-address-edit>
+</div>

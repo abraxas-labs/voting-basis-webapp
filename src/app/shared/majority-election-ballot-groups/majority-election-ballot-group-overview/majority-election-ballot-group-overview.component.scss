@@ -1,0 +1,33 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+.error {
+  color: $color-error;
+}
+
+.hidden {
+  display: none !important;
+}
+
+h4 {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mat-column-actions {
+  width: 4rem;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}

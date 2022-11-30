@@ -1,0 +1,21 @@
+<div class="full-width form-field">
+  <bc-text [label]="'CONTACT_PERSON.FAMILY_NAME' | translate"
+                [disabled]="disabled"
+                [(value)]="contactPerson.familyName"></bc-text>
+  <bc-text class="ml-2"
+                [label]="'CONTACT_PERSON.FIRST_NAME' | translate"
+                [disabled]="disabled"
+                [(value)]="contactPerson.firstName"></bc-text>
+</div>
+<bc-text [label]="'CONTACT_PERSON.PHONE' | translate"
+              type="phone"
+              [disabled]="disabled"
+              [(value)]="contactPerson.phone"></bc-text>
+<bc-text [label]="'CONTACT_PERSON.MOBILE_PHONE' | translate"
+              type="phone"
+              [disabled]="disabled"
+              [(value)]="contactPerson.mobilePhone"></bc-text>
+<bc-text [label]="'CONTACT_PERSON.EMAIL' | translate"
+              type="email"
+              [disabled]="disabled"
+              [(value)]="contactPerson.email"></bc-text>

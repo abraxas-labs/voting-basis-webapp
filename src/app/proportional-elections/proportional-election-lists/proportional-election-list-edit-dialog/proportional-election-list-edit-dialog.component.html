@@ -1,0 +1,38 @@
+<vo-lib-dialog>
+  <h1 header>{{!isNew ? ('PROPORTIONAL_ELECTION.LIST.EDIT' | translate) : ('PROPORTIONAL_ELECTION.LIST.NEW' | translate)}}</h1>
+
+  <div content class="form mr-3">
+    <bc-text [label]="'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate"
+             [required]="true"
+             [disabled]="testingPhaseEnded"
+             [maxlength]="6"
+             [(value)]="list.orderNumber"></bc-text>
+
+    <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.LIST.DESCRIPTION' | translate"
+                  [maxlength]="100"
+                  [(value)]="list.description"
+                  [singleLanguageInput]="true"></app-translated-formfield>
+
+    <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate"
+                  [maxlength]="20"
+                  [(value)]="list.shortDescription"
+                  [singleLanguageInput]="true"></app-translated-formfield>
+
+    <bc-number [label]="'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate"
+               [required]="true"
+               [disabled]="testingPhaseEnded"
+               [max]="numberOfMandates"
+               [min]="0"
+               [value]="list.blankRowCount"
+               (valueChange)="list.blankRowCount = $event"></bc-number>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                    [canSave]="canSave"
+                    [saving]="saving"
+                    [sticky]="false"
+                    (save)="save()"
+                    (cancel)="cancel()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

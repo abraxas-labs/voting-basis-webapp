@@ -1,0 +1,81 @@
+<vo-lib-dialog>
+  <h1 header translate>POLITICAL_BUSINESS_UNION.TITLE</h1>
+  <div content class="grid">
+    <div class="pt-5">
+      <bc-spinner class="block" *ngIf="loading; else politicalBusinessUnionOverview"></bc-spinner>
+      <ng-template #politicalBusinessUnionOverview>
+        <div class="buttons">
+          <bc-button *ngIf="cantonDefaults.enabledPoliticalBusinessUnionTypesList.length > 0"
+                     variant="tertiary"
+                     icon="plus"
+                     [label]="'POLITICAL_BUSINESS_UNION.ADD' | translate"
+                     [disabled]="disabled"
+                     (buttonClick)="createPoliticalBusinessUnion()"></bc-button>
+
+          <bc-button *ngIf="selectedPoliticalBusinessUnion && selectedPoliticalBusinessUnion.secureConnectId === tenantId"
+                     variant="tertiary"
+                     [disabled]="disabled"
+                     [label]="'POLITICAL_BUSINESS_UNION.ASSIGN' | translate"
+                     (buttonClick)="updateAssignedPoliticalBusinesses()"></bc-button>
+        </div>
+
+        <bc-advanced-table class="w-full" [dataSource]="politicalBusinessUnions">
+          <ng-container bcColumnDef="description">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS_UNION.DESCRIPTION' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">{{ element.description }}</td>
+          </ng-container>
+          <ng-container bcColumnDef="type">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS_UNION.TYPE' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">
+              <span>{{ 'POLITICAL_BUSINESS_UNION.TYPES.' + element.type | translate }}</span>
+            </td>
+          </ng-container>
+          <ng-container bcColumnDef="owner">
+            <th bc-header-cell *bcHeaderCellDef></th>
+            <td bc-cell *bcCellDef="let element">
+              <span *ngIf="element.secureConnectId === tenantId" translate>POLITICAL_BUSINESS_UNION.OWN_POLITICAL_BUSINESS_UNION</span>
+            </td>
+          </ng-container>
+          <ng-container bcColumnDef="actions">
+            <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+            <td bc-cell *bcCellDef="let element">
+              <div *ngIf="element.secureConnectId === tenantId" class="flex">
+                <bc-icon (click)="editPoliticalBusinessUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
+                <bc-icon (click)="deletePoliticalBusinessUnion(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+          <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"
+              [selectable]="true"
+              (rowSelected)="selectPoliticalBusinessUnion(row)" ></tr>
+        </bc-advanced-table>
+      </ng-template>
+    </div>
+    <bc-divider orientation="vertical" class="ml-4"></bc-divider>
+    <div>
+      <ng-container *ngIf="selectedPoliticalBusinessUnion">
+        <h2 translate>POLITICAL_BUSINESS_UNION.DETAIL.TITLE</h2>
+
+        <ng-container
+          *ngIf="selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_PROPORTIONAL_ELECTION"
+        >
+          <app-proportional-election-union-detail [politicalBusinessUnion]="selectedPoliticalBusinessUnion">
+          </app-proportional-election-union-detail>
+        </ng-container>
+        <ng-container *ngIf="selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_MAJORITY_ELECTION">
+          <app-majority-election-union-detail [politicalBusinessUnion]="selectedPoliticalBusinessUnion">
+          </app-majority-election-union-detail>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar [sticky]="false"
+                       [saveLabel]="'APP.FINISH' | translate"
+                       (cancel)="close()"
+                       (save)="close()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

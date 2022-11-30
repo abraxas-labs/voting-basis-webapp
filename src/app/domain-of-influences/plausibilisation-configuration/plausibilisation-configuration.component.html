@@ -1,0 +1,72 @@
+<div *ngIf="plausiConfig">
+  <p class="mb-1">{{ translationPrefix + 'COMPARISON_VOTER_PARTICIPATION_CONFIGURATION.TITLE' | translate }}</p>
+
+  <div *ngFor="let item of plausiConfig.comparisonVoterParticipationConfigurationsList"
+       class="grid-container voter-participations mb-2">
+    <bc-dropdown [label]="translationPrefix + 'COMPARISON_VOTER_PARTICIPATION_CONFIGURATION.MAIN_LEVEL' | translate"
+                 [items]="domainOfInfluenceTypeItems"
+                 [disabled]="disabled"
+                 [required]="true"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [(value)]="item.mainLevel"></bc-dropdown>
+
+    <bc-dropdown [label]="translationPrefix + 'COMPARISON_VOTER_PARTICIPATION_CONFIGURATION.COMPARISON_LEVEL' | translate"
+                 [items]="domainOfInfluenceTypeItems"
+                 [disabled]="disabled"
+                 [required]="true"
+                 displayExpr="description"
+                 valueExpr="value"
+                 [(value)]="item.comparisonLevel"></bc-dropdown>
+
+    <bc-number [label]="translationPrefix + 'THRESHOLD' | translate"
+               [min]="0"
+               [disabled]="disabled"
+               [(value)]="item.thresholdPercent"></bc-number>
+    <bc-icon *ngIf="!disabled"
+             class="pt-3 clickable"
+             icon="trash"
+             iconColor="error"
+             (click)="removeVoterParticipationConfiguration(item)"></bc-icon>
+  </div>
+
+  <bc-button *ngIf="!disabled"
+             variant="tertiary"
+             icon="plus"
+             [label]="translationPrefix + 'COMPARISON_VOTER_PARTICIPATION_CONFIGURATION.ADD' | translate"
+             (buttonClick)="addVoterParticipationConfiguration()"></bc-button>
+
+  <p class="mt-3 mb-1">{{ translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.TITLE' | translate }}</p>
+  <div class="grid-container count-of-voters mb-2">
+    <div *ngFor="let item of plausiConfig.comparisonCountOfVotersConfigurationsList">
+      <bc-number [label]="translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.CATEGORIES.' + item.category | translate"
+                 [min]="0"
+                 [disabled]="disabled"
+                 [(value)]="item.thresholdPercent"></bc-number>
+
+      <div *ngIf="countingCirclesByCategory[item.category]">
+        <p *ngFor="let countingCircle of countingCirclesByCategory[item.category]" class="mt-1 mb-0">{{ countingCircle.name }}</p>
+      </div>
+    </div>
+  </div>
+  <bc-button *ngIf="!disabled && domainOfInfluence.countingCircles && domainOfInfluence.countingCircles.length > 0"
+             variant="tertiary"
+             icon="plus"
+             [label]="translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.ASSIGN' | translate"
+             (buttonClick)="openAssignCountOfVoterCountingCirclesDialog()"></bc-button>
+
+  <p class="mt-3 mb-1">{{ translationPrefix + 'COMPARISON_VOTING_CHANNEL_CONFIGURATION.TITLE' | translate }}</p>
+  <div class="grid-container voting-channels">
+    <bc-number *ngFor="let item of plausiConfig.comparisonVotingChannelConfigurationsList"
+               [label]="'VOTING_CHANNELS.' + item.votingChannel | translate"
+               [min]="0"
+               [disabled]="disabled"
+               [(value)]="item.thresholdPercent"></bc-number>
+  </div>
+
+  <bc-number [label]="translationPrefix + 'COMPARISON_VALID_VOTING_CARDS_WITH_ACCOUNTED_BALLOTS_THRESHOLD_PERCENT.TITLE' | translate"
+             [min]="0"
+             [disabled]="disabled"
+             [(value)]="plausiConfig.comparisonValidVotingCardsWithAccountedBallotsThresholdPercent"
+             class="mt-3"></bc-number>
+</div>

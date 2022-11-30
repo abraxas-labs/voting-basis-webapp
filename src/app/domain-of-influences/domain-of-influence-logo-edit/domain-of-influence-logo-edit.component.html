@@ -1,0 +1,32 @@
+<h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.LOGO.TITLE</h3>
+
+<div class="logo-container"
+     *ngIf="!disabled || domainOfInfluence.hasLogo; else noInfo"
+     [class.disabled]="disabled"
+     [class.has-logo]="domainOfInfluence.hasLogo"
+     [class.dragging]="draggingLogo">
+  <img *ngIf="domainOfInfluence.hasLogo"
+       [src]="uploadedLogoPreviewSrc || (domainOfInfluence.id | domainOfInfluenceLogoUrl | async)"
+       [alt]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.LOGO.PREVIEW.ALT' | translate: domainOfInfluence"/>
+
+  <div class="upload-info" *ngIf="!disabled">
+    <input #fileInput
+           type="file"
+           (change)="setLogo(fileInput.files); fileInput.value = null;"
+           [accept]="allowedContentTypesCommaSeparated">
+
+    <p translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.LOGO.UPLOAD.DRAG</p>
+    <p translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.LOGO.UPLOAD.OR</p>
+
+    <bc-button (buttonClick)="fileInput.click()"
+               [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.LOGO.UPLOAD.CHOOSE_FILE' | translate"
+               variant="primary"></bc-button>
+    <bc-button *ngIf="domainOfInfluence.hasLogo"
+               (buttonClick)="removeLogo()"
+               [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.LOGO.UPLOAD.REMOVE' | translate"
+               variant="secondary"></bc-button>
+  </div>
+</div>
+<ng-template #noInfo>
+  <p translate class="no-data">DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.LOGO.NO_LOGO</p>
+</ng-template>

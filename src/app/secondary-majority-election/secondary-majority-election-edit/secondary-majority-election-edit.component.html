@@ -1,0 +1,44 @@
+<vo-lib-page [contentLoading]="initialLoading"
+             [header]="isNew ? 'SECONDARY_ELECTION.MAJORITY.NEW' : 'SECONDARY_ELECTION.MAJORITY.EDIT'"
+             [showBackButton]="true"
+             [backButtonNavigateCommands]="['../../']">
+  <bc-simple-stepper #stepper
+                          labelPosition="bottom"
+                          linear>
+    <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
+      <ng-container>
+        <app-secondary-majority-election-general-informations #step1
+                                                              [data]="data"
+                                                              [testingPhaseEnded]="testingPhaseEnded"
+                                                              [locked]="locked"
+                                                              [eVoting]="eVoting">
+        </app-secondary-majority-election-general-informations>
+        <div class="stepper-footer">
+          <bc-button class="align-right"
+                     variant="primary"
+                     [disabled]="!step1.canSave"
+                     [label]="'APP.NEXT' | translate"
+                     (buttonClick)="save()"></bc-button>
+        </div>
+      </ng-container>
+    </bc-simple-step>
+    <bc-simple-step [label]="'MAJORITY_ELECTION.CANDIDATE_STEP' | translate" [disabled]="!step1.canSave">
+      <app-secondary-majority-election-candidates [showBallotGroups]="true"
+                                                  [testingPhaseEnded]="testingPhaseEnded"
+                                                  [locked]="locked"
+                                                  [loadCandidates]="!newlyCreated"
+                                                  #step2
+                                                  [secondaryMajorityElection]="data">
+      </app-secondary-majority-election-candidates>
+
+      <div class="stepper-footer">
+        <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>
+
+        <bc-button variant="primary"
+                   [disabled]="!step2.canSave"
+                   [label]="'APP.FINISH' | translate"
+                   [routerLink]="['../../']"></bc-button>
+      </div>
+    </bc-simple-step>
+  </bc-simple-stepper>
+</vo-lib-page>

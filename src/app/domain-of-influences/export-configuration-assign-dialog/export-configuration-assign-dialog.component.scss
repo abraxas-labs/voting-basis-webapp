@@ -1,0 +1,16 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+}
+
+.mat-colum-description {
+  width: 82%;
+}
+
+.mat-column-format {
+  width: 10%;
+}
+
+.mat-column-select {
+  width: 8%;
+}

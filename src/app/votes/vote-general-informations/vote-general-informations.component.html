@@ -1,0 +1,62 @@
+<div class="form" *ngIf="contest && data">
+  <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
+           [disabled]="contest.locked"
+           [required]="true"
+           [(value)]="data.politicalBusinessNumber"></bc-text>
+
+  <app-translated-formfield [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
+                            [disabled]="contest.locked"
+                            [maxlength]="100"
+                            [(value)]="data.shortDescription"
+                            [singleLanguageInput]="true"></app-translated-formfield>
+
+  <div class="form-group">
+    <app-translated-textarea [label]="'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate"
+                             [disabled]="contest.locked"
+                             [maxlength]="500"
+                             class="full-width"
+                             [(value)]="data.officialDescription"
+                             [singleLanguageInput]="!contest.eVoting"></app-translated-textarea>
+  </div>
+
+  <bc-text [label]="'POLITICAL_BUSINESS.INTERNAL_DESCRIPTION' | translate"
+           [disabled]="contest.locked"
+           [(value)]="data.internalDescription"></bc-text>
+  <bc-dropdown class="full-width"
+               *ngIf="domainOfInfluenceTypes.length > 1"
+               [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
+               [items]="domainOfInfluenceTypes"
+               [disabled]="contest.testingPhaseEnded"
+               [clearable]="false"
+               [required]="true"
+               displayExpr="description"
+               valueExpr="value"
+               [(value)]="selectedDomainOfInfluenceType"></bc-dropdown>
+
+  <bc-dropdown class="full-width"
+               *ngIf="selectedDomainOfInfluenceType"
+               [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
+               [disabled]="contest.testingPhaseEnded"
+               displayExpr="name"
+               [required]="true"
+               [(value)]="selectedDomainOfInfluence"
+               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
+
+  <bc-dropdown class="full-width"
+               [items]="domainOfInfluenceLevels"
+               [disabled]="contest.locked"
+               displayExpr="desc"
+               valueExpr="level"
+               [required]="true"
+               [(value)]="data.reportDomainOfInfluenceLevel"
+               [label]="'POLITICAL_BUSINESS.REPORT_LEVEL' | translate"></bc-dropdown>
+
+  <bc-dropdown class="full-width"
+               [label]="'VOTE.RESULT_ALGORITHM.TITLE' | translate"
+               [items]="resultAlgorithms"
+               [disabled]="contest.testingPhaseEnded"
+               displayExpr="description"
+               valueExpr="value"
+               [required]="true"
+               [(value)]="data.resultAlgorithm"></bc-dropdown>
+</div>

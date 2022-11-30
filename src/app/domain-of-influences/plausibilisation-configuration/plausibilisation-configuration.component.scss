@@ -1,0 +1,19 @@
+.grid-container {
+  display: grid;
+  column-gap: 0.25rem;
+  row-gap: 0.25rem;
+
+  &.voter-participations {
+    grid-template-columns: repeat(3, 1fr) max-content;
+    align-items: center;
+  }
+
+  &.count-of-voters {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: initial;
+  }
+
+  &.voting-channels {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

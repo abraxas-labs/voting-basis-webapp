@@ -296,7 +296,6 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       politicalBusinessNumber: data.politicalBusinessNumber,
       officialDescription: data.officialDescription,
       shortDescription: data.shortDescription,
-      internalDescription: data.internalDescription,
       politicalBusinessType: PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION,
       active: data.active,
       domainOfInfluence: {
@@ -320,7 +319,6 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setPoliticalBusinessNumber(data.politicalBusinessNumber);
     fillProtoMap(result.getOfficialDescriptionMap(), data.officialDescription);
     fillProtoMap(result.getShortDescriptionMap(), data.shortDescription);
-    result.setInternalDescription(data.internalDescription);
     result.setNumberOfMandates(data.numberOfMandates);
     result.setMandateAlgorithm(data.mandateAlgorithm);
     result.setCandidateCheckDigit(data.candidateCheckDigit);
@@ -343,7 +341,6 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setPoliticalBusinessNumber(data.politicalBusinessNumber);
     fillProtoMap(result.getOfficialDescriptionMap(), data.officialDescription);
     fillProtoMap(result.getShortDescriptionMap(), data.shortDescription);
-    result.setInternalDescription(data.internalDescription);
     result.setNumberOfMandates(data.numberOfMandates);
     result.setMandateAlgorithm(data.mandateAlgorithm);
     result.setCandidateCheckDigit(data.candidateCheckDigit);
@@ -423,6 +420,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       accumulated: data.getAccumulated(),
       accumulatedPosition: data.getAccumulatedPosition(),
       party: DomainOfInfluenceService.mapToParty(data.getParty()),
+      origin: data.getOrigin(),
     };
   }
 
@@ -446,6 +444,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setAccumulated(data.accumulated);
     result.setAccumulatedPosition(data.accumulatedPosition);
     result.setPartyId(data.party!.id);
+    result.setOrigin(data.origin);
     return result;
   }
 
@@ -470,6 +469,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setAccumulated(data.accumulated);
     result.setAccumulatedPosition(data.accumulatedPosition);
     result.setPartyId(data.party!.id);
+    result.setOrigin(data.origin);
     return result;
   }
 }

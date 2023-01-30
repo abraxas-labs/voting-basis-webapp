@@ -5,13 +5,13 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthThemeGuard } from '@abraxas/voting-lib';
+import { AuthThemeGuard, ThemeService } from '@abraxas/voting-lib';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'default',
+    redirectTo: ThemeService.NoTheme,
   },
   {
     path: ':theme',

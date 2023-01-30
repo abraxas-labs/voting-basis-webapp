@@ -76,6 +76,7 @@
       <h2>{{ selectedList.shortDescription | getTranslation }}</h2>
       <app-proportional-election-candidates
         [list]="selectedList"
+        [domainOfInfluenceId]="proportionalElection.domainOfInfluenceId"
         [testingPhaseEnded]="testingPhaseEnded"
         [locked]="locked"
         (candidateCreated)="candidateCreated(selectedList, $event)"

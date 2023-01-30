@@ -9,6 +9,13 @@
     [required]="true"
     [disabled]="disabled"
     [(value)]="config.eaiMessageType"></bc-text>
+  <bc-dropdown [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDER' | translate"
+               [items]="providers"
+               displayExpr="description"
+               valueExpr="value"
+               [required]="true"
+               [disabled]="disabled"
+               [(value)]="config.provider"></bc-dropdown>
   <bc-button
     *ngIf="!disabled; else empty"
     variant="tertiary"

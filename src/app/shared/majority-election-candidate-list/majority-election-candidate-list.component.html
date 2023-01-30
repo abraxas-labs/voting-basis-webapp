@@ -51,17 +51,25 @@
   <ng-container bcColumnDef="actions">
     <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
     <td bc-cell *bcCellDef="let element">
-      <div class="flex">
-        <bc-icon *ngIf="element.id && !locked" class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
-        <bc-icon *ngIf="element.id && !testingPhaseEnded && !locked"
+      <div *ngIf="!locked && element.id" class="flex">
+        <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
+        <bc-icon *ngIf="!testingPhaseEnded"
                  class="clickable ml-2"
                  (click)="delete.emit(element)"
                  icon="trash"
                  iconColor="error"></bc-icon>
+        <bc-icon *ngIf="!testingPhaseEnded"
+                 icon="angle-up"
+                 (click)="moveCandidateUp(element)"
+                 [class.disabled]="candidates.indexOf(element) === 0"></bc-icon>
+        <bc-icon *ngIf="!testingPhaseEnded"
+                 icon="angle-down"
+                 (click)="moveCandidateDown(element)"
+                 [class.disabled]="candidates.indexOf(element) === candidates.length - 2"></bc-icon>
       </div>
     </td>
   </ng-container>
 
   <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
+  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true"></tr>
 </bc-advanced-table>

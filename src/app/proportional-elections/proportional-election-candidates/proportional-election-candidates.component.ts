@@ -6,7 +6,9 @@
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
+import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import {
   newProportionalElectionCandidate,
   ProportionalElectionCandidate,
@@ -71,12 +73,14 @@ export class ProportionalElectionCandidatesComponent {
   public selectedCandidate?: ProportionalElectionCandidate;
   public savingAccumulation: boolean = false;
   private currentList?: ProportionalElectionList;
+  private currentDomainOfInfluence?: DomainOfInfluence;
 
   constructor(
     private readonly proportionalElectionService: ProportionalElectionService,
     private readonly dialogService: DialogService,
     private readonly snackbarService: SnackbarService,
     private readonly i18n: TranslateService,
+    private readonly domainOfInfluenceService: DomainOfInfluenceService,
   ) {}
 
   @Input()
@@ -86,8 +90,13 @@ export class ProportionalElectionCandidatesComponent {
     this.selectedCandidate = undefined;
   }
 
+  @Input()
+  public set domainOfInfluenceId(value: string) {
+    this.loadDomainOfInfluence(value);
+  }
+
   public async createCandidate(): Promise<void> {
-    if (!this.currentList) {
+    if (!this.currentList || !this.currentDomainOfInfluence) {
       return;
     }
 
@@ -95,6 +104,7 @@ export class ProportionalElectionCandidatesComponent {
       candidate: newProportionalElectionCandidate(this.expandedCandidates.length + 1, this.currentList.id),
       testingPhaseEnded: false,
       parties: this.parties,
+      doiType: this.currentDomainOfInfluence.type,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);
@@ -103,7 +113,7 @@ export class ProportionalElectionCandidatesComponent {
   public async editCandidate(expandedCandidate: ProportionalElectionCandidate): Promise<void> {
     const candidate = this.candidates.find(c => c.id === expandedCandidate.id);
 
-    if (!candidate) {
+    if (!candidate || !this.currentDomainOfInfluence) {
       return;
     }
 
@@ -111,6 +121,7 @@ export class ProportionalElectionCandidatesComponent {
       candidate: { ...candidate },
       testingPhaseEnded: this.testingPhaseEnded,
       parties: this.parties,
+      doiType: this.currentDomainOfInfluence.type,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);
@@ -176,6 +187,31 @@ export class ProportionalElectionCandidatesComponent {
 
     await this.proportionalElectionService.reorderCandidates(this.currentList.id, this.candidates);
     this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+  }
+
+  public async moveCandidateUp(candidate: ProportionalElectionCandidate) {
+    const index = this.expandedCandidates.indexOf(candidate);
+    if (index <= 0) {
+      return;
+    }
+
+    const newIndex = index - 1;
+    await this.moveCandidate(index, newIndex);
+  }
+
+  public async moveCandidateDown(candidate: ProportionalElectionCandidate) {
+    const index = this.expandedCandidates.indexOf(candidate);
+    if (index >= this.expandedCandidates.length - 1) {
+      return;
+    }
+
+    const newIndex = index + 1;
+    await this.moveCandidate(index, newIndex);
+  }
+
+  private async moveCandidate(index: number, newIndex: number) {
+    this.expandedCandidates[index] = this.expandedCandidates.splice(newIndex, 1, this.expandedCandidates[index])[0];
+    await this.reorderCandidates(this.expandedCandidates);
   }
 
   private async loadCandidates(): Promise<void> {
@@ -248,5 +284,9 @@ export class ProportionalElectionCandidatesComponent {
         processedCandidates.add(candidate.id);
       }
     }
+  }
+
+  private async loadDomainOfInfluence(domainOfInfluenceId: string): Promise<void> {
+    this.currentDomainOfInfluence = await this.domainOfInfluenceService.get(domainOfInfluenceId);
   }
 }

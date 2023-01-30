@@ -112,8 +112,15 @@
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate"
-    [required]="true"
+    [required]="!isCommunalDoiType"
     [disabled]="isCandidateReference"
     [(value)]="candidate.locality"
+  ></bc-text>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.ORIGIN' | translate"
+    [required]="!isCommunalDoiType"
+    [disabled]="isCandidateReference"
+    [(value)]="candidate.origin"
   ></bc-text>
 </div>

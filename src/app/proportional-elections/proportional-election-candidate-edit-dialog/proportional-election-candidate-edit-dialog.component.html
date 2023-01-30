@@ -68,8 +68,12 @@
              [(value)]="data.zipCode"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate"
-             [required]="true"
+             [required]="!isCommunalDoiType"
              [(value)]="data.locality"></bc-text>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ORIGIN' | translate"
+             [required]="!isCommunalDoiType"
+             [(value)]="data.origin"></bc-text>
 
     <bc-dropdown class="full-width"
                  [label]="'PROPORTIONAL_ELECTION.CANDIDATE.PARTY' | translate"
@@ -77,8 +81,9 @@
                  [clearable]="false"
                  [required]="true"
                  displayExpr="shortDescriptionTranslated"
+                 valueExpr="id"
                  [disabled]="testingPhaseEnded"
-                 [(value)]="selectedParty"></bc-dropdown>
+                 [(value)]="selectedPartyId"></bc-dropdown>
   </div>
 
   <div footer class="mr-3">

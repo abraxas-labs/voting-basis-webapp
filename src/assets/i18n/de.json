@@ -1,6 +1,9 @@
 {
   "APP": {
-    "APPLICATION_TITLE": "VOTING Basis-Services",
+    "APPLICATION_TITLE": {
+      "default": "VOTING Basis-Services",
+      "sg": "Basis Service: Geschäfte und Stammdaten"
+    },
     "LOGOUT": "Logout",
     "USER_PLACEHOLDER": "User",
     "TENANT_PLACEHOLDER": "Mandant",
@@ -223,6 +226,11 @@
         "TITLE": "Schnittstellen",
         "DESCRIPTION": "Bezeichnung",
         "EAI_MESSAGE_TYPE": "Meldungstyp",
+        "PROVIDER": "Drittanbieter",
+        "PROVIDERS": {
+          "1": "Standard",
+          "2": "Seantis"
+        },
         "ASSIGN_OPEN": "Exports zuordnen…",
         "ASSIGN": "Exports zuordnen",
         "ADD": "Schnittstelle hinzufügen…",
@@ -568,7 +576,8 @@
       "MORE_CANDIDATES_THAN_ALLOWED_PLURAL": "Erlaubt sind nur {{max}} Listenplätze.",
       "LESS_CANDIDATES_THAN_ALLOWED_SINGLE": "Sie müssen noch 1 Listenplatz vergeben.",
       "LESS_CANDIDATES_THAN_ALLOWED_PLURAL": "Sie müssen noch {{diff}} Listenplätze vergeben.",
-      "PARTY": "Partei"
+      "PARTY": "Partei",
+      "ORIGIN": "Heimatort"
     },
     "REVIEW_PROCEDURE": {
       "TITLE": "Erfassungsweise (Kontrolle)",
@@ -583,8 +592,6 @@
     "NEW": "Majorzwahl hinzufügen",
     "EDIT": "Majorzwahl bearbeiten",
     "NUMBER_OF_MANDATES": "Anzahl Sitze",
-    "INDIVIDUAL_EMPTY_BALLOTS_ALLOWED": "Amtlich leerer Wahlzettel",
-    "INVALID_VOTES": "Ungültige Stimmen (Erfassung zu Statistikzwecken)",
     "BALLOT_BUNDLE_SIZE": "Bundgrösse",
     "BALLOT_BUNDLE_SAMPLE_SIZE": "Stichprobengrösse",
     "MANDATE_ALGORITHM": {
@@ -643,7 +650,8 @@
       "ZIP_CODE": "PLZ",
       "LOCALITY": "Wohnort",
       "INDIVIDUAL_PLACEHOLDER": "Vereinzelte",
-      "INDIVIDUAL_COUNT": "Anzahl Vereinzelte"
+      "INDIVIDUAL_COUNT": "Anzahl Vereinzelte",
+      "ORIGIN": "Heimatort"
     },
     "BALLOT_GROUP": {
       "TITLE": "Wahlzettel-Gruppen",
@@ -769,12 +777,14 @@
       "NAMES": {
         "1": "St. Gallen",
         "2": "Thurgau",
-        "3": "Zürich"
+        "3": "Zürich",
+        "4": "Graubünden"
       },
       "SHORT_NAMES": {
         "1": "SG",
         "2": "TG",
-        "3": "ZH"
+        "3": "ZH",
+        "4": "GR"
       }
     },
     "VOTING_CARDS": {

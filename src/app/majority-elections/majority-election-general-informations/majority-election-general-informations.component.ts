@@ -21,7 +21,6 @@ export class MajorityElectionGeneralInformationsComponent
   implements OnInit
 {
   public mandateAlgorithms: EnumItemDescription<MajorityElectionMandateAlgorithm>[] = [];
-  public canHaveInvalidVotes: boolean = false;
 
   constructor(
     domainOfInfluenceService: DomainOfInfluenceService,
@@ -43,11 +42,5 @@ export class MajorityElectionGeneralInformationsComponent
       MajorityElectionMandateAlgorithm,
       'MAJORITY_ELECTION.MANDATE_ALGORITHM.TYPES.',
     );
-
-    this.canHaveInvalidVotes = this.contestDomainOfInfluenceDefaults.majorityElectionInvalidVotes;
-    this.data.invalidVotes = this.data.invalidVotes && this.canHaveInvalidVotes;
-    if (!this.data.id) {
-      this.data.invalidVotes = this.contestDomainOfInfluenceDefaults.majorityElectionInvalidVotes;
-    }
   }
 }

@@ -56,7 +56,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
       !!this.selectedTenant &&
       !!this.selectedTenant.id &&
       (!!this.data.parentId || !!this.data.canton) &&
-      this.data.exportConfigurationsList.every(e => !!e.description && !!e.eaiMessageType) &&
+      this.data.exportConfigurationsList.every(e => !!e.description && !!e.eaiMessageType && !!e.provider) &&
       (!this.data.responsibleForVotingCards ||
         (!!this.data.printData &&
           !!this.data.printData.shippingAway &&

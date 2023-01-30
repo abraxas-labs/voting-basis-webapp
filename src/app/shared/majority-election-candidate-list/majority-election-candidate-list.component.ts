@@ -44,4 +44,31 @@ export class MajorityElectionCandidateListComponent {
 
   @Output()
   public candidatesReordered: EventEmitter<MajorityElectionCandidate[]> = new EventEmitter<MajorityElectionCandidate[]>();
+
+  public moveCandidateUp(candidate: MajorityElectionCandidate) {
+    const index = this.candidates.indexOf(candidate);
+    if (index <= 0) {
+      return;
+    }
+
+    const newIndex = index - 1;
+    this.moveCandidate(index, newIndex);
+  }
+
+  public moveCandidateDown(candidate: MajorityElectionCandidate) {
+    const index = this.candidates.indexOf(candidate);
+
+    // check for the second last entry, because the last entry is individual candidates
+    if (index >= this.candidates.length - 2) {
+      return;
+    }
+
+    const newIndex = index + 1;
+    this.moveCandidate(index, newIndex);
+  }
+
+  private moveCandidate(index: number, newIndex: number) {
+    this.candidates[index] = this.candidates.splice(newIndex, 1, this.candidates[index])[0];
+    this.candidatesReordered.emit(this.candidates);
+  }
 }

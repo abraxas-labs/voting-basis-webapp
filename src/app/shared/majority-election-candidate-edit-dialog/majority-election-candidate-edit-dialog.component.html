@@ -1,7 +1,11 @@
 <vo-lib-dialog>
   <h1 header>{{!isNew ? ('MAJORITY_ELECTION.CANDIDATE.EDIT' | translate) : ('MAJORITY_ELECTION.CANDIDATE.NEW' | translate)}}</h1>
 
-  <app-majority-election-candidate-edit content [candidate]="data" [testingPhaseEnded]="testingPhaseEnded">
+  <app-majority-election-candidate-edit
+    content
+    [candidate]="data"
+    [testingPhaseEnded]="testingPhaseEnded"
+    [isCommunalDoiType]="isCommunalDoiType">
   </app-majority-election-candidate-edit>
 
   <div footer class="mr-3">

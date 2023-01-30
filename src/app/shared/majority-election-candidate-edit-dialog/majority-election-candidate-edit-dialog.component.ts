@@ -4,14 +4,16 @@
  */
 
 import { EnumItemDescription, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../core/language.service';
 import { MajorityElectionService } from '../../core/majority-election.service';
+import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { MajorityElectionCandidate } from '../../core/models/majority-election.model';
 import { SexType } from '../../core/models/sex-type.model';
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
+import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 
 @Component({
   selector: 'app-majority-election-candidate-edit-dialog',
@@ -24,6 +26,7 @@ export class MajorityElectionCandidateEditDialogComponent {
   public saving: boolean = false;
   public testingPhaseEnded: boolean;
   public sexTypes: EnumItemDescription<SexType>[] = [];
+  public isCommunalDoiType: boolean;
 
   constructor(
     private readonly dialogRef: MatDialogRef<MajorityElectionCandidateEditDialogData>,
@@ -35,6 +38,7 @@ export class MajorityElectionCandidateEditDialogComponent {
     this.data = dialogData.candidate;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
     this.isNew = !this.data.id;
+    this.isCommunalDoiType = isCommunalDoiType(dialogData.doiType);
   }
 
   public get canSave(): boolean {
@@ -44,9 +48,10 @@ export class MajorityElectionCandidateEditDialogComponent {
       !!this.data.firstName &&
       !!this.data.lastName &&
       isValidDateOfBirth(this.data.dateOfBirth) &&
-      !!this.data.locality &&
+      (this.isCommunalDoiType || !!this.data.locality) &&
       LanguageService.allLanguagesPresent(this.data.party) &&
-      this.data.sex !== undefined
+      this.data.sex !== undefined &&
+      (this.isCommunalDoiType || !!this.data.origin)
     );
   }
 
@@ -89,6 +94,7 @@ export class MajorityElectionCandidateEditDialogComponent {
 export interface MajorityElectionCandidateEditDialogData {
   candidate: MajorityElectionCandidate;
   testingPhaseEnded: boolean;
+  doiType: DomainOfInfluenceType;
 }
 
 export interface MajorityElectionCandidateEditDialogResult {

@@ -3,13 +3,14 @@
  * For license information see LICENSE file
  */
 
-import { DialogService } from '@abraxas/voting-lib';
+import { DialogService, EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ExportConfiguration } from '../../core/models/export.model';
 import {
   ExportConfigurationAssignDialogComponent,
   ExportConfigurationAssignDialogData,
 } from '../../domain-of-influences/export-configuration-assign-dialog/export-configuration-assign-dialog.component';
+import { ExportProvider } from '@abraxas/voting-basis-service-proto/grpc/shared/export_pb';
 
 @Component({
   selector: 'app-export-configurations',
@@ -17,6 +18,8 @@ import {
   styleUrls: ['./export-configurations.component.scss'],
 })
 export class ExportConfigurationsComponent {
+  public providers: EnumItemDescription<ExportProvider>[] = [];
+
   @Input()
   public disabled: boolean = false;
 
@@ -26,7 +29,12 @@ export class ExportConfigurationsComponent {
   @Output()
   public configurationsChange: EventEmitter<ExportConfiguration[]> = new EventEmitter<ExportConfiguration[]>();
 
-  constructor(private readonly dialogService: DialogService) {}
+  constructor(private readonly dialogService: DialogService, private readonly enumUtil: EnumUtil) {
+    this.providers = enumUtil.getArrayWithDescriptions<ExportProvider>(
+      ExportProvider,
+      'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDERS.',
+    );
+  }
 
   public async assign(config: ExportConfiguration): Promise<void> {
     const data: ExportConfigurationAssignDialogData = {
@@ -54,6 +62,7 @@ export class ExportConfigurationsComponent {
         exportKeysList: [],
         eaiMessageType: '',
         domainOfInfluenceId: '',
+        provider: ExportProvider.EXPORT_PROVIDER_STANDARD,
       },
     ];
     this.configurationsChange.emit(this.configurations);

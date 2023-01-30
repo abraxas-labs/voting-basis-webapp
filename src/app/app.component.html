@@ -9,12 +9,13 @@
   <bc-app-header-bar-iam
     *ngIf="hasTenant; else nonIamHeader"
     [link]="['/', theme]"
-    [title]="'APP.APPLICATION_TITLE' | translate"
+    [title]="appTitle"
     (tenantChanged)="switchTenant()"
+    [customLogoPath]="customLogo ?? ''"
     logo="VO"
   ></bc-app-header-bar-iam>
   <ng-template #nonIamHeader>
-    <bc-app-header-bar [link]="['/', theme]" [title]="'APP.APPLICATION_TITLE' | translate" logo="VO"></bc-app-header-bar>
+    <bc-app-header-bar [link]="['/', theme]" [title]="appTitle" logo="VO"></bc-app-header-bar>
   </ng-template>
 
   <app-side-nav *ngIf="!loading && hasTenant; else notAuthenticated">

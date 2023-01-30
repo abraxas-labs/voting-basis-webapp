@@ -29,7 +29,6 @@ export function newSecondaryMajorityElection(): SecondaryMajorityElection {
     allowedCandidates:
       SecondaryMajorityElectionAllowedCandidates.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MUST_EXIST_IN_PRIMARY_ELECTION,
     id: '',
-    internalDescription: '',
     politicalBusinessNumber: '',
     numberOfMandates: 0,
     officialDescription: new Map<string, string>(),

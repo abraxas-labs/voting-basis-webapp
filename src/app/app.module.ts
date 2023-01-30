@@ -3,7 +3,14 @@
  * For license information see LICENSE file
  */
 
-import { AuthenticationModule, AuthorizationModule, AuthStorageService, TenantModule, UserModule } from '@abraxas/base-components';
+import {
+  AuthenticationModule,
+  AuthorizationModule,
+  AuthStorageService,
+  FORMFIELD_DEFAULT_OPTIONS,
+  TenantModule,
+  UserModule,
+} from '@abraxas/base-components';
 import { ENV_INJECTION_TOKEN, VotingLibModule } from '@abraxas/voting-lib';
 import { registerLocaleData } from '@angular/common';
 import localeDeCh from '@angular/common/locales/de-CH';
@@ -59,6 +66,10 @@ registerLocaleData(localeDeCh);
     {
       provide: CoreTranslateService,
       useClass: TranslateService,
+    },
+    {
+      provide: FORMFIELD_DEFAULT_OPTIONS,
+      useValue: { optionalText: 'optional' },
     },
   ],
 })

@@ -62,6 +62,7 @@ export type ProportionalElectionCandidate = {
   accumulated: boolean;
   accumulatedPosition: number;
   party?: DomainOfInfluenceParty;
+  origin: string;
 };
 
 export type ProportionalElectionListUnion = {
@@ -149,6 +150,7 @@ export function newProportionalElectionCandidate(position: number, proportionalE
     accumulated: false,
     accumulatedPosition: 0,
     party: newDomainOfInfluenceParty(),
+    origin: '',
   };
 }
 

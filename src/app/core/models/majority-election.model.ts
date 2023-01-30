@@ -43,6 +43,7 @@ export type MajorityElectionCandidate = {
   zipCode: string;
   locality: string;
   position: number;
+  origin: string;
 };
 
 export function newMajorityElection(): MajorityElection {
@@ -50,9 +51,7 @@ export function newMajorityElection(): MajorityElection {
     numberOfMandates: 0,
     ballotBundleSize: 0,
     ballotBundleSampleSize: 0,
-    individualEmptyBallotsAllowed: true,
     candidateCheckDigit: false,
-    invalidVotes: false,
     ballotNumberGeneration: BallotNumberGeneration.BALLOT_NUMBER_GENERATION_RESTART_FOR_EACH_BUNDLE,
     resultEntry: MajorityElectionResultEntryProto.MAJORITY_ELECTION_RESULT_ENTRY_FINAL_RESULTS,
     mandateAlgorithm: MajorityElectionMandateAlgorithmProto.MAJORITY_ELECTION_MANDATE_ALGORITHM_ABSOLUTE_MAJORITY,
@@ -80,5 +79,6 @@ export function newMajorityElectionCandidate(position: number, majorityElectionI
     zipCode: '',
     majorityElectionId,
     position,
+    origin: '',
   };
 }

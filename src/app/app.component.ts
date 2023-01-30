@@ -8,13 +8,13 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { SnackbarService, ThemeService } from '@abraxas/voting-lib';
 import { LocationStrategy } from '@angular/common';
 import { Component, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import 'moment/locale/de';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { CursorService, CursorType } from './core/cursor.service';
 import { LanguageService } from './core/language.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +25,8 @@ export class AppComponent implements OnInit, OnDestroy {
   public hasTenant = false;
   public loading = false;
   public theme?: string;
+  public customLogo?: string;
+  public appTitle: string = '';
 
   @HostBinding('style.cursor')
   public cursor?: CursorType;
@@ -44,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private readonly languageService: LanguageService,
     private readonly locationStrategy: LocationStrategy,
     private readonly snackbarService: SnackbarService,
+    private readonly title: Title,
   ) {
     // enable automatic silent refresh
     this.oauthService.setupAutomaticSilentRefresh();
@@ -62,9 +65,11 @@ export class AppComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(snackbarSubscription);
 
-    // This prevents a short flickering of the default theme (if another theme has been set)
-    const themeSubscription = themeService.theme$.subscribe(theme => (this.theme = theme));
+    const themeSubscription = themeService.theme$.subscribe(theme => this.onThemeChange(theme));
     this.subscriptions.push(themeSubscription);
+
+    const logoSubscription = themeService.logo$.subscribe(logo => (this.customLogo = logo));
+    this.subscriptions.push(logoSubscription);
   }
 
   public async switchTenant(): Promise<void> {
@@ -108,5 +113,18 @@ export class AppComponent implements OnInit, OnDestroy {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+  }
+
+  private async onThemeChange(theme?: string): Promise<void> {
+    if (!theme) {
+      return;
+    }
+
+    // Cannot use translations.instant here, as the translations may not have been loaded yet
+    // It would then just display the non-translated string
+    this.appTitle = await firstValueFrom(this.translations.get('APP.APPLICATION_TITLE.' + theme));
+    this.title.setTitle(this.appTitle);
+
+    this.theme = theme;
   }
 }

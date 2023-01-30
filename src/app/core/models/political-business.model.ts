@@ -20,7 +20,6 @@ export interface PoliticalBusinessBase {
   politicalBusinessNumber: string;
   officialDescription: Map<string, string>;
   shortDescription: Map<string, string>;
-  internalDescription: string;
   domainOfInfluenceId: string;
   contestId: string;
   active: boolean;

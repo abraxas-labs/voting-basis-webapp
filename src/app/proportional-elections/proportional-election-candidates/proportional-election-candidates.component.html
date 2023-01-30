@@ -74,6 +74,14 @@
                    (click)="deleteCandidate(element); $event.stopPropagation()"
                    icon="trash"
                    iconColor="error"></bc-icon>
+          <bc-icon *ngIf="!testingPhaseEnded"
+                   icon="angle-up"
+                   (click)="moveCandidateUp(element)"
+                   [class.disabled]="expandedCandidates.indexOf(element) === 0"></bc-icon>
+          <bc-icon *ngIf="!testingPhaseEnded"
+                   icon="angle-down"
+                   (click)="moveCandidateDown(element)"
+                   [class.disabled]="expandedCandidates.indexOf(element) === expandedCandidates.length - 1"></bc-icon>
         </div>
       </td>
     </ng-container>

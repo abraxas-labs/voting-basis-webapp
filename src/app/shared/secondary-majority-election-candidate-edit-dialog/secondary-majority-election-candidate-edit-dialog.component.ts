@@ -86,7 +86,8 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       isValidDateOfBirth(this.candidate.dateOfBirth) &&
       !!this.candidate.locality &&
       LanguageService.allLanguagesPresent(this.candidate.party) &&
-      this.candidate.sex !== undefined
+      this.candidate.sex !== undefined &&
+      !!this.candidate.origin
     );
   }
 

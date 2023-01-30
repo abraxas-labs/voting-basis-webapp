@@ -8,10 +8,12 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
+import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { ProportionalElectionCandidate } from '../../core/models/proportional-election.model';
 import { SexType } from '../../core/models/sex-type.model';
 import { ProportionalElectionService } from '../../core/proportional-election.service';
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
+import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 import { GetTranslationPipe } from '../../shared/get-translation.pipe';
 
 @Component({
@@ -27,7 +29,8 @@ export class ProportionalElectionCandidateEditDialogComponent {
   public saving: boolean = false;
   public sexTypes: EnumItemDescription<SexType>[] = [];
   public parties: DomainOfInfluencePartyDropdownData[] = [];
-  public selectedParty?: DomainOfInfluencePartyDropdownData;
+  public selectedPartyId?: string;
+  public isCommunalDoiType: boolean;
 
   constructor(
     private readonly dialogRef: MatDialogRef<ProportionalElectionCandidateEditDialogData>,
@@ -44,6 +47,8 @@ export class ProportionalElectionCandidateEditDialogComponent {
 
     this.sexTypes = this.enumUtil.getArrayWithDescriptions<SexType>(SexType, 'SEX_TYPE.');
     this.initPartiesDropdownData(dialogData.parties);
+
+    this.isCommunalDoiType = isCommunalDoiType(dialogData.doiType);
   }
 
   public set dateOfBirth(value: string) {
@@ -61,9 +66,10 @@ export class ProportionalElectionCandidateEditDialogComponent {
       !!this.data.firstName &&
       !!this.data.lastName &&
       this.isDateOfBirthValid() &&
-      !!this.data.locality &&
-      !!this.selectedParty &&
-      this.data.sex !== undefined
+      (this.isCommunalDoiType || !!this.data.locality) &&
+      !!this.selectedPartyId &&
+      this.data.sex !== undefined &&
+      (this.isCommunalDoiType || !!this.data.origin)
     );
   }
 
@@ -79,7 +85,12 @@ export class ProportionalElectionCandidateEditDialogComponent {
       this.data.politicalLastName = this.data.lastName;
     }
 
-    this.data.party = this.selectedParty;
+    const selectedParty = this.parties.find(x => x.id === this.selectedPartyId);
+    if (!selectedParty) {
+      return;
+    }
+
+    this.data.party = selectedParty;
 
     try {
       this.saving = true;
@@ -118,7 +129,7 @@ export class ProportionalElectionCandidateEditDialogComponent {
     const candidateParty = this.mapPartyToDropdownData(this.data.party);
     const hasCandidateParty = !!this.parties.find(p => p.id === candidateParty.id);
 
-    this.selectedParty = candidateParty;
+    this.selectedPartyId = candidateParty.id;
 
     if (hasCandidateParty) {
       return;
@@ -145,6 +156,7 @@ export interface ProportionalElectionCandidateEditDialogData {
   candidate: ProportionalElectionCandidate;
   testingPhaseEnded: boolean;
   parties: DomainOfInfluenceParty[];
+  doiType: DomainOfInfluenceType;
 }
 
 export interface ProportionalElectionCandidateEditDialogResult {

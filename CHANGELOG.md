@@ -1,4 +1,4 @@
-# ✨ Changelog (`v1.32.1`)
+# ✨ Changelog (`v1.37.1`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,93 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v1.32.1
-Previous version ---- v1.23.0
+This version -------- v1.37.1
+Previous version ---- v1.32.1
 Initial version ----- v1.23.0
-Total commits ------- 38
+Total commits ------- 15
 ```
+
+## [v1.37.1] - 2023-01-20
+
+### 🔄 Changed
+
+- use theme logo from library
+
+## [v1.37.0] - 2023-01-20
+
+### 🔄 Changed
+
+- change app title depending on theme
+
+## [v1.36.0] - 2023-01-20
+
+### 🔄 Changed
+
+- cache last used theme
+
+## [v1.35.3] - 2023-01-19
+
+### 🔄 Changed
+
+- election candidate locality and origin is allowed to be empty for communal political businesses
+
+## [v1.35.2] - 2023-01-11
+
+### 🔄 Changed
+
+- update base-components library
+
+## [v1.35.1] - 2023-01-05
+
+### ❌ Removed
+
+- remove internal description, invalid votes and individual empty ballots allowed from elections
+
+## [v1.35.0] - 2022-12-21
+
+### 🔄 Changed
+
+- add export provider
+
+## [v1.34.3] - 2022-12-19
+
+### 🔄 Changed
+
+- add optional text for formfield default options
+
+## [v1.34.2] - 2022-12-16
+
+### 🆕 Added
+
+- add domain of influence canton
+
+## [v1.34.1] - 2022-12-13
+
+### 🔄 Changed
+
+- changed path to logo for whitelabeling
+
+## [v1.34.0] - 2022-12-12
+
+### 🆕 Added
+
+- add white labeling logo for customers
+
+## [v1.33.0] - 2022-12-05
+
+### 🔄 Changed
+
+- reorder candidates
+
+### 🆕 Added
+
+- add candidate origin
+
+## [v1.32.2] - 2022-11-30
+
+### 🔄 Changed
+
+- proportional election candidate party selection
 
 ## [v1.32.1] - 2022-11-28
 
@@ -209,6 +291,20 @@ Total commits ------- 38
 ### 🆕 Added
 
 - tif support for domain of influence logos
+
+just a temporary fix. will be solved later by migrating to new base components
+
+just a temporary fix. will be solved later by migrating to new base components
+
+just a temporary fix. will be solved later by migrating to new base components
+
+fix: package lock old version
+
+Also allow users to view politicial business in readonly mode when testing phase ended
+
+also removed count of candidates check
+
+use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
 
 ## [v1.23.0] - 2022-05-09
 

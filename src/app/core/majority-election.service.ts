@@ -58,6 +58,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       zipCode: data.getZipCode(),
       majorityElectionId: data.getMajorityElectionId(),
       position: data.getPosition(),
+      origin: data.getOrigin(),
     };
   }
 
@@ -163,7 +164,6 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       politicalBusinessNumber: data.politicalBusinessNumber,
       officialDescription: data.officialDescription,
       shortDescription: data.shortDescription,
-      internalDescription: data.internalDescription,
       politicalBusinessType: PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION,
       active: data.active,
       domainOfInfluence: {
@@ -177,12 +177,9 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setPoliticalBusinessNumber(data.politicalBusinessNumber);
     fillProtoMap(result.getOfficialDescriptionMap(), data.officialDescription);
     fillProtoMap(result.getShortDescriptionMap(), data.shortDescription);
-    result.setInternalDescription(data.internalDescription);
     result.setNumberOfMandates(data.numberOfMandates);
     result.setMandateAlgorithm(data.mandateAlgorithm);
-    result.setIndividualEmptyBallotsAllowed(data.individualEmptyBallotsAllowed);
     result.setCandidateCheckDigit(data.candidateCheckDigit);
-    result.setInvalidVotes(data.invalidVotes);
     result.setBallotBundleSize(data.ballotBundleSize);
     result.setBallotBundleSampleSize(data.ballotBundleSampleSize);
     result.setAutomaticBallotBundleNumberGeneration(data.automaticBallotBundleNumberGeneration);
@@ -205,12 +202,9 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setPoliticalBusinessNumber(data.politicalBusinessNumber);
     fillProtoMap(result.getOfficialDescriptionMap(), data.officialDescription);
     fillProtoMap(result.getShortDescriptionMap(), data.shortDescription);
-    result.setInternalDescription(data.internalDescription);
     result.setNumberOfMandates(data.numberOfMandates);
     result.setMandateAlgorithm(data.mandateAlgorithm);
-    result.setIndividualEmptyBallotsAllowed(data.individualEmptyBallotsAllowed);
     result.setCandidateCheckDigit(data.candidateCheckDigit);
-    result.setInvalidVotes(data.invalidVotes);
     result.setBallotBundleSize(data.ballotBundleSize);
     result.setBallotBundleSampleSize(data.ballotBundleSampleSize);
     result.setAutomaticBallotBundleNumberGeneration(data.automaticBallotBundleNumberGeneration);
@@ -245,6 +239,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setZipCode(data.zipCode);
     result.setMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);
+    result.setOrigin(data.origin);
     return result;
   }
 
@@ -267,6 +262,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setZipCode(data.zipCode);
     result.setMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);
+    result.setOrigin(data.origin);
     return result;
   }
 }

@@ -332,6 +332,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     req.setDescription(data.description);
     req.setExportKeysList(data.exportKeysList);
     req.setEaiMessageType(data.eaiMessageType);
+    req.setProvider(data.provider);
     return req;
   }
 

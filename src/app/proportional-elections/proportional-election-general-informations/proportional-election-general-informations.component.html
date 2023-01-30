@@ -19,10 +19,6 @@
                              [singleLanguageInput]="!contest.eVoting"></app-translated-textarea>
   </div>
 
-  <bc-text [label]="'POLITICAL_BUSINESS.INTERNAL_DESCRIPTION' | translate"
-           [disabled]="contest.locked"
-           [(value)]="data.internalDescription"></bc-text>
-
   <bc-number [label]="'PROPORTIONAL_ELECTION.NUMBER_OF_MANDATES' | translate"
              [disabled]="contest.testingPhaseEnded"
              [required]="true"

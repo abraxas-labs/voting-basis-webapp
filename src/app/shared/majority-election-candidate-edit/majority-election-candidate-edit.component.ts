@@ -5,6 +5,7 @@
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, Input } from '@angular/core';
+import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { MajorityElectionCandidate } from '../../core/models/majority-election.model';
 import { SexType } from '../../core/models/sex-type.model';
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
@@ -24,6 +25,9 @@ export class MajorityElectionCandidateEditComponent {
   // allows editing of a candidate reference. only specific fields are enabled
   @Input()
   public isCandidateReference: boolean = false;
+
+  @Input()
+  public isCommunalDoiType: boolean = false;
 
   public sexTypes: EnumItemDescription<SexType>[] = [];
 

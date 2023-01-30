@@ -6,7 +6,9 @@
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Component, Input, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { MajorityElectionService } from '../../core/majority-election.service';
+import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { MajorityElection, MajorityElectionCandidate, newMajorityElectionCandidate } from '../../core/models/majority-election.model';
 import { SecondaryMajorityElection } from '../../core/models/secondary-majority-election.model';
 import { SecondaryMajorityElectionService } from '../../core/secondary-majority-election.service';
@@ -44,6 +46,7 @@ export class MajorityElectionCandidatesComponent {
   public loading: boolean = false;
   public currentMajorityElection?: MajorityElection;
   public secondaryElections: SecondaryMajorityElection[] = [];
+  public currentDomainOfInfluence?: DomainOfInfluence;
 
   constructor(
     private readonly majorityElectionService: MajorityElectionService,
@@ -51,11 +54,13 @@ export class MajorityElectionCandidatesComponent {
     private readonly dialogService: DialogService,
     private readonly snackbarService: SnackbarService,
     private readonly i18n: TranslateService,
+    private readonly domainOfInfluenceService: DomainOfInfluenceService,
   ) {}
 
   @Input()
   public set majorityElection(value: MajorityElection) {
     this.currentMajorityElection = value;
+    this.loadDomainOfInfluence(value.domainOfInfluenceId);
     this.fetchDependencies();
   }
 
@@ -64,22 +69,28 @@ export class MajorityElectionCandidatesComponent {
   }
 
   public async createCandidate(): Promise<void> {
-    if (!this.currentMajorityElection) {
+    if (!this.currentMajorityElection || !this.currentDomainOfInfluence) {
       return;
     }
 
     const dialogData: MajorityElectionCandidateEditDialogData = {
       candidate: newMajorityElectionCandidate(this.candidates.length + 1, this.currentMajorityElection.id),
       testingPhaseEnded: false,
+      doiType: this.currentDomainOfInfluence.type,
     };
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);
   }
 
   public async editCandidate(candidate: MajorityElectionCandidate): Promise<void> {
+    if (!this.currentDomainOfInfluence) {
+      return;
+    }
+
     const dialogData: MajorityElectionCandidateEditDialogData = {
       candidate: { ...candidate },
       testingPhaseEnded: this.testingPhaseEnded,
+      doiType: this.currentDomainOfInfluence.type,
     };
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);
@@ -106,6 +117,7 @@ export class MajorityElectionCandidatesComponent {
     // remove the expanded candidate
     this.candidates = updatedList.filter(x => !!x.id);
     this.updateCandidatePositions();
+    this.refreshExpandedCandidates();
 
     await this.majorityElectionService.reorderCandidates(this.currentMajorityElection.id, this.candidates);
     this.snackbarService.success(this.i18n.instant('APP.SAVED'));
@@ -182,5 +194,9 @@ export class MajorityElectionCandidatesComponent {
     for (let i = 1; i <= this.candidates.length; i++) {
       this.candidates[i - 1].position = i;
     }
+  }
+
+  private async loadDomainOfInfluence(domainOfInfluenceId: string): Promise<void> {
+    this.currentDomainOfInfluence = await this.domainOfInfluenceService.get(domainOfInfluenceId);
   }
 }

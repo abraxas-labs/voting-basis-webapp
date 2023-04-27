@@ -4,7 +4,7 @@
     <td bc-cell *bcCellDef="let element">
       <bc-checkbox
         class="ml-2"
-        (checkedChange)="selection.toggle(element); emitContestImport()"
+        (checkedChange)="setSelected(element, $event)"
         [checked]="selection.isSelected(element)"
       >
       </bc-checkbox>
@@ -34,7 +34,7 @@
   <tr bc-header-row *bcHeaderRowDef="columns"></tr>
   <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"
       [selectable]="true"
-      (rowSelected)="selection.toggle(row); emitContestImport()"></tr>
+      (rowSelected)="setSelected(row, true)"></tr>
 </bc-advanced-table>
 
 <div class="mt-4">

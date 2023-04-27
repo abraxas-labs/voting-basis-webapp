@@ -34,6 +34,7 @@ import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
+import { LanguageService } from './language.service';
 import { PoliticalBusiness, PoliticalBusinessType } from './models/political-business.model';
 import {
   ProportionalElection,
@@ -52,7 +53,7 @@ import { fillProtoMap, toJsMap } from './utils/map.utils';
   providedIn: 'root',
 })
 export class ProportionalElectionService extends GrpcService<ProportionalElectionServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor(grpcBackend: GrpcBackendService, private readonly languageService: LanguageService) {
     super(ProportionalElectionServicePromiseClient, environment, grpcBackend);
   }
 
@@ -274,18 +275,6 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     };
   }
 
-  public mapToProportionalElectionListUnion(data: ProportionalElectionListUnionProto): ProportionalElectionListUnion {
-    return {
-      id: data.getId(),
-      proportionalElectionId: data.getProportionalElectionId(),
-      description: toJsMap(data.getDescriptionMap()),
-      position: data.getPosition(),
-      proportionalElectionRootListUnionId: data.getProportionalElectionRootListUnionId(),
-      proportionalElectionSubListUnions: [],
-      proportionalElectionListIds: [],
-    };
-  }
-
   public mapToPoliticalBusinesses(data: ProportionalElection[]): PoliticalBusiness[] {
     return data.map(m => this.mapToPoliticalBusiness(m));
   }
@@ -305,12 +294,14 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
   }
 
   private mapToProportionalElectionList(list: ProportionalElectionListProto): ProportionalElectionList {
+    const description = toJsMap(list.getDescriptionMap());
     return {
       ...list.toObject(),
       shortDescription: toJsMap(list.getShortDescriptionMap()),
-      description: toJsMap(list.getDescriptionMap()),
+      description: description,
       listUnionDescription: toJsMap(list.getListUnionDescriptionMap()),
       subListUnionDescription: toJsMap(list.getSubListUnionDescriptionMap()),
+      orderNumberAndDescription: `${list.getOrderNumber()} ${this.languageService.getTranslationForCurrentLang(description)}`,
     };
   }
 

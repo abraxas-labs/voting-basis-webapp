@@ -39,6 +39,7 @@
     "CANTON_SETTINGS": "Kantonale Einstellungen"
   },
   "ERROR_MESSAGES": {
+    "DuplicatedBfsException": "Diese BFS-Nummber ist bereits vergeben.",
     "NonUniqueCandidateNumberException": "Die Kandidaten/innen-Nummer ist bereits vergeben.",
     "ContestWithExistingPoliticalBusinessesException": "Der Urnengang beinhaltet eingerichtete Geschäfte. Bitte löschen Sie zuerst die Geschäfte.",
     "CountingCircleInScheduledMergeException": "Der Auszählungskreis befindet sich in einer Fusion und ist nicht bearbeitbar.",

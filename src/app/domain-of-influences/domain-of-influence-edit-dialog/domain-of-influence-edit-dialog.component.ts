@@ -18,6 +18,8 @@ import { isDistinct } from '../../core/utils/array.utils';
   templateUrl: './domain-of-influence-edit-dialog.component.html',
 })
 export class DomainOfInfluenceEditDialogComponent implements OnInit {
+  public readonly knownDomainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
+
   public data: DomainOfInfluence;
   public parentType?: DomainOfInfluenceType;
   public isNew: boolean = false;
@@ -53,6 +55,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
       !!this.data.name &&
       !!this.data.shortName &&
       !!this.data.type &&
+      (this.data.type !== DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_MU || !!this.data.bfs) &&
       !!this.selectedTenant &&
       !!this.selectedTenant.id &&
       (!!this.data.parentId || !!this.data.canton) &&

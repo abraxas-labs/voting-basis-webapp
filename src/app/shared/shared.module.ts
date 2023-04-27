@@ -26,6 +26,7 @@ import {
   TabsModule,
   TextareaModule,
   TextModule,
+  TimeModule,
 } from '@abraxas/base-components';
 import { VotingLibModule } from '@abraxas/voting-lib';
 import { CommonModule } from '@angular/common';
@@ -141,6 +142,7 @@ const modules = [
   LabelModule,
   NumberModule,
   SnackbarModule,
+  TimeModule,
 ];
 
 @NgModule({

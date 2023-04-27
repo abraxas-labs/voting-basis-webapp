@@ -42,16 +42,25 @@
                               [maxlength]="100"
                               [(value)]="data.description"
                               [singleLanguageInput]="true"></app-translated-formfield>
-    <bc-date [label]="'CONTEST.END_OF_TESTING_PHASE' | translate"
-                  [disabled]="testingPhaseEnded"
-                  [required]="true"
-                  [error]="
+    <div class="flex">
+      <bc-date [label]="'CONTEST.END_OF_TESTING_PHASE' | translate"
+               [disabled]="testingPhaseEnded"
+               [required]="true"
+               [error]="
                     data.endOfTestingPhase !== undefined &&
                     data.date !== undefined &&
                     (data.endOfTestingPhase < now || data.endOfTestingPhase > data.date)
                   "
-                  [value]="data.endOfTestingPhase | date"
-                  (valueChange)="endOfTestingPhaseString = $event"></bc-date>
+               [value]="data.endOfTestingPhase | date"
+               (valueChange)="endOfTestingPhaseString = $event; setTime(endOfTestingPhaseTimeValue, data.endOfTestingPhase)"></bc-date>
+      <bc-time class="ml-2"
+               [showEmptyLabel]="true"
+               optionalText=""
+               icon="clock-o"
+               [value]="endOfTestingPhaseTimeValue"
+               (valueChange)="endOfTestingPhaseTimeValue = $event;
+               setTime(endOfTestingPhaseTimeValue, data.endOfTestingPhase)"></bc-time>
+    </div>
 
     <bc-spinner class="block" size="1.5rem" *ngIf="pastContestsLoading; else pastContestsDropdown"></bc-spinner>
     <ng-template #pastContestsDropdown>
@@ -71,17 +80,34 @@
                  (checkedChange)="loadCountingCircleOptionsIfNeeded()"></bc-checkbox>
 
     <ng-container *ngIf="data.eVoting">
-      <bc-date [label]="'CONTEST.E_VOTING_FROM' | translate"
-                    [disabled]="testingPhaseEnded"
-                    [required]="true"
-                    [value]="data.eVotingFrom | date"
-                    (valueChange)="eVotingFromString = $event"></bc-date>
+      <div class="flex">
+        <bc-date [label]="'CONTEST.E_VOTING_FROM' | translate"
+                 [disabled]="testingPhaseEnded"
+                 [required]="true"
+                 [value]="data.eVotingFrom | date"
+                 (valueChange)="eVotingFromString = $event; setTime(eVotingFromTimeValue, data.eVotingFrom)"></bc-date>
+        <bc-time class="ml-2"
+                 [showEmptyLabel]="true"
+                 optionalText=""
+                 icon="clock-o"
+                 [value]="eVotingFromTimeValue"
+                 (valueChange)="eVotingFromTimeValue = $event; setTime(eVotingFromTimeValue, data.eVotingFrom)"></bc-time>
+      </div>
 
-      <bc-date [label]="'CONTEST.E_VOTING_TO' | translate"
-                    [disabled]="testingPhaseEnded"
-                    [required]="true"
-                    [value]="data.eVotingTo | date"
-                    (valueChange)="eVotingToString = $event"></bc-date>
+      <div class="flex">
+        <bc-date [label]="'CONTEST.E_VOTING_TO' | translate"
+                 [disabled]="testingPhaseEnded"
+                 [required]="true"
+                 [value]="data.eVotingTo | date"
+                 (valueChange)="eVotingToString = $event; setTime(eVotingToTimeValue, data.eVotingTo)"></bc-date>
+        <bc-time class="ml-2"
+                 [showEmptyLabel]="true"
+                 optionalText=""
+                 icon="clock-o"
+                 [value]="eVotingToTimeValue"
+                 (valueChange)="eVotingToTimeValue = $event; setTime(eVotingToTimeValue, data.eVotingTo)"></bc-time>
+      </div>
+
 
       <bc-spinner *ngIf="countingCircleOptionsLoading"></bc-spinner>
       <div *ngIf="countingCircleOptions" class="mt-2">

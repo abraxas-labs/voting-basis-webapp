@@ -53,6 +53,22 @@ export class ImportContestEditComponent implements OnInit {
     }
   }
 
+  public setSelected(importFile: ContestImportFile, selected: boolean = true): void {
+    // ignore deselected events and cannot use toggle for the same reason:
+    // since the selection is single selection only
+    // and automatically deselects others on selection of an item
+    // and fires events for the selection as well as the deselection.
+    // if the deselection event happens first, everything works,
+    // but if the selection event happens first, the other item is automatically deselected,
+    // which leads to two toggle calls, which then leads to another selection.
+    if (!selected) {
+      return;
+    }
+
+    this.selection.select(importFile);
+    this.emitContestImport();
+  }
+
   public emitContestImport(): void {
     const selected = this.selection.selected;
     if (selected.length !== 1 || !this.domainOfInfluenceId || !this.endOfTestingPhaseString) {

@@ -21,6 +21,7 @@
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.BFS' | translate"
              [disabled]="readonly || !isAdmin"
+             [required]="data.type === knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU"
              [(value)]="data.bfs"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.CODE' | translate"

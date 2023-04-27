@@ -6,13 +6,14 @@
                  [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.TITLE' | translate"
                  [items]="lists"
                  [required]="true"
-                 displayExpr="orderNumber"
+                 displayExpr="orderNumberAndDescription"
                  valueExpr="id"
                  [(value)]="data.proportionalElectionMainListId"></bc-dropdown>
-    <vo-lib-button-bar footer
-                       [saving]="saving"
-                       [sticky]="false"
-                       (save)="save()"
-                       (cancel)="cancel()"></vo-lib-button-bar>
   </div>
+  <vo-lib-button-bar footer
+                     [saving]="saving"
+                     [sticky]="false"
+                     (save)="save()"
+                     [canSave]="!!data.proportionalElectionMainListId"
+                     (cancel)="cancel()"></vo-lib-button-bar>
 </vo-lib-dialog>

@@ -18,9 +18,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="allowedCandidateTypes.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MAY_EXIST_IN_PRIMARY_ELECTION">
-      <bc-checkbox [(checked)]="selectCandidateFromPrimaryElection" [disabled]="!isNew">
-        {{'SECONDARY_ELECTION.MAJORITY.SELECT_CANDIDATE_FROM_PRIMARY' | translate}}
-      </bc-checkbox>
+      <bc-checkbox [(checked)]="selectCandidateFromPrimaryElection"
+                   [disabled]="!isNew"
+                   [label]="'SECONDARY_ELECTION.MAJORITY.SELECT_CANDIDATE_FROM_PRIMARY' | translate"></bc-checkbox>
       <bc-dropdown class="full-width mb-4"
                    [items]="majorityElectionCandidates"
                    [clearable]="false"

@@ -15,6 +15,7 @@ import { DomainOfInfluenceService } from '../../core/domain-of-influence.service
 import { LanguageService } from '../../core/language.service';
 import { Contest, ContestCountingCircleOption, ContestDateAvailability, newContest } from '../../core/models/contest.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
+import { getDefaultTimeDate } from '../../core/utils/time.utils';
 
 @Component({
   selector: 'app-contest-edit-dialog',
@@ -41,7 +42,9 @@ export class ContestEditDialogComponent implements OnInit {
 
   public pastContestsLoading: boolean = false;
   public pastContests: ContestPastDropdownItem[] = [];
-
+  public endOfTestingPhaseTimeValue?: Date;
+  public eVotingFromTimeValue?: Date;
+  public eVotingToTimeValue?: Date;
   private dialogData: ContestEditDialogData;
   private oldContestDate?: Date;
   private dateStringValue: string = '';
@@ -97,11 +100,16 @@ export class ContestEditDialogComponent implements OnInit {
       (this.data.date > this.now || this.testingPhaseEnded) &&
       LanguageService.allLanguagesPresent(this.data.description) &&
       !!this.data.endOfTestingPhase &&
+      !!this.endOfTestingPhaseTimeValue &&
       this.data.endOfTestingPhase < this.data.date &&
       (this.data.endOfTestingPhase > this.now || this.testingPhaseEnded) &&
       !!this.data.domainOfInfluenceId &&
       (!this.data.eVoting ||
-        (!!this.data.eVotingFrom && !!this.data.eVotingTo && this.data.eVotingFrom.getTime() < this.data.eVotingTo.getTime()))
+        (!!this.data.eVotingFrom &&
+          !!this.eVotingFromTimeValue &&
+          !!this.data.eVotingTo &&
+          !!this.eVotingToTimeValue &&
+          this.data.eVotingFrom.getTime() < this.data.eVotingTo.getTime()))
     );
   }
 
@@ -119,6 +127,27 @@ export class ContestEditDialogComponent implements OnInit {
       this.data = contest;
       this.domainOfInfluences = domainOfInfluences;
       this.oldContestDate = this.data.date;
+
+      if (this.data.endOfTestingPhase) {
+        // default date 1970-01-01 is necessary, because of the max value (1970-01-02) in the bc-time implementation
+        const date = getDefaultTimeDate();
+        this.setTime(this.data.endOfTestingPhase, date);
+        this.endOfTestingPhaseTimeValue = date;
+      }
+
+      if (this.data.eVotingFrom) {
+        // default date 1970-01-01 is necessary, because of the max value (1970-01-02) in the bc-time implementation
+        const date = getDefaultTimeDate();
+        this.setTime(this.data.eVotingFrom, date);
+        this.eVotingFromTimeValue = date;
+      }
+
+      if (this.data.eVotingTo) {
+        // default date 1970-01-01 is necessary, because of the max value (1970-01-02) in the bc-time implementation
+        const date = getDefaultTimeDate();
+        this.setTime(this.data.eVotingTo, date);
+        this.eVotingToTimeValue = date;
+      }
 
       this.preconfiguredDates = preconfiguredDates.map(pcd => {
         return {
@@ -244,6 +273,15 @@ export class ContestEditDialogComponent implements OnInit {
     } finally {
       this.countingCircleOptionsLoading = false;
     }
+  }
+
+  public setTime(time?: Date, date?: Date): void {
+    if (!date || !time) {
+      return;
+    }
+
+    date.setHours(time.getHours());
+    date.setMinutes(time.getMinutes());
   }
 
   private async saveContestAfterTestingPhase(): Promise<void> {

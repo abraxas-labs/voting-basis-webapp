@@ -13,6 +13,7 @@ import { ProportionalElectionService } from '../../../core/proportional-election
 @Component({
   selector: 'app-proportional-election-list-union-main-list-edit-dialog',
   templateUrl: './proportional-election-list-union-main-list-edit-dialog.component.html',
+  styleUrls: ['./proportional-election-list-union-main-list-edit-dialog.component.scss'],
 })
 export class ProportionalElectionListUnionMainListEditDialogComponent {
   public data: ProportionalElectionListUnion;

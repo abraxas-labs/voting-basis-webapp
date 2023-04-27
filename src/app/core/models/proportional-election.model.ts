@@ -36,6 +36,7 @@ export type ProportionalElectionList = Omit<
   description: Map<string, string>;
   listUnionDescription: Map<string, string>;
   subListUnionDescription: Map<string, string>;
+  orderNumberAndDescription: string;
 };
 export { ProportionalElectionListUnionProto };
 export type ProportionalElectionListUnionEntries = ProportionalElectionListUnionEntriesProto.AsObject;
@@ -109,6 +110,7 @@ export function newProportionalElectionList(position: number, proportionalElecti
     countOfCandidates: 0,
     listUnionDescription: new Map<string, string>(),
     subListUnionDescription: new Map<string, string>(),
+    orderNumberAndDescription: '',
   };
 }
 

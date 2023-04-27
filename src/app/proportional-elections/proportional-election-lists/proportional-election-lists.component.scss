@@ -15,6 +15,7 @@ div[right] {
 div.buttons {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
 
   > :not(:first-child) {
     margin-left: 0.5rem;

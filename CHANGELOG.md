@@ -1,4 +1,4 @@
-# ✨ Changelog (`v1.37.1`)
+# ✨ Changelog (`v1.39.2`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v1.37.1
-Previous version ---- v1.32.1
+This version -------- v1.39.2
+Previous version ---- v1.37.1
 Initial version ----- v1.23.0
-Total commits ------- 15
+Total commits ------- 8
 ```
+
+## [v1.39.2] - 2023-03-01
+
+### 🔄 Changed
+
+- wrap buttons for proportional election lists
+
+## [v1.39.1] - 2023-02-15
+
+### 🔄 Changed
+
+- proportional election list union main list popup min width
+
+## [v1.39.0] - 2023-02-13
+
+### 🆕 Added
+
+- List union main list selection: show list order number and description
+
+## [v1.38.1] - 2023-02-07
+
+### 🔄 Changed
+
+- prevent loop of selection/deselection of contest import files
+
+## [v1.38.0] - 2023-02-01
+
+### 🔄 Changed
+
+- Domain of influence BFS is required and needs to be unique if the domain of influence is of type MU
+
+## [v1.37.3] - 2023-01-30
+
+### 🔄 Changed
+
+- add missing checkbox label
+
+## [v1.37.2] - 2023-01-27
+
+### 🔄 Changed
+
+- add time component for contest fields
 
 ## [v1.37.1] - 2023-01-20
 
@@ -244,6 +286,52 @@ Total commits ------- 15
 - The default NGINX listen port is now 8080 instead of 80
 - nginx:1.19-alpine image changed to nginxinc/nginx-unprivileged:1.20-alpine
 
+### 🆕 Added
+
+- add domain of influence external printing center eai message type
+
+### 🔄 Changed
+
+- secondary majority election module routing fixed
+
+### 🔄 Changed
+
+- revert angular 9 update changes
+
+### 🆕 Added
+
+- added voting documents e-voting message type to canton settings
+
+### 🔄 Changed
+
+- reverted angular 9 update and add workaround for entry components
+
+### 🔄 Changed
+
+- moved files into feature modules
+
+### 🔄 Changed
+
+- extend evoting date with time
+
+### 🆕 Added
+
+- tif support for domain of influence logos
+
+just a temporary fix. will be solved later by migrating to new base components
+
+just a temporary fix. will be solved later by migrating to new base components
+
+just a temporary fix. will be solved later by migrating to new base components
+
+fix: package lock old version
+
+Also allow users to view politicial business in readonly mode when testing phase ended
+
+also removed count of candidates check
+
+use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
+
 ## [v1.25.0] - 2022-07-15
 
 ### 🆕 Added
@@ -291,20 +379,6 @@ Total commits ------- 15
 ### 🆕 Added
 
 - tif support for domain of influence logos
-
-just a temporary fix. will be solved later by migrating to new base components
-
-just a temporary fix. will be solved later by migrating to new base components
-
-just a temporary fix. will be solved later by migrating to new base components
-
-fix: package lock old version
-
-Also allow users to view politicial business in readonly mode when testing phase ended
-
-also removed count of candidates check
-
-use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
 
 ## [v1.23.0] - 2022-05-09
 

@@ -103,6 +103,13 @@
              [disabled]="readonly"
              [required]="true"
              [(value)]="data.votingDocumentsEVotingEaiMessageType"></bc-text>
+
+    <h2 class="mb-1" translate>CANTON_SETTINGS.ELECTORAL_REGISTRATION.TITLE</h2>
+    <bc-checkbox [(checked)]="data.electoralRegistrationEnabled"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.ELECTORAL_REGISTRATION.ENABLED' | translate"
+                 class="full-width">
+    </bc-checkbox>
   </div>
 
   <div footer class="mr-3">

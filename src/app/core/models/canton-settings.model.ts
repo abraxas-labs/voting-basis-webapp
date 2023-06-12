@@ -67,5 +67,6 @@ export function newCantonSettings(): CantonSettings {
     ],
     protocolCountingCircleSortType: ProtocolCountingCircleSortTypeProto.PROTOCOL_COUNTING_CIRCLE_SORT_TYPE_SORT_NUMBER,
     protocolDomainOfInfluenceSortType: ProtocolDomainOfInfluenceSortTypeProto.PROTOCOL_DOMAIN_OF_INFLUENCE_SORT_TYPE_SORT_NUMBER,
+    electoralRegistrationEnabled: false,
   };
 }

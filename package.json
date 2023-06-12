@@ -17,7 +17,7 @@
   "private": true,
   "dependencies": {
     "@abraxas/base-components": "14.18.2",
-    "@abraxas/voting-basis-service-proto": "1.69.3",
+    "@abraxas/voting-basis-service-proto": "1.70.0",
     "@abraxas/voting-lib": "2.6.0",
     "@angular/animations": "13.3.11",
     "@angular/cdk": "13.3.9",

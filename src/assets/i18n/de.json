@@ -201,7 +201,8 @@
       "PRINTING_CENTER": {
         "TITLE": "Produktionszentrum",
         "EXTERNAL": "Extern",
-        "EXTERNAL_EAI_MESSAGE_TYPE": "Meldungstyp"
+        "EXTERNAL_EAI_MESSAGE_TYPE": "Meldungstyp",
+        "SAP_CUSTOMER_ORDER_NUMBER": "Kundenauftragsnummer"
       },
       "LOGO": {
         "TITLE": "Logo",
@@ -757,6 +758,10 @@
     "NEW": "Kantonale Einstellungen erstellen",
     "EDIT": "Kantonale Einstellungen bearbeiten",
     "PROPORTIONAL_ELECTION": "Proporzwahl",
+    "ELECTORAL_REGISTRATION": {
+      "TITLE": "Stimmregister",
+      "ENABLED": "Kanton verwendet Stimmregister"
+    },
     "MAJORITY_ELECTION": {
       "TITLE": "Majorzwahl",
       "ABSOLUTE_MAJORITY_ALGORITHM": "Berechungsverfahren",

@@ -1,4 +1,4 @@
-# ✨ Changelog (`v1.39.2`)
+# ✨ Changelog (`v1.40.2`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v1.39.2
-Previous version ---- v1.37.1
+This version -------- v1.40.2
+Previous version ---- 
 Initial version ----- v1.23.0
-Total commits ------- 8
+Total commits ------- 4
 ```
+
+## [v1.40.2] - 2023-06-09
+
+### 🔄 Changed
+
+- show list unions on lists
+
+## [v1.40.1] - 2023-05-02
+
+### 🔄 Changed
+
+- update cd-templates to resolve blocking deploy-trigger
+
+## [v1.40.0] - 2023-05-01
+
+### 🔄 Changed
+
+- canton settings add electoral register settings
+
+## [v1.39.3] - 2023-05-01
+
+### 🆕 Added
+
+- Added domain of influence sap customer order number
 
 ## [v1.39.2] - 2023-03-01
 
@@ -254,14 +278,6 @@ Total commits ------- 8
 
 - update base components bugfixes
 
-## [v1.27.0] - 2022-07-25
-
-### 🔄 Changed
-
-- update base components
-
-## [v1.26.1] - 2022-07-18
-
 ### 🆕 Added
 
 - gzip on
@@ -270,8 +286,6 @@ Total commits ------- 8
 ### 🔄 Changed
 
 - adapted authentication module type to match used iam lib
-
-## [v1.26.0] - 2022-07-17
 
 ### 🆕 Added
 
@@ -331,6 +345,38 @@ Also allow users to view politicial business in readonly mode when testing phase
 also removed count of candidates check
 
 use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
+
+## [v1.27.0] - 2022-07-25
+
+### 🔄 Changed
+
+- update base components
+
+## [v1.26.1] - 2022-07-18
+
+### 🆕 Added
+
+- gzip on
+- outdated error page
+
+### 🔄 Changed
+
+- adapted authentication module type to match used iam lib
+
+## [v1.26.0] - 2022-07-17
+
+### 🆕 Added
+
+- config.js: definitions of window env-handler (replacement ngssc)
+
+### ❌ Removed
+
+- ngssc-library
+
+### 🔒 Security
+
+- The default NGINX listen port is now 8080 instead of 80
+- nginx:1.19-alpine image changed to nginxinc/nginx-unprivileged:1.20-alpine
 
 ## [v1.25.0] - 2022-07-15
 

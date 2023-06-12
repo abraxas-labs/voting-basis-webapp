@@ -99,6 +99,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       printData: doi.getPrintData()?.toObject(),
       externalPrintingCenter: doi.getExternalPrintingCenter(),
       externalPrintingCenterEaiMessageType: doi.getExternalPrintingCenterEaiMessageType(),
+      sapCustomerOrderNumber: doi.getSapCustomerOrderNumber(),
       hasLogo: doi.getHasLogo(),
       plausibilisationConfiguration: DomainOfInfluenceService.mapToPlausibilisationConfiguration(doi.getPlausibilisationConfiguration()),
       parties: doi.getPartiesList().map(x => DomainOfInfluenceService.mapToParty(x, doiId)!),
@@ -322,6 +323,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setPlausibilisationConfiguration(this.mapToPlausibilisationConfigurationProto(data.plausibilisationConfiguration));
     result.setExternalPrintingCenter(data.externalPrintingCenter);
     result.setExternalPrintingCenterEaiMessageType(data.externalPrintingCenterEaiMessageType);
+    result.setSapCustomerOrderNumber(data.sapCustomerOrderNumber);
     result.setPartiesList(this.filterOnlyUpdateablePartiesAndMapToProto(data));
     return result;
   }
@@ -355,6 +357,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setNameForProtocol(data.nameForProtocol);
       adminRequest.setExternalPrintingCenter(data.externalPrintingCenter);
       adminRequest.setExternalPrintingCenterEaiMessageType(data.externalPrintingCenterEaiMessageType);
+      adminRequest.setSapCustomerOrderNumber(data.sapCustomerOrderNumber);
       adminRequest.setExportConfigurationsList(data.exportConfigurationsList.map(x => this.mapToExportConfigurationRequest(x)));
       this.mapToDomainOfInfluenceElectionAdminOrAdminRequest(data, adminRequest);
       result.setAdminRequest(adminRequest);
@@ -377,6 +380,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     request.setPrintData(this.mapToVotingCardPrintDataProto(data.printData));
     request.setExternalPrintingCenter(data.externalPrintingCenter);
     request.setExternalPrintingCenterEaiMessageType(data.externalPrintingCenterEaiMessageType);
+    request.setSapCustomerOrderNumber(data.sapCustomerOrderNumber);
     request.setPlausibilisationConfiguration(this.mapToPlausibilisationConfigurationProto(data.plausibilisationConfiguration));
     request.setPartiesList(this.filterOnlyUpdateablePartiesAndMapToProto(data));
   }

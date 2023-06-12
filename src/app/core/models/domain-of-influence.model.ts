@@ -38,6 +38,7 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     parties: [],
     externalPrintingCenter: false,
     externalPrintingCenterEaiMessageType: '',
+    sapCustomerOrderNumber: '',
     nameForProtocol: '',
   } as DomainOfInfluence;
 }

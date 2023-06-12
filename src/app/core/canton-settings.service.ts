@@ -70,6 +70,7 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setVotingDocumentsEVotingEaiMessageType(data.votingDocumentsEVotingEaiMessageType);
     result.setProtocolCountingCircleSortType(data.protocolCountingCircleSortType);
     result.setProtocolDomainOfInfluenceSortType(data.protocolDomainOfInfluenceSortType);
+    result.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
     return result;
   }
 
@@ -88,6 +89,7 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setVotingDocumentsEVotingEaiMessageType(data.votingDocumentsEVotingEaiMessageType);
     result.setProtocolCountingCircleSortType(data.protocolCountingCircleSortType);
     result.setProtocolDomainOfInfluenceSortType(data.protocolDomainOfInfluenceSortType);
+    result.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
     return result;
   }
 

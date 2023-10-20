@@ -4,6 +4,7 @@
  */
 
 import { EntityOrder } from '@abraxas/voting-basis-service-proto/grpc/models/entity_order_pb';
+import { ProportionalElectionImport } from '@abraxas/voting-basis-service-proto/grpc/models/import_pb';
 import { ProportionalElectionServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/proportional_election_service_grpc_web_pb';
 import {
   CreateProportionalElectionCandidateRequest,
@@ -35,6 +36,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
 import { LanguageService } from './language.service';
+import { DomainOfInfluenceParty, PartyMapping, PartyMappingContainer, PartyWithMappings } from './models/domain-of-influence-party.model';
 import { PoliticalBusiness, PoliticalBusinessType } from './models/political-business.model';
 import {
   ProportionalElection,

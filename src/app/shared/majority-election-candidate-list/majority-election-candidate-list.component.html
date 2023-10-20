@@ -1,4 +1,8 @@
-<bc-advanced-table class="w-full mb-2" [dataSource]="candidates">
+<bc-advanced-table class="w-full mb-2"
+                   [dataSource]="candidates"
+                   cdkDropList [cdkDropListData]="candidates"
+                   [cdkDropListDisabled]="testingPhaseEnded"
+                   (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)">
   <ng-container bcColumnDef="position">
     <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.POSITION' | translate }}</th>
     <td bc-cell *bcCellDef="let element">{{ element.position }}</td>
@@ -58,18 +62,10 @@
                  (click)="delete.emit(element)"
                  icon="trash"
                  iconColor="error"></bc-icon>
-        <bc-icon *ngIf="!testingPhaseEnded"
-                 icon="angle-up"
-                 (click)="moveCandidateUp(element)"
-                 [class.disabled]="candidates.indexOf(element) === 0"></bc-icon>
-        <bc-icon *ngIf="!testingPhaseEnded"
-                 icon="angle-down"
-                 (click)="moveCandidateDown(element)"
-                 [class.disabled]="candidates.indexOf(element) === candidates.length - 2"></bc-icon>
       </div>
     </td>
   </ng-container>
 
   <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true"></tr>
+  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" cdkDrag [cdkDragDisabled]="testingPhaseEnded" [cdkDragData]="row"></tr>
 </bc-advanced-table>

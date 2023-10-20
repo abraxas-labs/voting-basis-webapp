@@ -1,16 +1,32 @@
 <vo-lib-dialog [contentLoading]="fileSelect.loading">
   <h1 header translate>IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES</h1>
 
-  <app-import-file-select content
-                          #fileSelect
-                          [importTypes]="importTypes"
-                          (importsChange)="importFilesChanged($event)">
-  </app-import-file-select>
+  <bc-simple-stepper #stepper
+                     content
+                     labelPosition="bottom"
+                     linear
+                     (selectionChange)="stepChange($event)">
+    <bc-simple-step [label]="'IMPORT.FILE' | translate">
+      <app-import-file-select content
+                              #fileSelect
+                              [importTypes]="importTypes"
+                              (importsChange)="importFilesChanged($event)">
+      </app-import-file-select>
+    </bc-simple-step>
+
+    <bc-simple-step [label]="'IMPORT.PARTY_MAPPING.TITLE' | translate">
+      <div class="party-mapping">
+        <bc-spinner *ngIf="loadingParties"></bc-spinner>
+        <app-import-proportional-election-party-mapping *ngIf="partyMappings !== undefined"
+                                                        [data]="partyMappings!"></app-import-proportional-election-party-mapping>
+      </div>
+    </bc-simple-step>
+  </bc-simple-stepper>
 
   <div footer class="mr-3">
     <vo-lib-button-bar footer
-                       [saveLabel]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES' | translate"
-                       (save)="save()"
+                       [saveLabel]="(lastStep ? 'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' : 'APP.NEXT') | translate"
+                       (save)="lastStep ? save() : stepper.next()"
                        [canSave]="canSave"
                        [saving]="saving"
                        [cancelLabel]="'APP.CANCEL' | translate"

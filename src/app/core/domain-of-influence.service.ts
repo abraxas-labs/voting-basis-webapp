@@ -36,6 +36,10 @@ import {
   DomainOfInfluenceVotingCardPrintData,
   DomainOfInfluenceVotingCardPrintDataProto,
 } from './models/domain-of-influence-voting-card-print-data.model';
+import {
+  DomainOfInfluenceVotingCardSwissPostData,
+  DomainOfInfluenceVotingCardSwissPostDataProto,
+} from './models/domain-of-influence-voting-card-swiss-post-data.model';
 import { DomainOfInfluence, DomainOfInfluenceProto } from './models/domain-of-influence.model';
 import { ExportConfiguration, ExportConfigurationProto } from './models/export.model';
 import {
@@ -97,6 +101,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       exportConfigurationsList: doi.getExportConfigurationsList().map(x => x.toObject()),
       returnAddress: doi.getReturnAddress()?.toObject(),
       printData: doi.getPrintData()?.toObject(),
+      swissPostData: doi.getSwissPostData()?.toObject(),
       externalPrintingCenter: doi.getExternalPrintingCenter(),
       externalPrintingCenterEaiMessageType: doi.getExternalPrintingCenterEaiMessageType(),
       sapCustomerOrderNumber: doi.getSapCustomerOrderNumber(),
@@ -320,6 +325,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setExportConfigurationsList(data.exportConfigurationsList.map(x => this.mapToExportConfigurationRequest(x)));
     result.setReturnAddress(this.mapToVotingCardReturnAddressProto(data.returnAddress));
     result.setPrintData(this.mapToVotingCardPrintDataProto(data.printData));
+    result.setSwissPostData(this.mapToVotingCardSwissPostDataProto(data.swissPostData));
     result.setPlausibilisationConfiguration(this.mapToPlausibilisationConfigurationProto(data.plausibilisationConfiguration));
     result.setExternalPrintingCenter(data.externalPrintingCenter);
     result.setExternalPrintingCenterEaiMessageType(data.externalPrintingCenterEaiMessageType);
@@ -359,6 +365,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setExternalPrintingCenterEaiMessageType(data.externalPrintingCenterEaiMessageType);
       adminRequest.setSapCustomerOrderNumber(data.sapCustomerOrderNumber);
       adminRequest.setExportConfigurationsList(data.exportConfigurationsList.map(x => this.mapToExportConfigurationRequest(x)));
+      adminRequest.setSwissPostData(this.mapToVotingCardSwissPostDataProto(data.swissPostData));
       this.mapToDomainOfInfluenceElectionAdminOrAdminRequest(data, adminRequest);
       result.setAdminRequest(adminRequest);
     } else {
@@ -406,6 +413,20 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setShippingReturn(data.shippingReturn);
     result.setShippingAway(data.shippingAway);
     result.setShippingMethod(data.shippingMethod);
+    result.setShippingVotingCardsToDeliveryAddress(data.shippingVotingCardsToDeliveryAddress);
+    return result;
+  }
+
+  private mapToVotingCardSwissPostDataProto(
+    data?: DomainOfInfluenceVotingCardSwissPostData,
+  ): DomainOfInfluenceVotingCardSwissPostDataProto | undefined {
+    if (!data) {
+      return undefined;
+    }
+
+    const result = new DomainOfInfluenceVotingCardSwissPostDataProto();
+    result.setInvoiceReferenceNumber(data.invoiceReferenceNumber);
+    result.setFrankingLicenceReturnNumber(data.frankingLicenceReturnNumber);
     return result;
   }
 

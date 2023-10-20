@@ -20,7 +20,10 @@
                      (buttonClick)="updateAssignedLists(selectedListUnion)"></bc-button>
         </div>
 
-        <bc-advanced-table class="w-full" [dataSource]="dataSource">
+        <bc-advanced-table class="w-full"
+                           [dataSource]="dataSource"
+                           cdkDropList [cdkDropListData]="dataSource"
+                           (cdkDropListDropped)="moveListUnion($event.previousIndex, $event.currentIndex)">
           <ng-container bcColumnDef="number">
             <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.NUMBER' | translate }}</th>
             <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
@@ -52,7 +55,11 @@
           </ng-container>
 
           <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-          <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="selectListUnion(row)"></tr>
+          <tr bc-advanced-table-row
+              *bcRowDef="let row; columns: columns"
+              cdkDrag [cdkDragData]="row"
+              [selectable]="true"
+              (rowSelected)="selectListUnion(row)"></tr>
         </bc-advanced-table>
       </ng-template>
 
@@ -79,7 +86,10 @@
                      (buttonClick)="updateAssignedLists(selectedSubListUnion)"></bc-button>
         </div>
 
-        <bc-advanced-table class="w-full" [dataSource]="dataSourceSubLists">
+        <bc-advanced-table class="w-full"
+                           [dataSource]="dataSourceSubLists"
+                           cdkDropList [cdkDropListData]="dataSourceSubLists"
+                           (cdkDropListDropped)="moveListUnion($event.previousIndex, $event.currentIndex, selectedListUnion)">
           <ng-container bcColumnDef="number">
             <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.NUMBER' | translate }}</th>
             <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
@@ -108,6 +118,8 @@
 
           <tr bc-header-row *bcHeaderRowDef="columnsSubList"></tr>
           <tr bc-advanced-table-row *bcRowDef="let row; columns: columnsSubList"
+              cdkDrag
+              [cdkDragData]="row"
               [selectable]="true"
               (rowSelected)="selectSubListUnion(row)"></tr>
         </bc-advanced-table>

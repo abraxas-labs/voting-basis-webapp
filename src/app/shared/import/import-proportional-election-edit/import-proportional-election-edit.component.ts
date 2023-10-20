@@ -3,12 +3,15 @@
  * For license information see LICENSE file
  */
 
+import { DomainOfInfluenceParty } from '@abraxas/voting-basis-service-proto/grpc/models/domain_of_influence_party_pb';
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, Input } from '@angular/core';
+import { ProportionalElectionImport } from 'src/app/core/models/import.model';
 import { DomainOfInfluenceLevelService } from '../../../core/domain-of-influence-level.service';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
-import { ProportionalElectionImport } from '../../../core/models/import.model';
+import { PartyMappingContainer } from '../../../core/models/domain-of-influence-party.model';
 import { ProportionalElection, ProportionalElectionMandateAlgorithm } from '../../../core/models/proportional-election.model';
+import { ProportionalElectionPartyMappingService } from '../../../core/proportional-election-party-mapping.service';
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
 import { ImportPoliticalBusinessEditComponent } from '../import-political-business-edit/import-political-business-edit.component';
 
@@ -18,11 +21,18 @@ import { ImportPoliticalBusinessEditComponent } from '../import-political-busine
   styleUrls: ['./import-proportional-election-edit.component.scss'],
 })
 export class ImportProportionalElectionEditComponent extends ImportPoliticalBusinessEditComponent<ProportionalElection> {
+  public loadingParties: boolean = false;
+  public partyMappings?: PartyMappingContainer;
   public mandateAlgorithms: EnumItemDescription<ProportionalElectionMandateAlgorithm>[] = [];
 
   private proportionalElectionImport?: ProportionalElectionImport;
 
-  constructor(enumUtil: EnumUtil, doiLevelService: DomainOfInfluenceLevelService, domainOfInfluenceService: DomainOfInfluenceService) {
+  constructor(
+    enumUtil: EnumUtil,
+    doiLevelService: DomainOfInfluenceLevelService,
+    domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly proportionalElectionPartyMappingService: ProportionalElectionPartyMappingService,
+  ) {
     super(enumUtil, doiLevelService, domainOfInfluenceService);
   }
 
@@ -37,7 +47,14 @@ export class ImportProportionalElectionEditComponent extends ImportPoliticalBusi
     proportionalElection.setPoliticalBusinessNumber(this.data.politicalBusinessNumber);
     proportionalElection.setDomainOfInfluenceId(this.data.domainOfInfluenceId);
     proportionalElection.setMandateAlgorithm(this.data.mandateAlgorithm);
+    this.proportionalElectionPartyMappingService.applyMappings(this.partyMappings);
     this.setValid();
+  }
+
+  protected async handleDomainOfInfluenceChange(): Promise<void> {
+    this.setValid(false);
+    await super.handleDomainOfInfluenceChange();
+    await this.loadPartyMappings();
   }
 
   public override handleDomainOfInfluenceDefaultsChange(): void {
@@ -56,5 +73,23 @@ export class ImportProportionalElectionEditComponent extends ImportPoliticalBusi
           this.domainOfInfluenceDefaults!.proportionalElectionMandateAlgorithmsList.includes(i.value) ||
           this.data.mandateAlgorithm === i.value,
       );
+  }
+
+  private async loadPartyMappings(): Promise<void> {
+    if (this.selectedDomainOfInfluence === undefined || this.proportionalElectionImport === undefined) {
+      delete this.partyMappings;
+      return;
+    }
+
+    try {
+      this.loadingParties = true;
+      const parties = await this.domainOfInfluenceService.listParties(this.selectedDomainOfInfluence.id);
+      this.partyMappings = this.proportionalElectionPartyMappingService.buildImportPartyMappingGroups(
+        this.proportionalElectionImport.getListsList(),
+        parties,
+      );
+    } finally {
+      this.loadingParties = false;
+    }
   }
 }

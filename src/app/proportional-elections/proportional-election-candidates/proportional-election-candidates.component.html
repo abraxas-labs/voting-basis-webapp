@@ -22,7 +22,12 @@
     </div>
   </div>
 
-  <bc-advanced-table class="w-full mb-2" [dataSource]="expandedCandidates">
+  <bc-advanced-table class="w-full mb-2"
+                     [dataSource]="expandedCandidates"
+                     cdkDropList
+                     [cdkDropListData]="expandedCandidates"
+                     [cdkDropListDisabled]="testingPhaseEnded"
+                     (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)">
     <ng-container bcColumnDef="position">
       <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.POSITION' | translate }}</span></th>
       <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.position }}</div></td>
@@ -74,20 +79,18 @@
                    (click)="deleteCandidate(element); $event.stopPropagation()"
                    icon="trash"
                    iconColor="error"></bc-icon>
-          <bc-icon *ngIf="!testingPhaseEnded"
-                   icon="angle-up"
-                   (click)="moveCandidateUp(element)"
-                   [class.disabled]="expandedCandidates.indexOf(element) === 0"></bc-icon>
-          <bc-icon *ngIf="!testingPhaseEnded"
-                   icon="angle-down"
-                   (click)="moveCandidateDown(element)"
-                   [class.disabled]="expandedCandidates.indexOf(element) === expandedCandidates.length - 1"></bc-icon>
         </div>
       </td>
     </ng-container>
 
     <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-    <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="selectCandidate(row)"></tr>
+    <tr bc-advanced-table-row
+        *bcRowDef="let row; columns: columns"
+        cdkDrag
+        [cdkDragDisabled]="testingPhaseEnded"
+        [cdkDragData]="row"
+        [selectable]="true"
+        (rowSelected)="selectCandidate(row)"></tr>
   </bc-advanced-table>
 
   <p *ngIf="expandedCandidates.length === maxCandidateCount; else candidateCount" translate>

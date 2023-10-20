@@ -1,4 +1,4 @@
-# ✨ Changelog (`v1.40.2`)
+# ✨ Changelog (`v2.3.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v1.40.2
-Previous version ---- 
+This version -------- v2.3.0
+Previous version ---- v1.40.1
 Initial version ----- v1.23.0
-Total commits ------- 4
+Total commits ------- 12
 ```
+
+## [v2.3.0] - 2023-09-01
+
+### 🔄 Changed
+
+- political first name of candidate from simple text to complex text
+
+## [v2.2.2] - 2023-08-29
+
+### 🔄 Changed
+
+- display list and order number for created lists correctly
+
+## [v2.2.1] - 2023-08-18
+
+### ❌ Removed
+
+- remove swiss post order number
+
+## [v2.2.0] - 2023-08-10
+
+### 🆕 Added
+
+- party import mappings for proportional election candidates
+
+## [v2.1.0] - 2023-08-09
+
+### 🔄 Changed
+
+- make proportional election lists, candidates and list unions reordable again
+
+## [v2.0.0] - 2023-08-08
+
+### ❌ Removed
+
+- revert commit 6c24fa62023da2dbd9473ee23f438faab4878903
+
+BREAKING CHANGE: update to Angular 14 version
+
+### 🔄 Changed
+
+- Angular 14 Update
+
+## [v1.41.0] - 2023-07-26
+
+### 🆕 Added
+
+- add swiss post data
+
+## [v1.40.5] - 2023-07-18
+
+### 🆕 Added
+
+- Add domain of influence voting card shipping choice
+
+## [v1.40.4] - 2023-07-12
+
+### 🔄 Changed
+
+- end of testing phase time component disabled if testing phase ended
+
+## [v1.40.3] - 2023-06-21
+
+### 🔄 Changed
+
+- disable candidate move buttons during reordering
 
 ## [v1.40.2] - 2023-06-09
 
@@ -218,31 +284,17 @@ Total commits ------- 4
 
 - optimise white labling to not overwrite the base components styles
 
-## [v1.28.0] - 2022-09-01
-
 ### 🆕 Added
 
 - Added white labling option
-
-## [v1.27.8] - 2022-08-30
 
 ### 🔄 Changed
 
 - Allow political business number modification on all political businesses after testing phase has ended
 
-## [v1.27.7] - 2022-08-25
-
 ### 🔄 Changed
 
 - Refactor and clean up code smells
-
-## [v1.27.6] - 2022-08-23
-
-### 🔄 Changed
-
-- update vulnerable dependencies
-
-## [v1.27.5] - 2022-08-18
 
 ### ❌ Removed
 
@@ -254,25 +306,17 @@ Total commits ------- 4
 - Use "Fragment" response mode
 - Update dependencies
 
-## [v1.27.4] - 2022-08-17
-
 ### 🔄 Changed
 
 - Made political businesses only clickable/viewable for authorized users
-
-## [v1.27.3] - 2022-08-15
 
 ### 🆕 Added
 
 - Events to notify political businesses and political business unions about a contest merge
 
-## [v1.27.2] - 2022-08-02
-
 ### 🔄 Changed
 
 - contest list columns fixed
-
-## [v1.27.1] - 2022-07-29
 
 ### 🔄 Changed
 
@@ -345,6 +389,66 @@ Also allow users to view politicial business in readonly mode when testing phase
 also removed count of candidates check
 
 use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
+
+## [v1.28.0] - 2022-09-01
+
+### 🆕 Added
+
+- Added white labling option
+
+## [v1.27.8] - 2022-08-30
+
+### 🔄 Changed
+
+- Allow political business number modification on all political businesses after testing phase has ended
+
+## [v1.27.7] - 2022-08-25
+
+### 🔄 Changed
+
+- Refactor and clean up code smells
+
+## [v1.27.6] - 2022-08-23
+
+### 🔄 Changed
+
+- update vulnerable dependencies
+
+## [v1.27.5] - 2022-08-18
+
+### ❌ Removed
+
+- TenantGuard, tenant is no longer in the URL
+
+### 🔒 Security
+
+- Changed auth flow to PKCE
+- Use "Fragment" response mode
+- Update dependencies
+
+## [v1.27.4] - 2022-08-17
+
+### 🔄 Changed
+
+- Made political businesses only clickable/viewable for authorized users
+
+## [v1.27.3] - 2022-08-15
+
+### 🆕 Added
+
+- Events to notify political businesses and political business unions about a contest merge
+
+## [v1.27.2] - 2022-08-02
+
+### 🔄 Changed
+
+- contest list columns fixed
+
+## [v1.27.1] - 2022-07-29
+
+### 🔄 Changed
+
+- update base components bugfixes
 
 ## [v1.27.0] - 2022-07-25
 

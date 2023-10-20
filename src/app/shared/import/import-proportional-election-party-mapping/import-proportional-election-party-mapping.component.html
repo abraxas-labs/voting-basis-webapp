@@ -1,0 +1,54 @@
+<div class="p-2 available-mappings">
+  <h4 translate class="mb-2">IMPORT.PARTY_MAPPING.FROM_IMPORT_TITLE</h4>
+  <div class="available-mapping-entries"
+       [dndDropzone]
+       dndDragoverClass="drag-over"
+       (dndDrop)="removeMapping($event.data.mapping, $event.data.party)">
+    <p *ngIf="data.unmapped.length === 0" class="no-data" translate>
+      IMPORT.PARTY_MAPPING.NO_UNMAPPED
+    </p>
+    <div class="available-mapping p-2 mb-2"
+         *ngFor="let partyMapping of data.unmapped"
+         [dndDraggable]="{mapping: partyMapping}">
+      <mat-icon class="mr-1">drag_handle</mat-icon>
+      <span>{{partyMapping.sourceName}}</span>
+    </div>
+  </div>
+</div>
+<div class="p-2 parties">
+  <h4 translate>IMPORT.PARTY_MAPPING.AVAILABLE_TITLE</h4>
+  <div class="parties-content">
+    <table>
+      <thead>
+      <tr>
+        <th>
+          <bc-label [label]="'DOMAIN_OF_INFLUENCE.PARTY.NAME' | translate"></bc-label>
+        </th>
+        <th>
+          <bc-label [label]="'DOMAIN_OF_INFLUENCE.PARTY.SHORT_DESCRIPTION' | translate"></bc-label>
+        </th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let party of data.parties">
+        <tr [dndDropzone]
+            dndDragoverClass="drag-over"
+            (dndDrop)="removeMapping($event.data.mapping, $event.data.party); addMapping($event.data.mapping, party)">
+          <td>{{party.name | getTranslation}}</td>
+          <td>{{party.shortDescription | getTranslation}}</td>
+          <td>
+            <div class="chip p-1 pl-2 m-1" *ngFor="let mapping of party.mappings"
+                 [dndDraggable]="{party, mapping}">
+              {{mapping.sourceName}}
+              <bc-icon icon="cancel"
+                       class="ml-1 clickable"
+                       (click)="removeMapping(mapping, party); $event.preventDefault(); $event.stopPropagation()"></bc-icon>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

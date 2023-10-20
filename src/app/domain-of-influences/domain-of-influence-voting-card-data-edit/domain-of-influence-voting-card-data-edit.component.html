@@ -1,4 +1,4 @@
-<div class="mr-3 my-2" *ngIf="!!domainOfInfluence.returnAddress && !!domainOfInfluence.printData">
+<div class="mr-3 my-2" *ngIf="!!domainOfInfluence.returnAddress && !!domainOfInfluence.printData && !!domainOfInfluence.swissPostData">
   <app-domain-of-influence-logo-edit [disabled]="disabled"
                                      [domainOfInfluence]="domainOfInfluence"
                                      (logoChanged)="logoChanged.emit($event)"></app-domain-of-influence-logo-edit>
@@ -70,6 +70,23 @@
                  [required]="true"
                  [disabled]="disabled"
                  [(value)]="domainOfInfluence.printData.shippingMethod"></bc-dropdown>
+
+    <bc-checkbox class="mt-2"
+                 [disabled]="disabled"
+                 [label]="
+                  'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.SHIPPING_VOTING_CARDS_TO_DELIVERY_ADDRESS' | translate
+                 "
+                 [(checked)]="domainOfInfluence.printData.shippingVotingCardsToDeliveryAddress"></bc-checkbox>
+
+    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.INVOICE_REFERENCE_NUMBER' | translate"
+             [disabled]="disabled || !isAdmin"
+             [required]="true"
+             [(value)]="domainOfInfluence.swissPostData.invoiceReferenceNumber"></bc-text>
+
+    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.FRANKING_LICENCE_RETURN_NUMBER' | translate"
+             [disabled]="disabled || !isAdmin"
+             [required]="true"
+             [(value)]="domainOfInfluence.swissPostData.frankingLicenceReturnNumber"></bc-text>
   </div>
 
   <div>

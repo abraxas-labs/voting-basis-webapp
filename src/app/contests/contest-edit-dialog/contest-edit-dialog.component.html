@@ -55,6 +55,7 @@
                (valueChange)="endOfTestingPhaseString = $event; setTime(endOfTestingPhaseTimeValue, data.endOfTestingPhase)"></bc-date>
       <bc-time class="ml-2"
                [showEmptyLabel]="true"
+               [disabled]="testingPhaseEnded"
                optionalText=""
                icon="clock-o"
                [value]="endOfTestingPhaseTimeValue"

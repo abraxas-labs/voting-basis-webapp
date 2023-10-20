@@ -44,6 +44,7 @@ export class MajorityElectionCandidatesComponent {
   public candidates: MajorityElectionCandidate[] = [];
   public expandedCandidates: MajorityElectionCandidate[] = [];
   public loading: boolean = false;
+  public reordering: boolean = false;
   public currentMajorityElection?: MajorityElection;
   public secondaryElections: SecondaryMajorityElection[] = [];
   public currentDomainOfInfluence?: DomainOfInfluence;
@@ -119,8 +120,13 @@ export class MajorityElectionCandidatesComponent {
     this.updateCandidatePositions();
     this.refreshExpandedCandidates();
 
-    await this.majorityElectionService.reorderCandidates(this.currentMajorityElection.id, this.candidates);
-    this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+    try {
+      this.reordering = true;
+      await this.majorityElectionService.reorderCandidates(this.currentMajorityElection.id, this.candidates);
+      this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+    } finally {
+      this.reordering = false;
+    }
   }
 
   public importCandidates(): void {

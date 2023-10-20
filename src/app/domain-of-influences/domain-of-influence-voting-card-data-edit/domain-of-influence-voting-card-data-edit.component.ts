@@ -12,6 +12,8 @@ import {
   VotingCardShippingMethod,
 } from '../../core/models/domain-of-influence-voting-card-print-data.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
+import { newDomainOfInfluenceVotingCardSwissPostData } from '../../core/models/domain-of-influence-voting-card-swiss-post-data.model';
+import { RolesService } from '../../core/roles.service';
 
 @Component({
   selector: 'app-domain-of-influence-voting-card-data-edit',
@@ -28,9 +30,11 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
   @Output()
   public logoChanged: EventEmitter<File> = new EventEmitter<File>();
 
+  public isAdmin: boolean = false;
+
   private domainOfInfluenceValue!: DomainOfInfluence;
 
-  constructor(private readonly enumUtil: EnumUtil) {}
+  constructor(private readonly enumUtil: EnumUtil, private readonly rolesService: RolesService) {}
 
   public get domainOfInfluence(): DomainOfInfluence {
     return this.domainOfInfluenceValue;
@@ -50,10 +54,14 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
       v.printData = newDomainOfInfluenceVotingCardPrintData();
     }
 
+    if (!v.swissPostData) {
+      v.swissPostData = newDomainOfInfluenceVotingCardSwissPostData();
+    }
+
     this.domainOfInfluenceValue = v;
   }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
     this.shippingAwayItems = this.enumUtil
       .getArrayWithDescriptions<VotingCardShippingFranking>(
         VotingCardShippingFranking,
@@ -82,5 +90,7 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
       VotingCardShippingMethod,
       'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SHIPPING_METHOD.',
     );
+
+    this.isAdmin = await this.rolesService.isAdmin();
   }
 }

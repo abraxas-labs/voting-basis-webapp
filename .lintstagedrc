@@ -1,0 +1,10 @@
+{
+  "**/*.ts": [
+    "prettier --write",
+    "ng-lint-staged lint:ng --fix --"
+  ],
+  "**/*.scss": [
+    "prettier --write",
+    "stylelint"
+  ]
+}

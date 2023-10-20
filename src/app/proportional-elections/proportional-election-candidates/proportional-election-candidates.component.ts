@@ -70,6 +70,7 @@ export class ProportionalElectionCandidatesComponent {
   public candidates: ProportionalElectionCandidate[] = [];
   public expandedCandidates: ProportionalElectionCandidate[] = [];
   public loading: boolean = false;
+  public reordering: boolean = false;
   public selectedCandidate?: ProportionalElectionCandidate;
   public savingAccumulation: boolean = false;
   private currentList?: ProportionalElectionList;
@@ -176,42 +177,25 @@ export class ProportionalElectionCandidatesComponent {
     }
   }
 
-  public async reorderCandidates(updatedList: ProportionalElectionCandidate[]): Promise<void> {
-    if (!this.currentList) {
+  public async moveCandidate(previousIndex: number, newIndex: number): Promise<void> {
+    if (previousIndex === newIndex || this.reordering || !this.currentList) {
       return;
     }
 
-    this.expandedCandidates = updatedList;
-    this.updateCandidatePositions();
-    this.refreshExpandedCandidates();
+    try {
+      this.reordering = true;
+      const removedCandidate = this.expandedCandidates.splice(previousIndex, 1)[0];
+      this.expandedCandidates.splice(newIndex, 0, removedCandidate);
+      this.expandedCandidates = [...this.expandedCandidates];
 
-    await this.proportionalElectionService.reorderCandidates(this.currentList.id, this.candidates);
-    this.snackbarService.success(this.i18n.instant('APP.SAVED'));
-  }
+      this.updateCandidatePositions();
+      this.refreshExpandedCandidates();
 
-  public async moveCandidateUp(candidate: ProportionalElectionCandidate) {
-    const index = this.expandedCandidates.indexOf(candidate);
-    if (index <= 0) {
-      return;
+      await this.proportionalElectionService.reorderCandidates(this.currentList.id, this.candidates);
+      this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+    } finally {
+      this.reordering = false;
     }
-
-    const newIndex = index - 1;
-    await this.moveCandidate(index, newIndex);
-  }
-
-  public async moveCandidateDown(candidate: ProportionalElectionCandidate) {
-    const index = this.expandedCandidates.indexOf(candidate);
-    if (index >= this.expandedCandidates.length - 1) {
-      return;
-    }
-
-    const newIndex = index + 1;
-    await this.moveCandidate(index, newIndex);
-  }
-
-  private async moveCandidate(index: number, newIndex: number) {
-    this.expandedCandidates[index] = this.expandedCandidates.splice(newIndex, 1, this.expandedCandidates[index])[0];
-    await this.reorderCandidates(this.expandedCandidates);
   }
 
   private async loadCandidates(): Promise<void> {

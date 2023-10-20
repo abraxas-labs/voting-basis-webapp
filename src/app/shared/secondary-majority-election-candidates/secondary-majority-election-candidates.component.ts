@@ -45,6 +45,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
   public candidates: SecondaryMajorityElectionCandidate[] = [];
   public expandedCandidates: SecondaryMajorityElectionCandidate[] = [];
   public loading: boolean = false;
+  public reordering: boolean = false;
   public currentSecondaryMajorityElection?: SecondaryMajorityElection;
   public majorityElection?: MajorityElection;
   public secondaryMajorityElections: SecondaryMajorityElection[] = [];
@@ -121,8 +122,13 @@ export class SecondaryMajorityElectionCandidatesComponent {
     this.candidates = updatedList.filter(x => !!x.id);
     this.updateCandidatePositions();
 
-    await this.secondaryMajorityElectionService.reorderCandidates(this.currentSecondaryMajorityElection.id, this.candidates);
-    this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+    try {
+      this.reordering = true;
+      await this.secondaryMajorityElectionService.reorderCandidates(this.currentSecondaryMajorityElection.id, this.candidates);
+      this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+    } finally {
+      this.reordering = false;
+    }
   }
 
   private async fetchDependencies(): Promise<void> {

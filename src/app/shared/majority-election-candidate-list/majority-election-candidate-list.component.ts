@@ -36,6 +36,9 @@ export class MajorityElectionCandidateListComponent {
   @Input()
   public locked: boolean = false;
 
+  @Input()
+  public reordering: boolean = false;
+
   @Output()
   public edit: EventEmitter<MajorityElectionCandidate> = new EventEmitter<MajorityElectionCandidate>();
 
@@ -45,30 +48,13 @@ export class MajorityElectionCandidateListComponent {
   @Output()
   public candidatesReordered: EventEmitter<MajorityElectionCandidate[]> = new EventEmitter<MajorityElectionCandidate[]>();
 
-  public moveCandidateUp(candidate: MajorityElectionCandidate) {
-    const index = this.candidates.indexOf(candidate);
-    if (index <= 0) {
+  public async moveCandidate(previousIndex: number, newIndex: number): Promise<void> {
+    if (previousIndex === newIndex || this.reordering) {
       return;
     }
 
-    const newIndex = index - 1;
-    this.moveCandidate(index, newIndex);
-  }
-
-  public moveCandidateDown(candidate: MajorityElectionCandidate) {
-    const index = this.candidates.indexOf(candidate);
-
-    // check for the second last entry, because the last entry is individual candidates
-    if (index >= this.candidates.length - 2) {
-      return;
-    }
-
-    const newIndex = index + 1;
-    this.moveCandidate(index, newIndex);
-  }
-
-  private moveCandidate(index: number, newIndex: number) {
-    this.candidates[index] = this.candidates.splice(newIndex, 1, this.candidates[index])[0];
+    const removedCandidate = this.candidates.splice(previousIndex, 1)[0];
+    this.candidates.splice(newIndex, 0, removedCandidate);
     this.candidatesReordered.emit(this.candidates);
   }
 }

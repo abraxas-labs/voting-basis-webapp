@@ -26,7 +26,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
   public data!: T;
 
   @Output()
-  public valid: EventEmitter<void> = new EventEmitter<void>();
+  public valid: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public isValid: boolean = false;
 
@@ -40,7 +40,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
   protected constructor(
     protected readonly enumUtil: EnumUtil,
     private readonly doiLevelService: DomainOfInfluenceLevelService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
+    protected readonly domainOfInfluenceService: DomainOfInfluenceService,
   ) {}
 
   public get selectedDomainOfInfluence(): DomainOfInfluence | undefined {
@@ -53,7 +53,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
 
     const politicalBusinessDomainOfInfluenceNode = this.domainOfInfluenceTree?.findNodeById(this.data.domainOfInfluenceId);
     this.domainOfInfluenceLevels = this.doiLevelService.buildDomainOfInfluenceLevels(politicalBusinessDomainOfInfluenceNode);
-    this.loadDomainOfInfluenceDefaults();
+    this.handleDomainOfInfluenceChange();
   }
 
   public get selectedDomainOfInfluenceType(): DomainOfInfluenceType | undefined {
@@ -80,12 +80,16 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
     }
   }
 
-  protected setValid(): void {
-    this.isValid = true;
-    this.valid.emit();
+  protected setValid(valid: boolean = true): void {
+    this.isValid = valid;
+    this.valid.emit(valid);
   }
 
   protected handleDomainOfInfluenceDefaultsChange(): void {}
+
+  protected async handleDomainOfInfluenceChange(): Promise<void> {
+    await this.loadDomainOfInfluenceDefaults();
+  }
 
   private async initDomainOfInfluenceData(): Promise<void> {
     this.domainOfInfluenceTree = new DomainOfInfluenceTree(await this.domainOfInfluenceService.listTree(), this.enumUtil);

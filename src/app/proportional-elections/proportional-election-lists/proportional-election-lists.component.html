@@ -23,7 +23,11 @@
                    [disabled]="testingPhaseEnded"></bc-button>
       </div>
 
-      <bc-advanced-table class="w-full" [dataSource]="lists">
+      <bc-advanced-table class="w-full"
+                         [dataSource]="lists"
+                         cdkDropList [cdkDropListData]="lists"
+                         [cdkDropListDisabled]="testingPhaseEnded"
+                         (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)">
         <ng-container bcColumnDef="orderNumber">
           <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate }}</th>
           <td bc-cell *bcCellDef="let element">{{ element.orderNumber }}</td>
@@ -38,11 +42,15 @@
         </ng-container>
         <ng-container bcColumnDef="listUnionDescription">
           <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate }}</th>
-          <td bc-cell *bcCellDef="let element"><ng-container *ngTemplateOutlet="listUnionDescriptionCol"></ng-container></td>
+          <td bc-cell *bcCellDef="let element">
+            <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.listUnionDescription}"></ng-container>
+          </td>
         </ng-container>
         <ng-container bcColumnDef="subListUnionDescription">
           <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate }}</th>
-          <td bc-cell *bcCellDef="let element"><ng-container *ngTemplateOutlet="listUnionDescriptionCol"></ng-container></td>
+          <td bc-cell *bcCellDef="let element">
+            <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.subListUnionDescription}"></ng-container>
+          </td>
         </ng-container>
         <ng-container bcColumnDef="actions">
           <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
@@ -58,9 +66,14 @@
         </ng-container>
 
         <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-        <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="selectList(row)"></tr>
+        <tr bc-advanced-table-row
+            *bcRowDef="let row; columns: columns"
+            cdkDrag [cdkDragData]="row"
+            [cdkDragDisabled]="testingPhaseEnded"
+            [selectable]="true"
+            (rowSelected)="selectList(row)"></tr>
 
-        <ng-template #listUnionDescriptionCol let-element="element">
+        <ng-template #listUnionDescriptionCol let-element>
           <!-- List union descriptions are validated on the server, they do not contain user-controlled HTML.
              It is safe to display the description directly as HTML -->
           <div class="list-union-description" [innerHTML]="element | getTranslation | safeHtml"></div>

@@ -70,7 +70,10 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
           !!this.data.returnAddress.street &&
           !!this.data.returnAddress.city &&
           !!this.data.returnAddress.country &&
-          !!this.data.returnAddress.zipCode)) &&
+          !!this.data.returnAddress.zipCode &&
+          !!this.data.swissPostData &&
+          !!this.data.swissPostData.invoiceReferenceNumber &&
+          !!this.data.swissPostData.frankingLicenceReturnNumber)) &&
       !!this.data.plausibilisationConfiguration &&
       this.data.plausibilisationConfiguration.comparisonVoterParticipationConfigurationsList.every(
         x =>
@@ -123,6 +126,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
         ...this.data,
         printData: this.data.responsibleForVotingCards ? this.data.printData : undefined,
         returnAddress: this.data.responsibleForVotingCards ? this.data.returnAddress : undefined,
+        swissPostData: this.data.responsibleForVotingCards ? this.data.swissPostData : undefined,
       };
 
       if (this.isNew) {

@@ -33,9 +33,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { DndModule } from 'ngx-drag-drop';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { MomentModule } from 'ngx-moment';
 import { CanEditBallotGroupPipe } from './can-edit-ballot-group.pipe';
@@ -73,6 +75,8 @@ import { SecondaryMajorityElectionCreateDialogComponent } from './secondary-majo
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { TranslatedFormfieldComponent } from './translated-formfield/translated-formfield.component';
 import { TranslatedTextareaComponent } from './translated-textarea/translated-textarea.component';
+import { ImportProportionalElectionPartyMappingComponent } from './import/import-proportional-election-party-mapping/import-proportional-election-party-mapping.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const components = [
   ContactPersonEditComponent,
@@ -106,6 +110,7 @@ const components = [
   MajorityElectionCandidateEditComponent,
   MajorityElectionCandidateEditDialogComponent,
   MajorityElectionBallotGroupAssignCandidatesEntryComponent,
+  ImportProportionalElectionPartyMappingComponent,
 ];
 
 const pipes = [GetTranslationPipe, SafeHtmlPipe, MajorityElectionBallotGroupBlankRowsPipe, CanEditBallotGroupPipe];
@@ -143,6 +148,9 @@ const modules = [
   NumberModule,
   SnackbarModule,
   TimeModule,
+  DragDropModule,
+  DndModule,
+  MatIconModule,
 ];
 
 @NgModule({

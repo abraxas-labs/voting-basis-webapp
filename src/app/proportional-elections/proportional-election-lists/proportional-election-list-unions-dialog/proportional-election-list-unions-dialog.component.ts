@@ -110,20 +110,19 @@ export class ProportionalElectionListUnionsDialogComponent implements OnInit, Af
     this.handleEditListUnion(result?.listUnion);
   }
 
-  public async reorderListUnions(
-    updatedData: ProportionalElectionListUnion[],
-    rootListUnion?: ProportionalElectionListUnion,
-  ): Promise<void> {
-    const listUnionsWithSameRoot = rootListUnion?.proportionalElectionSubListUnions ?? this.dataSource.data;
-
-    // replace old list unions with the new ordered list unions
-    listUnionsWithSameRoot.splice(0, listUnionsWithSameRoot.length);
-    for (const listUnion of updatedData) {
-      listUnionsWithSameRoot.push(listUnion);
+  public async moveListUnion(previousIndex: number, newIndex: number, rootListUnion?: ProportionalElectionListUnion): Promise<void> {
+    if (previousIndex === newIndex) {
+      return;
     }
 
+    // Can either reorder the list unions or the sub list unions, which are handled the same way
+    const listUnions = rootListUnion?.proportionalElectionSubListUnions ?? this.dataSource.data;
+
+    const removedListUnion = listUnions.splice(previousIndex, 1)[0];
+    listUnions.splice(newIndex, 0, removedListUnion);
+
     this.reorderAndRefreshListUnions();
-    await this.proportionalElectionService.reorderListUnions(this.proportionalElection.id, updatedData, rootListUnion?.id);
+    await this.proportionalElectionService.reorderListUnions(this.proportionalElection.id, listUnions, rootListUnion?.id);
     this.triggerChangeDetectionForListUnions();
     this.snackbarService.success(this.i18n.instant('APP.SAVED'));
   }

@@ -14,6 +14,7 @@ import { ProportionalElectionService } from '../../../core/proportional-election
 @Component({
   selector: 'app-proportional-election-list-edit-dialog',
   templateUrl: './proportional-election-list-edit-dialog.component.html',
+  styleUrls: ['./proportional-election-list-edit-dialog.component.scss'],
 })
 export class ProportionalElectionListEditDialogComponent {
   public list: ProportionalElectionList;
@@ -27,6 +28,7 @@ export class ProportionalElectionListEditDialogComponent {
     private readonly i18n: TranslateService,
     private readonly snackbarService: SnackbarService,
     private readonly proportionalElectionService: ProportionalElectionService,
+    private readonly languageService: LanguageService,
     @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionListEditDialogData,
   ) {
     this.list = dialogData.list;
@@ -63,6 +65,9 @@ export class ProportionalElectionListEditDialogComponent {
         await this.proportionalElectionService.updateList(this.list);
       }
 
+      this.list.orderNumberAndDescription = `${this.list.orderNumber} ${this.languageService.getTranslationForCurrentLang(
+        this.list.description,
+      )}`;
       updateProportionalElectionListCandidateCountOk(this.list, this.numberOfMandates);
 
       this.snackbarService.success(this.i18n.instant('APP.SAVED'));

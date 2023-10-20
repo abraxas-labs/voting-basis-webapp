@@ -196,7 +196,12 @@
         "TITLE": "Druckdatenangaben",
         "SHIPPING_AWAY": "Versand Hinweg",
         "SHIPPING_RETURN": "Versand Rückweg",
-        "SHIPPING_METHOD": "Versandart"
+        "SHIPPING_METHOD": "Versandart",
+        "SHIPPING_VOTING_CARDS_TO_DELIVERY_ADDRESS": "Versand Stimmunterlagen an Versandadresse (anstatt Wohnadresse)"
+      },
+      "VOTING_CARD_SWISS_POST_DATA": {
+        "INVOICE_REFERENCE_NUMBER": "Rechnungsreferenz Post (9-stellig)",
+        "FRANKING_LICENCE_RETURN_NUMBER": "Frankierlizenznummer Post Rückweg (9-stellig)"
       },
       "PRINTING_CENTER": {
         "TITLE": "Produktionszentrum",
@@ -734,7 +739,13 @@
     "IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES": "Listen/Kandidierende importieren",
     "POLITICAL_BUSINESS_INFOS": "Geschäftsinformationen",
     "CONTEST_INFOS": "Urnenganginformationen",
-    "IMPORT_SUCCESSFUL": "Die importierten Daten werden verarbeitet. Dies kann etwas Zeit in Anspruch nehmen."
+    "IMPORT_SUCCESSFUL": "Die importierten Daten werden verarbeitet. Dies kann etwas Zeit in Anspruch nehmen.",
+    "PARTY_MAPPING": {
+      "TITLE": "Parteien",
+      "FROM_IMPORT_TITLE": "Listen / Parteien aus Import",
+      "AVAILABLE_TITLE": "Parteien",
+      "NO_UNMAPPED": "Keine Einträge vorhanden"
+    }
   },
   "HISTORIZATION": {
     "CURRENT_STATUS": "Aktueller Stand",

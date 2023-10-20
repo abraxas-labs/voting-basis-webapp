@@ -4,6 +4,7 @@
  */
 
 import { DomainOfInfluenceParty as DomainOfInfluencePartyProto } from '@abraxas/voting-basis-service-proto/grpc/models/domain_of_influence_party_pb';
+import { ProportionalElectionCandidate } from '@abraxas/voting-basis-service-proto/grpc/models/proportional_election_pb';
 
 export { DomainOfInfluencePartyProto };
 
@@ -20,4 +21,18 @@ export interface DomainOfInfluenceParty {
   name: Map<string, string>;
   shortDescription: Map<string, string>;
   inherited?: boolean;
+}
+
+export interface PartyMappingContainer {
+  parties: PartyWithMappings[];
+  unmapped: PartyMapping[];
+}
+
+export interface PartyWithMappings extends DomainOfInfluenceParty {
+  mappings: PartyMapping[];
+}
+
+export interface PartyMapping {
+  sourceName?: string;
+  candidates: ProportionalElectionCandidate[];
 }

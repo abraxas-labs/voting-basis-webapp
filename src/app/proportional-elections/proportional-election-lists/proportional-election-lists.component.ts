@@ -102,8 +102,14 @@ export class ProportionalElectionListsComponent implements OnInit {
     this.handleEditList(result);
   }
 
-  public async reorderLists(updatedData: ProportionalElectionList[]): Promise<void> {
-    this.lists = updatedData;
+  public async moveList(previousIndex: number, newIndex: number): Promise<void> {
+    if (previousIndex === newIndex) {
+      return;
+    }
+
+    const removedList = this.lists.splice(previousIndex, 1)[0];
+    this.lists.splice(newIndex, 0, removedList);
+    this.lists = [...this.lists];
     this.updateListPositions();
 
     await this.proportionalElectionService.reorderLists(this.proportionalElection.id, this.lists);

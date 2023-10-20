@@ -17,7 +17,7 @@
   "private": true,
   "dependencies": {
     "@abraxas/base-components": "14.18.2",
-    "@abraxas/voting-basis-service-proto": "1.70.0",
+    "@abraxas/voting-basis-service-proto": "1.73.0",
     "@abraxas/voting-lib": "2.6.0",
     "@angular/animations": "13.3.11",
     "@angular/cdk": "13.3.9",
@@ -36,6 +36,7 @@
     "grpc-web": "1.3.1",
     "moment": "2.29.4",
     "ngx-currency": "2.5.3",
+    "ngx-drag-drop": "13.0.1",
     "ngx-filter-pipe": "2.1.2",
     "ngx-mask": "13.1.15",
     "ngx-moment": "6.0.2",

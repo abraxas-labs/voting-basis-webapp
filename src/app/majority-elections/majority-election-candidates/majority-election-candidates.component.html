@@ -22,6 +22,7 @@
   <app-majority-election-candidate-list [candidates]="expandedCandidates"
                                         [testingPhaseEnded]="testingPhaseEnded"
                                         [locked]="locked"
+                                        [reordering]="reordering"
                                         (candidatesReordered)="reorderCandidates($event)"
                                         (edit)="editCandidate($event)"
                                         (delete)="deleteCandidate($event)"

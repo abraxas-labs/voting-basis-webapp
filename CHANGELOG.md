@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.3.0`)
+# ✨ Changelog (`v2.3.2`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.3.0
-Previous version ---- v1.40.1
+This version -------- v2.3.2
+Previous version ---- v2.3.0
 Initial version ----- v1.23.0
-Total commits ------- 12
+Total commits ------- 2
 ```
+
+## [v2.3.2] - 2023-11-09
+
+### :new: Added
+
+- add environment indicator badge in header
+
+## [v2.3.1] - 2023-10-24
+
+### :arrows_counterclockwise: Changed
+
+- setup automatic refresh to only listen for the access_token lifetime since the IdP only responds with the access_token
 
 ## [v2.3.0] - 2023-09-01
 
@@ -278,8 +290,6 @@ BREAKING CHANGE: update to Angular 14 version
 
 - included theme in header bar link
 
-## [v1.28.1] - 2022-09-06
-
 ### 🔄 Changed
 
 - optimise white labling to not overwrite the base components styles
@@ -389,6 +399,12 @@ Also allow users to view politicial business in readonly mode when testing phase
 also removed count of candidates check
 
 use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
+
+## [v1.28.1] - 2022-09-06
+
+### 🔄 Changed
+
+- optimise white labling to not overwrite the base components styles
 
 ## [v1.28.0] - 2022-09-01
 

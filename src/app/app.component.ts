@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private readonly title: Title,
   ) {
     // enable automatic silent refresh
-    this.oauthService.setupAutomaticSilentRefresh();
+    this.oauthService.setupAutomaticSilentRefresh({}, 'access_token');
 
     const cursorSubscription = cursorService.cursor$.subscribe(c => (this.cursor = c));
     this.subscriptions.push(cursorSubscription);

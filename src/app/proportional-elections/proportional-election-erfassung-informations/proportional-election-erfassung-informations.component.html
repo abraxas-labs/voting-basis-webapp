@@ -9,55 +9,58 @@
              [min]="0"
              [(value)]="ballotBundleSampleSize"></bc-number>
 
-  <div class="flex-container">
-    <div>
-      <bc-label class="full-width" [label]="'PROPORTIONAL_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
-      <bc-checkbox class="mt-2 ml-2"
-                   [(checked)]="data.automaticBallotBundleNumberGeneration"
-                   [disabled]="testingPhaseEnded"
-                   [label]="'PROPORTIONAL_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.AUTOMATIC' | translate"
-                   (checkedChange)="refreshBallotNumberGenerationChoices()"></bc-checkbox>
-    </div>
-
-    <div>
-      <bc-label class="full-width" [label]="'PROPORTIONAL_ELECTION.BALLOT_NUMBER_GENERATION.TITLE' | translate"></bc-label>
-      <bc-radio-button-group class="mt-2 ml-2"
-                             orientation="vertical"
-                             [items]="ballotNumberGenerationChoices"
-                             [(value)]="data.ballotNumberGeneration">
-      </bc-radio-button-group>
-    </div>
+  <div class="flex-grid">
+    <bc-label class="full-width" [label]="'PROPORTIONAL_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
+    <bc-label class="full-width" [label]="'PROPORTIONAL_ELECTION.BALLOT_NUMBER_GENERATION.TITLE' | translate"></bc-label>
+    <bc-checkbox class="ml-2"
+                 [(checked)]="data.automaticBallotBundleNumberGeneration"
+                 [disabled]="testingPhaseEnded"
+                 [label]="'PROPORTIONAL_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.AUTOMATIC' | translate"
+                 (checkedChange)="refreshBallotNumberGenerationChoices()"></bc-checkbox>
+    <bc-radio-button-group class="ml-2"
+                           orientation="vertical"
+                           [items]="ballotNumberGenerationChoices"
+                           [(value)]="data.ballotNumberGeneration">
+    </bc-radio-button-group>
   </div>
 
-  <div class="flex-container">
-    <div>
-      <bc-label class="full-width" [label]="'PROPORTIONAL_ELECTION.AUTOMATIC_EMPTY_VOTE_COUNTING.TITLE' | translate"></bc-label>
-      <bc-radio-button-group class="mt-2 ml-2"
-                             orientation="vertical"
-                             [items]="automaticEmptyVoteCountingChoices"
-                             [(value)]="data.automaticEmptyVoteCounting"
-                             [disabled]="testingPhaseEnded">
-      </bc-radio-button-group>
-    </div>
-    <bc-checkbox class="mt-4 ml-2"
+  <div class="flex-grid">
+    <bc-label class="full-width col-span-2" [label]="'PROPORTIONAL_ELECTION.AUTOMATIC_EMPTY_VOTE_COUNTING.TITLE' | translate"></bc-label>
+    <bc-radio-button-group class="ml-2"
+                           orientation="vertical"
+                           [items]="automaticEmptyVoteCountingChoices"
+                           [(value)]="data.automaticEmptyVoteCounting"
+                           [disabled]="testingPhaseEnded">
+    </bc-radio-button-group>
+    <bc-checkbox class="ml-2"
                  [(checked)]="data.enforceEmptyVoteCountingForCountingCircles"
                  [label]="'PROPORTIONAL_ELECTION.ENFORCE_EMPTY_VOTE_COUNTING_FOR_COUNTING_CIRCLES' | translate"
                  [disabled]="locked"></bc-checkbox>
   </div>
 
-  <div class="flex-container">
-    <div>
-      <bc-label class="full-width" [label]="'PROPORTIONAL_ELECTION.REVIEW_PROCEDURE.TITLE' | translate"></bc-label>
-      <bc-radio-button-group class="mt-2 ml-2"
-                             [items]="reviewProcedureChoices"
-                             orientation="vertical"
-                             [(value)]="data.reviewProcedure"
-                             [disabled]="testingPhaseEnded">
-      </bc-radio-button-group>
-    </div>
-    <bc-checkbox class="mt-4 ml-2"
+  <div class="flex-grid">
+    <bc-label class="full-width col-span-2" [label]="'PROPORTIONAL_ELECTION.REVIEW_PROCEDURE.TITLE' | translate"></bc-label>
+    <bc-radio-button-group class="ml-2"
+                           [items]="reviewProcedureChoices"
+                           orientation="vertical"
+                           [(value)]="data.reviewProcedure"
+                           [disabled]="testingPhaseEnded">
+    </bc-radio-button-group>
+    <bc-checkbox class="ml-2"
                  [(checked)]="data.enforceReviewProcedureForCountingCircles"
                  [label]="'PROPORTIONAL_ELECTION.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
+                 [disabled]="testingPhaseEnded"></bc-checkbox>
+  </div>
+
+  <div *ngIf="useCandidateCheckDigit" class="flex-grid">
+    <bc-label class="full-width col-span-2" [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.TITLE' | translate"></bc-label>
+    <bc-checkbox class="ml-2"
+                 [(checked)]="data.candidateCheckDigit"
+                 [disabled]="testingPhaseEnded"
+                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.USE' | translate"></bc-checkbox>
+    <bc-checkbox class="ml-2"
+                 [(checked)]="data.enforceCandidateCheckDigitForCountingCircles"
+                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.ENFORCE_FOR_COUNTING_CIRCLES' | translate"
                  [disabled]="testingPhaseEnded"></bc-checkbox>
   </div>
 </div>

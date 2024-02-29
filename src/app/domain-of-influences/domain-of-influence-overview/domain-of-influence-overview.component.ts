@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { AuthorizationService, Tenant } from '@abraxas/base-components';
@@ -12,7 +13,7 @@ import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
 import { DomainOfInfluence, newDomainOfInfluence } from '../../core/models/domain-of-influence.model';
-import { RolesService } from '../../core/roles.service';
+import { PermissionService } from '../../core/permission.service';
 import { HistorizationFilter, newHistorizationFilter } from '../../shared/historization-filter-bar/historization-filter-bar.component';
 import {
   DomainOfInfluenceCountingCircleAssignDialogComponent,
@@ -24,6 +25,7 @@ import {
   DomainOfInfluenceEditDialogData,
   DomainOfInfluenceEditDialogResult,
 } from '../domain-of-influence-edit-dialog/domain-of-influence-edit-dialog.component';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-domain-of-influence-overview',
@@ -34,7 +36,10 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
   public readonly columns = ['name', 'bfs', 'authority'];
   public tree: DomainOfInfluenceTree | undefined;
 
-  public isAdmin: boolean = false;
+  public canCreate: boolean = false;
+  public canEditEverything: boolean = false;
+  public canDelete: boolean = false;
+  public canAssignCountingCircles: boolean = false;
   public loading: boolean = true;
   public loadingDetail: boolean = false;
   public loadingAssignableCountingCircles: boolean = false;
@@ -49,7 +54,7 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
 
   constructor(
     private readonly i18n: TranslateService,
-    private readonly rolesService: RolesService,
+    private readonly permissionService: PermissionService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly countingCircleService: CountingCircleService,
     private readonly snackbarService: SnackbarService,
@@ -69,7 +74,10 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     try {
-      this.isAdmin = await this.rolesService.isAdmin();
+      this.canCreate = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.Create);
+      this.canAssignCountingCircles = await this.permissionService.hasPermission(Permissions.DomainOfInfluenceHierarchy.Update);
+      this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateAll);
+      this.canDelete = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.Delete);
       this.tenant = await this.auth.getActiveTenant();
       await this.loadTree();
     } finally {
@@ -86,9 +94,9 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
     }
 
     const editable = !this.historizationFilter.date && !node.data.deletedOn;
-    node.showEditButton = editable && (this.isAdmin || node.data.secureConnectId === this.tenant?.id);
+    node.showEditButton = editable && (this.canEditEverything || node.data.secureConnectId === this.tenant?.id);
     node.showInfoButton = editable && !node.showEditButton;
-    node.showDeleteButton = editable && this.isAdmin;
+    node.showDeleteButton = editable && this.canDelete;
 
     // prevent reload same twice
     if (this.selectedDomainOfInfluence && node.data.id === this.selectedDomainOfInfluence.id) {

@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { NgModule } from '@angular/core';
@@ -13,6 +14,8 @@ import { CountingCircleMergerSelectComponent } from './counting-circle-merger-se
 import { CountingCircleMergersComponent } from './counting-circle-mergers/counting-circle-mergers.component';
 import { CountingCircleOverviewComponent } from './counting-circle-overview/counting-circle-overview.component';
 import { CountingCirclesRoutingModule } from './counting-circles-routing.module';
+import { CountingCircleElectoratesComponent } from './counting-circle-electorates/counting-circle-electorates.component';
+import { CountingCircleElectorateAssignDialogComponent } from './counting-circle-electorate-assign-dialog/counting-circle-electorate-assign-dialog.component';
 
 const components = [
   AuthorityAddressEditComponent,
@@ -22,6 +25,8 @@ const components = [
   CountingCircleMergerSelectComponent,
   CountingCircleMergersComponent,
   CountingCircleOverviewComponent,
+  CountingCircleElectoratesComponent,
+  CountingCircleElectorateAssignDialogComponent,
 ];
 
 @NgModule({

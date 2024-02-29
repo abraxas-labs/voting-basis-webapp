@@ -16,6 +16,12 @@
                              [(selectedTenant)]="selectedTenant"></vo-lib-tenant-selection>
 
     <h2 class="mb-1" translate>CANTON_SETTINGS.COUNTING_CIRCLE.TITLE</h2>
+    <bc-checkbox [(checked)]="data.countingMachineEnabled"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.COUNTING_CIRCLE.COUNTING_MACHINE' | translate"
+                 class="full-width">
+    </bc-checkbox>
+
     <bc-label class="full-width" [label]="'CANTON_SETTINGS.COUNTING_CIRCLE.PROTOCOL_SORT.TITLE' | translate"></bc-label>
     <bc-radio-button-group class="mb-3"
                            orientation="vertical"
@@ -29,9 +35,25 @@
                            [items]="protocolDomainOfInfluenceSortTypeChoices"
                            [(value)]="data.protocolDomainOfInfluenceSortType"></bc-radio-button-group>
 
-    <h2 class="mb-1" translate>CANTON_SETTINGS.PROPORTIONAL_ELECTION</h2>
+    <h2 class="mb-1" translate>CANTON_SETTINGS.VOTE.TITLE</h2>
+    <div class="full-width">
+      <bc-checkbox [(checked)]="data.multipleVoteBallotsEnabled"
+                   [disabled]="readonly"
+                   [label]="'CANTON_SETTINGS.VOTE.MULTIPLE_VOTE_BALLOTS_ENABLED.TITLE' | translate"></bc-checkbox>
+      <bc-icon icon="question-circle-o"
+               class="ml-2"
+               [tooltip]="'CANTON_SETTINGS.VOTE.MULTIPLE_VOTE_BALLOTS_ENABLED.INFO' | translate"></bc-icon>
+    </div>
 
-    <label></label>
+    <h2 class="mb-1" translate>CANTON_SETTINGS.PROPORTIONAL_ELECTION.TITLE</h2>
+
+    <bc-checkbox [(checked)]="data.proportionalElectionUseCandidateCheckDigit"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.PROPORTIONAL_ELECTION.USE_CANDIDATE_CHECK_DIGIT' | translate"
+                 class="full-width">
+    </bc-checkbox>
+
+    <bc-label class="full-width" [label]="'CANTON_SETTINGS.PROPORTIONAL_ELECTION.MANDATE_ALGORITHM' | translate"></bc-label>
     <bc-checkbox *ngFor="let proportionalElectionMandateAlgorithm of proportionalElectionMandateAlgorithms.items"
                  [checked]="proportionalElectionMandateAlgorithm.checked"
                  (checkedChange)="proportionalElectionMandateAlgorithms.updateChecked(proportionalElectionMandateAlgorithm, $event)"
@@ -55,7 +77,19 @@
                  [disabled]="readonly"
                  [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.INVALID_VOTES' | translate"></bc-checkbox>
 
+    <bc-checkbox [(checked)]="data.majorityElectionUseCandidateCheckDigit"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.USE_CANDIDATE_CHECK_DIGIT' | translate"
+                 class="full-width">
+    </bc-checkbox>
+
     <h2 class="mb-1" translate>CANTON_SETTINGS.GENERAL</h2>
+
+    <bc-checkbox [(checked)]="data.newZhFeaturesEnabled"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.NEW_ZH_FEATURES' | translate"
+                 class="full-width">
+    </bc-checkbox>
 
     <bc-label class="mt-2 full-width" [label]="'CANTON_SETTINGS.POLITICAL_BUSINESS_UNIONS.TITLE' | translate"></bc-label>
     <bc-checkbox *ngFor="let unionType of politicalBusinessUnionTypes.items"

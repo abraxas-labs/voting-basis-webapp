@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.3.2`)
+# ✨ Changelog (`v2.10.1`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,96 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.3.2
-Previous version ---- v2.3.0
+This version -------- v2.10.1
+Previous version ---- v2.3.2
 Initial version ----- v1.23.0
-Total commits ------- 2
+Total commits ------- 19
 ```
+
+## [v2.10.1] - 2024-02-06
+
+### 🔄 Changed
+
+- Standardized proportional election mandate algorithms in unions
+
+## [v2.10.0] - 2024-02-06
+
+### 🆕 Added
+
+- Double proportional election mandate algorithms
+
+## [v2.9.2] - 2024-02-02
+
+### 🔄 Changed
+
+- update voting-lib to v2.6.3
+
+## [v2.9.1] - 2024-02-01
+
+### 🔄 Changed
+
+- remove domain of influence type hierarchy checks
+
+## [v2.9.0] - 2024-01-31
+
+### 🆕 Added
+
+- Add counting circle electorate
+
+## [v2.8.0] - 2024-01-26
+
+### 🆕 Added
+
+- add candidate check digit
+
+## [v2.7.0] - 2024-01-10
+
+### :lock: Security
+
+- change from roles to permissions
+
+## [v2.6.0] - 2024-01-04
+
+### 🆕 Added
+
+- add new zh features flag
+
+## [v2.5.1] - 2023-12-22
+
+### 🔄 Changed
+
+- load canton defaults for vote
+
+## [v2.5.0] - 2023-12-20
+
+### 🆕 Added
+
+- Add counting machine flag to canton settings
+
+## [v2.4.0] - 2023-12-19
+
+### 🆕 Added
+
+- add multiple vote ballots
+
+## [v2.3.5] - 2023-11-28
+
+### :arrows_counterclockwise: Changed
+
+- apply strict policy for files that should not be cached
+
+## [v2.3.4] - 2023-11-27
+
+### :arrows_counterclockwise: Changed
+
+- configure caching for statically named resource config.js
+- set version tag for referenced config.js in index.html to enforce initial client-side cache invalidation
+
+## [v2.3.3] - 2023-11-24
+
+### :new: Added
+
+- add support for custom oauth scopes.
 
 ## [v2.3.2] - 2023-11-09
 
@@ -188,43 +273,25 @@ BREAKING CHANGE: update to Angular 14 version
 
 - update base-components library
 
-## [v1.35.1] - 2023-01-05
-
 ### ❌ Removed
 
 - remove internal description, invalid votes and individual empty ballots allowed from elections
-
-## [v1.35.0] - 2022-12-21
-
-### 🔄 Changed
-
-- add export provider
-
-## [v1.34.3] - 2022-12-19
 
 ### 🔄 Changed
 
 - add optional text for formfield default options
 
-## [v1.34.2] - 2022-12-16
-
 ### 🆕 Added
 
 - add domain of influence canton
-
-## [v1.34.1] - 2022-12-13
 
 ### 🔄 Changed
 
 - changed path to logo for whitelabeling
 
-## [v1.34.0] - 2022-12-12
-
 ### 🆕 Added
 
 - add white labeling logo for customers
-
-## [v1.33.0] - 2022-12-05
 
 ### 🔄 Changed
 
@@ -234,31 +301,17 @@ BREAKING CHANGE: update to Angular 14 version
 
 - add candidate origin
 
-## [v1.32.2] - 2022-11-30
-
 ### 🔄 Changed
 
 - proportional election candidate party selection
-
-## [v1.32.1] - 2022-11-28
-
-### 🔄 Changed
-
-- restrict logo upload to PNG and SVG
-
-## [v1.32.0] - 2022-11-28
 
 ### 🔄 Changed
 
 - set authority name for domain of influence
 
-## [v1.31.0] - 2022-11-16
-
 ### 🔒 Security
 
 - configure client refresh token flow (rfc-6749)
-
-## [v1.30.0] - 2022-10-10
 
 ### 🆕 Added
 
@@ -266,25 +319,17 @@ BREAKING CHANGE: update to Angular 14 version
 - Sortnumber for counting circle
 - Protocol sort types for domain of influence and counting circle
 
-## [v1.29.2] - 2022-10-04
-
 ### 🔄 Changed
 
 - Updated voting-library to fix layouting issues
-
-## [v1.29.1] - 2022-09-27
 
 ### 🔒 Security
 
 - disable style inline optimization to allow a more restictive CPS eleminating script-src unsafe-inline
 
-## [v1.29.0] - 2022-09-13
-
 ### 🆕 Added
 
 - added review procedure and enforce for counting circle property for vote, majority election and proportional election
-
-## [v1.28.2] - 2022-09-06
 
 ### 🔄 Changed
 
@@ -399,6 +444,108 @@ Also allow users to view politicial business in readonly mode when testing phase
 also removed count of candidates check
 
 use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
+
+## [v1.35.1] - 2023-01-05
+
+### ❌ Removed
+
+- remove internal description, invalid votes and individual empty ballots allowed from elections
+
+## [v1.35.0] - 2022-12-21
+
+### 🔄 Changed
+
+- add export provider
+
+## [v1.34.3] - 2022-12-19
+
+### 🔄 Changed
+
+- add optional text for formfield default options
+
+## [v1.34.2] - 2022-12-16
+
+### 🆕 Added
+
+- add domain of influence canton
+
+## [v1.34.1] - 2022-12-13
+
+### 🔄 Changed
+
+- changed path to logo for whitelabeling
+
+## [v1.34.0] - 2022-12-12
+
+### 🆕 Added
+
+- add white labeling logo for customers
+
+## [v1.33.0] - 2022-12-05
+
+### 🔄 Changed
+
+- reorder candidates
+
+### 🆕 Added
+
+- add candidate origin
+
+## [v1.32.2] - 2022-11-30
+
+### 🔄 Changed
+
+- proportional election candidate party selection
+
+## [v1.32.1] - 2022-11-28
+
+### 🔄 Changed
+
+- restrict logo upload to PNG and SVG
+
+## [v1.32.0] - 2022-11-28
+
+### 🔄 Changed
+
+- set authority name for domain of influence
+
+## [v1.31.0] - 2022-11-16
+
+### 🔒 Security
+
+- configure client refresh token flow (rfc-6749)
+
+## [v1.30.0] - 2022-10-10
+
+### 🆕 Added
+
+- Name for protocol for domain of influence and counting circle
+- Sortnumber for counting circle
+- Protocol sort types for domain of influence and counting circle
+
+## [v1.29.2] - 2022-10-04
+
+### 🔄 Changed
+
+- Updated voting-library to fix layouting issues
+
+## [v1.29.1] - 2022-09-27
+
+### 🔒 Security
+
+- disable style inline optimization to allow a more restictive CPS eleminating script-src unsafe-inline
+
+## [v1.29.0] - 2022-09-13
+
+### 🆕 Added
+
+- added review procedure and enforce for counting circle property for vote, majority election and proportional election
+
+## [v1.28.2] - 2022-09-06
+
+### 🔄 Changed
+
+- included theme in header bar link
 
 ## [v1.28.1] - 2022-09-06
 

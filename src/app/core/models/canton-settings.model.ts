@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import {
@@ -68,5 +69,10 @@ export function newCantonSettings(): CantonSettings {
     protocolCountingCircleSortType: ProtocolCountingCircleSortTypeProto.PROTOCOL_COUNTING_CIRCLE_SORT_TYPE_SORT_NUMBER,
     protocolDomainOfInfluenceSortType: ProtocolDomainOfInfluenceSortTypeProto.PROTOCOL_DOMAIN_OF_INFLUENCE_SORT_TYPE_SORT_NUMBER,
     electoralRegistrationEnabled: false,
+    multipleVoteBallotsEnabled: false,
+    countingMachineEnabled: false,
+    newZhFeaturesEnabled: false,
+    majorityElectionUseCandidateCheckDigit: false,
+    proportionalElectionUseCandidateCheckDigit: false,
   };
 }

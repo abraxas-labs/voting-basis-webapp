@@ -17,7 +17,8 @@
                    [label]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
                    (buttonClick)="importListsAndCandidates()"></bc-button>
 
-        <bc-button variant="tertiary"
+        <bc-button *ngIf="hasHagenbachBischoffDistribution"
+                   variant="tertiary"
                    (buttonClick)="manageListUnions()"
                    [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate"
                    [disabled]="testingPhaseEnded"></bc-button>
@@ -30,31 +31,35 @@
                          (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)">
         <ng-container bcColumnDef="orderNumber">
           <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate }}</th>
-          <td bc-cell *bcCellDef="let element">{{ element.orderNumber }}</td>
+          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">{{ element.orderNumber }}</td>
         </ng-container>
         <ng-container bcColumnDef="shortDescription">
           <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate }}</th>
-          <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
+          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
+            {{ element.shortDescription | getTranslation }}
+          </td>
         </ng-container>
         <ng-container bcColumnDef="blankRowCount">
           <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate }}</th>
-          <td bc-cell *bcCellDef="let element">{{ element.blankRowCount }}</td>
+          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
+            {{ element.blankRowCount }}
+          </td>
         </ng-container>
         <ng-container bcColumnDef="listUnionDescription">
           <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate }}</th>
-          <td bc-cell *bcCellDef="let element">
+          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
             <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.listUnionDescription}"></ng-container>
           </td>
         </ng-container>
         <ng-container bcColumnDef="subListUnionDescription">
           <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate }}</th>
-          <td bc-cell *bcCellDef="let element">
+          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
             <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.subListUnionDescription}"></ng-container>
           </td>
         </ng-container>
         <ng-container bcColumnDef="actions">
           <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-          <td bc-cell *bcCellDef="let element">
+          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
             <div *ngIf="!locked" class="actions">
               <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
               <bc-icon *ngIf="!testingPhaseEnded"

@@ -1,6 +1,6 @@
 @use '@abraxas/voting-lib/style/color' as *;
 
-h3:not(:first-child) {
+:is(h2, h3):not(:first-child) {
   margin-top: 2rem !important;
 }
 

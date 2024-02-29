@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { SimpleStepperComponent } from '@abraxas/base-components';
@@ -14,6 +15,8 @@ import { ContestService } from '../../core/contest.service';
 import { BallotType, newBallot, newVote, Vote, VoteResultEntry } from '../../core/models/vote.model';
 import { VoteService } from '../../core/vote.service';
 import { VoteGeneralInformationsComponent } from '../vote-general-informations/vote-general-informations.component';
+import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
+import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 
 @Component({
   selector: 'app-vote-edit',
@@ -34,6 +37,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
   public locked: boolean = false;
   public eVoting: boolean = false;
   public isVariantsBallot: boolean = false;
+  public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
 
   private persistedData: Vote = {} as Vote;
 
@@ -46,6 +50,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
     private readonly location: Location,
     private readonly voteService: VoteService,
     private readonly contestService: ContestService,
+    private readonly domainOfInfluenceService: DomainOfInfluenceService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -58,10 +63,11 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
       this.data.contestId = this.data.contestId || this.route.snapshot.params.contestId;
       this.refreshIsVariantsBallot();
 
-      const { testingPhaseEnded, locked, eVoting } = await this.contestService.get(this.data.contestId);
+      const { testingPhaseEnded, locked, eVoting, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked = locked;
       this.eVoting = eVoting;
+      this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
     } finally {
       this.initialLoading = false;
     }
@@ -128,14 +134,19 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
         await this.setResultEntryToFinalResultsAndUpdateEnforceForCountingCircles();
       }
 
-      await Promise.all(ballotsToDelete.map(b => this.voteService.deleteBallot(b.id, b.voteId)));
-      await Promise.all(ballotsToUpdate.map(b => this.voteService.updateBallot(b)));
-      const newBallotIds = await Promise.all(ballotsToCreate.map(b => this.voteService.createBallot(b)));
-      const deletedBallotIds = ballotsToDelete.map(b => b.id);
-
-      for (let i = 0; i < ballotsToCreate.length; i++) {
-        ballotsToCreate[i].id = newBallotIds[i];
+      for (const ballot of ballotsToDelete) {
+        await this.voteService.deleteBallot(ballot.id, ballot.voteId);
       }
+
+      for (const ballot of ballotsToUpdate) {
+        await this.voteService.updateBallot(ballot);
+      }
+
+      for (const ballot of ballotsToCreate) {
+        ballot.id = await this.voteService.createBallot(ballot);
+      }
+
+      const deletedBallotIds = ballotsToDelete.map(b => b.id);
 
       this.data.ballots = this.data.ballots.filter(b => !deletedBallotIds.includes(b.id));
       this.persistedData.ballots = cloneDeep(this.data.ballots);

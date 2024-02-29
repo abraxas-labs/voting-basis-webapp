@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { SimpleStepperComponent } from '@abraxas/base-components';
@@ -15,6 +16,8 @@ import { newProportionalElection, ProportionalElection } from '../../core/models
 import { ProportionalElectionService } from '../../core/proportional-election.service';
 import { ProportionalElectionGeneralInformationsComponent } from '../proportional-election-general-informations/proportional-election-general-informations.component';
 import { ProportionalElectionListsComponent } from '../proportional-election-lists/proportional-election-lists.component';
+import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
+import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 
 @Component({
   selector: 'app-proportional-election-edit',
@@ -36,6 +39,7 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
   public isNew: boolean = false;
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
+  public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
 
   private persistedData: ProportionalElection = newProportionalElection();
 
@@ -48,6 +52,7 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
     private readonly location: Location,
     private readonly proportionalElectionService: ProportionalElectionService,
     private readonly contestService: ContestService,
+    private readonly domainOfInfluenceService: DomainOfInfluenceService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -59,11 +64,10 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
       this.data = cloneDeep(this.persistedData);
       this.data.contestId = this.data.contestId || this.route.snapshot.params.contestId;
 
-      if (!this.isNew) {
-        const { testingPhaseEnded, locked } = await this.contestService.get(this.data.contestId);
-        this.testingPhaseEnded = testingPhaseEnded;
-        this.locked = locked;
-      }
+      const { testingPhaseEnded, locked, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
+      this.testingPhaseEnded = testingPhaseEnded;
+      this.locked = locked;
+      this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
     } finally {
       this.initialLoading = false;
     }

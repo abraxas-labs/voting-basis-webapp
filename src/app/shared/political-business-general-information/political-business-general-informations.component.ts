@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
@@ -10,7 +11,6 @@ import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-le
 import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { LanguageService } from '../../core/language.service';
-import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 import { Contest } from '../../core/models/contest.model';
 import { DomainOfInfluence, DomainOfInfluenceLevel, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { PoliticalBusinessBase } from '../../core/models/political-business.model';
@@ -24,7 +24,6 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
   public domainOfInfluencesByType: Partial<Record<DomainOfInfluenceType, DomainOfInfluence[]>> = {};
   public domainOfInfluenceLevels: DomainOfInfluenceLevel[] = [];
   public contest: Contest = {} as Contest;
-  public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
 
   @Input()
   public data: T;
@@ -86,7 +85,6 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
   public async ngOnInit(): Promise<void> {
     try {
       this.contest = await this.contestService.get(this.data.contestId);
-      this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(this.contest.domainOfInfluenceId);
 
       await this.initDomainOfInfluenceData();
     } finally {

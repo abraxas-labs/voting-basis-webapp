@@ -11,6 +11,3 @@ trim_trailing_whitespace = true
 [*.md]
 max_line_length = off
 trim_trailing_whitespace = false
-
-[*.{ts, js, scss, css}]
-file_header_template = (c) Copyright 2022 by Abraxas Informatik AG\nFor license information see LICENSE file

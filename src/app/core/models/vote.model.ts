@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import {
@@ -42,7 +43,6 @@ export type Ballot = {
   id: string;
   position: number;
   ballotType: BallotTypeProto;
-  description: Map<string, string>;
   ballotQuestions: BallotQuestion[];
   voteId: string;
   hasTieBreakQuestions: boolean;
@@ -84,7 +84,6 @@ export function newBallot(): Ballot {
     ballotType: BallotTypeProto.BALLOT_TYPE_STANDARD_BALLOT,
     hasTieBreakQuestions: false,
     position: 1,
-    description: new Map<string, string>(),
     ballotQuestions: [
       {
         number: 1,

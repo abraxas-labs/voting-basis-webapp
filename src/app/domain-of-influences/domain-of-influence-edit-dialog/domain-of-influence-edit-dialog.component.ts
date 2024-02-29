@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { Tenant } from '@abraxas/base-components';
@@ -10,8 +11,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluence, DomainOfInfluenceCanton, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
-import { RolesService } from '../../core/roles.service';
+import { PermissionService } from '../../core/permission.service';
 import { isDistinct } from '../../core/utils/array.utils';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-domain-of-influence-edit-dialog',
@@ -31,12 +33,12 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
   public updatedLogo?: File;
   public selectedTenant?: Tenant;
   public saving: boolean = false;
-  public isAdmin: boolean = false;
+  public canEditEverything: boolean = false;
   public readonly readonly: boolean;
 
   constructor(
     private readonly dialogRef: MatDialogRef<DomainOfInfluenceEditDialogData>,
-    private readonly rolesService: RolesService,
+    private readonly permissionService: PermissionService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly i18n: TranslateService,
     private readonly enumUtil: EnumUtil,
@@ -98,7 +100,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     this.isNew = !this.data.id;
-    this.isAdmin = await this.rolesService.isAdmin();
+    this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateAll);
     this.initDomainOfInfluenceTypes();
     this.initDomainOfInfluenceCantons();
 
@@ -112,7 +114,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
       return;
     }
 
-    if (!this.isAdmin) {
+    if (!this.canEditEverything) {
       await this.updateAsElectionAdmin();
       return;
     }
@@ -180,20 +182,13 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
       'DOMAIN_OF_INFLUENCE.SHORT_TYPES.',
     );
 
-    if (!parentType) {
+    // If no parent or parent isn't political, we do not restrict anything
+    if (!parentType || parentType >= DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_SC) {
       this.domainOfInfluenceTypes = domainOfInfluenceTypes;
       return;
     }
 
-    // if non political
-    if (parentType >= DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_SC) {
-      this.domainOfInfluenceTypes = domainOfInfluenceTypes.filter(dit => dit.value >= DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_SC);
-      return;
-    }
-
-    this.domainOfInfluenceTypes = domainOfInfluenceTypes.filter(
-      dit => dit.value >= parentType && dit.value < DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_SC,
-    );
+    this.domainOfInfluenceTypes = domainOfInfluenceTypes.filter(dit => dit.value >= parentType);
   }
 
   private initDomainOfInfluenceCantons(): void {

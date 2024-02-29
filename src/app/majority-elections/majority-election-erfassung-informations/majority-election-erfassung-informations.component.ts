@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { RadioButton } from '@abraxas/base-components';
@@ -29,6 +30,9 @@ export class MajorityElectionErfassungInformationsComponent implements OnInit {
 
   @Input()
   public locked: boolean = false;
+
+  @Input()
+  public useCandidateCheckDigit: boolean = false;
 
   public resultEntryChoices: EnumItemDescription<MajorityElectionResultEntry>[];
   public ballotNumberGenerationChoices: RadioButton[];

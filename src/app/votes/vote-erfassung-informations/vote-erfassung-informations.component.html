@@ -31,17 +31,15 @@
       </div>
     </div>
 
-    <div class="review-procedure">
-      <div>
-        <bc-label class="full-width" [label]="'VOTE.REVIEW_PROCEDURE.TITLE' | translate"></bc-label>
-        <bc-radio-button-group class="mt-2"
-                               [items]="reviewProcedureChoices"
-                               orientation="vertical"
-                               [(value)]="data.reviewProcedure"
-                               [disabled]="testingPhaseEnded">
-        </bc-radio-button-group>
-      </div>
-      <bc-checkbox class="mt-4 ml-5"
+    <div class="flex-grid">
+      <bc-label class="full-width col-span-2" [label]="'VOTE.REVIEW_PROCEDURE.TITLE' | translate"></bc-label>
+      <bc-radio-button-group class="ml-2"
+                             [items]="reviewProcedureChoices"
+                             orientation="vertical"
+                             [(value)]="data.reviewProcedure"
+                             [disabled]="testingPhaseEnded">
+      </bc-radio-button-group>
+      <bc-checkbox class="ml-2"
                    [(checked)]="data.enforceReviewProcedureForCountingCircles"
                    [label]="'VOTE.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
                    [disabled]="testingPhaseEnded"></bc-checkbox>

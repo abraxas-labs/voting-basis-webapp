@@ -47,7 +47,9 @@
     "CountingCircleMergerAlreadyActiveException": "Fusion der Auszählungskreise wurde bereits aktiviert und kann nicht mehr bearbeitet werden.",
     "ContestSetAsPreviousContestException": "Der Urnengang wird als Vergleich für Plausibilisierungen verwendet und kann daher nicht gelöscht werden.",
     "ContestInMergeSetAsPreviousContestException": "Ein Urnengang der für diesen Urnengang zusammengeführt wird, wird als Vergleich für Plausibilisierungen verwendet und kann daher nicht zusammengeführt werden.",
-    "MajorityElectionWithExistingSecondaryElectionsException": "Eine Wahl mit Nebenwahlen kann nicht gelöscht werden. Bitte zuerst sämtliche Nebenwahlen löschen."
+    "MajorityElectionWithExistingSecondaryElectionsException": "Eine Wahl mit Nebenwahlen kann nicht gelöscht werden. Bitte zuerst sämtliche Nebenwahlen löschen.",
+    "ProportionalElectionUnionMultipleMandateAlgorithmsException": "Es dürfen nur Proporzwahlen mit gleichem Berechnungsverfahren miteinander verbunden werden.",
+    "ProportionalElectionEditMandateAlgorithmInUnionException": "Die Sitzverteilung darf nur bei unverbundenen Proporzwahlen geändert werden."
   },
   "CONTACT_PERSON": {
     "PHONE": "Telefon",
@@ -109,6 +111,20 @@
         "SELECT": "Fusionierte Auszählungskreise wählen",
         "SELECTED": "Zur Fusion markiert",
         "COPY_FROM": "Datenübernahme"
+      }
+    },
+    "ELECTORATE": {
+      "TITLE": "Elektorat",
+      "SUB_TITLE": "Identische Geschäftsebenen (Sind alle Ebenen identisch, muss die Anzahl Stimmrechtsausweise nur für eine Ebene erfasst werden).",
+      "ADD": "Elektorat hinzufügen...",
+      "DOMAIN_OF_INFLUENCE_TYPES": "Geschäftsebenen",
+      "ASSIGN_OPEN": "Ebenen zuordnen",
+      "NO_DATA": "Keine Elektorate vorhanden...",
+      "ASSIGN": {
+        "TITLE": "Geschäftsebenen zuordnen",
+        "DOMAIN_OF_INFLUENCE_TYPE_PREFIX": "Ebene",
+        "DOMAIN_OF_INFLUENCE_TYPE": "Geschäftsebene",
+        "SELECTED": "Ausgewählte Geschäftsebenen"
       }
     }
   },
@@ -419,7 +435,9 @@
       }
     },
     "BALLOT": {
-      "TITLE": "Vorlage"
+      "TITLE": "Vorlage",
+      "MULTIPLE_TITLE": "Frage",
+      "ADD": "Weitere Frage hinzufügen"
     },
     "BALLOT_TYPE": {
       "TITLE": "Abstimmungstyp",
@@ -478,8 +496,9 @@
       "TITLE": "Sitzverteilung",
       "TYPES": {
         "1": "Berechnung nach Hagenbach-Bischoff",
-        "2": "Doppelter Pukelsheim (5%-Quorum (X-Wahlkreise))",
-        "3": "Doppelter Pukelsheim (0%-Quorum (1-Wahlkreise))"
+        "4": "DoppelProporz x-Wahlkreise: Quoren - 5%-WKR-od-3%-Gesamt, WählerzahlUngerundet",
+        "5": "DoppelProporz x-Wahlkreise: Quorum - 5%-WKR, WählerzahlUngerundet",
+        "6": "DoppelProporz 1-Wahlkreis: Quorum - 0%-WKR, WählerzahlUngerundet"
       }
     },
     "AUTOMATIC_EMPTY_VOTE_COUNTING": {
@@ -593,7 +612,12 @@
         "2": "Physisch"
       }
     },
-    "ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+    "ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen",
+    "CANDIDATE_CHECK_DIGIT": {
+      "TITLE": "Prüfziffer",
+      "USE": "Prüfziffer verwenden",
+      "ENFORCE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+    }
   },
   "MAJORITY_ELECTION": {
     "NEW": "Majorzwahl hinzufügen",
@@ -684,7 +708,12 @@
         "2": "Physisch"
       }
     },
-    "ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+    "ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen",
+    "CANDIDATE_CHECK_DIGIT": {
+      "TITLE": "Prüfziffer",
+      "USE": "Prüfziffer verwenden",
+      "ENFORCE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+    }
   },
   "ELECTION_GROUP": {
     "TITLE": "Wahlgruppen",
@@ -768,7 +797,18 @@
     "AUTHORITY": "Zuständige Behörde",
     "NEW": "Kantonale Einstellungen erstellen",
     "EDIT": "Kantonale Einstellungen bearbeiten",
-    "PROPORTIONAL_ELECTION": "Proporzwahl",
+    "VOTE":  {
+      "TITLE": "Abstimmung",
+      "MULTIPLE_VOTE_BALLOTS_ENABLED": {
+        "TITLE": "Mehrfachvorlagen auf separaten Stimmzetteln",
+        "INFO": "Wenn aktiviert, kann die Vorlage auf mehrere Stimmzettel verteilt werden (separate Auszählung je Frage möglich)."
+      }
+    },
+    "PROPORTIONAL_ELECTION":  {
+      "TITLE": "Proporzwahl",
+      "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden",
+      "MANDATE_ALGORITHM": "Sitzverteilungsverfahren"
+    },
     "ELECTORAL_REGISTRATION": {
       "TITLE": "Stimmregister",
       "ENABLED": "Kanton verwendet Stimmregister"
@@ -780,9 +820,11 @@
         "1": "Absolutes Mehr (gültige Stimmzettel geteilt durch zwei, nächsthöhere Zahl)",
         "2": "Absolutes Mehr (Kandidatenstimmen geteilt durch doppelte Sitzzahl, nächsthöhere Zahl)"
       },
-      "INVALID_VOTES": "Ungültige Stimmen"
+      "INVALID_VOTES": "Ungültige Stimmen",
+      "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden"
     },
     "GENERAL": "Allgemein",
+    "NEW_ZH_FEATURES": "Neue ZH Features",
     "SWISS_ABROAD_VOTING_RIGHT": {
       "TITLE": "Auslandschweizerinnen und Auslandschweizer",
       "DOMAIN_OF_INFLUENCE_TYPES": "Stimmrecht auf folgenden Geschäftsebenen"
@@ -820,7 +862,8 @@
           "1": "Nach Sortierungsnummer",
           "2": "Alphabetisch"
         }
-      }
+      },
+      "COUNTING_MACHINE": "Technische Hilfsmittel"
     },
     "DOMAIN_OF_INFLUENCE": {
       "TITLE": "Wahlkreis",

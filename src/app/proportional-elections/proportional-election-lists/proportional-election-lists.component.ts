@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
@@ -14,6 +15,7 @@ import {
   ProportionalElection,
   ProportionalElectionCandidate,
   ProportionalElectionList,
+  ProportionalElectionMandateAlgorithm,
   updateProportionalElectionListCandidateCountOk,
 } from '../../core/models/proportional-election.model';
 import { ProportionalElectionService } from '../../core/proportional-election.service';
@@ -37,14 +39,7 @@ import {
   styleUrls: ['./proportional-election-lists.component.scss'],
 })
 export class ProportionalElectionListsComponent implements OnInit {
-  public readonly columns = [
-    'orderNumber',
-    'shortDescription',
-    'blankRowCount',
-    'listUnionDescription',
-    'subListUnionDescription',
-    'actions',
-  ];
+  public columns: string[] = [];
 
   @Input()
   public proportionalElection: ProportionalElection = newProportionalElection();
@@ -60,6 +55,7 @@ export class ProportionalElectionListsComponent implements OnInit {
   public loading: boolean = false;
   public canSave: boolean = false;
   public parties: DomainOfInfluenceParty[] = [];
+  public hasHagenbachBischoffDistribution: boolean = false;
 
   constructor(
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
@@ -74,6 +70,10 @@ export class ProportionalElectionListsComponent implements OnInit {
 
     try {
       this.parties = await this.domainOfInfluenceService.listParties(this.proportionalElection.domainOfInfluenceId);
+      this.hasHagenbachBischoffDistribution =
+        this.proportionalElection.mandateAlgorithm ===
+        ProportionalElectionMandateAlgorithm.PROPORTIONAL_ELECTION_MANDATE_ALGORITHM_HAGENBACH_BISCHOFF;
+      this.updateColumns();
       await this.loadLists();
       this.updateAllListCandidatesOk();
       this.updateCanSave();
@@ -227,6 +227,14 @@ export class ProportionalElectionListsComponent implements OnInit {
   private updateAllListCandidatesOk(): void {
     for (const list of this.lists) {
       updateProportionalElectionListCandidateCountOk(list, this.proportionalElection.numberOfMandates);
+    }
+  }
+
+  private updateColumns() {
+    this.columns = ['orderNumber', 'shortDescription', 'blankRowCount', 'actions'];
+
+    if (this.hasHagenbachBischoffDistribution) {
+      this.columns.splice(3, 0, 'listUnionDescription', 'subListUnionDescription');
     }
   }
 }

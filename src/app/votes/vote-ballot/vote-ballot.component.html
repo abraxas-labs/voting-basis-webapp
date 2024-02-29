@@ -1,13 +1,14 @@
 <div class="form">
   <ng-container *ngFor="let ballot of data">
-    <app-translated-formfield *ngIf="data.length > 1"
-                  [label]="'VOTE.BALLOT.DESCRIPTION' | translate"
-                  [disabled]="locked"
-                  [optional]="true"
-                  [maxlength]="255"
-                  [(value)]="ballot.description"
-                  [singleLanguageInput]="!eVoting"></app-translated-formfield>
-
+    <h2 *ngIf="data.length > 1">
+      <span>{{'VOTE.BALLOT.MULTIPLE_TITLE' | translate}} {{ballot.position}}</span>
+      <bc-icon *ngIf="!locked && data.length === ballot.position"
+               icon="trash"
+               iconColor="error"
+               class="ml-2 clickable"
+               (click)="removeBallot(ballot)">
+      </bc-icon>
+    </h2>
     <bc-dropdown class="full-width"
                  [items]="ballotTypes"
                  [label]="'VOTE.BALLOT_TYPE.TITLE' | translate"
@@ -74,4 +75,12 @@
       </ng-container>
     </ng-container>
   </ng-container>
+
+  <bc-button *ngIf="!locked && multipleVoteBallotsEnabled"
+             variant="tertiary"
+             icon="plus"
+             class="block"
+             (click)="addBallot()"
+             [label]="'VOTE.BALLOT.ADD' | translate">
+  </bc-button>
 </div>

@@ -1,7 +1,7 @@
 <vo-lib-page [contentLoading]="loading"
              header="CANTON_SETTINGS.TITLE">
   <div class="flex">
-    <bc-button *ngIf="isAdmin"
+    <bc-button *ngIf="canCreate"
                variant="tertiary"
                icon="plus"
                [label]="'CANTON_SETTINGS.NEW' | translate"

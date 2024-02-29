@@ -1,10 +1,11 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ContestService } from '../../core/contest.service';
 import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-level.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
@@ -23,6 +24,9 @@ export class ProportionalElectionGeneralInformationsComponent
   extends PoliticalBusinessGeneralInformationsComponent<ProportionalElection>
   implements OnInit
 {
+  @Input()
+  public proportionalElectionMandateAlgorithmsList: ProportionalElectionMandateAlgorithm[] = [];
+
   public mandateAlgorithms: EnumItemDescription<ProportionalElectionMandateAlgorithm>[] = [];
 
   constructor(
@@ -46,11 +50,7 @@ export class ProportionalElectionGeneralInformationsComponent
         ProportionalElectionMandateAlgorithm,
         'PROPORTIONAL_ELECTION.MANDATE_ALGORITHM.TYPES.',
       )
-      .filter(
-        i =>
-          this.contestDomainOfInfluenceDefaults.proportionalElectionMandateAlgorithmsList.includes(i.value) ||
-          this.data.mandateAlgorithm === i.value,
-      );
+      .filter(i => this.proportionalElectionMandateAlgorithmsList.includes(i.value) || this.data.mandateAlgorithm === i.value);
     if (this.mandateAlgorithms.length === 1) {
       this.data.mandateAlgorithm = this.mandateAlgorithms[0].value;
     }

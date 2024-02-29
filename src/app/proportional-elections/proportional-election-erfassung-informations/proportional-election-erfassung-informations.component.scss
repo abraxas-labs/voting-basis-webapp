@@ -1,7 +1,9 @@
-.flex-container {
-  display: flex;
+.flex-grid {
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  row-gap: 0.5rem;
 
-  :first-child {
-    width: 16rem;
+  .col-span-2 {
+    grid-column: span 2 / span 2;
   }
 }

@@ -7,8 +7,11 @@
                      linear>
     <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
       <ng-container *ngIf="data.contestId && stepper.selectedIndex === 0">
-        <app-proportional-election-general-informations #step1
-                                       [data]="data"></app-proportional-election-general-informations>
+        <app-proportional-election-general-informations
+          #step1
+          [data]="data"
+          [proportionalElectionMandateAlgorithmsList]="contestDomainOfInfluenceDefaults.proportionalElectionMandateAlgorithmsList"
+        ></app-proportional-election-general-informations>
         <div class="stepper-footer">
           <bc-button class="align-right"
                      variant="primary"
@@ -39,11 +42,13 @@
     <bc-simple-step [label]="'POLITICAL_BUSINESS.RESULT_ENTRY_INFORMATION' | translate"
                     [disabled]="stepper.selectedIndex !== 2 && !step2?.canSave">
       <ng-container *ngIf="data.id && stepper.selectedIndex === 2">
-        <app-proportional-election-erfassung-informations #step3
-                                                          [testingPhaseEnded]="testingPhaseEnded"
-                                                          [locked]="locked"
-                                                          [data]="data">
-        </app-proportional-election-erfassung-informations>
+        <app-proportional-election-erfassung-informations
+          #step3
+          [testingPhaseEnded]="testingPhaseEnded"
+          [locked]="locked"
+          [data]="data"
+          [useCandidateCheckDigit]="contestDomainOfInfluenceDefaults.proportionalElectionUseCandidateCheckDigit"
+        ></app-proportional-election-erfassung-informations>
 
         <div class="stepper-footer">
           <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>

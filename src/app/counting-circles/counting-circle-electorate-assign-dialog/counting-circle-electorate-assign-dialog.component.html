@@ -1,0 +1,75 @@
+<vo-lib-dialog [contentLoading]="false">
+  <h1 header translate>COUNTING_CIRCLE.ELECTORATE.ASSIGN.TITLE</h1>
+
+  <div content>
+    <div class="grid">
+      <div>
+        <bc-advanced-table class="w-full" [dataSource]="dataSource">
+          <ng-container bcColumnDef="select">
+            <th bc-header-cell *bcHeaderCellDef>
+              <bc-checkbox
+                class="ml-2 mb-0"
+                (checkedChange)="toggleAllRows($event)"
+                [checked]="selection.hasValue() && isAllSelected"
+                [indeterminate]="selection.hasValue() && !isAllSelected"
+              >
+              </bc-checkbox>
+            </th>
+            <td bc-cell *bcCellDef="let element">
+              <bc-checkbox
+                class="ml-2"
+                (checkedChange)="toggleRow(element, $event)"
+                [checked]="selection.isSelected(element)"
+              >
+              </bc-checkbox>
+            </td>
+          </ng-container>
+          <ng-container bcColumnDef="domainOfInfluenceType">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">
+              <span>{{ 'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE_PREFIX' | translate }} </span>
+              <span>{{ 'DOMAIN_OF_INFLUENCE_TYPES.' + element | translate }}</span>
+            </td>
+          </ng-container>
+
+          <tr bc-header-row *bcHeaderRowDef="columns"></tr>
+          <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"
+              [selectable]="true"
+              (rowSelected)="selection.toggle(row); updateIsAllSelected()"></tr>
+        </bc-advanced-table>
+      </div>
+
+      <bc-divider class="ml-4" orientation="vertical"></bc-divider>
+
+      <div>
+        <h2 translate class="mb-0">{{'COUNTING_CIRCLE.ELECTORATE.ASSIGN.SELECTED' | translate}}</h2>
+        <bc-advanced-table class="w-full" [dataSource]="selection.selected">
+          <ng-container bcColumnDef="domainOfInfluenceType">
+            <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE' | translate }}</th>
+            <td bc-cell *bcCellDef="let element">
+              <span>{{ 'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE_PREFIX' | translate }} </span>
+              <span>{{ 'DOMAIN_OF_INFLUENCE_TYPES.' + element | translate }}</span>
+            </td>
+          </ng-container>
+          <ng-container bcColumnDef="actions">
+            <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
+            <td bc-cell *bcCellDef="let element">
+              <bc-icon class="clickable" (click)="selection.deselect(element)" icon="remove"></bc-icon>
+            </td>
+          </ng-container>
+
+          <tr bc-header-row *bcHeaderRowDef="columnsSelected"></tr>
+          <tr bc-advanced-table-row *bcRowDef="let row; columns: columnsSelected"></tr>
+        </bc-advanced-table>
+      </div>
+    </div>
+  </div>
+
+  <vo-lib-button-bar footer
+                     (save)="save()"
+                     [canSave]="selection.selected.length > 0"
+                     [sticky]="true"
+                     [saveLabel]="'ACTIONS.ASSIGN' | translate"
+                     (cancel)="close()">
+  </vo-lib-button-bar>
+</vo-lib-dialog>

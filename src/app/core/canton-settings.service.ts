@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { CantonSettingsServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/canton_settings_service_grpc_web_pb';
@@ -71,6 +72,11 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setProtocolCountingCircleSortType(data.protocolCountingCircleSortType);
     result.setProtocolDomainOfInfluenceSortType(data.protocolDomainOfInfluenceSortType);
     result.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
+    result.setMultipleVoteBallotsEnabled(data.multipleVoteBallotsEnabled);
+    result.setCountingMachineEnabled(data.countingMachineEnabled);
+    result.setNewZhFeaturesEnabled(data.newZhFeaturesEnabled);
+    result.setMajorityElectionUseCandidateCheckDigit(data.majorityElectionUseCandidateCheckDigit);
+    result.setProportionalElectionUseCandidateCheckDigit(data.proportionalElectionUseCandidateCheckDigit);
     return result;
   }
 
@@ -90,6 +96,11 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setProtocolCountingCircleSortType(data.protocolCountingCircleSortType);
     result.setProtocolDomainOfInfluenceSortType(data.protocolDomainOfInfluenceSortType);
     result.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
+    result.setMultipleVoteBallotsEnabled(data.multipleVoteBallotsEnabled);
+    result.setCountingMachineEnabled(data.countingMachineEnabled);
+    result.setNewZhFeaturesEnabled(data.newZhFeaturesEnabled);
+    result.setMajorityElectionUseCandidateCheckDigit(data.majorityElectionUseCandidateCheckDigit);
+    result.setProportionalElectionUseCandidateCheckDigit(data.proportionalElectionUseCandidateCheckDigit);
     return result;
   }
 

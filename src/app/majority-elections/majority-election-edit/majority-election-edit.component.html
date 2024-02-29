@@ -39,11 +39,13 @@
     </bc-simple-step>
     <bc-simple-step [label]="'POLITICAL_BUSINESS.RESULT_ENTRY_INFORMATION' | translate"
                     [disabled]="stepper.selectedIndex !== 2 && (!step1?.canSave || !step2?.canSave)">
-      <app-majority-election-erfassung-informations #step3
-                                                    [testingPhaseEnded]="testingPhaseEnded"
-                                                    [locked]="locked"
-                                                    [data]="data">
-      </app-majority-election-erfassung-informations>
+      <app-majority-election-erfassung-informations
+        #step3
+        [testingPhaseEnded]="testingPhaseEnded"
+        [locked]="locked"
+        [data]="data"
+        [useCandidateCheckDigit]="contestDomainOfInfluenceDefaults.majorityElectionUseCandidateCheckDigit"
+      ></app-majority-election-erfassung-informations>
 
       <div class="stepper-footer">
         <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>

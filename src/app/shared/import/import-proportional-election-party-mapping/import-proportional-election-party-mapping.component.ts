@@ -1,3 +1,9 @@
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
+ */
+
 import { Component, Input } from '@angular/core';
 import { PartyMapping, PartyMappingContainer, PartyWithMappings } from '../../../core/models/domain-of-influence-party.model';
 

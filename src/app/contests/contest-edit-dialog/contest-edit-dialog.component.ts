@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
@@ -16,6 +17,7 @@ import { LanguageService } from '../../core/language.service';
 import { Contest, ContestCountingCircleOption, ContestDateAvailability, newContest } from '../../core/models/contest.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { getDefaultTimeDate } from '../../core/utils/time.utils';
+import { CountingCircle } from '../../core/models/counting-circle.model';
 
 @Component({
   selector: 'app-contest-edit-dialog',
@@ -266,7 +268,10 @@ export class ContestEditDialogComponent implements OnInit {
       this.countingCircleOptionsLoading = true;
       const countingCircles = await this.countingCircleService.listAssignedForDomainOfInfluence(this.data.domainOfInfluenceId);
       this.countingCircleOptions = countingCircles.map(countingCircle => ({
-        countingCircle,
+        countingCircle: {
+          ...countingCircle,
+          electoratesList: [], // required for the counting circle type (!= domain of influence counting circle)
+        },
         eVoting: false,
         contestId: this.data.id,
       }));

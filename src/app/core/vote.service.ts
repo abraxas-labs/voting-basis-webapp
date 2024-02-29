@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import {
@@ -53,7 +54,6 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
   private static mapToBallot(ballot: BallotProto): Ballot {
     return {
       ...ballot.toObject(),
-      description: toJsMap(ballot.getDescriptionMap()),
       ballotQuestions: ballot.getBallotQuestionsList().map(q => this.mapToBallotQuestion(q)),
       tieBreakQuestions: ballot.getTieBreakQuestionsList().map(q => this.mapToTieBreakQuestion(q)),
     };
@@ -175,7 +175,6 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
   private mapToBallotRequest(data: Ballot, result: CreateBallotRequest | UpdateBallotRequest): void {
     result.setVoteId(data.voteId);
     result.setBallotType(data.ballotType);
-    fillProtoMap(result.getDescriptionMap(), data.description);
     result.setHasTieBreakQuestions(data.hasTieBreakQuestions);
     result.setBallotQuestionsList(data.ballotQuestions.map(this.mapToProtoBallotQuestion));
     result.setTieBreakQuestionsList(data.tieBreakQuestions.map(this.mapToProtoTieBreakQuestion));

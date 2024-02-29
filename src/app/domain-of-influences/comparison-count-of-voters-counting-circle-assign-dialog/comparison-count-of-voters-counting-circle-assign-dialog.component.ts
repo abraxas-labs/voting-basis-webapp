@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
@@ -8,7 +9,7 @@ import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { CountingCircle } from '../../core/models/counting-circle.model';
+import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { ComparisonCountOfVotersCategory } from '../../core/models/plausibilisation.model';
 
@@ -74,6 +75,6 @@ export interface ComparisonCountOfVotersCountingCircleAssignDialogData {
   disabled: boolean;
 }
 
-interface ComparisonCountOfVotersCountingCircleTableItem extends CountingCircle {
+interface ComparisonCountOfVotersCountingCircleTableItem extends DomainOfInfluenceCountingCircle {
   category?: ComparisonCountOfVotersCategory;
 }

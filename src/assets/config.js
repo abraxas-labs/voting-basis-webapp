@@ -5,4 +5,5 @@
     window["config"].SC_SERVICE_NAME = "${SC_SERVICE_NAME}";
     window["config"].ENV = "${ENV}";
     window["config"].ISSUER = "${ISSUER}";
+    window["config"].OAUTH_SCOPES = "${OAUTH_SCOPES}";
 })(this);

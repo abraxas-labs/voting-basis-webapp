@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { AuthorizationService, Tenant } from '@abraxas/base-components';
@@ -13,7 +14,8 @@ import { CountingCircleService } from '../../core/counting-circle.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { CountingCircle, newCountingCircle } from '../../core/models/counting-circle.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
-import { RolesService } from '../../core/roles.service';
+import { PermissionService } from '../../core/permission.service';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-counting-circle-detail',
@@ -29,16 +31,16 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy {
 
   public selectedResponsibleAuthority: Tenant | undefined;
 
-  public isAdmin: boolean = false;
+  public canEditEverything: boolean = false;
+  public isResponsibleAuthorityOrCanEditEverything: boolean = false;
   public tenantId: string = '';
-  public isResponsibleAuthorityOrAdmin: boolean = false;
   public isNew: boolean = false;
 
   private readonly routeSubscription: Subscription;
 
   constructor(
     private readonly countingCircleService: CountingCircleService,
-    private readonly rolesService: RolesService,
+    private readonly permissionService: PermissionService,
     private readonly auth: AuthorizationService,
     private readonly snackbarService: SnackbarService,
     private readonly i18n: TranslateService,
@@ -66,7 +68,7 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy {
 
     try {
       this.saving = true;
-      if (this.isAdmin && this.data.responsibleAuthority) {
+      if (this.canEditEverything && this.data.responsibleAuthority) {
         this.data.responsibleAuthority.secureConnectId = this.selectedResponsibleAuthority?.id || '';
         this.data.responsibleAuthority.name = this.selectedResponsibleAuthority?.name || '';
       }
@@ -85,7 +87,7 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.isAdmin = await this.rolesService.isAdmin();
+    this.canEditEverything = await this.permissionService.hasPermission(Permissions.CountingCircle.UpdateAll);
     const tenant = await this.auth.getActiveTenant();
     this.tenantId = tenant.id;
   }
@@ -96,13 +98,12 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy {
 
   private async load(countingCircleId?: string): Promise<void> {
     this.loading = true;
-    this.isResponsibleAuthorityOrAdmin = false;
+    this.isResponsibleAuthorityOrCanEditEverything = false;
     try {
       this.isNew = !countingCircleId;
       if (!countingCircleId) {
         this.data = newCountingCircle();
-        // only admins can create counting circles
-        this.isResponsibleAuthorityOrAdmin = true;
+        this.isResponsibleAuthorityOrCanEditEverything = true;
         return;
       }
 
@@ -118,8 +119,8 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy {
         id: this.data.responsibleAuthority.secureConnectId,
       } as Tenant;
 
-      // only admins can change responsible authority, so we can set isResponsibleAuthorityOrAdmin once at loading
-      this.isResponsibleAuthorityOrAdmin = this.isAdmin || this.tenantId === this.data.responsibleAuthority.secureConnectId;
+      this.isResponsibleAuthorityOrCanEditEverything =
+        this.canEditEverything || this.tenantId === this.data.responsibleAuthority.secureConnectId;
     } finally {
       this.loading = false;
     }

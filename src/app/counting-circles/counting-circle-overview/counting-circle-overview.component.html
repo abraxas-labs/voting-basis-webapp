@@ -3,12 +3,14 @@
     <app-historization-filter-bar [includeDeletedLabel]="'HISTORIZATION.INCLUDE_DELETED.COUNTING_CIRCLE'"
                                   (filterChange)="historizationFilterChange($event)"></app-historization-filter-bar>
 
-    <div class="flex" *ngIf="!historizationFilter.date && isAdmin">
+    <div class="flex" *ngIf="!historizationFilter.date && (canCreate || canMerge)">
       <bc-button variant="tertiary"
+                 *ngIf="canCreate"
                  [label]="'COUNTING_CIRCLE.NEW' | translate"
                  icon="plus"
                  (buttonClick)="create()"></bc-button>
       <bc-button variant="tertiary"
+                 *ngIf="canMerge"
                  (buttonClick)="openMergers()"
                  [label]="'COUNTING_CIRCLE.MERGE.TITLE' | translate"
                  icon="group"></bc-button>
@@ -43,7 +45,7 @@
       <ng-container bcColumnDef="actions">
         <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
         <td bc-cell *bcCellDef="let element">
-          <bc-icon *ngIf="!element.deletedOn && isAdmin"
+          <bc-icon *ngIf="!element.deletedOn && canDelete"
                    (click)="delete(element); $event.stopPropagation()"
                    icon="trash"
                    iconColor="error"></bc-icon>

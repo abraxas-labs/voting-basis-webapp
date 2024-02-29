@@ -1,12 +1,13 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, Input, OnInit } from '@angular/core';
 import { LanguageService } from '../../core/language.service';
-import { Ballot, BallotQuestion, BallotType } from '../../core/models/vote.model';
+import { Ballot, BallotQuestion, BallotType, newBallot } from '../../core/models/vote.model';
 
 @Component({
   selector: 'app-vote-ballot',
@@ -30,6 +31,9 @@ export class VoteBallotComponent implements OnInit {
 
   @Input()
   public eVoting: boolean = false;
+
+  @Input()
+  public multipleVoteBallotsEnabled: boolean = false;
 
   constructor(private readonly enumUtil: EnumUtil) {}
 
@@ -114,6 +118,23 @@ export class VoteBallotComponent implements OnInit {
         });
         idx++;
       }
+    }
+  }
+
+  public addBallot(): void {
+    const ballot = newBallot();
+    ballot.position = this.data.length + 1;
+    this.data.push(ballot);
+  }
+
+  public removeBallot(ballot: Ballot): void {
+    const ballotPosition = ballot.position;
+    this.data.splice(ballotPosition - 1, 1);
+
+    const ballotsToReposition = this.data.filter(b => b.position > ballotPosition);
+
+    for (const b of ballotsToReposition) {
+      b.position -= 1;
     }
   }
 }

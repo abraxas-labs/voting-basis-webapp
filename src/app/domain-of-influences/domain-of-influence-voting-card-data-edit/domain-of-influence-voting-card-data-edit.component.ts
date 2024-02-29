@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
@@ -13,7 +14,8 @@ import {
 } from '../../core/models/domain-of-influence-voting-card-print-data.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { newDomainOfInfluenceVotingCardSwissPostData } from '../../core/models/domain-of-influence-voting-card-swiss-post-data.model';
-import { RolesService } from '../../core/roles.service';
+import { PermissionService } from '../../core/permission.service';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-domain-of-influence-voting-card-data-edit',
@@ -30,11 +32,11 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
   @Output()
   public logoChanged: EventEmitter<File> = new EventEmitter<File>();
 
-  public isAdmin: boolean = false;
+  public canEditEverything: boolean = false;
 
   private domainOfInfluenceValue!: DomainOfInfluence;
 
-  constructor(private readonly enumUtil: EnumUtil, private readonly rolesService: RolesService) {}
+  constructor(private readonly enumUtil: EnumUtil, private readonly permissionService: PermissionService) {}
 
   public get domainOfInfluence(): DomainOfInfluence {
     return this.domainOfInfluenceValue;
@@ -91,6 +93,6 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
       'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SHIPPING_METHOD.',
     );
 
-    this.isAdmin = await this.rolesService.isAdmin();
+    this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateAll);
   }
 }

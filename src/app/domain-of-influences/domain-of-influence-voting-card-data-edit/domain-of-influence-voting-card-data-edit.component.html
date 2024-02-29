@@ -79,12 +79,12 @@
                  [(checked)]="domainOfInfluence.printData.shippingVotingCardsToDeliveryAddress"></bc-checkbox>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.INVOICE_REFERENCE_NUMBER' | translate"
-             [disabled]="disabled || !isAdmin"
+             [disabled]="disabled || !canEditEverything"
              [required]="true"
              [(value)]="domainOfInfluence.swissPostData.invoiceReferenceNumber"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.FRANKING_LICENCE_RETURN_NUMBER' | translate"
-             [disabled]="disabled || !isAdmin"
+             [disabled]="disabled || !canEditEverything"
              [required]="true"
              [(value)]="domainOfInfluence.swissPostData.frankingLicenceReturnNumber"></bc-text>
   </div>

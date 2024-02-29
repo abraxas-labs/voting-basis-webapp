@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import {
@@ -27,6 +28,7 @@ import {
   TextareaModule,
   TextModule,
   TimeModule,
+  TooltipModule,
 } from '@abraxas/base-components';
 import { VotingLibModule } from '@abraxas/voting-lib';
 import { CommonModule } from '@angular/common';
@@ -151,6 +153,7 @@ const modules = [
   DragDropModule,
   DndModule,
   MatIconModule,
+  TooltipModule,
 ];
 
 @NgModule({

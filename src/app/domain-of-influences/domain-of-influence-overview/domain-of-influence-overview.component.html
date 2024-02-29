@@ -14,7 +14,7 @@
                                            (nodeDelete)="nodeDelete($event)"
                                            [editModeEnabled]="true"
                                            [addLabel]="'DOMAIN_OF_INFLUENCE.NEW'"
-                                           [showAdd]="isAdmin && !historizationFilter.date"
+                                           [showAdd]="canCreate && !historizationFilter.date"
                                            (addClicked)="create()"
                                            [rowTemplate]="doiTreeRowTemplate"></vo-lib-searchable-tree-navigation>
 
@@ -46,7 +46,7 @@
           <div class="flex">
             <vo-lib-inline-spinner position="right"
                                    [loading]="loadingAssignableCountingCircles">
-              <bc-button *ngIf="isAdmin && !selectedDomainOfInfluence.deletedOn && !historizationFilter.date"
+              <bc-button *ngIf="canAssignCountingCircles && !selectedDomainOfInfluence.deletedOn && !historizationFilter.date"
                          variant="tertiary"
                          icon="plus"
                          class="my-2"

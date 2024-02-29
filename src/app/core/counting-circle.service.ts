@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { CountingCircleServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/counting_circle_service_grpc_web_pb';
@@ -26,6 +27,8 @@ import {
   Authority,
   AuthorityProto,
   CountingCircle,
+  CountingCircleElectorate,
+  CountingCircleElectorateProto,
   CountingCircleProto,
   CountingCirclesMerger,
   CountingCirclesMergerProto,
@@ -181,6 +184,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     result.setCode(data.code);
     result.setNameForProtocol(data.nameForProtocol);
     result.setSortNumber(data.sortNumber);
+    result.setElectoratesList(data.electoratesList.map(e => this.mapToProtoElectorate(e)));
     return result;
   }
 
@@ -195,6 +199,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     result.setCode(data.code);
     result.setNameForProtocol(data.nameForProtocol);
     result.setSortNumber(data.sortNumber);
+    result.setElectoratesList(data.electoratesList.map(e => this.mapToProtoElectorate(e)));
     return result;
   }
 
@@ -242,6 +247,12 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     return result;
   }
 
+  private mapToProtoElectorate(data: CountingCircleElectorate): CountingCircleElectorateProto {
+    const result = new CountingCircleElectorateProto();
+    result.setDomainOfInfluenceTypesList(data.domainOfInfluenceTypesList);
+    return result;
+  }
+
   private mapToCountingCircle(cc: CountingCircleProto): CountingCircle {
     return {
       id: cc.getId(),
@@ -258,6 +269,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
       code: cc.getCode(),
       sortNumber: cc.getSortNumber(),
       nameForProtocol: cc.getNameForProtocol(),
+      electoratesList: cc.getElectoratesList().map(x => x.toObject()),
     };
   }
 

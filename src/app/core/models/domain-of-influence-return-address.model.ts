@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { DomainOfInfluenceVotingCardReturnAddress as DomainOfInfluenceVotingCardReturnAddressProto } from '@abraxas/voting-basis-service-proto/grpc/models/domain_of_influence_voting_card_return_address_pb';

@@ -5,39 +5,39 @@
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.NAME' | translate"
              [required]="true"
              [maxlength]="100"
-             [disabled]="readonly || !isAdmin"
+             [disabled]="readonly || !canEditEverything"
              [(value)]="data.name"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.SHORT_NAME' | translate"
              [required]="true"
              [maxlength]="5"
-             [disabled]="readonly || !isAdmin"
+             [disabled]="readonly || !canEditEverything"
              [(value)]="data.shortName"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.NAME_FOR_PROTOCOL' | translate"
              [maxlength]="100"
-             [disabled]="readonly || !isAdmin"
+             [disabled]="readonly || !canEditEverything"
              [(value)]="data.nameForProtocol"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.BFS' | translate"
-             [disabled]="readonly || !isAdmin"
+             [disabled]="readonly || !canEditEverything"
              [required]="data.type === knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU"
              [(value)]="data.bfs"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.CODE' | translate"
              [maxlength]="10"
-             [disabled]="readonly || !isAdmin"
+             [disabled]="readonly || !canEditEverything"
              [(value)]="data.code"></bc-text>
 
     <bc-number [label]="'DOMAIN_OF_INFLUENCE.SORT_NUMBER' | translate"
                [max]="999999999"
                [min]="0"
                [error]="data.sortNumber < 0 || data.sortNumber > 999999999"
-               [disabled]="readonly || !isAdmin"
+               [disabled]="readonly || !canEditEverything"
                [(value)]="data.sortNumber"></bc-number>
 
     <vo-lib-tenant-selection label="DOMAIN_OF_INFLUENCE.AUTHORITY"
-                             [disabled]="readonly || !isAdmin"
+                             [disabled]="readonly || !canEditEverything"
                              [(selectedTenant)]="selectedTenant"></vo-lib-tenant-selection>
 
     <bc-dropdown *ngIf="domainOfInfluenceCantons.length"
@@ -47,13 +47,13 @@
                  displayExpr="description"
                  valueExpr="value"
                  [required]="true"
-                 [disabled]="readonly || !isAdmin"
+                 [disabled]="readonly || !canEditEverything"
                  [(value)]="data.canton"></bc-dropdown>
 
     <bc-dropdown class="full-width"
                  [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
                  [items]="domainOfInfluenceTypes"
-                 [disabled]="!!data.id || readonly || !isAdmin"
+                 [disabled]="!!data.id || readonly || !canEditEverything"
                  displayExpr="description"
                  valueExpr="value"
                  [required]="true"
@@ -69,7 +69,7 @@
 
     <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.TITLE</h2>
     <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.TITLE</h3>
-    <app-export-configurations [disabled]="readonly || !isAdmin"
+    <app-export-configurations [disabled]="readonly || !canEditEverything"
                                [(configurations)]="data.exportConfigurationsList"
                                class="mb-4"></app-export-configurations>
 
@@ -80,7 +80,7 @@
 
     <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.TITLE</h2>
     <bc-checkbox
-      [disabled]="readonly || !isAdmin"
+      [disabled]="readonly || !canEditEverything"
       [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.RESPONSIBLE_FOR_VOTING_CARDS' | translate"
       [(checked)]="data.responsibleForVotingCards"></bc-checkbox>
     <app-domain-of-influence-voting-card-data-edit *ngIf="data.responsibleForVotingCards"

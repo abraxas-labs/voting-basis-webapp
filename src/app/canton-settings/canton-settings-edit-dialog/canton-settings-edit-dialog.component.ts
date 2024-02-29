@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { RadioButton, Tenant } from '@abraxas/base-components';
@@ -150,6 +151,12 @@ export class CantonSettingsEditDialogComponent implements OnInit {
         .getArrayWithDescriptions<ProportionalElectionMandateAlgorithm>(
           ProportionalElectionMandateAlgorithm,
           'PROPORTIONAL_ELECTION.MANDATE_ALGORITHM.TYPES.',
+        )
+        .filter(
+          // deprecated values
+          p =>
+            p.value !== ProportionalElectionMandateAlgorithm.PROPORTIONAL_ELECTION_MANDATE_ALGORITHM_DOPPELTER_PUKELSHEIM_0_QUORUM &&
+            p.value !== ProportionalElectionMandateAlgorithm.PROPORTIONAL_ELECTION_MANDATE_ALGORITHM_DOPPELTER_PUKELSHEIM_5_QUORUM,
         )
         .map(p => ({
           checked: this.data.proportionalElectionMandateAlgorithmsList.includes(p.value),

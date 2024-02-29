@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { DialogService, EnumUtil } from '@abraxas/voting-lib';
@@ -8,12 +9,13 @@ import { Component, OnInit } from '@angular/core';
 import { CantonSettingsService } from '../../core/canton-settings.service';
 import { CantonSettings, newCantonSettings } from '../../core/models/canton-settings.model';
 import { DomainOfInfluenceCanton } from '../../core/models/domain-of-influence.model';
-import { RolesService } from '../../core/roles.service';
+import { PermissionService } from '../../core/permission.service';
 import {
   CantonSettingsEditDialogComponent,
   CantonSettingsEditDialogData,
   CantonSettingsEditDialogResult,
 } from '../canton-settings-edit-dialog/canton-settings-edit-dialog.component';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-canton-settings-overview',
@@ -22,20 +24,22 @@ import {
 })
 export class CantonSettingsOverviewComponent implements OnInit {
   public loading: boolean = true;
-  public isAdmin: boolean = false;
+  public canCreate: boolean = false;
+  public canEdit: boolean = false;
 
   public cantonSettingsList: CantonSettings[] = [];
 
   constructor(
     private readonly cantonSettingsService: CantonSettingsService,
-    private readonly rolesService: RolesService,
+    private readonly permissionService: PermissionService,
     private readonly dialogService: DialogService,
     private readonly enumUtil: EnumUtil,
   ) {}
 
   public async ngOnInit(): Promise<void> {
     try {
-      this.isAdmin = await this.rolesService.isAdmin();
+      this.canCreate = await this.permissionService.hasPermission(Permissions.CantonSettings.Create);
+      this.canEdit = await this.permissionService.hasPermission(Permissions.CantonSettings.Update);
       this.cantonSettingsList = await this.cantonSettingsService.list();
     } finally {
       this.loading = false;
@@ -60,7 +64,7 @@ export class CantonSettingsOverviewComponent implements OnInit {
     const data: CantonSettingsEditDialogData = {
       cantons: allCantons.filter(c => !takenCantons.includes(c.value)),
       cantonSettings,
-      readonly: !this.isAdmin,
+      readonly: !this.canEdit,
     };
 
     const result = await this.dialogService.openForResult(CantonSettingsEditDialogComponent, data);

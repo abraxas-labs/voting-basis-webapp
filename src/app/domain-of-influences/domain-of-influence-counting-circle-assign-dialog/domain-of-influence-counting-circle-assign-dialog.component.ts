@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
@@ -13,7 +14,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
-import { RolesService } from '../../core/roles.service';
+import { PermissionService } from '../../core/permission.service';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-domain-of-influence-counting-circle-assign-dialog',
@@ -30,7 +32,7 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
 
   public data: DomainOfInfluence;
   public saving: boolean = false;
-  public isAdmin: boolean = false;
+  public canEdit: boolean = false;
 
   public dataSource: MatTableDataSource<DomainOfInfluenceCountingCircle> = new MatTableDataSource<DomainOfInfluenceCountingCircle>();
   public inheritedCountingCircles: DomainOfInfluenceCountingCircle[] = [];
@@ -39,7 +41,7 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
 
   constructor(
     private readonly dialogRef: MatDialogRef<DomainOfInfluenceCountingCircleAssignDialogData>,
-    private readonly rolesService: RolesService,
+    private readonly permissionService: PermissionService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly i18n: TranslateService,
     private readonly snackbarService: SnackbarService,
@@ -58,7 +60,7 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
   }
 
   public async ngOnInit(): Promise<void> {
-    this.isAdmin = await this.rolesService.isAdmin();
+    this.canEdit = await this.permissionService.hasPermission(Permissions.DomainOfInfluenceHierarchy.Update);
   }
 
   public ngAfterViewInit(): void {
@@ -66,7 +68,7 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
   }
 
   public async save(): Promise<void> {
-    if (!this.isAdmin || !this.data.countingCircles) {
+    if (!this.canEdit || !this.data.countingCircles) {
       return;
     }
 

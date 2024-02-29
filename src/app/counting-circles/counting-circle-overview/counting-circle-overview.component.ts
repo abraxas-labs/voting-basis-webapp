@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
@@ -8,10 +9,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
-import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { CountingCircle } from '../../core/models/counting-circle.model';
-import { RolesService } from '../../core/roles.service';
+import { PermissionService } from '../../core/permission.service';
 import { HistorizationFilter, newHistorizationFilter } from '../../shared/historization-filter-bar/historization-filter-bar.component';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-counting-circle-overview',
@@ -23,24 +24,27 @@ export class CountingCircleOverviewComponent implements OnInit {
   public columns = this.allColumns;
   public loading: boolean = true;
   public data: CountingCircle[] = [];
-  public isAdmin: boolean = false;
+  public canDelete: boolean = false;
+  public canCreate: boolean = false;
+  public canMerge: boolean = false;
 
   public historizationFilter: HistorizationFilter = newHistorizationFilter();
 
   constructor(
     private readonly router: Router,
     private readonly i18n: TranslateService,
-    private readonly rolesService: RolesService,
+    private readonly permissionService: PermissionService,
     private readonly snackbarService: SnackbarService,
     private readonly countingCircleService: CountingCircleService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly route: ActivatedRoute,
     private readonly dialogService: DialogService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
     try {
-      this.isAdmin = await this.rolesService.isAdmin();
+      this.canDelete = await this.permissionService.hasPermission(Permissions.CountingCircle.Delete);
+      this.canCreate = await this.permissionService.hasPermission(Permissions.CountingCircle.Create);
+      this.canMerge = await this.permissionService.hasPermission(Permissions.CountingCircle.Merge);
       this.data = await this.countingCircleService.list();
     } finally {
       this.loading = false;

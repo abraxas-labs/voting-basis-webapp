@@ -1,6 +1,7 @@
-/*!
- * (c) Copyright 2022 by Abraxas Informatik AG
- * For license information see LICENSE file
+/**
+ * (c) Copyright 2024 by Abraxas Informatik AG
+ *
+ * For license information see LICENSE file.
  */
 
 import { MajorityElectionServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/majority_election_service_grpc_web_pb';
@@ -193,6 +194,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setReportDomainOfInfluenceLevel(data.reportDomainOfInfluenceLevel);
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
+    result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
     return result;
   }
 
@@ -218,6 +220,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setReportDomainOfInfluenceLevel(data.reportDomainOfInfluenceLevel);
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
+    result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
     return result;
   }
 

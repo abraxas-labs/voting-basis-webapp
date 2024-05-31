@@ -5,7 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Directive, Input, OnInit } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContestService } from '../../core/contest.service';
 import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-level.service';
 import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
@@ -27,6 +27,9 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
 
   @Input()
   public data: T;
+
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   public domainOfInfluences: DomainOfInfluence[] = [];
   private selectedDomainOfInfluenceValue?: DomainOfInfluence;
@@ -100,7 +103,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
       throw new Error('could not access doi of contest');
     }
 
-    this.domainOfInfluences = await this.domainOfInfluenceService.filterOnlyManagedByCurrentTenant(
+    this.domainOfInfluences = await this.domainOfInfluenceService.filterOnlyManagedByCurrentTenantAndNotVirtualTopLevel(
       this.domainOfInfluenceTree.getSelfAndChildrenAsFlatList(contestDomainOfInfluenceNode),
     );
 

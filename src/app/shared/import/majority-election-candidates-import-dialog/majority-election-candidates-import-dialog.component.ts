@@ -6,12 +6,12 @@
 
 import { SnackbarService } from '@abraxas/voting-lib';
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { ImportService } from '../../../core/import.service';
 import { ImportFileContent, ImportType } from '../../../core/models/import.model';
 import { MajorityElection, MajorityElectionCandidateProto } from '../../../core/models/majority-election.model';
 import { flatMap } from '../../../core/utils/array.utils';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-majority-election-candidates-import-dialog',

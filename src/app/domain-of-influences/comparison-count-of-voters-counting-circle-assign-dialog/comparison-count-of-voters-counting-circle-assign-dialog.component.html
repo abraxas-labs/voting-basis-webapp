@@ -2,14 +2,17 @@
   <h1 header>{{ translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.DIALOG_TITLE' | translate}}</h1>
 
   <div content class="form mr-3 my-3">
-    <bc-advanced-table class="w-full" [dataSource]="dataSource">
-      <ng-container bcColumnDef="name">
-        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</th>
-        <td bc-cell *bcCellDef="let element">{{ element.name }}</td>
+    <bc-table class="w-full" [dataSource]="dataSource">
+      <ng-container columnDef="name">
+        <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
       </ng-container>
-      <ng-container bcColumnDef="category">
-        <th bc-header-cell *bcHeaderCellDef>{{ translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.CATEGORY' | translate }}</th>
-        <td bc-cell *bcCellDef="let element">
+
+      <ng-container columnDef="category">
+        <bc-header-cell *headerCellDef>
+          {{ translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.CATEGORY' | translate }}
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
           <bc-dropdown class="full-width"
                        [items]="categoryItems"
                        [disabled]="disabled"
@@ -18,13 +21,13 @@
                        displayExpr="description"
                        valueExpr="value"
                        [(value)]="element.category"></bc-dropdown>
-        </td>
+        </bc-data-cell>
       </ng-container>
 
-      <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-      <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
-    </bc-advanced-table>
-    <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+      <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+      <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>  
+    </bc-table>
+    <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
   </div>
 
   <div footer class="mr-3">

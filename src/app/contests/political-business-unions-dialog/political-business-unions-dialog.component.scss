@@ -10,9 +10,10 @@
 
 .flex {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-}
 
-.mat-column-actions {
-  width: 4rem;
+  bc-icon {
+    margin-left: 10px;
+  }
 }

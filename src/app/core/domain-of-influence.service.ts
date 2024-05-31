@@ -110,6 +110,10 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       plausibilisationConfiguration: DomainOfInfluenceService.mapToPlausibilisationConfiguration(doi.getPlausibilisationConfiguration()),
       parties: doi.getPartiesList().map(x => DomainOfInfluenceService.mapToParty(x, doiId)!),
       nameForProtocol: doi.getNameForProtocol(),
+      virtualTopLevel: doi.getVirtualTopLevel(),
+      viewCountingCirclePartialResults: doi.getViewCountingCirclePartialResults(),
+      votingCardColor: doi.getVotingCardColor(),
+      electoralRegistrationEnabled: doi.getElectoralRegistrationEnabled(),
     };
   }
 
@@ -155,9 +159,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     };
   }
 
-  public async filterOnlyManagedByCurrentTenant(dois: DomainOfInfluence[]): Promise<DomainOfInfluence[]> {
+  public async filterOnlyManagedByCurrentTenantAndNotVirtualTopLevel(dois: DomainOfInfluence[]): Promise<DomainOfInfluence[]> {
     const { id: tenantId } = await this.auth.getActiveTenant();
-    return dois.filter(({ secureConnectId }) => secureConnectId === tenantId);
+    return dois.filter(({ secureConnectId, virtualTopLevel }) => secureConnectId === tenantId && !virtualTopLevel);
   }
 
   public get(id: string): Promise<DomainOfInfluence> {
@@ -332,6 +336,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setExternalPrintingCenterEaiMessageType(data.externalPrintingCenterEaiMessageType);
     result.setSapCustomerOrderNumber(data.sapCustomerOrderNumber);
     result.setPartiesList(this.filterOnlyUpdateablePartiesAndMapToProto(data));
+    result.setVirtualTopLevel(data.virtualTopLevel);
+    result.setViewCountingCirclePartialResults(data.viewCountingCirclePartialResults);
+    result.setVotingCardColor(data.votingCardColor);
     return result;
   }
 
@@ -367,6 +374,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setSapCustomerOrderNumber(data.sapCustomerOrderNumber);
       adminRequest.setExportConfigurationsList(data.exportConfigurationsList.map(x => this.mapToExportConfigurationRequest(x)));
       adminRequest.setSwissPostData(this.mapToVotingCardSwissPostDataProto(data.swissPostData));
+      adminRequest.setVirtualTopLevel(data.virtualTopLevel);
+      adminRequest.setViewCountingCirclePartialResults(data.viewCountingCirclePartialResults);
+      adminRequest.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
       this.mapToDomainOfInfluenceElectionAdminOrAdminRequest(data, adminRequest);
       result.setAdminRequest(adminRequest);
     } else {
@@ -391,6 +401,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     request.setSapCustomerOrderNumber(data.sapCustomerOrderNumber);
     request.setPlausibilisationConfiguration(this.mapToPlausibilisationConfigurationProto(data.plausibilisationConfiguration));
     request.setPartiesList(this.filterOnlyUpdateablePartiesAndMapToProto(data));
+    request.setVotingCardColor(data.votingCardColor);
   }
 
   private mapToUpdateDomainOfInfluenceCountingCircleEntriesRequest(

@@ -7,8 +7,10 @@
                  displayExpr="description"
                  valueExpr="value"
                  [required]="true"
-                 [(value)]="data.resultEntry"></bc-dropdown>
-    <bc-checkbox [(checked)]="data.enforceResultEntryForCountingCircles"
+                 [value]="data.resultEntry"
+                 (valueChange)="data.resultEntry = $event; contentChanged.emit()"></bc-dropdown>
+    <bc-checkbox [checked]="data.enforceResultEntryForCountingCircles"
+                 (checkedChange)="data.enforceResultEntryForCountingCircles = $event; contentChanged.emit()"
                  class="mb-1"
                  [label]="'VOTE.ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES' | translate"
                  [disabled]="locked || !isVariantsBallot"></bc-checkbox>
@@ -16,16 +18,18 @@
 
   <ng-container *ngIf="data.resultEntry === resultEntryType.VOTE_RESULT_ENTRY_DETAILED">
     <bc-number [label]="'VOTE.BALLOT_BUNDLE_SAMPLE_SIZE_PERCENT' | translate"
-                  [disabled]="testingPhaseEnded"
-                  [max]="100"
-                  [(value)]="ballotBundleSampleSizePercent"></bc-number>
+               [disabled]="testingPhaseEnded"
+               [max]="100"
+               [value]="ballotBundleSampleSizePercent"
+               (valueChange)="ballotBundleSampleSizePercent = $event; contentChanged.emit()"></bc-number>
     <div class="ballot-numbers">
       <div>
         <bc-label class="full-width" [label]="'VOTE.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
         <bc-radio-button-group class="mt-2"
                                [items]="automaticBallotBundleNumberGenerationChoices"
                                orientation="vertical"
-                               [(value)]="data.automaticBallotBundleNumberGeneration"
+                               [value]="data.automaticBallotBundleNumberGeneration"
+                               (valueChange)="data.automaticBallotBundleNumberGeneration = $event; contentChanged.emit()"
                                [disabled]="testingPhaseEnded">
         </bc-radio-button-group>
       </div>
@@ -36,11 +40,13 @@
       <bc-radio-button-group class="ml-2"
                              [items]="reviewProcedureChoices"
                              orientation="vertical"
-                             [(value)]="data.reviewProcedure"
+                             [value]="data.reviewProcedure"
+                             (valueChange)="data.reviewProcedure = $event; contentChanged.emit()"
                              [disabled]="testingPhaseEnded">
       </bc-radio-button-group>
       <bc-checkbox class="ml-2"
-                   [(checked)]="data.enforceReviewProcedureForCountingCircles"
+                   [checked]="data.enforceReviewProcedureForCountingCircles"
+                   (checkedChange)="data.enforceReviewProcedureForCountingCircles = $event; contentChanged.emit()"
                    [label]="'VOTE.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
                    [disabled]="testingPhaseEnded"></bc-checkbox>
     </div>

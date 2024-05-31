@@ -169,6 +169,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     result.setCode(data.code);
     result.setNameForProtocol(data.nameForProtocol);
     result.setSortNumber(data.sortNumber);
+    result.setEVoting(data.eVoting);
     return result.toObject();
   }
 
@@ -185,6 +186,8 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     result.setNameForProtocol(data.nameForProtocol);
     result.setSortNumber(data.sortNumber);
     result.setElectoratesList(data.electoratesList.map(e => this.mapToProtoElectorate(e)));
+    result.setCanton(data.canton);
+    result.setEVoting(data.eVoting);
     return result;
   }
 
@@ -200,6 +203,8 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     result.setNameForProtocol(data.nameForProtocol);
     result.setSortNumber(data.sortNumber);
     result.setElectoratesList(data.electoratesList.map(e => this.mapToProtoElectorate(e)));
+    result.setCanton(data.canton);
+    result.setEVoting(data.eVoting);
     return result;
   }
 
@@ -229,6 +234,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     req.setActiveFrom(TimestampUtil.toTimestamp(data.activeFrom));
     req.setNameForProtocol(data.newCountingCircle.nameForProtocol);
     req.setSortNumber(data.newCountingCircle.sortNumber);
+    req.setEVoting(data.newCountingCircle.eVoting);
   }
 
   private mapToProtoAuthority(data?: Authority): AuthorityProto {
@@ -270,6 +276,8 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
       sortNumber: cc.getSortNumber(),
       nameForProtocol: cc.getNameForProtocol(),
       electoratesList: cc.getElectoratesList().map(x => x.toObject()),
+      canton: cc.getCanton(),
+      eVoting: cc.getEVoting(),
     };
   }
 

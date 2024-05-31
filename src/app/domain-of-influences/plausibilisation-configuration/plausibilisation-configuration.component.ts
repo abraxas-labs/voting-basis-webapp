@@ -5,7 +5,7 @@
  */
 
 import { DialogService, EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
 import { DomainOfInfluence, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import {
@@ -34,6 +34,9 @@ export class PlausibilisationConfigurationComponent {
 
   @Input()
   public disabled: boolean = false;
+
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   private domainOfInfluenceValue!: DomainOfInfluence;
   private domainOfInfluenceTypeValue!: DomainOfInfluenceType;
@@ -90,6 +93,7 @@ export class PlausibilisationConfigurationComponent {
 
     await this.dialogService.openForResult(ComparisonCountOfVotersCountingCircleAssignDialogComponent, data);
     this.updateCountingCirclesByCategory();
+    this.contentChanged.emit();
   }
 
   private updateCountingCirclesByCategory(): void {

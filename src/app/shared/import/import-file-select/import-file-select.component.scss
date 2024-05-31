@@ -22,12 +22,6 @@
   }
 }
 
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .grid {
   display: grid;
   grid-template-columns: 1fr 4rem 1fr;

@@ -7,54 +7,85 @@
                [required]="true"
                [maxlength]="100"
                [disabled]="!canEditEverything"
-               [(value)]="data.name"></bc-text>
+               [value]="data.name"
+               (valueChange)="data.name = $event; contentChanged()"
+               [subscriptSizing]="'dynamic'"></bc-text>
       <bc-text [label]="'COUNTING_CIRCLE.NAME_FOR_PROTOCOL' | translate"
                [maxlength]="100"
                [disabled]="!canEditEverything"
-               [(value)]="data.nameForProtocol"></bc-text>
+               [value]="data.nameForProtocol"
+               (valueChange)="data.nameForProtocol = $event; contentChanged()"
+               [subscriptSizing]="'dynamic'"></bc-text>
+      <bc-dropdown class="full-width"
+                   [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
+                   [items]="cantons"
+                   displayExpr="description"
+                   valueExpr="value"
+                   [required]="true"
+                   [disabled]="!canEditEverything"
+                   [value]="data.canton"
+                   (valueChange)="data.canton = $event; contentChanged()"
+                   [subscriptSizing]="'dynamic'"></bc-dropdown>
       <bc-text [label]="'COUNTING_CIRCLE.BFS' | translate"
                [required]="true"
                [disabled]="!canEditEverything"
-               [(value)]="data.bfs"></bc-text>
+               [value]="data.bfs"
+               (valueChange)="data.bfs = $event; contentChanged()"
+               [subscriptSizing]="'dynamic'"></bc-text>
       <bc-text [label]="'COUNTING_CIRCLE.CODE' | translate"
                [maxlength]="10"
                [disabled]="!canEditEverything"
-               [(value)]="data.code"></bc-text>
+               [value]="data.code"
+               (valueChange)="data.code = $event; contentChanged()"
+               [subscriptSizing]="'dynamic'"></bc-text>
       <bc-number [label]="'COUNTING_CIRCLE.SORT_NUMBER' | translate"
                  [max]="999999999"
                  [min]="0"
                  [error]="data.sortNumber < 0 || data.sortNumber > 999999999"
                  [disabled]="!canEditEverything"
-                 [(value)]="data.sortNumber"></bc-number>
+                 [value]="data.sortNumber"
+                 (valueChange)="data.sortNumber = $event; contentChanged()"
+                 [subscriptSizing]="'dynamic'"></bc-number>
 
       <vo-lib-tenant-selection label="COUNTING_CIRCLE.DETAIL.AUTHORITY"
                                [disabled]="!canEditEverything"
-                               [(selectedTenant)]="selectedResponsibleAuthority"></vo-lib-tenant-selection>
+                               [selectedTenant]="selectedResponsibleAuthority"
+                               (selectedTenantChange)="selectedResponsibleAuthority = $event; contentChanged()"></vo-lib-tenant-selection>
+
+      <bc-checkbox [label]="'COUNTING_CIRCLE.E_VOTING' | translate"
+                   [checked]="data.eVoting"
+                   (checkedChange)="data.eVoting = $event; contentChanged()"
+                   [disabled]="!canEditEverything"></bc-checkbox>
 
       <app-authority-address-edit [authority]="data.responsibleAuthority!"
+                                  (contentChanged)="contentChanged()"
                                   [disabled]="!isResponsibleAuthorityOrCanEditEverything"></app-authority-address-edit>
 
       <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
       <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_DURING_EVENT</span>
       <app-contact-person-edit class="form"
                                [disabled]="!isResponsibleAuthorityOrCanEditEverything"
-                               [contactPerson]="data.contactPersonDuringEvent"></app-contact-person-edit>
+                               [contactPerson]="data.contactPersonDuringEvent"
+                               (contentChanged)="contentChanged()"></app-contact-person-edit>
 
       <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
       <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_AFTER_EVENT</span>
       <bc-checkbox class="ml-2"
-        [label]="'COUNTING_CIRCLE.DETAIL.SAME_CONTACT_PERSON' | translate"
+                   [label]="'COUNTING_CIRCLE.DETAIL.SAME_CONTACT_PERSON' | translate"
                    [disabled]="!isResponsibleAuthorityOrCanEditEverything"
-                   [(checked)]="data.contactPersonSameDuringEventAsAfter"></bc-checkbox>
+                   [checked]="data.contactPersonSameDuringEventAsAfter"
+                   (checkedChange)="data.contactPersonSameDuringEventAsAfter = $event; contentChanged()"></bc-checkbox>
       <app-contact-person-edit *ngIf="!data.contactPersonSameDuringEventAsAfter"
                                class="form"
                                [disabled]="!isResponsibleAuthorityOrCanEditEverything"
-                               [contactPerson]="data.contactPersonAfterEvent"></app-contact-person-edit>
+                               [contactPerson]="data.contactPersonAfterEvent"
+                               (contentChanged)="contentChanged()"></app-contact-person-edit>
 
       <h2 class="mb-2" translate>COUNTING_CIRCLE.ELECTORATE.TITLE</h2>
       <span class="subtitle" translate>COUNTING_CIRCLE.ELECTORATE.SUB_TITLE</span>
 
       <app-counting-circle-electorates [(electorates)]="data.electoratesList"
+                                       (electoratesChange)="data.electoratesList = $event; contentChanged()"
                                        [disabled]="!canEditEverything"></app-counting-circle-electorates>
 
       <vo-lib-button-bar *ngIf="isResponsibleAuthorityOrCanEditEverything"

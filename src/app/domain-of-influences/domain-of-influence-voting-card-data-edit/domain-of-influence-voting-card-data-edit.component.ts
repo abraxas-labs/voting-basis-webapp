@@ -16,6 +16,7 @@ import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { newDomainOfInfluenceVotingCardSwissPostData } from '../../core/models/domain-of-influence-voting-card-swiss-post-data.model';
 import { PermissionService } from '../../core/permission.service';
 import { Permissions } from '../../core/models/permissions.model';
+import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared/voting_card_color_pb';
 
 @Component({
   selector: 'app-domain-of-influence-voting-card-data-edit',
@@ -25,12 +26,16 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
   public shippingAwayItems: EnumItemDescription<VotingCardShippingFranking>[] = [];
   public shippingReturnItems: EnumItemDescription<VotingCardShippingFranking>[] = [];
   public shippingMethodItems: EnumItemDescription<VotingCardShippingMethod>[] = [];
+  public votingCardColors: EnumItemDescription<VotingCardColor>[] = [];
 
   @Input()
   public disabled: boolean = false;
 
   @Output()
   public logoChanged: EventEmitter<File> = new EventEmitter<File>();
+
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   public canEditEverything: boolean = false;
 
@@ -93,6 +98,13 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
       'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SHIPPING_METHOD.',
     );
 
-    this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateAll);
+    this.votingCardColors = this.enumUtil
+      .getArrayWithDescriptions<VotingCardColor>(VotingCardColor, 'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_COLORS.')
+      .filter(c => c.value !== VotingCardColor.VOTING_CARD_COLOR_UNSPECIFIED);
+
+    this.canEditEverything = await this.permissionService.hasAnyPermission(
+      Permissions.DomainOfInfluence.UpdateSameCanton,
+      Permissions.DomainOfInfluence.UpdateAll,
+    );
   }
 }

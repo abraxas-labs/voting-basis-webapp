@@ -11,6 +11,8 @@ import {
   Vote as VoteProto,
 } from '@abraxas/voting-basis-service-proto/grpc/models/vote_pb';
 import {
+  BallotQuestionType as BallotQuestionTypeProto,
+  BallotQuestionType,
   BallotType as BallotTypeProto,
   VoteResultAlgorithm as VoteResultAlgorithmProto,
   VoteResultEntry as VoteResultEntryProto,
@@ -52,6 +54,7 @@ export { BallotQuestionProto };
 export type BallotQuestion = {
   number: number;
   question: Map<string, string>;
+  type: BallotQuestionTypeProto;
 };
 export { TieBreakQuestionProto };
 export type TieBreakQuestion = {
@@ -63,6 +66,7 @@ export type TieBreakQuestion = {
 export { BallotTypeProto as BallotType };
 export { VoteResultEntryProto as VoteResultEntry };
 export { VoteReviewProcedureProto as VoteReviewProcedure };
+export { BallotQuestionTypeProto as BallotQuestionType };
 
 export function newVote(): Vote {
   return {
@@ -88,6 +92,7 @@ export function newBallot(): Ballot {
       {
         number: 1,
         question: new Map<string, string>(),
+        type: BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT,
       },
     ],
   } as Ballot;

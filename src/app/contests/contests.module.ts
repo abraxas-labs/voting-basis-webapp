@@ -7,7 +7,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ContestArchiveDialogComponent } from './contest-archive-dialog/contest-archive-dialog.component';
-import { ContestCountingCircleEVotingTableComponent } from './contest-counting-circle-e-voting-table/contest-counting-circle-e-voting-table.component';
 import { ContestDetailComponent } from './contest-detail/contest-detail.component';
 import { ContestEditDialogComponent } from './contest-edit-dialog/contest-edit-dialog.component';
 import { ContestListComponent } from './contest-list/contest-list.component';
@@ -22,13 +21,10 @@ import { PoliticalBusinessUnionEntriesEditDialogComponent } from './political-bu
 import { PoliticalBusinessUnionsDialogComponent } from './political-business-unions-dialog/political-business-unions-dialog.component';
 import { ProportionalElectionUnionDetailListTabComponent } from './proportional-election-union-detail-list-tab/proportional-election-union-detail-list-tab.component';
 import { ProportionalElectionUnionDetailComponent } from './proportional-election-union-detail/proportional-election-union-detail.component';
-import { CanDeleteContestPipe } from './shared/can-delete-contest.pipe';
-import { CanEditContestPipe } from './shared/can-edit-contest.pipe';
-import { OwnsContestPipe } from './shared/owns-contest.pipe';
+import { PoliticalAssemblyEditDialogComponent } from './political-assembly-edit-dialog/political-assembly-edit-dialog.component';
 
 const components = [
   ContestArchiveDialogComponent,
-  ContestCountingCircleEVotingTableComponent,
   ContestDetailComponent,
   ContestEditDialogComponent,
   ContestListComponent,
@@ -42,13 +38,12 @@ const components = [
   PoliticalBusinessUnionsDialogComponent,
   ProportionalElectionUnionDetailComponent,
   ProportionalElectionUnionDetailListTabComponent,
+  PoliticalAssemblyEditDialogComponent,
 ];
 
-const pipes = [CanEditContestPipe, CanDeleteContestPipe, OwnsContestPipe];
-
 @NgModule({
-  declarations: [...components, ...pipes],
+  declarations: [...components],
   imports: [SharedModule, ContestsRoutingModule],
-  exports: [...components, ...pipes],
+  exports: [...components],
 })
 export class ContestsModule {}

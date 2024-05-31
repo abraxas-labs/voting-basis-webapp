@@ -6,7 +6,6 @@
 
 import {
   Contest as ContestProto,
-  ContestCountingCircleOption as ContestCountingCircleOptionProto,
   ContestDetailsChangeMessage as ContestDetailsChangeMessageProto,
   ContestOverviewChangeMessage as ContestOverviewChangeMessageProto,
   ContestSummary as ContestSummaryProto,
@@ -20,7 +19,7 @@ import { BaseEntityMessage } from './message.model';
 import { PoliticalBusinessUnion, PoliticalBusinessUnionMessage } from './political-business-union.model';
 import { PoliticalBusiness, PoliticalBusinessMessage } from './political-business.model';
 
-export { ContestCountingCircleOptionProto, ContestDetailsChangeMessageProto, ContestOverviewChangeMessageProto };
+export { ContestDetailsChangeMessageProto, ContestOverviewChangeMessageProto };
 export { ContestState };
 export { ContestProto };
 export type Contest = {
@@ -53,7 +52,6 @@ export type PreconfiguredContestDate = {
   date: Date;
 };
 
-export type ContestCountingCircleOption = Required<ContestCountingCircleOptionProto.AsObject>;
 export type ContestSimple = {
   id: string;
   date: Date;

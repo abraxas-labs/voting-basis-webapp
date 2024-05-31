@@ -1,7 +1,33 @@
-.pcd-header {
-  width: 20rem;
+@use '../../../sharedStyles/table' as table;
+
+::ng-deep .bc-column-political-businesses {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-owner {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-end-of-testing-phase {
+  @include table.truncate-long-sortable-table-header();
 }
 
 .pcd {
   font-style: italic;
+}
+
+.description-header {
+  width: 12rem;
+}
+
+.political-businesses {
+  white-space: pre-line;
+}
+
+.bc-column-actions {
+  width: 2%;
+}
+
+bc-paginator {
+  overflow: hidden;
 }

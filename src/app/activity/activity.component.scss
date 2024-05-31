@@ -1,8 +1,12 @@
 // stylelint-disable-next-line
-.mat-column-eventName {
+.bc-column-eventName {
   width: 40rem;
 }
 
-.mat-column-timestamp {
+.bc-column-timestamp {
   width: 10rem;
+}
+
+bc-paginator {
+  overflow: hidden;
 }

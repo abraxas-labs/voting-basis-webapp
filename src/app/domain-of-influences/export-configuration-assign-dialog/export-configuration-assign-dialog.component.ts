@@ -4,13 +4,12 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { ExportService } from '../../core/export.service';
 import { ExportGenerator, ExportTemplate } from '../../core/models/export.model';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-export-configuration-assign-dialog',
@@ -22,10 +21,9 @@ export class ExportConfigurationAssignDialogComponent implements OnInit, AfterVi
   public readonly columnsSelected = ['description', 'actions'];
   public loading: boolean = true;
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
-  public dataSource: MatTableDataSource<ExportTemplate> = new MatTableDataSource<ExportTemplate>();
+  public dataSource = new TableDataSource<ExportTemplate>();
   public selection = new SelectionModel<ExportTemplate>(true, []);
   public isAllSelected: boolean = false;
 

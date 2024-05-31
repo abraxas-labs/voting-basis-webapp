@@ -5,7 +5,10 @@
  */
 
 import { CantonSettingsServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/canton_settings_service_grpc_web_pb';
-import { CantonSettingsVotingCardChannel as CantonSettingsVotingCardChannelProto } from '@abraxas/voting-basis-service-proto/grpc/models/canton_settings_pb';
+import {
+  CantonSettingsVotingCardChannel as CantonSettingsVotingCardChannelProto,
+  CountingCircleResultStateDescription as CountingCircleResultStateDescriptionProto,
+} from '@abraxas/voting-basis-service-proto/grpc/models/canton_settings_pb';
 import {
   CreateCantonSettingsRequest,
   GetCantonSettingsRequest,
@@ -15,7 +18,7 @@ import {
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CantonSettings, CantonSettingsVotingCardChannel } from './models/canton-settings.model';
+import { CantonSettings, CantonSettingsVotingCardChannel, CountingCircleResultStateDescription } from './models/canton-settings.model';
 
 @Injectable({
   providedIn: 'root',
@@ -71,12 +74,16 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setVotingDocumentsEVotingEaiMessageType(data.votingDocumentsEVotingEaiMessageType);
     result.setProtocolCountingCircleSortType(data.protocolCountingCircleSortType);
     result.setProtocolDomainOfInfluenceSortType(data.protocolDomainOfInfluenceSortType);
-    result.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
     result.setMultipleVoteBallotsEnabled(data.multipleVoteBallotsEnabled);
     result.setCountingMachineEnabled(data.countingMachineEnabled);
     result.setNewZhFeaturesEnabled(data.newZhFeaturesEnabled);
     result.setMajorityElectionUseCandidateCheckDigit(data.majorityElectionUseCandidateCheckDigit);
     result.setProportionalElectionUseCandidateCheckDigit(data.proportionalElectionUseCandidateCheckDigit);
+    result.setCountingCircleResultStateDescriptionsList(
+      this.filterEmptyCountingCircleResultStateDescriptions(data.countingCircleResultStateDescriptionsList),
+    );
+    result.setStatePlausibilisedDisabled(data.statePlausibilisedDisabled);
+    result.setPublishResultsEnabled(data.publishResultsEnabled);
     return result;
   }
 
@@ -95,12 +102,16 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setVotingDocumentsEVotingEaiMessageType(data.votingDocumentsEVotingEaiMessageType);
     result.setProtocolCountingCircleSortType(data.protocolCountingCircleSortType);
     result.setProtocolDomainOfInfluenceSortType(data.protocolDomainOfInfluenceSortType);
-    result.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
     result.setMultipleVoteBallotsEnabled(data.multipleVoteBallotsEnabled);
     result.setCountingMachineEnabled(data.countingMachineEnabled);
     result.setNewZhFeaturesEnabled(data.newZhFeaturesEnabled);
     result.setMajorityElectionUseCandidateCheckDigit(data.majorityElectionUseCandidateCheckDigit);
     result.setProportionalElectionUseCandidateCheckDigit(data.proportionalElectionUseCandidateCheckDigit);
+    result.setCountingCircleResultStateDescriptionsList(
+      this.filterEmptyCountingCircleResultStateDescriptions(data.countingCircleResultStateDescriptionsList),
+    );
+    result.setStatePlausibilisedDisabled(data.statePlausibilisedDisabled);
+    result.setPublishResultsEnabled(data.publishResultsEnabled);
     return result;
   }
 
@@ -111,5 +122,18 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
       obj.setValid(x.valid);
       return obj;
     });
+  }
+
+  private filterEmptyCountingCircleResultStateDescriptions(
+    descriptions: Array<CountingCircleResultStateDescription>,
+  ): CountingCircleResultStateDescriptionProto[] {
+    return descriptions
+      .filter(x => !!x.description)
+      .map(x => {
+        const obj = new CountingCircleResultStateDescriptionProto();
+        obj.setState(x.state);
+        obj.setDescription(x.description);
+        return obj;
+      });
   }
 }

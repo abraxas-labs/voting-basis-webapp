@@ -6,7 +6,6 @@
 
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { ContestProto } from '../../../core/models/contest.model';
@@ -14,6 +13,7 @@ import { DomainOfInfluence } from '../../../core/models/domain-of-influence.mode
 import { ContestImport, ImportFileContent } from '../../../core/models/import.model';
 import { flatMap } from '../../../core/utils/array.utils';
 import { toJsMap } from '../../../core/utils/map.utils';
+import { TableDataSource } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-import-contest-edit',
@@ -25,7 +25,7 @@ export class ImportContestEditComponent implements OnInit {
   public contestImport: EventEmitter<ContestImport | undefined> = new EventEmitter<ContestImport | undefined>();
 
   public readonly columns = ['select', 'filename', 'date', 'description', 'eVotingFrom', 'eVotingTo'];
-  public dataSource: MatTableDataSource<ContestImportFile> = new MatTableDataSource<ContestImportFile>();
+  public dataSource: TableDataSource<ContestImportFile> = new TableDataSource<ContestImportFile>();
   public domainOfInfluences: DomainOfInfluence[] = [];
   public domainOfInfluenceId: string = '';
   public endOfTestingPhaseString: string = '';

@@ -1,11 +1,4 @@
-<ng-template #notAuthenticated>
-  <div class="p-4">
-    <h1 translate>COMMON.LOADING</h1>
-    <bc-spinner></bc-spinner>
-  </div>
-</ng-template>
-
-<bc-app-layout *ngIf="theme">
+<header *ngIf="theme">
   <bc-app-header-bar-iam
     *ngIf="hasTenant; else nonIamHeader"
     [link]="['/', theme]"
@@ -14,7 +7,7 @@
     [customLogoPath]="customLogo ?? ''"
     logo="VO"
   >
-    <vo-lib-environment-chip></vo-lib-environment-chip>    
+    <vo-lib-environment-chip></vo-lib-environment-chip>
   </bc-app-header-bar-iam>
   <ng-template #nonIamHeader>
     <bc-app-header-bar [link]="['/', theme]" [title]="appTitle" logo="VO"></bc-app-header-bar>
@@ -25,22 +18,26 @@
       <router-outlet></router-outlet>
     </div>
   </app-side-nav>
+</header>
+<main>
+  <bc-snackbar #snackbar horizontalPosition="right" verticalPosition="top" [action]="'ACTIONS.CLOSE' | translate"></bc-snackbar>
 
-</bc-app-layout>
-<bc-snackbar #snackbar horizontalPosition="right" verticalPosition="top" [action]="'ACTIONS.CLOSE' | translate"></bc-snackbar>
-
-<ng-template #notAuthenticated>
-  <div class="no-permissions-container" *ngIf="!loading; else appLoading">
-    <p translate>APP.NO_PERMISSIONS</p>
-    <div>
-      <bc-button (buttonClick)="reload()" [label]="'APP.RELOAD' | translate"></bc-button>
-      <bc-button class="ml-2" (buttonClick)="logout()" [label]="'APP.LOGOUT' | translate"></bc-button>
+  <ng-template #notAuthenticated>
+    <div class="p-5">
+      <ng-container *ngIf="!loading; else appLoading">
+        <p translate>APP.NO_PERMISSIONS</p>
+        <div>
+          <bc-button (buttonClick)="reload()" [label]="'APP.RELOAD' | translate"></bc-button>
+          <bc-button class="ml-2" (buttonClick)="logout()" [label]="'APP.LOGOUT' | translate"></bc-button>
+        </div>
+      </ng-container>
     </div>
-  </div>
 
-  <ng-template #appLoading>
-    <div class="spinner-container">
-      <bc-spinner size="large"></bc-spinner>
-    </div>
+    <ng-template #appLoading>
+      <h1>
+        <bc-spinner class="mr-1"></bc-spinner>
+        {{ 'COMMON.LOADING' | translate }}
+      </h1>
+    </ng-template>
   </ng-template>
-</ng-template>
+</main>

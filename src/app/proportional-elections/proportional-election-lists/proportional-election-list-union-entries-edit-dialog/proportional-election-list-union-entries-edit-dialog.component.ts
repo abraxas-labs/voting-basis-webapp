@@ -4,15 +4,14 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { ProportionalElectionList, ProportionalElectionListUnion } from '../../../core/models/proportional-election.model';
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-proportional-election-list-union-entries-edit-dialog',
@@ -23,14 +22,13 @@ export class ProportionalElectionListUnionEntriesEditDialogComponent implements 
   public readonly columns = ['select', 'orderNumber', 'shortDescription'];
   public readonly columnsSelected = ['orderNumber', 'shortDescription', 'actions'];
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
   public data: ProportionalElectionListUnion;
   public saving: boolean = false;
   public listUnionTitleType: string = '';
 
-  public dataSource: MatTableDataSource<ProportionalElectionList> = new MatTableDataSource<ProportionalElectionList>();
+  public dataSource = new TableDataSource<ProportionalElectionList>();
   public selection = new SelectionModel<ProportionalElectionList>(true, []);
   public isAllSelected: boolean = false;
 

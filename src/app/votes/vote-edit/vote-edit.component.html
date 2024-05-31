@@ -8,7 +8,8 @@
     <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
       <ng-container *ngIf="data.contestId">
         <app-vote-general-informations #step1
-                                       [data]="data"></app-vote-general-informations>
+                                       [data]="data"
+                                       (contentChanged)="contentChanged()"></app-vote-general-informations>
         <div class="stepper-footer">
           <vo-lib-inline-spinner class="align-right"
                                  position="left"
@@ -28,7 +29,8 @@
                        [testingPhaseEnded]="testingPhaseEnded"
                        [locked]="locked"
                        [multipleVoteBallotsEnabled]="contestDomainOfInfluenceDefaults.multipleVoteBallotsEnabled"
-                       [eVoting]="eVoting">
+                       [eVoting]="eVoting"
+                       (contentChanged)="contentChanged()">
       </app-vote-ballot>
 
       <div class="stepper-footer">
@@ -50,7 +52,8 @@
                                        [testingPhaseEnded]="testingPhaseEnded"
                                        [locked]="locked"
                                        [isVariantsBallot]="isVariantsBallot"
-                                       [data]="data">
+                                       [data]="data"
+                                       (contentChanged)="contentChanged()">
       </app-vote-erfassung-informations>
 
       <div class="stepper-footer">

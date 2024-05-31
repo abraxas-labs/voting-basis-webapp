@@ -9,7 +9,8 @@
 
       <app-majority-election-ballot-group-assign-candidates-entry
         [entry]="entry"
-        [candidates]="entry.candidates"></app-majority-election-ballot-group-assign-candidates-entry>
+        [candidates]="entry.candidates"
+        (contentChanged)="contentChanged()"></app-majority-election-ballot-group-assign-candidates-entry>
 
       <hr *ngIf="!last" class="my-4" />
     </div>
@@ -20,6 +21,6 @@
                        (save)="save()"
                        [saving]="saving"
                        [saveLabel]="'ACTIONS.ASSIGN' | translate"
-                       (cancel)="cancel()"></vo-lib-button-bar>
+                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

@@ -61,14 +61,17 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
 
   private static mapToBallotQuestion(question: BallotQuestionProto): BallotQuestion {
     return {
-      ...question.toObject(),
+      number: question.getNumber(),
       question: toJsMap(question.getQuestionMap()),
+      type: question.getType(),
     };
   }
 
   private static mapToTieBreakQuestion(question: TieBreakQuestionProto): TieBreakQuestion {
     return {
-      ...question.toObject(),
+      number: question.getNumber(),
+      question1Number: question.getQuestion1Number(),
+      question2Number: question.getQuestion2Number(),
       question: toJsMap(question.getQuestionMap()),
     };
   }
@@ -184,6 +187,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     const result = new ProtoBallotQuestion();
     result.setNumber(data.number);
     fillProtoMap(result.getQuestionMap(), data.question);
+    result.setType(data.type);
     return result;
   }
 

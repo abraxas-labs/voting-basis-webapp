@@ -11,6 +11,7 @@
           #step1
           [data]="data"
           [proportionalElectionMandateAlgorithmsList]="contestDomainOfInfluenceDefaults.proportionalElectionMandateAlgorithmsList"
+          (contentChanged)="contentChanged()"
         ></app-proportional-election-general-informations>
         <div class="stepper-footer">
           <bc-button class="align-right"
@@ -48,6 +49,7 @@
           [locked]="locked"
           [data]="data"
           [useCandidateCheckDigit]="contestDomainOfInfluenceDefaults.proportionalElectionUseCandidateCheckDigit"
+          (contentChanged)="contentChanged()"
         ></app-proportional-election-erfassung-informations>
 
         <div class="stepper-footer">

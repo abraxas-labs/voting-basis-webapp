@@ -1,21 +1,25 @@
 <bc-spinner class="block" *ngIf="loading; else showPoliticalBusinesses"></bc-spinner>
 <ng-template #showPoliticalBusinesses>
-  <bc-advanced-table class="w-full" [dataSource]="dataSource">
-    <ng-container bcColumnDef="politicalBusinessNumber">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS.NUMBER' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.politicalBusinessNumber }}</td>
-    </ng-container>
-    <ng-container bcColumnDef="shortDescription">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
-    </ng-container>
-    <ng-container bcColumnDef="domainOfInfluenceName">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.domainOfInfluence.name }}</td>
+  <bc-table class="w-full" [dataSource]="dataSource">
+
+    <ng-container columnDef="politicalBusinessNumber">
+      <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS.NUMBER' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.politicalBusinessNumber }}</bc-data-cell>
     </ng-container>
 
-    <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-    <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
-  </bc-advanced-table>
+    <ng-container columnDef="shortDescription">
+      <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.shortDescription | getTranslation }}</bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="domainOfInfluenceName">
+      <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.domainOfInfluence.name }}</bc-data-cell>
+    </ng-container>
+
+
+    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+    <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+  </bc-table>
 </ng-template>
-<bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+<bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>

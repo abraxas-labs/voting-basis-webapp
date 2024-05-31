@@ -12,6 +12,7 @@ import {
   DomainOfInfluenceCountingCircle as DomainOfInfluenceCountingCircleProto,
 } from '@abraxas/voting-basis-service-proto/grpc/models/counting_circle_pb';
 import { newContactPerson } from './contact-person.model';
+import { DomainOfInfluenceCanton } from '@abraxas/voting-basis-service-proto/grpc/shared/domain_of_influence_pb';
 
 export {
   AuthorityProto,
@@ -49,6 +50,7 @@ export function newCountingCircle(): CountingCircle {
     code: '',
     nameForProtocol: '',
     electoratesList: [] as CountingCircleElectorate[],
+    canton: DomainOfInfluenceCanton.DOMAIN_OF_INFLUENCE_CANTON_UNSPECIFIED,
   } as CountingCircle;
 }
 

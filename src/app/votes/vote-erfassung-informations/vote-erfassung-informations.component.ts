@@ -6,7 +6,7 @@
 
 import { RadioButton } from '@abraxas/base-components';
 import { EnumItemDescription, EnumUtil, NumberUtil } from '@abraxas/voting-lib';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { newVote, Vote, VoteResultEntry, VoteReviewProcedure } from '../../core/models/vote.model';
 
@@ -27,6 +27,9 @@ export class VoteErfassungInformationsComponent {
 
   @Input()
   public isVariantsBallot: boolean = false;
+
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   public resultEntryChoices: EnumItemDescription<VoteResultEntry>[];
   public resultEntryType: typeof VoteResultEntry = VoteResultEntry;

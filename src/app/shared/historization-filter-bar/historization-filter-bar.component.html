@@ -6,7 +6,7 @@
   ></bc-radio-button-group>
   <bc-date class="px-3" [value]="date" [disabled]="isCurrentStatus" (valueChange)="dateString = $event"></bc-date>
   <bc-checkbox
-    class="px-4"
+    class="mb-3"
     [checked]="includeDeleted"
     (checkedChange)="includeDeleted = $event; emitFilterChange()"
     [label]="includeDeletedLabel | translate"

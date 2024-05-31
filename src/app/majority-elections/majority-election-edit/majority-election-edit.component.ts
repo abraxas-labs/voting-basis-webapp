@@ -7,7 +7,7 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
@@ -18,12 +18,18 @@ import { MajorityElectionCandidatesComponent } from '../majority-election-candid
 import { MajorityElectionGeneralInformationsComponent } from '../majority-election-general-informations/majority-election-general-informations.component';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
+import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
 
 @Component({
   selector: 'app-majority-election-edit',
   templateUrl: './majority-election-edit.component.html',
 })
-export class MajorityElectionEditComponent implements OnInit, AfterContentChecked {
+export class MajorityElectionEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+
   @ViewChild(SimpleStepperComponent, { static: true })
   public stepper!: SimpleStepperComponent;
 
@@ -41,6 +47,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
+  public hasChanges: boolean = false;
 
   private persistedData: MajorityElection = newMajorityElection();
 
@@ -80,11 +87,15 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
     this.cd.detectChanges();
   }
 
+  public get hasUnsavedChanges(): boolean {
+    return this.hasChanges;
+  }
+
   public async saveMajorityElection(navigateBack: boolean = false): Promise<void> {
     this.stepLoading = true;
 
     try {
-      if (!isEqual(this.data, this.persistedData)) {
+      if (this.hasChanges) {
         if (this.isNew) {
           this.data.id = await this.majorityElectionService.create(this.data);
         } else {
@@ -93,6 +104,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
 
         this.persistedData = { ...this.data };
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+        this.hasChanges = false;
       }
 
       this.newlyCreated = this.isNew;
@@ -113,5 +125,9 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
     } finally {
       this.stepLoading = false;
     }
+  }
+
+  public contentChanged(): void {
+    this.hasChanges = !isEqual(this.data, this.persistedData);
   }
 }

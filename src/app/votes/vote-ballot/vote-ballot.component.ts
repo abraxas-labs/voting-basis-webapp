@@ -5,9 +5,10 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LanguageService } from '../../core/language.service';
-import { Ballot, BallotQuestion, BallotType, newBallot } from '../../core/models/vote.model';
+import { Ballot, BallotQuestion, BallotQuestionType, BallotType, newBallot } from '../../core/models/vote.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vote-ballot',
@@ -18,7 +19,9 @@ export class VoteBallotComponent implements OnInit {
   private static readonly maxVariantBallotQuestions: number = 3;
 
   public BallotType: typeof BallotType = BallotType;
+  public BallotQuestionType: typeof BallotQuestionType = BallotQuestionType;
   public ballotTypes: EnumItemDescription<BallotType>[] = [];
+  public mainBallotQuestionTypes: EnumItemDescription<BallotQuestionType>[] = [];
 
   @Input()
   public data!: Ballot[];
@@ -35,7 +38,10 @@ export class VoteBallotComponent implements OnInit {
   @Input()
   public multipleVoteBallotsEnabled: boolean = false;
 
-  constructor(private readonly enumUtil: EnumUtil) {}
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
+
+  constructor(private readonly enumUtil: EnumUtil, private readonly i18n: TranslateService) {}
 
   public get canSave(): boolean {
     return (
@@ -50,6 +56,12 @@ export class VoteBallotComponent implements OnInit {
 
   public ngOnInit(): void {
     this.ballotTypes = this.enumUtil.getArrayWithDescriptions<BallotType>(BallotType, 'VOTE.BALLOT_TYPE.TYPES.');
+    this.mainBallotQuestionTypes = [
+      {
+        value: BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT,
+        description: this.i18n.instant('VOTE.BALLOT_QUESTION_TYPE.TYPES.' + BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT),
+      },
+    ];
   }
 
   public addQuestion(ballot: Ballot): void {
@@ -57,6 +69,10 @@ export class VoteBallotComponent implements OnInit {
     ballot.ballotQuestions.push({
       number: nextQuestionNumber,
       question: new Map<string, string>(),
+      type:
+        nextQuestionNumber === 1
+          ? BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT
+          : BallotQuestionType.BALLOT_QUESTION_TYPE_COUNTER_PROPOSAL,
     });
     this.updateTieBreakQuestions(ballot);
   }
@@ -85,6 +101,7 @@ export class VoteBallotComponent implements OnInit {
     ballot.ballotQuestions.push({
       number: 2,
       question: new Map<string, string>(),
+      type: BallotQuestionType.BALLOT_QUESTION_TYPE_COUNTER_PROPOSAL,
     });
   }
 

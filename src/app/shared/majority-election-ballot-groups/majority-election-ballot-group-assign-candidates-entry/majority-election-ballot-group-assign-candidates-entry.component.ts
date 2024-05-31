@@ -4,10 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MajorityElectionCandidate } from '../../../core/models/majority-election.model';
 import { BallotGroupUiEntry } from '../majority-election-ballot-group-assign-candidates-dialog/majority-election-ballot-group-assign-candidates-dialog.component';
 
@@ -30,10 +29,12 @@ export class MajorityElectionBallotGroupAssignCandidatesEntryComponent implement
     this.selection = new SelectionModel<MajorityElectionCandidate>(true, selectedCandidates);
   }
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
-  public dataSource: MatTableDataSource<MajorityElectionCandidate> = new MatTableDataSource<MajorityElectionCandidate>();
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
+
+  public dataSource = new TableDataSource<MajorityElectionCandidate>();
   public selection = new SelectionModel<MajorityElectionCandidate>(true, []);
   public isAllSelected: boolean = false;
 
@@ -76,7 +77,7 @@ export class MajorityElectionBallotGroupAssignCandidatesEntryComponent implement
       return;
     }
 
-    this.entry.selectedCandidateIds = this.selection.selected.map(({ id }) => id);
+    this.entry.selectedCandidateIds = this.selection.selected.map(({ id }) => id).sort();
     this.entry.entry.countOfCandidates = this.entry.selectedCandidateIds.length;
   }
 }

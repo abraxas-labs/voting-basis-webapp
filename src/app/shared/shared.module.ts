@@ -7,10 +7,10 @@
 import {
   AppHeaderBarIamModule,
   AppHeaderBarModule,
-  AppLayoutModule,
   ButtonModule,
   CheckboxModule,
   DateModule,
+  DialogModule,
   DividerModule,
   DropdownModule,
   ExpansionPanelModule,
@@ -23,6 +23,7 @@ import {
   SimpleStepperModule,
   SnackbarModule,
   SpinnerModule,
+  SwitchModule,
   TableModule,
   TabsModule,
   TextareaModule,
@@ -34,13 +35,10 @@ import { VotingLibModule } from '@abraxas/voting-lib';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { DndModule } from 'ngx-drag-drop';
-import { FilterPipeModule } from 'ngx-filter-pipe';
 import { MomentModule } from 'ngx-moment';
 import { CanEditBallotGroupPipe } from './can-edit-ballot-group.pipe';
 import { ContactPersonEditComponent } from './contact-person-edit/contact-person-edit.component';
@@ -79,6 +77,7 @@ import { TranslatedFormfieldComponent } from './translated-formfield/translated-
 import { TranslatedTextareaComponent } from './translated-textarea/translated-textarea.component';
 import { ImportProportionalElectionPartyMappingComponent } from './import/import-proportional-election-party-mapping/import-proportional-election-party-mapping.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatMenuModule } from '@angular/material/menu';
 
 const components = [
   ContactPersonEditComponent,
@@ -126,7 +125,6 @@ const modules = [
   TextareaModule,
   DropdownModule,
   CheckboxModule,
-  FilterPipeModule,
   RadioButtonModule,
   ExpansionPanelModule,
   MomentModule,
@@ -135,11 +133,8 @@ const modules = [
   TableModule,
   NavLayoutModule,
   NavigationModule,
-  MatDialogModule,
-  AppLayoutModule,
   AppHeaderBarIamModule,
   AppHeaderBarModule,
-  MatMenuModule,
   RouterModule,
   TranslateModule,
   VotingLibModule,
@@ -154,6 +149,11 @@ const modules = [
   DndModule,
   MatIconModule,
   TooltipModule,
+  TableModule,
+  NavLayoutModule,
+  DialogModule,
+  MatMenuModule,
+  SwitchModule,
 ];
 
 @NgModule({

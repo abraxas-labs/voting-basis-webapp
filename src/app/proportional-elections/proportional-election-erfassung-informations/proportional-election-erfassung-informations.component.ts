@@ -6,7 +6,7 @@
 
 import { RadioButton } from '@abraxas/base-components';
 import { EnumUtil, NumberUtil } from '@abraxas/voting-lib';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { BallotNumberGeneration } from '../../core/models/ballot-number-generation.model';
 import {
@@ -32,6 +32,9 @@ export class ProportionalElectionErfassungInformationsComponent implements OnIni
 
   @Input()
   public useCandidateCheckDigit: boolean = false;
+
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   public ballotNumberGenerationChoices: RadioButton[];
   public automaticEmptyVoteCountingChoices: RadioButton[];

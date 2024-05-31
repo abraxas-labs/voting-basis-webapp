@@ -9,26 +9,44 @@ const UpdateSuffix = ':update';
 const ReadSuffix = ':read';
 const DeleteSuffix = ':delete';
 
+// This suffix allows to access the resource when the "canton matches"
+const ReadSameTenantSuffix = CreateSuffix + '-same-tenant';
+const UpdateSameTenantSuffix = ReadSuffix + '-same-tenant';
+
+// This suffix allows to access the resource when the "canton matches"
+const CreateSameCantonSuffix = CreateSuffix + '-same-canton';
+const ReadSameCantonSuffix = ReadSuffix + '-same-canton';
+const UpdateSameCantonSuffix = UpdateSuffix + '-same-canton';
+const DeleteSameCantonSuffix = DeleteSuffix + '-same-canton';
+
 // Used when the "normal" permission (ex. 'read') allows access only to specific resources, while the  '-all' allows access to all resources
+const CreateAllSuffix = CreateSuffix + '-all';
 const ReadAllSuffix = ReadSuffix + '-all';
 const UpdateAllSuffix = UpdateSuffix + '-all';
+const DeleteAllSuffix = DeleteSuffix + '-all';
 
 export class Permissions {
   private static readonly DomainOfInfluencePrefix = 'DomainOfInfluence';
   public static readonly DomainOfInfluence = {
-    Create: Permissions.DomainOfInfluencePrefix + CreateSuffix,
+    CreateAll: Permissions.DomainOfInfluencePrefix + CreateAllSuffix,
+    CreateSameCanton: Permissions.DomainOfInfluencePrefix + CreateSameCantonSuffix,
     UpdateAll: Permissions.DomainOfInfluencePrefix + UpdateAllSuffix,
-    Update: Permissions.DomainOfInfluencePrefix + UpdateSuffix,
-    Read: Permissions.DomainOfInfluencePrefix + ReadSuffix,
+    UpdateSameCanton: Permissions.DomainOfInfluencePrefix + UpdateSameCantonSuffix,
+    UpdateSameTenant: Permissions.DomainOfInfluencePrefix + UpdateSameTenantSuffix,
+    ReadSameTenant: Permissions.DomainOfInfluencePrefix + ReadSameTenantSuffix,
+    ReadSameCanton: Permissions.DomainOfInfluencePrefix + ReadSameCantonSuffix,
     ReadAll: Permissions.DomainOfInfluencePrefix + ReadAllSuffix,
-    Delete: Permissions.DomainOfInfluencePrefix + DeleteSuffix,
+    DeleteSameCanton: Permissions.DomainOfInfluencePrefix + DeleteSameCantonSuffix,
+    DeleteAll: Permissions.DomainOfInfluencePrefix + DeleteAllSuffix,
   };
 
   private static readonly DomainOfInfluenceHierarchyPrefix = 'DomainOfInfluence.Hierarchy';
   public static readonly DomainOfInfluenceHierarchy = {
-    Read: Permissions.DomainOfInfluenceHierarchyPrefix + ReadSuffix,
+    ReadSameTenant: Permissions.DomainOfInfluenceHierarchyPrefix + ReadSameTenantSuffix,
+    ReadSameCanton: Permissions.DomainOfInfluenceHierarchyPrefix + ReadSameCantonSuffix,
     ReadAll: Permissions.DomainOfInfluenceHierarchyPrefix + ReadAllSuffix,
-    Update: Permissions.DomainOfInfluenceHierarchyPrefix + UpdateSuffix,
+    UpdateSameCanton: Permissions.DomainOfInfluenceHierarchyPrefix + UpdateSameCantonSuffix,
+    UpdateAll: Permissions.DomainOfInfluenceHierarchyPrefix + UpdateAllSuffix,
   };
 
   private static readonly DomainOfInfluenceLogoPrefix = 'DomainOfInfluence.Logo';
@@ -41,27 +59,34 @@ export class Permissions {
   private static readonly CantonSettingsPrefix = 'CantonSettings';
   public static readonly CantonSettings = {
     Create: Permissions.CantonSettingsPrefix + CreateSuffix,
-    Update: Permissions.CantonSettingsPrefix + UpdateSuffix,
-    Read: Permissions.CantonSettingsPrefix + ReadSuffix,
+    UpdateAll: Permissions.CantonSettingsPrefix + UpdateAllSuffix,
+    UpdateSameTenant: Permissions.CantonSettingsPrefix + UpdateSameTenantSuffix,
+    ReadSameTenant: Permissions.CantonSettingsPrefix + ReadSameTenantSuffix,
     ReadAll: Permissions.CantonSettingsPrefix + ReadAllSuffix,
   };
 
   private static readonly CountingCirclePrefix = 'CountingCircle';
   public static readonly CountingCircle = {
-    Create: Permissions.CountingCirclePrefix + CreateSuffix,
-    Update: Permissions.CountingCirclePrefix + UpdateSuffix,
+    CreateAll: Permissions.CountingCirclePrefix + CreateAllSuffix,
+    CreateSameCanton: Permissions.CountingCirclePrefix + CreateSameCantonSuffix,
+    UpdateSameTenant: Permissions.CountingCirclePrefix + UpdateSameTenantSuffix,
+    UpdateSameCanton: Permissions.CountingCirclePrefix + UpdateSameCantonSuffix,
     UpdateAll: Permissions.CountingCirclePrefix + UpdateAllSuffix,
     Read: Permissions.CountingCirclePrefix + ReadSuffix,
+    ReadSameCanton: Permissions.CountingCirclePrefix + ReadSameCantonSuffix,
     ReadAll: Permissions.CountingCirclePrefix + ReadAllSuffix,
-    Delete: Permissions.CountingCirclePrefix + DeleteSuffix,
-    Merge: Permissions.CountingCirclePrefix + ':merge',
+    DeleteSameCanton: Permissions.CountingCirclePrefix + DeleteSameCantonSuffix,
+    DeleteAll: Permissions.CountingCirclePrefix + DeleteSuffix,
+    MergeSameCanton: Permissions.CountingCirclePrefix + ':merge-same-canton',
+    MergeAll: Permissions.CountingCirclePrefix + ':merge-all',
   };
 
   private static readonly ContestPrefix = 'Contest';
   public static readonly Contest = {
     Create: Permissions.ContestPrefix + CreateSuffix,
     Update: Permissions.ContestPrefix + UpdateSuffix,
-    Read: Permissions.ContestPrefix + ReadSuffix,
+    ReadTenantHierarchy: Permissions.ContestPrefix + ReadSuffix + '-tenant-hierarchy',
+    ReadSameCanton: Permissions.ContestPrefix + ReadSameCantonSuffix,
     ReadAll: Permissions.ContestPrefix + ReadAllSuffix,
     Delete: Permissions.ContestPrefix + DeleteSuffix,
   };
@@ -179,7 +204,7 @@ export class Permissions {
 
   private static readonly EventLogPrefix = 'EventLog';
   public static readonly EventLog = {
-    Read: Permissions.EventLogPrefix + ReadSuffix,
+    ReadSameTenant: Permissions.EventLogPrefix + ReadSameTenantSuffix,
     ReadAll: Permissions.EventLogPrefix + ReadAllSuffix,
   };
 

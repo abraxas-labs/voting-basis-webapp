@@ -1,21 +1,31 @@
 <div class="full-width form-field">
   <bc-text [label]="'CONTACT_PERSON.FAMILY_NAME' | translate"
-                [disabled]="disabled"
-                [(value)]="contactPerson.familyName"></bc-text>
+           [disabled]="disabled"
+           [value]="contactPerson.familyName"
+           (valueChange)="contactPerson.familyName = $event; contentChanged.emit()"
+           [subscriptSizing]="'dynamic'"></bc-text>
   <bc-text class="ml-2"
-                [label]="'CONTACT_PERSON.FIRST_NAME' | translate"
-                [disabled]="disabled"
-                [(value)]="contactPerson.firstName"></bc-text>
+           [label]="'CONTACT_PERSON.FIRST_NAME' | translate"
+           [disabled]="disabled"
+           [value]="contactPerson.firstName"
+           (valueChange)="contactPerson.firstName = $event; contentChanged.emit()"
+           [subscriptSizing]="'dynamic'"></bc-text>
 </div>
 <bc-text [label]="'CONTACT_PERSON.PHONE' | translate"
-              type="phone"
-              [disabled]="disabled"
-              [(value)]="contactPerson.phone"></bc-text>
+         type="phone"
+         [disabled]="disabled"
+         [value]="contactPerson.phone"
+         (valueChange)="contactPerson.phone = $event; contentChanged.emit()"
+         [subscriptSizing]="'dynamic'"></bc-text>
 <bc-text [label]="'CONTACT_PERSON.MOBILE_PHONE' | translate"
-              type="phone"
-              [disabled]="disabled"
-              [(value)]="contactPerson.mobilePhone"></bc-text>
+         type="phone"
+         [disabled]="disabled"
+         [value]="contactPerson.mobilePhone"
+         (valueChange)="contactPerson.mobilePhone = $event; contentChanged.emit()"
+         [subscriptSizing]="'dynamic'"></bc-text>
 <bc-text [label]="'CONTACT_PERSON.EMAIL' | translate"
-              type="email"
-              [disabled]="disabled"
-              [(value)]="contactPerson.email"></bc-text>
+         type="email"
+         [disabled]="disabled"
+         [value]="contactPerson.email"
+         (valueChange)="contactPerson.email = $event; contentChanged.emit()"
+         [subscriptSizing]="'dynamic'"></bc-text>

@@ -5,8 +5,8 @@
  */
 
 import { Tenant } from '@abraxas/base-components';
-import { EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject, OnInit } from '@angular/core';
+import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
@@ -14,13 +14,26 @@ import { DomainOfInfluence, DomainOfInfluenceCanton, DomainOfInfluenceType } fro
 import { PermissionService } from '../../core/permission.service';
 import { isDistinct } from '../../core/utils/array.utils';
 import { Permissions } from '../../core/models/permissions.model';
+import { Subscription } from 'rxjs';
+import { cloneDeep, isEqual } from 'lodash';
+import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared/voting_card_color_pb';
 
 @Component({
   selector: 'app-domain-of-influence-edit-dialog',
   templateUrl: './domain-of-influence-edit-dialog.component.html',
+  styleUrls: ['./domain-of-influence-edit-dialog.component.scss'],
 })
-export class DomainOfInfluenceEditDialogComponent implements OnInit {
+export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public readonly knownDomainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
+
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+  @HostListener('window:keyup.esc')
+  public async keyUpEscape(): Promise<void> {
+    await this.closeWithUnsavedChangesCheck();
+  }
 
   public data: DomainOfInfluence;
   public parentType?: DomainOfInfluenceType;
@@ -36,6 +49,11 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
   public canEditEverything: boolean = false;
   public readonly readonly: boolean;
 
+  public hasChanges: boolean = false;
+  public originalDomainOfInfluence: DomainOfInfluence;
+  public originalSecureConnectId?: string;
+  public readonly backdropClickSubscription: Subscription;
+
   constructor(
     private readonly dialogRef: MatDialogRef<DomainOfInfluenceEditDialogData>,
     private readonly permissionService: PermissionService,
@@ -43,12 +61,21 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
     private readonly i18n: TranslateService,
     private readonly enumUtil: EnumUtil,
     private readonly snackbarService: SnackbarService,
+    private readonly dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) dialogData: DomainOfInfluenceEditDialogData,
   ) {
     this.data = dialogData.domainOfInfluence;
     this.data.parentId = dialogData.parent?.id || '';
     this.parentType = dialogData.parent?.type;
     this.readonly = dialogData.readonly;
+    this.originalDomainOfInfluence = cloneDeep(this.data);
+
+    this.dialogRef.disableClose = true;
+    this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+  }
+
+  public ngOnDestroy(): void {
+    this.backdropClickSubscription.unsubscribe();
   }
 
   public get canSave(): boolean {
@@ -76,6 +103,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
           !!this.data.swissPostData &&
           !!this.data.swissPostData.invoiceReferenceNumber &&
           !!this.data.swissPostData.frankingLicenceReturnNumber)) &&
+      !(!this.data.responsibleForVotingCards && this.data.electoralRegistrationEnabled) &&
       !!this.data.plausibilisationConfiguration &&
       this.data.plausibilisationConfiguration.comparisonVoterParticipationConfigurationsList.every(
         x =>
@@ -100,12 +128,16 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     this.isNew = !this.data.id;
-    this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateAll);
+    this.canEditEverything = await this.permissionService.hasAnyPermission(
+      Permissions.DomainOfInfluence.UpdateSameCanton,
+      Permissions.DomainOfInfluence.UpdateAll,
+    );
     this.initDomainOfInfluenceTypes();
     this.initDomainOfInfluenceCantons();
 
     if (this.data.secureConnectId) {
       this.selectedTenant = { id: this.data.secureConnectId, name: this.data.authorityName } as Tenant;
+      this.originalSecureConnectId = this.data.secureConnectId;
     }
   }
 
@@ -142,6 +174,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
       }
 
       this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+      this.hasChanges = false;
       this.dialogRef.close({
         domainOfInfluence: this.data,
       } as DomainOfInfluenceEditDialogResult);
@@ -152,8 +185,23 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit {
     }
   }
 
-  public cancel(): void {
+  public async closeWithUnsavedChangesCheck(): Promise<void> {
+    if (await this.leaveDialogOpen()) {
+      return;
+    }
+
     this.dialogRef.close();
+  }
+
+  public contentChanged(): void {
+    this.hasChanges =
+      !isEqual(this.data, this.originalDomainOfInfluence) ||
+      !isEqual(this.selectedTenant?.id, this.originalSecureConnectId) ||
+      this.logoChanged;
+  }
+
+  private async leaveDialogOpen(): Promise<boolean> {
+    return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
 
   private async updateAsElectionAdmin(): Promise<void> {

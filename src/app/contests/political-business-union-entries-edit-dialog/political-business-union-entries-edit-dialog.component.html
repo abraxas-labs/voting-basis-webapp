@@ -3,66 +3,63 @@
 
   <div content class="grid">
     <div>
-      <bc-advanced-table class="w-full" [dataSource]="dataSource">
-        <ng-container bcColumnDef="select">
-          <th bc-header-cell *bcHeaderCellDef>
-            <bc-checkbox
-              class="ml-2 mb-0"
-              (checkedChange)="toggleAllRows($event)"
+      <bc-table selection class="w-full" [dataSource]="dataSource">
+        <ng-container columnDef="select">
+          <bc-header-cell *headerCellDef>
+            <bc-checkbox class="ml-2 mb-0" (checkedChange)="toggleAllRows($event)"
               [checked]="selection.hasValue() && isAllSelected"
-              [indeterminate]="selection.hasValue() && !isAllSelected"
-            >
+              [indeterminate]="selection.hasValue() && !isAllSelected">
             </bc-checkbox>
-          </th>
-          <td bc-cell *bcCellDef="let element">
-            <bc-checkbox
-              class="ml-2"
-              (checkedChange)="toggleRowWithValue(element, $event)"
-              [checked]="selection.isSelected(element)"
-            >
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <bc-checkbox class="ml-2" (checkedChange)="toggleRowWithValue(element, $event)"
+              [checked]="selection.isSelected(element)">
             </bc-checkbox>
-          </td>
-        </ng-container>
-        <ng-container bcColumnDef="politicalBusinessNumber">
-          <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.NUMBER' | translate }}</th>
-          <td bc-cell *bcCellDef="let element">{{ element.politicalBusinessNumber }}</td>
-        </ng-container>
-        <ng-container bcColumnDef="shortDescription">
-          <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.SHORT_DESCRIPTION' | translate }}</th>
-          <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
+          </bc-data-cell>
         </ng-container>
 
-        <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-        <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="toggleRow(row)"></tr>
-      </bc-advanced-table>
-      <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+        <ng-container columnDef="politicalBusinessNumber">
+          <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.NUMBER' | translate
+            }}</bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">{{ element.politicalBusinessNumber }}</bc-data-cell>
+        </ng-container>
+
+        <ng-container columnDef="shortDescription">
+          <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.SHORT_DESCRIPTION' |
+            translate }}</bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">{{ element.shortDescription | getTranslation }}</bc-data-cell>
+        </ng-container>
+
+        <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+        <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
+          selectionRow [selectionRowValue]="row" (click)="toggleRow(row)"></bc-data-row>
+      </bc-table>
+      <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
     </div>
     <bc-divider orientation="vertical" class="ml-4"></bc-divider>
     <div right>
       <h2 translate class="mb-0">{{'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.SELECTED' | translate}}</h2>
-      <bc-advanced-table class="w-full" [dataSource]="selection.selected">
-        <ng-container bcColumnDef="politicalBusinessNumber">
-          <th bc-header-cell *bcHeaderCellDef>{{ 'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.NUMBER' | translate }}</th>
-          <td bc-cell *bcCellDef="let element">{{ element.politicalBusinessNumber }}</td>
-        </ng-container>
-        <ng-container bcColumnDef="actions">
-          <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-          <td bc-cell *bcCellDef="let element">
-            <bc-icon class="clickable" (click)="toggleRow(element)" icon="remove"></bc-icon>
-          </td>
+      <bc-table class="w-full" [dataSource]="selection.selected">
+        <ng-container columnDef="politicalBusinessNumber">
+          <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.NUMBER' | translate
+            }}</bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">{{ element.politicalBusinessNumber }}</bc-data-cell>
         </ng-container>
 
-        <tr bc-header-row *bcHeaderRowDef="columnsSelected"></tr>
-        <tr bc-advanced-table-row *bcRowDef="let row; columns: columnsSelected"></tr>
-      </bc-advanced-table>
+        <ng-container columnDef="actions">
+          <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <bc-icon class="clickable" (click)="toggleRow(element)" icon="remove"></bc-icon>
+          </bc-data-cell>
+        </ng-container>
+
+        <bc-header-row *headerRowDef="let row; columns: columnsSelected"></bc-header-row>
+        <bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></bc-data-row>
+      </bc-table>
     </div>
   </div>
 
-  <vo-lib-button-bar footer
-                     (save)="save()"
-                     [saving]="saving"
-                     [sticky]="true"
-                     [saveLabel]="'ACTIONS.ASSIGN' | translate"
-                     (cancel)="cancel()">
+  <vo-lib-button-bar footer (save)="save()" [saving]="saving" [sticky]="true" [saveLabel]="'ACTIONS.ASSIGN' | translate"
+    (cancel)="cancel()">
   </vo-lib-button-bar>
 </vo-lib-dialog>

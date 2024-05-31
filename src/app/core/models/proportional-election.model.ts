@@ -52,8 +52,8 @@ export type ProportionalElectionCandidate = {
   lastName: string;
   politicalFirstName: string;
   politicalLastName: string;
-  dateOfBirth: Date;
-  sex: SexType;
+  dateOfBirth?: Date;
+  sex?: SexType;
   occupation: Map<string, string>;
   title: string;
   occupationTitle: Map<string, string>;
@@ -140,13 +140,12 @@ export function newProportionalElectionCandidate(position: number, proportionalE
     politicalFirstName: '',
     politicalLastName: '',
     incumbent: false,
-    dateOfBirth: new Date(),
     locality: '',
     number: '',
     occupation: new Map<string, string>(),
     title: '',
     occupationTitle: new Map<string, string>(),
-    sex: SexType.SEX_TYPE_MALE,
+    sex: undefined,
     zipCode: '',
     proportionalElectionListId,
     position,

@@ -5,9 +5,9 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ElectionGroupService } from '../../core/election-group.service';
 import { ElectionGroup } from '../../core/models/election-group.model';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-secondary-election-create-dialog',

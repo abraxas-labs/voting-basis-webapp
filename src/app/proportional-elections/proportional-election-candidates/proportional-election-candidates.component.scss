@@ -8,6 +8,7 @@
 .flex {
   display: flex;
   justify-content: flex-end;
+  gap: 1rem;
 
   bc-spinner {
     vertical-align: middle;
@@ -19,21 +20,60 @@
   color: $color-error;
 }
 
-.nowrap {
-  white-space: nowrap;
-}
-
-.overflow {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .actions {
   display: flex;
   justify-content: space-between;
 }
 
-.mat-column-actions {
-  width: 3rem;
+.bc-column-position {
+  width: 8%;
+}
+
+.bc-column-number {
+  width: 8%;
+}
+
+.bc-column-last-name {
+  width: 15%;
+}
+
+.bc-column-first-name {
+  width: 17%;
+}
+
+.bc-column-date-of-birth {
+  width: 13%;
+}
+
+.bc-column-sex {
+  width: 11%;
+}
+
+.bc-column-title {
+  width: 5%;
+}
+
+.bc-column-incumbent {
+  width: 7%;
+}
+
+.bc-column-zip-code {
+  width: 5%;
+}
+
+.bc-column-locality {
+  width: 9%;
+}
+
+.bc-column-actions {
+  width: 8%;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgb(0 0 0 / 20%), 0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
+  display: flex;
+  justify-content: space-between;
 }

@@ -2,62 +2,62 @@
   <div>
     <h2 translate class="mb-0">COUNTING_CIRCLE.MERGE.EDIT.SELECT</h2>
 
-    <bc-advanced-table class="w-full" [dataSource]="dataSource">
-      <ng-container bcColumnDef="select">
-        <th bc-header-cell *bcHeaderCellDef>
-          <bc-checkbox
-            class="ml-2 mb-0"
-            (checkedChange)="toggleAllRows($event)"
-            [checked]="selection.hasValue() && isAllSelected"
-            [indeterminate]="selection.hasValue() && !isAllSelected"
-          >
+    <bc-table selection class="w-full" [dataSource]="dataSource">
+
+      <ng-container columnDef="select">
+        <bc-header-cell *headerCellDef>
+          <bc-checkbox class="ml-2 mb-0" (checkedChange)="toggleAllRows($event)"
+            [checked]="selection.hasValue() && isAllSelected" [indeterminate]="selection.hasValue() && !isAllSelected">
           </bc-checkbox>
-        </th>
-        <td bc-cell *bcCellDef="let element">
-          <bc-checkbox
-            class="ml-2"
-            (checkedChange)="toggleRowWithValue(element, $event)"
-            [checked]="selection.isSelected(element)"
-          >
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <bc-checkbox class="ml-2" (checkedChange)="toggleRowWithValue(element, $event)"
+            [checked]="selection.isSelected(element)">
           </bc-checkbox>
-        </td>
-      </ng-container>
-      <ng-container bcColumnDef="name">
-        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</th>
-        <td bc-cell *bcCellDef="let element">{{ element.name }}</td>
-      </ng-container>
-      <ng-container bcColumnDef="bfs">
-        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</th>
-        <td bc-cell *bcCellDef="let element">{{ element.bfs }}</td>
-      </ng-container>
-      <ng-container bcColumnDef="authority">
-        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</th>
-        <td bc-cell *bcCellDef="let element">{{ element.responsibleAuthority.name }}</td>
+        </bc-data-cell>
       </ng-container>
 
-      <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-      <tr bc-advanced-table-row *bcRowDef="let row; columns: columns" [selectable]="true" (rowSelected)="toggleRow(row)"></tr>
-    </bc-advanced-table>
-    <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+      <ng-container columnDef="name">
+        <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
+      </ng-container>
+
+      <ng-container columnDef="bfs">
+        <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">{{ element.bfs }}</bc-data-cell>
+      </ng-container>
+
+      <ng-container columnDef="authority">
+        <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">{{ element.responsibleAuthority.name }}</bc-data-cell>
+      </ng-container>
+
+      <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+      <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
+        selectionRow [selectionRowValue]="row"
+        (click)="toggleRow(row)"></bc-data-row>
+    </bc-table>
+    <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
   </div>
   <bc-divider class="ml-4" orientation="vertical"></bc-divider>
   <div>
     <h2 translate class="mb-0">COUNTING_CIRCLE.MERGE.EDIT.SELECTED</h2>
 
-    <bc-advanced-table class="w-full" [dataSource]="selection.selected">
-      <ng-container bcColumnDef="name">
-        <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</th>
-        <td bc-cell *bcCellDef="let element">{{ element.name }}</td>
-      </ng-container>
-      <ng-container bcColumnDef="actions">
-        <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-        <td bc-cell *bcCellDef="let element">
-          <bc-icon class="clickable" (click)="toggleRow(element)" icon="remove"></bc-icon>
-        </td>
+    <bc-table class="w-full" [dataSource]="selection.selected">
+      <ng-container columnDef="name">
+        <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
       </ng-container>
 
-      <tr bc-header-row *bcHeaderRowDef="columnsSelected"></tr>
-      <tr bc-advanced-table-row *bcRowDef="let row; columns: columnsSelected"></tr>
-    </bc-advanced-table>
+      <ng-container columnDef="actions">
+        <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <bc-icon class="clickable" (click)="toggleRow(element)" icon="remove"></bc-icon>
+        </bc-data-cell>
+      </ng-container>
+
+      <bc-header-row *headerRowDef="let row; columns: columnsSelected"></bc-header-row>
+      <bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></bc-data-row>
+    </bc-table>
   </div>
 </div>

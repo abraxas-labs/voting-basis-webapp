@@ -1,55 +1,49 @@
-<bc-advanced-table class="w-full" [dataSource]="dataSource">
-  <ng-container bcColumnDef="select">
-    <th bc-header-cell *bcHeaderCellDef></th>
-    <td bc-cell *bcCellDef="let element">
-      <bc-checkbox
-        class="ml-2"
-        (checkedChange)="setSelected(element, $event)"
-        [checked]="selection.isSelected(element)"
-      >
+<bc-table selection class="w-full" [dataSource]="dataSource">
+
+  <ng-container columnDef="select">
+    <bc-header-cell *headerCellDef></bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <bc-checkbox class="ml-2" (checkedChange)="setSelected(element, $event)"
+        [checked]="selection.isSelected(element)">
       </bc-checkbox>
-    </td>
-  </ng-container>
-  <ng-container bcColumnDef="filename">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'IMPORT.FILENAME' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.fileName }}</td>
-  </ng-container>
-  <ng-container bcColumnDef="date">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.CONTEST_DATE' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.contestDate | date }}</td>
-  </ng-container>
-  <ng-container bcColumnDef="description">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.DESCRIPTION' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.description | getTranslation }}</td>
-  </ng-container>
-  <ng-container bcColumnDef="eVotingFrom">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.E_VOTING_FROM' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.eVotingFrom | date:'short' }}</td>
-  </ng-container>
-  <ng-container bcColumnDef="eVotingTo">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.E_VOTING_FROM' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.eVotingTo | date:'short' }}</td>
+    </bc-data-cell>
   </ng-container>
 
-  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"
-      [selectable]="true"
-      (rowSelected)="setSelected(row, true)"></tr>
-</bc-advanced-table>
+  <ng-container columnDef="filename">
+    <bc-header-cell *headerCellDef>{{ 'IMPORT.FILENAME' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.fileName }}</bc-data-cell>
+  </ng-container>
+
+  <ng-container columnDef="date">
+    <bc-header-cell *headerCellDef>{{ 'CONTEST.CONTEST_DATE' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.contestDate | date }}</bc-data-cell>
+  </ng-container>
+
+  <ng-container columnDef="description">
+    <bc-header-cell *headerCellDef>{{ 'CONTEST.DESCRIPTION' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.description | getTranslation }}</bc-data-cell>
+  </ng-container>
+
+  <ng-container columnDef="eVotingFrom">
+    <bc-header-cell *headerCellDef>{{ 'CONTEST.E_VOTING_FROM' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.eVotingFrom | date:'short' }}</bc-data-cell>
+  </ng-container>
+
+  <ng-container columnDef="eVotingTo">
+    <bc-header-cell *headerCellDef>{{ 'CONTEST.E_VOTING_FROM' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.eVotingTo | date:'short' }}</bc-data-cell>
+  </ng-container>
+
+  <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+  <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
+    selectionRow [selectionRowValue]="row" (click)="setSelected(row, true)"></bc-data-row>
+</bc-table>
 
 <div class="mt-4">
-  <bc-dropdown *ngIf="domainOfInfluences.length !== 1"
-               [items]="domainOfInfluences"
-               class="full-width"
-               displayExpr="name"
-               valueExpr="id"
-               [required]="true"
-               [(value)]="domainOfInfluenceId"
-               (valueChange)="emitContestImport()"
-               [label]="'CONTEST.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
+  <bc-dropdown *ngIf="domainOfInfluences.length !== 1" [items]="domainOfInfluences" class="full-width"
+    displayExpr="name" valueExpr="id" [required]="true" [(value)]="domainOfInfluenceId"
+    (valueChange)="emitContestImport()" [label]="'CONTEST.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
 
-  <bc-date [label]="'CONTEST.END_OF_TESTING_PHASE' | translate"
-           [required]="true"
-           (valueChange)="endOfTestingPhaseString = $event; emitContestImport()"
-           [value]="endOfTestingPhaseString"></bc-date>
+  <bc-date [label]="'CONTEST.END_OF_TESTING_PHASE' | translate" [required]="true"
+    (valueChange)="endOfTestingPhaseString = $event; emitContestImport()" [value]="endOfTestingPhaseString"></bc-date>
 </div>

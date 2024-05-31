@@ -1,91 +1,157 @@
-<vo-lib-page [contentLoading]="loading"
-             [header]="('CONTEST.DETAIL.FROM' | translate) + ((contest?.date || '') | date:'dd.MM.yyyy')"
-             [showBackButton]="true"
-             [backButtonNavigateCommands]="['../']">
+<vo-lib-page
+  [contentLoading]="loading"
+  [header]="('CONTEST.DETAIL.FROM' | translate) + (contest?.date || '' | date: 'dd.MM.yyyy')"
+  [showBackButton]="true"
+  [backButtonNavigateCommands]="['../']"
+>
   <div class="flex">
-    <bc-button [matMenuTriggerFor]="menu"
-               variant="tertiary"
-               icon="plus"
-               [disabled]="contest.testingPhaseEnded"
-               [label]="'POLITICAL_BUSINESS.NEW' | translate"></bc-button>
+    <bc-button
+      [matMenuTriggerFor]="menu"
+      variant="tertiary"
+      icon="plus"
+      [disabled]="contest.testingPhaseEnded"
+      [label]="'POLITICAL_BUSINESS.NEW' | translate"
+    ></bc-button>
 
     <mat-menu #menu="matMenu">
       <vo-lib-action-menu-item (click)="createVote()" text="POLITICAL_BUSINESS.VOTE"></vo-lib-action-menu-item>
       <vo-lib-action-menu-item (click)="createMajorityElection()" text="POLITICAL_BUSINESS.MAJORITY_ELECTION"></vo-lib-action-menu-item>
-      <vo-lib-action-menu-item (click)="createProportionalElection()"
-                               text="POLITICAL_BUSINESS.PROPORTIONAL_ELECTION"></vo-lib-action-menu-item>
+      <vo-lib-action-menu-item
+        (click)="createProportionalElection()"
+        text="POLITICAL_BUSINESS.PROPORTIONAL_ELECTION"
+      ></vo-lib-action-menu-item>
       <vo-lib-action-menu-item (click)="createSecondaryElection()" text="POLITICAL_BUSINESS.SECONDARY_ELECTION"></vo-lib-action-menu-item>
     </mat-menu>
 
-    <bc-button [disabled]="contest.testingPhaseEnded"
-               variant="tertiary"
-               icon="download"
-               (buttonClick)="importPoliticalBusinesses()"
-               [label]="'IMPORT.IMPORT_POLITICAL_BUSINESS' | translate"
-               class="ml-2"></bc-button>
+    <bc-button
+      [disabled]="contest.testingPhaseEnded"
+      variant="tertiary"
+      icon="download"
+      (buttonClick)="importPoliticalBusinesses()"
+      [label]="'IMPORT.IMPORT_POLITICAL_BUSINESS' | translate"
+      class="ml-2"
+    ></bc-button>
 
-    <bc-button *ngIf="cantonDefaults?.enabledPoliticalBusinessUnionTypesList.length > 0"
-               variant="tertiary"
-               icon="building"
-               (buttonClick)="managePoliticalBusinessUnions()"
-               [label]="'CONTEST.POLITICAL_BUSINESS_UNION_MANAGE' | translate"
-               [disabled]="contest.testingPhaseEnded"></bc-button>
+    <bc-button
+      *ngIf="cantonDefaults?.enabledPoliticalBusinessUnionTypesList.length > 0"
+      variant="tertiary"
+      icon="building"
+      (buttonClick)="managePoliticalBusinessUnions()"
+      [label]="'CONTEST.POLITICAL_BUSINESS_UNION_MANAGE' | translate"
+      [disabled]="contest.testingPhaseEnded"
+    ></bc-button>
   </div>
 
-  <bc-advanced-table class="w-full" [dataSource]="dataSource">
-    <ng-container bcColumnDef="number">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.NUMBER' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.politicalBusinessNumber }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="shortDescription">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.shortDescription | getTranslation }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="officialDescription">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.officialDescription | getTranslation }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="domainOfInfluenceType">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE_TYPE' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element">
-        <div class="overflow">{{ 'DOMAIN_OF_INFLUENCE.TYPES.' + element.domainOfInfluence.type | translate }}</div>
-      </td>
-    </ng-container>
-    <ng-container bcColumnDef="domainOfInfluenceName">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.domainOfInfluence.name }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="type">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.TYPE.TITLE' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element">
-        <div class="overflow">{{ 'POLITICAL_BUSINESS.TYPE.' + element.politicalBusinessType | translate }}</div>
-      </td>
-    </ng-container>
-    <ng-container bcColumnDef="enable">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.ENABLE_TITLE' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element">
-        <bc-checkbox [checked]="element.active"
-                     class="ml-2"
-                     [disabled]="!ownsPoliticalBusiness(element) || contest.testingPhaseEnded"
-                     (click)="activeStateChange(element, !element.active); $event.stopPropagation()">
-        </bc-checkbox>
-      </td>
-    </ng-container>
-    <ng-container bcColumnDef="owner">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'POLITICAL_BUSINESS.OWNER' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.domainOfInfluence.authorityName }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="ownerDescription">
-      <th bc-header-cell *bcHeaderCellDef></th>
-      <td bc-cell *bcCellDef="let element">
-        <div class="overflow" *ngIf="ownsPoliticalBusiness(element)" translate>POLITICAL_BUSINESS.OWN_POLITICAL_BUSINESS</div>
-      </td>
+  <bc-table
+    selection
+    sort
+    [sortMultiple]="true"
+    [sortActive]="[
+      { id: 'domainOfInfluenceType', direction: 'asc' },
+      { id: 'number', direction: 'asc' }
+    ]"
+    filter
+    class="w-full"
+    [dataSource]="dataSource"
+  >
+    <ng-container columnDef="number">
+      <bc-header-cell filter sort *headerCellDef>
+        <span>{{ 'POLITICAL_BUSINESS.NUMBER' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.number }}</div>
+      </bc-data-cell>
     </ng-container>
 
-    <ng-container bcColumnDef="actions">
-      <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-      <td bc-cell *bcCellDef="let element">
-        <vo-lib-action-menu *ngIf="element.domainOfInfluence.secureConnectId === tenantId">
+    <ng-container columnDef="shortDescription">
+      <bc-header-cell filter sort *headerCellDef>
+        <span>{{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.shortDescription }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="officialDescription">
+      <bc-header-cell filter sort *headerCellDef>
+        <span>{{ 'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.officialDescription }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="domainOfInfluenceType">
+      <bc-header-cell
+        filter
+        filterType="list"
+        [filterItems]="domainOfInfluenceTypeList"
+        filterDisplayExpr="description"
+        filterValueExpr="value"
+        sort
+        *headerCellDef
+        >
+        <span>{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE_TYPE' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ 'DOMAIN_OF_INFLUENCE.TYPES.' + element.domainOfInfluenceType | translate }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="domainOfInfluenceName">
+      <bc-header-cell filter sort *headerCellDef>
+        <span>{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.domainOfInfluenceName }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="type">
+      <bc-header-cell
+        filter
+        filterType="list"
+        [filterItems]="politicalBusinessTypeList"
+        filterDisplayExpr="description"
+        filterValueExpr="value"
+        sort
+        *headerCellDef
+        >
+        <span>{{ 'POLITICAL_BUSINESS.TYPE.TITLE' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ 'POLITICAL_BUSINESS.TYPE.' + element.type | translate }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="active">
+      <bc-header-cell filter filterType="bool" sort *headerCellDef>
+        <span>{{ 'POLITICAL_BUSINESS.ENABLE_TITLE' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <bc-switch
+          class="ml-2"
+          [checked]="element.active"
+          (checkedChange)="activeStateChange(element, $event)"
+          [disabled]="element.ownerId !== tenantId || contest.testingPhaseEnded"
+        >
+        </bc-switch>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="owner">
+      <bc-header-cell filter sort *headerCellDef>
+        <span>{{ 'POLITICAL_BUSINESS.OWNER' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.owner }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="actions">
+      <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+      <bc-data-cell *dataCellDef="let element; let i = index">
+        <vo-lib-action-menu *ngIf="element.ownerId === tenantId">
           <vo-lib-action-menu-item
             icon="edit"
             text="ACTIONS.EDIT"
@@ -104,26 +170,28 @@
           <vo-lib-action-menu-item
             icon="download"
             text="ACTIONS.EXPORT"
-            *ngIf="element.politicalBusinessType !== politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION"
+            *ngIf="element.type !== politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION"
             (click)="export(element)"
           ></vo-lib-action-menu-item>
         </vo-lib-action-menu>
-      </td>
+      </bc-data-cell>
     </ng-container>
 
-    <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-    <tr bc-advanced-table-row
-        *bcRowDef="let row; columns: columns"
-        [selectable]="row.domainOfInfluence.secureConnectId === tenantId"
-        (rowSelected)="open(row)">
-    </tr>
-  </bc-advanced-table>
-  <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+    <bc-data-row
+      *dataRowDef="let row; columns: columns; let i = index"
+      selectionToggle
+      [selectionToggleValue]="row"
+      [selectionDisabled]="isSelectionDisabled"
+      selectionRow
+      [selectionRowValue]="row"
+      (click)="open(row)"
+    ></bc-data-row>
+  </bc-table>
+  <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
 
-    <ng-container *ngIf="contest.id && electionGroups.length > 0">
-      <h2 class="mt-5" translate>ELECTION_GROUP.TITLE</h2>
-      <app-election-group-overview [readonly]="contest.testingPhaseEnded"
-                                   [electionGroups]="electionGroups">
-      </app-election-group-overview>
-    </ng-container>
-  </vo-lib-page>
+  <ng-container *ngIf="contest.id && electionGroups.length > 0">
+    <h2 class="mt-5" translate>ELECTION_GROUP.TITLE</h2>
+    <app-election-group-overview [readonly]="contest.testingPhaseEnded" [electionGroups]="electionGroups"> </app-election-group-overview>
+  </ng-container>
+</vo-lib-page>

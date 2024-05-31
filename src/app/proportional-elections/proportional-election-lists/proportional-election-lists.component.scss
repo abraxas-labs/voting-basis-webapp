@@ -16,51 +16,39 @@ div.buttons {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-
-  > :not(:first-child) {
-    margin-left: 0.5rem;
-  }
+  gap: 1rem;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 4rem 1fr;
+  grid-template-columns: 41.5% 4rem 1fr;
 }
 
-// stylelint-disable-next-line
-.mat-column-orderNumber {
-  width: 20%;
-
-  &.hagenbach-bischoff {
-    width: 15%;
-  }
+.bc-column-order-number {
+  width: 14%;
 }
 
-// stylelint-disable-next-line
-.mat-column-shortDescription {
-  width: 30%;
+.bc-column-short-description {
+  width: 70%;
 
   &.hagenbach-bischoff {
     width: 20%;
   }
 }
 
-// stylelint-disable-next-line
-.mat-column-blankRowCount {
-  width: 15%;
+.bc-column-blank-row-count {
+  width: 16%;
 }
 
-// stylelint-disable-next-line
-.mat-column-listUnionDescription {
-  width: 25%;
+.bc-column-list-union-description {
+  width: 22%;
 }
 
-// stylelint-disable-next-line
-.mat-column-subListUnionDescription {
-  width: 25%;
+.bc-column-sub-list-union-description {
+  width: 28%;
 }
 
-.mat-column-actions {
+.bc-column-actions {
   width: 4rem;
 }
 
@@ -69,4 +57,13 @@ div.buttons {
   display: flex;
   justify-content: space-between;
   margin-left: auto;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgb(0 0 0 / 20%), 0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
+  display: flex;
+  justify-content: space-between;
 }

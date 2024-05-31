@@ -9,6 +9,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CountingCircleDetailComponent } from './counting-circle-detail/counting-circle-detail.component';
 import { CountingCircleMergersComponent } from './counting-circle-mergers/counting-circle-mergers.component';
 import { CountingCircleOverviewComponent } from './counting-circle-overview/counting-circle-overview.component';
+import { HasUnsavedChangesGuard } from '../core/guards/has-unsaved-changes.guard';
 
 const routes: Routes = [
   {
@@ -23,10 +24,12 @@ const routes: Routes = [
   {
     path: 'new',
     component: CountingCircleDetailComponent,
+    canDeactivate: [HasUnsavedChangesGuard],
   },
   {
     path: ':countingCircleId',
     component: CountingCircleDetailComponent,
+    canDeactivate: [HasUnsavedChangesGuard],
   },
 ];
 

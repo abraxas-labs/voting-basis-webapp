@@ -6,10 +6,10 @@
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LanguageService } from '../../core/language.service';
 import { PoliticalBusiness, PoliticalBusinessType } from '../../core/models/political-business.model';
 import { newSecondaryElection, SecondaryElection } from '../../core/models/secondary-election.model';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-secondary-majority-election-create-dialog',

@@ -5,9 +5,9 @@
  */
 
 import { SimpleStepperComponent } from '@abraxas/base-components';
-import { SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
@@ -18,12 +18,20 @@ import { ProportionalElectionGeneralInformationsComponent } from '../proportiona
 import { ProportionalElectionListsComponent } from '../proportional-election-lists/proportional-election-lists.component';
 import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
+import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
+import { ProportionalElectionUnionService } from '../../core/proportional-election-union.service';
+import { ProportionalElectionUnion } from '../../core/models/proportional-election-union.model';
 
 @Component({
   selector: 'app-proportional-election-edit',
   templateUrl: './proportional-election-edit.component.html',
 })
-export class ProportionalElectionEditComponent implements OnInit, AfterContentChecked {
+export class ProportionalElectionEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+
   @ViewChild(SimpleStepperComponent, { static: true })
   public stepper!: SimpleStepperComponent;
 
@@ -40,6 +48,8 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
+  public hasChanges: boolean = false;
+  public proportionalElectionUnions: ProportionalElectionUnion[] = [];
 
   private persistedData: ProportionalElection = newProportionalElection();
 
@@ -53,6 +63,8 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
     private readonly proportionalElectionService: ProportionalElectionService,
     private readonly contestService: ContestService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly proportionalElectionUnionService: ProportionalElectionUnionService,
+    private readonly dialogService: DialogService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -68,6 +80,10 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked = locked;
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
+
+      if (!this.isNew) {
+        this.proportionalElectionUnions = await this.proportionalElectionUnionService.list(id);
+      }
     } finally {
       this.initialLoading = false;
     }
@@ -79,19 +95,42 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
     this.cd.detectChanges();
   }
 
+  public get hasUnsavedChanges(): boolean {
+    return this.hasChanges;
+  }
+
   public async saveProportionalElection(navigateBack: boolean = false): Promise<void> {
     this.stepLoading = true;
 
     try {
-      if (!isEqual(this.data, this.persistedData)) {
+      if (this.hasChanges) {
         if (this.isNew) {
           this.data.id = await this.proportionalElectionService.create(this.data);
         } else {
+          // if proportional election is in a union and the mandate algorithm changed,
+          // all proportional elections will change their mandate algorithm
+          if (this.proportionalElectionUnions.length > 0 && this.data.mandateAlgorithm !== this.persistedData.mandateAlgorithm) {
+            const shouldChange = await this.dialogService.confirm(
+              'PROPORTIONAL_ELECTION.IS_IN_UNION.TITLE',
+              'PROPORTIONAL_ELECTION.IS_IN_UNION.MSG',
+              'APP.CHANGE',
+            );
+            if (!shouldChange) {
+              return;
+            }
+
+            await this.proportionalElectionUnionService.updatePoliticalBusinesses(
+              this.proportionalElectionUnions.map(x => x.id),
+              this.data.mandateAlgorithm,
+            );
+          }
+
           await this.proportionalElectionService.update(this.data);
         }
 
         this.persistedData = { ...this.data };
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+        this.hasChanges = false;
       }
 
       const newlyCreated = this.isNew;
@@ -112,5 +151,9 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
     } finally {
       this.stepLoading = false;
     }
+  }
+
+  public contentChanged(): void {
+    this.hasChanges = !isEqual(this.data, this.persistedData);
   }
 }

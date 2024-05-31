@@ -6,10 +6,10 @@
 
 import { SnackbarService } from '@abraxas/voting-lib';
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { ContestService } from '../../core/contest.service';
 import { ContestState, ContestSummary } from '../../core/models/contest.model';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-contest-past-unlock-dialog',

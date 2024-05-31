@@ -9,14 +9,18 @@
                  valueExpr="value"
                  [required]="true"
                  [disabled]="readonly || !isNew"
-                 [(value)]="data.canton"></bc-dropdown>
+                 [value]="data.canton"
+                 (valueChange)="data.canton = $event; contentChanged()"
+                 [subscriptSizing]="'dynamic'"></bc-dropdown>
 
     <vo-lib-tenant-selection label="CANTON_SETTINGS.AUTHORITY"
                              [disabled]="readonly"
-                             [(selectedTenant)]="selectedTenant"></vo-lib-tenant-selection>
+                             [selectedTenant]="selectedTenant"
+                             (selectedTenantChange)="selectedTenant = $event; contentChanged()"></vo-lib-tenant-selection>
 
     <h2 class="mb-1" translate>CANTON_SETTINGS.COUNTING_CIRCLE.TITLE</h2>
-    <bc-checkbox [(checked)]="data.countingMachineEnabled"
+    <bc-checkbox [checked]="data.countingMachineEnabled"
+                 (checkedChange)="data.countingMachineEnabled = $event; contentChanged()"
                  [disabled]="readonly"
                  [label]="'CANTON_SETTINGS.COUNTING_CIRCLE.COUNTING_MACHINE' | translate"
                  class="full-width">
@@ -26,18 +30,21 @@
     <bc-radio-button-group class="mb-3"
                            orientation="vertical"
                            [items]="protocolCountingCircleSortTypeChoices"
-                           [(value)]="data.protocolCountingCircleSortType"></bc-radio-button-group>
+                           [value]="data.protocolCountingCircleSortType"
+                           (valueChange)="data.protocolCountingCircleSortType = $event; contentChanged()"></bc-radio-button-group>
 
     <h2 class="mb-1" translate>CANTON_SETTINGS.DOMAIN_OF_INFLUENCE.TITLE</h2>
     <bc-label class="full-width" [label]="'CANTON_SETTINGS.DOMAIN_OF_INFLUENCE.PROTOCOL_SORT.TITLE' | translate"></bc-label>
     <bc-radio-button-group class="mb-3"
                            orientation="vertical"
                            [items]="protocolDomainOfInfluenceSortTypeChoices"
-                           [(value)]="data.protocolDomainOfInfluenceSortType"></bc-radio-button-group>
+                           [value]="data.protocolDomainOfInfluenceSortType"
+                           (valueChange)="data.protocolDomainOfInfluenceSortType = $event; contentChanged()"></bc-radio-button-group>
 
     <h2 class="mb-1" translate>CANTON_SETTINGS.VOTE.TITLE</h2>
     <div class="full-width">
-      <bc-checkbox [(checked)]="data.multipleVoteBallotsEnabled"
+      <bc-checkbox [checked]="data.multipleVoteBallotsEnabled"
+                   (checkedChange)="data.multipleVoteBallotsEnabled = $event; contentChanged()"
                    [disabled]="readonly"
                    [label]="'CANTON_SETTINGS.VOTE.MULTIPLE_VOTE_BALLOTS_ENABLED.TITLE' | translate"></bc-checkbox>
       <bc-icon icon="question-circle-o"
@@ -47,7 +54,8 @@
 
     <h2 class="mb-1" translate>CANTON_SETTINGS.PROPORTIONAL_ELECTION.TITLE</h2>
 
-    <bc-checkbox [(checked)]="data.proportionalElectionUseCandidateCheckDigit"
+    <bc-checkbox [checked]="data.proportionalElectionUseCandidateCheckDigit"
+                 (checkedChange)="data.proportionalElectionUseCandidateCheckDigit = $event; contentChanged()"
                  [disabled]="readonly"
                  [label]="'CANTON_SETTINGS.PROPORTIONAL_ELECTION.USE_CANDIDATE_CHECK_DIGIT' | translate"
                  class="full-width">
@@ -56,7 +64,10 @@
     <bc-label class="full-width" [label]="'CANTON_SETTINGS.PROPORTIONAL_ELECTION.MANDATE_ALGORITHM' | translate"></bc-label>
     <bc-checkbox *ngFor="let proportionalElectionMandateAlgorithm of proportionalElectionMandateAlgorithms.items"
                  [checked]="proportionalElectionMandateAlgorithm.checked"
-                 (checkedChange)="proportionalElectionMandateAlgorithms.updateChecked(proportionalElectionMandateAlgorithm, $event)"
+                 (checkedChange)="
+                  proportionalElectionMandateAlgorithms.updateChecked(proportionalElectionMandateAlgorithm, $event);
+                  contentChanged()
+                 "
                  [label]="proportionalElectionMandateAlgorithm.item.description"
                  class="full-width"
                  [disabled]="readonly">
@@ -64,20 +75,24 @@
 
     <h2 class="mb-1" translate>CANTON_SETTINGS.MAJORITY_ELECTION.TITLE</h2>
 
+    <bc-label class="full-width" [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.ABSOLUTE_MAJORITY_ALGORITHM' | translate"></bc-label>
     <bc-dropdown class="full-width"
-                 [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.ABSOLUTE_MAJORITY_ALGORITHM' | translate"
                  [items]="majorityElectionAbsoluteMajorityAlgorithms"
                  displayExpr="description"
                  valueExpr="value"
                  [required]="true"
                  [disabled]="readonly"
-                 [(value)]="data.majorityElectionAbsoluteMajorityAlgorithm"></bc-dropdown>
+                 [value]="data.majorityElectionAbsoluteMajorityAlgorithm"
+                 (valueChange)="data.majorityElectionAbsoluteMajorityAlgorithm = $event; contentChanged()"
+                 [subscriptSizing]="'dynamic'"></bc-dropdown>
 
-    <bc-checkbox [(checked)]="data.majorityElectionInvalidVotes"
+    <bc-checkbox [checked]="data.majorityElectionInvalidVotes"
+                 (checkedChange)="data.majorityElectionInvalidVotes = $event; contentChanged()"
                  [disabled]="readonly"
                  [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.INVALID_VOTES' | translate"></bc-checkbox>
 
-    <bc-checkbox [(checked)]="data.majorityElectionUseCandidateCheckDigit"
+    <bc-checkbox [checked]="data.majorityElectionUseCandidateCheckDigit"
+                 (checkedChange)="data.majorityElectionUseCandidateCheckDigit = $event; contentChanged()"
                  [disabled]="readonly"
                  [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.USE_CANDIDATE_CHECK_DIGIT' | translate"
                  class="full-width">
@@ -85,16 +100,48 @@
 
     <h2 class="mb-1" translate>CANTON_SETTINGS.GENERAL</h2>
 
-    <bc-checkbox [(checked)]="data.newZhFeaturesEnabled"
+    <bc-checkbox [checked]="data.newZhFeaturesEnabled"
+                 (checkedChange)="data.newZhFeaturesEnabled = $event; contentChanged()"
                  [disabled]="readonly"
                  [label]="'CANTON_SETTINGS.NEW_ZH_FEATURES' | translate"
                  class="full-width">
     </bc-checkbox>
 
+    <bc-checkbox [checked]="data.publishResultsEnabled"
+                 (checkedChange)="data.publishResultsEnabled = $event; contentChanged()"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.PUBLISH_RESULTS' | translate">
+    </bc-checkbox>
+
+    <bc-label class="mt-2 full-width" [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.TITLE' | translate"></bc-label>
+    <div *ngFor="let countingCircleResultStateDescription of data.countingCircleResultStateDescriptionsList">
+      <div class="counting-circle-result-state-descriptions">
+        <div class="state-colorbox" [ngClass]="'result-state-' + countingCircleResultStateDescription.state"></div>
+        <div class="text-checkbox-container full-width">
+          <bc-text
+            [placeholder]="'COUNTING_CIRCLE_RESULT_STATE.' + countingCircleResultStateDescription.state | translate"
+            [disabled]="readonly"
+            [required]="true"
+            [value]="countingCircleResultStateDescription.description"
+            (valueChange)="countingCircleResultStateDescription.description = $event; contentChanged()"
+            [subscriptSizing]="'dynamic'"></bc-text>
+          <bc-checkbox *ngIf="countingCircleResultStateDescription.state === states.COUNTING_CIRCLE_RESULT_STATE_PLAUSIBILISED"
+                       class="mt-1"
+                       [checked]="!data.statePlausibilisedDisabled"
+                       (checkedChange)="data.statePlausibilisedDisabled = !$event; contentChanged()"
+                       [disabled]="readonly"
+                       [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.USE_STATE' | translate">
+          </bc-checkbox>
+        </div>
+
+      </div>
+
+    </div>
+
     <bc-label class="mt-2 full-width" [label]="'CANTON_SETTINGS.POLITICAL_BUSINESS_UNIONS.TITLE' | translate"></bc-label>
     <bc-checkbox *ngFor="let unionType of politicalBusinessUnionTypes.items"
                  [checked]="unionType.checked"
-                 (checkedChange)="politicalBusinessUnionTypes.updateChecked(unionType, $event)"
+                 (checkedChange)="politicalBusinessUnionTypes.updateChecked(unionType, $event); contentChanged()"
                  [disabled]="readonly"
                  [label]="unionType.item.description"
                  class="full-width">
@@ -107,14 +154,17 @@
                  valueExpr="value"
                  [required]="true"
                  [disabled]="readonly"
-                 [(value)]="data.swissAbroadVotingRight"></bc-dropdown>
+                 [value]="data.swissAbroadVotingRight"
+                 (valueChange)="data.swissAbroadVotingRight = $event; contentChanged()"
+                 [subscriptSizing]="'dynamic'"></bc-dropdown>
 
     <bc-label class="mt-2 full-width"
               [label]="'CANTON_SETTINGS.SWISS_ABROAD_VOTING_RIGHT.DOMAIN_OF_INFLUENCE_TYPES' | translate"></bc-label>
     <bc-checkbox *ngFor="let swissAbroadVotingRightDomainOfInfluenceType of swissAbroadVotingRightDomainOfInfluenceTypes.items"
                  [checked]="swissAbroadVotingRightDomainOfInfluenceType.checked"
                  (checkedChange)="
-                  swissAbroadVotingRightDomainOfInfluenceTypes.updateChecked(swissAbroadVotingRightDomainOfInfluenceType, $event)
+                  swissAbroadVotingRightDomainOfInfluenceTypes.updateChecked(swissAbroadVotingRightDomainOfInfluenceType, $event);
+                  contentChanged()
                  "
                  [disabled]="readonly"
                  [label]="swissAbroadVotingRightDomainOfInfluenceType.item.description"
@@ -126,7 +176,7 @@
        class="error mb-1 mt-0">{{'CANTON_SETTINGS.VOTING_CARDS.NONE_SELECTED' | translate}}</p>
     <bc-checkbox *ngFor="let votingCardChannel of votingCardChannels.items"
                  [checked]="votingCardChannel.checked"
-                 (checkedChange)="votingCardChannels.updateChecked(votingCardChannel, $event)"
+                 (checkedChange)="votingCardChannels.updateChecked(votingCardChannel, $event); contentChanged()"
                  [disabled]="readonly"
                  [label]="votingCardChannel.item.description"
                  class="full-width">
@@ -136,14 +186,9 @@
     <bc-text [label]="'CANTON_SETTINGS.VOTING_DOCUMENTS.E_VOTING_EAI_MESSAGE_TYPE' | translate"
              [disabled]="readonly"
              [required]="true"
-             [(value)]="data.votingDocumentsEVotingEaiMessageType"></bc-text>
-
-    <h2 class="mb-1" translate>CANTON_SETTINGS.ELECTORAL_REGISTRATION.TITLE</h2>
-    <bc-checkbox [(checked)]="data.electoralRegistrationEnabled"
-                 [disabled]="readonly"
-                 [label]="'CANTON_SETTINGS.ELECTORAL_REGISTRATION.ENABLED' | translate"
-                 class="full-width">
-    </bc-checkbox>
+             [value]="data.votingDocumentsEVotingEaiMessageType"
+             (valueChange)="data.votingDocumentsEVotingEaiMessageType = $event; contentChanged()"
+             [subscriptSizing]="'dynamic'"></bc-text>
   </div>
 
   <div footer class="mr-3">
@@ -153,6 +198,6 @@
                        [sticky]="false"
                        [hasSaveButton]="!readonly"
                        (save)="save()"
-                       (cancel)="cancel()"></vo-lib-button-bar>
+                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

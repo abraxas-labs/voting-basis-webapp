@@ -5,37 +5,50 @@
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NUMBER' | translate"
              [required]="true"
              [disabled]="testingPhaseEnded"
-             [(value)]="data.number"></bc-text>
+             [value]="data.number"
+             (valueChange)="data.number = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.FIRST_NAME' | translate"
              [required]="true"
              [maxlength]="100"
-             [(value)]="data.firstName"></bc-text>
+             [value]="data.firstName"
+             (valueChange)="data.firstName = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.LAST_NAME' | translate"
              [required]="true"
              [maxlength]="100"
-             [(value)]="data.lastName"></bc-text>
+             [value]="data.lastName"
+             (valueChange)="data.lastName = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.POLITICAL_FIRST_NAME' | translate"
              [placeholder]="data.firstName"
              [maxlength]="100"
-             [(value)]="data.politicalFirstName"></bc-text>
+             [value]="data.politicalFirstName"
+             (valueChange)="data.politicalFirstName = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.POLITICAL_LAST_NAME' | translate"
              [placeholder]="data.lastName"
              [maxlength]="100"
-             [(value)]="data.politicalLastName"></bc-text>
+             [value]="data.politicalLastName"
+             (valueChange)="data.politicalLastName = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-date [label]="'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate"
              [required]="true"
-             [error]="!isDateOfBirthValid()"
-             [value]="data.dateOfBirth | date"
-             (valueChange)="dateOfBirth = $event"></bc-date>
+             [error]="data.dateOfBirth !== undefined && !isDateOfBirthValid()"
+             [value]="data.dateOfBirth | date: 'yyyy-MM-dd'"
+             (valueChange)="dateOfBirth = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-date>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH_YEAR' | translate"
              [disabled]="true"
-             [value]="data.dateOfBirth.getFullYear().toString()"></bc-text>
+             [required]="true"
+             [value]="'' + (data.dateOfBirth?.getFullYear() || '')"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-dropdown class="full-width"
                  [label]="'SEX_TYPE.TITLE' | translate"
@@ -44,36 +57,50 @@
                  displayExpr="description"
                  valueExpr="value"
                  [required]="true"
-                 [(value)]="data.sex"></bc-dropdown>
+                 [value]="data.sex"
+                 (valueChange)="data.sex = $event; contentChanged()"
+                 subscriptSizing="dynamic"></bc-dropdown>
 
     <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.CANDIDATE.OCCUPATION' | translate"
                               [optional]="true"
                               [maxlength]="250"
-                              [(value)]="data.occupation"
+                              [value]="data.occupation"
+                              (valueChange)="data.occupation = $event; contentChanged()"
                               [singleLanguageInput]="true"></app-translated-formfield>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.TITLE' | translate"
              [maxlength]="50"
-             [(value)]="data.title"></bc-text>
+             [value]="data.title"
+             (valueChange)="data.title = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.CANDIDATE.OCCUPATION_TITLE' | translate"
                               [optional]="true"
                               [maxlength]="250"
-                              [(value)]="data.occupationTitle"
+                              [value]="data.occupationTitle"
+                              (valueChange)="data.occupationTitle = $event; contentChanged()"
                               [singleLanguageInput]="true"></app-translated-formfield>
 
-    <bc-checkbox [(checked)]="data.incumbent" [label]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"></bc-checkbox>
+    <bc-checkbox [checked]="data.incumbent"
+                 (checkedChange)="data.incumbent = $event; contentChanged()"
+                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"></bc-checkbox>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate"
-             [(value)]="data.zipCode"></bc-text>
+             [value]="data.zipCode"
+             (valueChange)="data.zipCode = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate"
              [required]="!isCommunalDoiType"
-             [(value)]="data.locality"></bc-text>
+             [value]="data.locality"
+             (valueChange)="data.locality = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ORIGIN' | translate"
              [required]="!isCommunalDoiType"
-             [(value)]="data.origin"></bc-text>
+             [value]="data.origin"
+             (valueChange)="data.origin = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-dropdown class="full-width"
                  [label]="'PROPORTIONAL_ELECTION.CANDIDATE.PARTY' | translate"
@@ -83,7 +110,9 @@
                  displayExpr="shortDescriptionTranslated"
                  valueExpr="id"
                  [disabled]="testingPhaseEnded"
-                 [(value)]="selectedPartyId"></bc-dropdown>
+                 [value]="selectedPartyId"
+                 (valueChange)="selectedPartyId = $event; contentChanged()"
+                 subscriptSizing="dynamic"></bc-dropdown>
   </div>
 
   <div footer class="mr-3">
@@ -92,6 +121,6 @@
                        [saving]="saving"
                        [sticky]="false"
                        (save)="save()"
-                       (cancel)="cancel()"></vo-lib-button-bar>
+                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

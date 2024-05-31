@@ -31,28 +31,30 @@
   <div>
     <h2 translate>IMPORT.CHOSEN_FILES</h2>
 
-    <bc-advanced-table class="w-full" [dataSource]="dataSource">
-      <ng-container bcColumnDef="filename">
-        <th bc-header-cell *bcHeaderCellDef>{{ 'IMPORT.FILENAME' | translate }}</th>
-        <td bc-cell *bcCellDef="let element">{{ element.fileName }}</td>
+    <bc-table class="w-full" [dataSource]="dataSource">
+      <ng-container columnDef="filename">
+        <bc-header-cell *headerCellDef>{{ 'IMPORT.FILENAME' | translate }}</bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">{{ element.fileName }}</bc-data-cell>
       </ng-container>
-      <ng-container bcColumnDef="type">
-        <th bc-header-cell *bcHeaderCellDef>{{ 'IMPORT.E_CH_STANDARD' | translate }}</th>
-        <td bc-cell *bcCellDef="let element">
+
+      <ng-container columnDef="type">
+        <bc-header-cell *headerCellDef>{{ 'IMPORT.E_CH_STANDARD' | translate }}</bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
           <div class="truncate mr-4">
             {{ 'IMPORT.TYPES.' + element.importType | translate }}
           </div>
-        </td>
-      </ng-container>
-      <ng-container bcColumnDef="actions">
-        <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-        <td bc-cell *bcCellDef="let element">
-          <bc-icon class="clickable" (click)="removeFile(element)" icon="trash" iconColor="error"></bc-icon>
-        </td>
+        </bc-data-cell>
       </ng-container>
 
-      <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-      <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
-    </bc-advanced-table>
+      <ng-container columnDef="actions">
+        <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <bc-icon class="clickable" (click)="removeFile(element)" icon="trash" iconColor="error"></bc-icon>
+        </bc-data-cell>
+      </ng-container>
+
+      <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+      <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+    </bc-table>
   </div>
 </div>

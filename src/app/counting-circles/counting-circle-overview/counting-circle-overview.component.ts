@@ -4,8 +4,8 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, OnInit } from '@angular/core';
+import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
@@ -13,22 +13,48 @@ import { CountingCircle } from '../../core/models/counting-circle.model';
 import { PermissionService } from '../../core/permission.service';
 import { HistorizationFilter, newHistorizationFilter } from '../../shared/historization-filter-bar/historization-filter-bar.component';
 import { Permissions } from '../../core/models/permissions.model';
+import { CountingCircleState } from '@abraxas/voting-basis-service-proto/grpc/shared/counting_circle_pb';
+import { FilterDirective, SortDirective, TableDataSource } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-counting-circle-overview',
   templateUrl: './counting-circle-overview.component.html',
   styleUrls: ['./counting-circle-overview.component.scss'],
 })
-export class CountingCircleOverviewComponent implements OnInit {
-  public readonly allColumns = ['name', 'bfs', 'code', 'authority', 'modifiedOn', 'state', 'actions'];
+export class CountingCircleOverviewComponent implements OnInit, AfterViewInit {
+  public readonly nameColumn = 'name';
+  public readonly bfsColumn = 'bfs';
+  public readonly codeColumn = 'code';
+  public readonly authorityColumn = 'authority';
+  public readonly modifiedOnColumn = 'modifiedOn';
+  public readonly stateColumn = 'state';
+  public readonly actionsColumn = 'actions';
+
+  public readonly allColumns = [
+    this.nameColumn,
+    this.bfsColumn,
+    this.codeColumn,
+    this.authorityColumn,
+    this.modifiedOnColumn,
+    this.stateColumn,
+    this.actionsColumn,
+  ];
+
+  @ViewChild(SortDirective, { static: true })
+  public sort!: SortDirective;
+
+  @ViewChild(FilterDirective, { static: true })
+  public filter!: FilterDirective;
+
   public columns = this.allColumns;
   public loading: boolean = true;
-  public data: CountingCircle[] = [];
+  public dataSource = new TableDataSource<CountingCircle>();
   public canDelete: boolean = false;
   public canCreate: boolean = false;
   public canMerge: boolean = false;
 
   public historizationFilter: HistorizationFilter = newHistorizationFilter();
+  public stateList: EnumItemDescription<CountingCircleState>[] = [];
 
   constructor(
     private readonly router: Router,
@@ -38,17 +64,44 @@ export class CountingCircleOverviewComponent implements OnInit {
     private readonly countingCircleService: CountingCircleService,
     private readonly route: ActivatedRoute,
     private readonly dialogService: DialogService,
+    private readonly enumUtil: EnumUtil,
   ) {}
 
   public async ngOnInit(): Promise<void> {
+    this.stateList = this.enumUtil.getArrayWithDescriptions<CountingCircleState>(CountingCircleState, 'COUNTING_CIRCLE.STATES.');
+    const dataAccessor = (data: CountingCircle, filterId: string) => {
+      if (filterId === this.authorityColumn) {
+        return data.responsibleAuthority?.name ?? '';
+      }
+
+      return (data as Record<string, any>)[filterId];
+    };
+
+    this.dataSource.filterDataAccessor = dataAccessor;
+    this.dataSource.sortingDataAccessor = dataAccessor;
+
     try {
-      this.canDelete = await this.permissionService.hasPermission(Permissions.CountingCircle.Delete);
-      this.canCreate = await this.permissionService.hasPermission(Permissions.CountingCircle.Create);
-      this.canMerge = await this.permissionService.hasPermission(Permissions.CountingCircle.Merge);
-      this.data = await this.countingCircleService.list();
+      this.canDelete = await this.permissionService.hasAnyPermission(
+        Permissions.CountingCircle.DeleteSameCanton,
+        Permissions.CountingCircle.DeleteAll,
+      );
+      this.canCreate = await this.permissionService.hasAnyPermission(
+        Permissions.CountingCircle.CreateSameCanton,
+        Permissions.CountingCircle.CreateAll,
+      );
+      this.canMerge = await this.permissionService.hasAnyPermission(
+        Permissions.CountingCircle.MergeSameCanton,
+        Permissions.CountingCircle.MergeAll,
+      );
+      this.dataSource.data = await this.countingCircleService.list();
     } finally {
       this.loading = false;
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.filter = this.filter;
   }
 
   public async create(): Promise<void> {
@@ -75,14 +128,14 @@ export class CountingCircleOverviewComponent implements OnInit {
     }
 
     await this.countingCircleService.delete(row.id);
-    this.data = this.data.filter(d => d.id !== row.id);
+    this.dataSource.data = this.dataSource.data.filter(d => d.id !== row.id);
     this.snackbarService.success(this.i18n.instant('APP.DELETED'));
   }
 
   public async historizationFilterChange(filter: HistorizationFilter): Promise<void> {
     this.historizationFilter = filter;
 
-    this.data = !this.historizationFilter.useHistorizationRequests
+    this.dataSource.data = !this.historizationFilter.useHistorizationRequests
       ? await this.countingCircleService.list()
       : await this.countingCircleService.listSnapshot(filter.includeDeleted, filter.date);
 

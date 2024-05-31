@@ -1,30 +1,33 @@
-<bc-advanced-table class="w-full" [dataSource]="electionGroups">
-  <ng-container bcColumnDef="number">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'ELECTION_GROUP.NUMBER' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
+<bc-table class="w-full" [dataSource]="electionGroups">
+  <ng-container columnDef="number">
+    <bc-header-cell *headerCellDef>{{ 'ELECTION_GROUP.NUMBER' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.number }}</bc-data-cell>
   </ng-container>
-  <ng-container bcColumnDef="description">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'ELECTION_GROUP.DESCRIPTION' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.description }}</td>
+
+  <ng-container columnDef="description">
+    <bc-header-cell *headerCellDef>{{ 'ELECTION_GROUP.DESCRIPTION' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.description }}</bc-data-cell>
   </ng-container>
-  <ng-container bcColumnDef="primaryBusinessNumber">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'ELECTION_GROUP.PRIMARY_ELECTION' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.primaryMajorityElection.politicalBusinessNumber }}</td>
+
+  <ng-container columnDef="primaryBusinessNumber">
+    <bc-header-cell *headerCellDef>{{ 'ELECTION_GROUP.PRIMARY_ELECTION' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.primaryMajorityElection.politicalBusinessNumber }}</bc-data-cell>
   </ng-container>
-  <ng-container bcColumnDef="secondaryElections">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'ELECTION_GROUP.SECONDARY_ELECTIONS' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">
+
+  <ng-container columnDef="secondaryElections">
+    <bc-header-cell *headerCellDef>{{ 'ELECTION_GROUP.SECONDARY_ELECTIONS' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
       <div class="cell-container">{{ getSecondaryElectionPoliticalBusinessNumbers(element) }}</div>
-    </td>
+    </bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="actions">
-    <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-    <td bc-cell *bcCellDef="let element">
+  <ng-container columnDef="actions">
+    <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
       <bc-icon *ngIf="!readonly && canEdit(element)" class="clickable" (click)="edit(element)" icon="edit"></bc-icon>
-    </td>
+    </bc-data-cell>
   </ng-container>
 
-  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
-</bc-advanced-table>
+  <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+  <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+</bc-table>

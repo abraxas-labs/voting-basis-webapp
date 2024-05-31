@@ -6,11 +6,12 @@
 
 import { RadioButton, Tenant } from '@abraxas/base-components';
 import { VotingChannel } from '@abraxas/voting-basis-service-proto/grpc/shared/voting_channel_pb';
-import { EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CantonSettingsService } from '../../core/canton-settings.service';
 import {
+  allCountingCircleResultStateDescriptions,
   CantonMajorityElectionAbsoluteMajorityAlgorithm,
   CantonSettings,
   CantonSettingsVotingCardChannel,
@@ -23,6 +24,10 @@ import { DomainOfInfluenceCanton, DomainOfInfluenceType } from '../../core/model
 import { PoliticalBusinessUnionType } from '../../core/models/political-business-union.model';
 import { ProportionalElectionMandateAlgorithm } from '../../core/models/proportional-election.model';
 import { TranslateService } from '../../core/translate.service';
+import { Subscription } from 'rxjs';
+import { cloneDeep, isEqual } from 'lodash';
+import { groupBySingle } from '../../core/utils/array.utils';
+import { CountingCircleResultState } from '@abraxas/voting-basis-service-proto/grpc/shared/counting_circle_pb';
 
 const availableVotingCardChannels: CantonSettingsVotingCardChannel[] = [
   { votingChannel: VotingChannel.VOTING_CHANNEL_BY_MAIL, valid: true },
@@ -36,7 +41,17 @@ const availableVotingCardChannels: CantonSettingsVotingCardChannel[] = [
   templateUrl: './canton-settings-edit-dialog.component.html',
   styleUrls: ['./canton-settings-edit-dialog.component.scss'],
 })
-export class CantonSettingsEditDialogComponent implements OnInit {
+export class CantonSettingsEditDialogComponent implements OnInit, OnDestroy {
+  public readonly states: typeof CountingCircleResultState = CountingCircleResultState;
+
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+  @HostListener('window:keyup.esc')
+  public async keyUpEscape(): Promise<void> {
+    await this.closeWithUnsavedChangesCheck();
+  }
   public data: CantonSettings;
   public cantons: EnumItemDescription<DomainOfInfluenceCanton>[] = [];
   public majorityElectionAbsoluteMajorityAlgorithms: EnumItemDescription<CantonMajorityElectionAbsoluteMajorityAlgorithm>[] = [];
@@ -52,12 +67,22 @@ export class CantonSettingsEditDialogComponent implements OnInit {
   public selectedTenant?: Tenant;
   public saving: boolean = false;
 
+  public hasChanges: boolean = false;
+  public originalCantonSettings: CantonSettings;
+  public originalSecureConnectId?: string;
+  public originalProportionalElectionMandateAlgorithms?: CheckableItems<EnumItemDescription<ProportionalElectionMandateAlgorithm>>;
+  public originalPoliticalBusinessUnionTypes?: CheckableItems<EnumItemDescription<PoliticalBusinessUnionType>>;
+  public originalVotingCardChannels?: CheckableItems<EnumItemDescription<CantonSettingsVotingCardChannel>>;
+  public originalSwissAbroadVotingRightDomainOfInfluenceTypes?: CheckableItems<EnumItemDescription<DomainOfInfluenceType>>;
+  public readonly backdropClickSubscription: Subscription;
+
   constructor(
     private readonly dialogRef: MatDialogRef<CantonSettingsEditDialogData>,
     private readonly cantonSettingsService: CantonSettingsService,
     private readonly i18n: TranslateService,
     private readonly enumUtil: EnumUtil,
     private readonly snackbarService: SnackbarService,
+    private readonly dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) dialogData: CantonSettingsEditDialogData,
   ) {
     this.data = dialogData.cantonSettings;
@@ -83,6 +108,26 @@ export class CantonSettingsEditDialogComponent implements OnInit {
         value: item.value,
         displayText: item.description,
       }));
+
+    const existingCountingCircleResultStateDescriptionsByState = groupBySingle(
+      this.data.countingCircleResultStateDescriptionsList,
+      x => x.state,
+      x => x.description,
+    );
+
+    this.data.countingCircleResultStateDescriptionsList = allCountingCircleResultStateDescriptions.map(x => ({
+      state: x,
+      description: existingCountingCircleResultStateDescriptionsByState[x] ?? '',
+    }));
+
+    this.originalCantonSettings = cloneDeep(this.data);
+
+    this.dialogRef.disableClose = true;
+    this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+  }
+
+  public ngOnDestroy(): void {
+    this.backdropClickSubscription.unsubscribe();
   }
 
   public get canSave(): boolean {
@@ -101,6 +146,7 @@ export class CantonSettingsEditDialogComponent implements OnInit {
 
     if (this.data.secureConnectId) {
       this.selectedTenant = { id: this.data.secureConnectId, name: this.data.authorityName } as Tenant;
+      this.originalSecureConnectId = this.data.secureConnectId;
     }
   }
 
@@ -127,6 +173,7 @@ export class CantonSettingsEditDialogComponent implements OnInit {
       }
 
       this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+      this.hasChanges = false;
       this.dialogRef.close({
         cantonSettings: this.data,
       } as CantonSettingsEditDialogResult);
@@ -135,8 +182,26 @@ export class CantonSettingsEditDialogComponent implements OnInit {
     }
   }
 
-  public cancel(): void {
+  public async closeWithUnsavedChangesCheck(): Promise<void> {
+    if (await this.leaveDialogOpen()) {
+      return;
+    }
+
     this.dialogRef.close();
+  }
+
+  public contentChanged(): void {
+    this.hasChanges =
+      !isEqual(this.data, this.originalCantonSettings) ||
+      !isEqual(this.selectedTenant?.id, this.originalSecureConnectId) ||
+      !isEqual(this.proportionalElectionMandateAlgorithms, this.originalProportionalElectionMandateAlgorithms) ||
+      !isEqual(this.politicalBusinessUnionTypes, this.originalPoliticalBusinessUnionTypes) ||
+      !isEqual(this.votingCardChannels, this.originalVotingCardChannels) ||
+      !isEqual(this.swissAbroadVotingRightDomainOfInfluenceTypes, this.originalSwissAbroadVotingRightDomainOfInfluenceTypes);
+  }
+
+  private async leaveDialogOpen(): Promise<boolean> {
+    return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
 
   private initEnums(): void {
@@ -164,12 +229,16 @@ export class CantonSettingsEditDialogComponent implements OnInit {
         })),
     );
 
+    this.originalProportionalElectionMandateAlgorithms = cloneDeep(this.proportionalElectionMandateAlgorithms);
+
     this.swissAbroadVotingRightDomainOfInfluenceTypes = new CheckableItems(
       this.enumUtil.getArrayWithDescriptions<DomainOfInfluenceType>(DomainOfInfluenceType, 'DOMAIN_OF_INFLUENCE.TYPES.').map(doit => ({
         checked: this.data.swissAbroadVotingRightDomainOfInfluenceTypesList.includes(doit.value),
         item: doit,
       })),
     );
+
+    this.originalSwissAbroadVotingRightDomainOfInfluenceTypes = cloneDeep(this.swissAbroadVotingRightDomainOfInfluenceTypes);
 
     this.swissAbroadVotingRights = this.enumUtil.getArrayWithDescriptions<SwissAbroadVotingRight>(
       SwissAbroadVotingRight,
@@ -185,6 +254,8 @@ export class CantonSettingsEditDialogComponent implements OnInit {
         })),
     );
 
+    this.originalPoliticalBusinessUnionTypes = cloneDeep(this.politicalBusinessUnionTypes);
+
     this.votingCardChannels = new CheckableItems(
       availableVotingCardChannels.map(x => ({
         checked: this.data.enabledVotingCardChannelsList.some(l => l.valid === x.valid && l.votingChannel === x.votingChannel),
@@ -197,6 +268,8 @@ export class CantonSettingsEditDialogComponent implements OnInit {
         },
       })),
     );
+
+    this.originalVotingCardChannels = cloneDeep(this.votingCardChannels);
   }
 }
 

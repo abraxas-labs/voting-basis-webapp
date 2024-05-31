@@ -7,6 +7,7 @@
       <bc-spinner class="block" *ngIf="loading; else domainOfInfluencesList"></bc-spinner>
       <ng-template #domainOfInfluencesList>
         <vo-lib-searchable-tree-navigation *ngIf="tree"
+                                           class="overflow-tree"
                                            [nodes]="tree.nodes"
                                            (selectedNodeChange)="nodeSelect($event)"
                                            (nodeEdit)="nodeEdit($event, false)"
@@ -21,11 +22,8 @@
         <ng-template #doiTreeRowTemplate let-node>
           <span class="tree-row">
             <span [class.disabled]="!!node.data.deletedOn">{{ node.displayName }}</span>
-            <span class="disabled pl-3">({{
-              !node.data.deletedOn
-                ? ('HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.ACTIVE'
-                  | translate: { modifiedOn: node.data.modifiedOn | date: 'yyyy-MM-dd / HH:mm' })
-                : ('HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.DELETED'
+            <span *ngIf="node.data.deletedOn" class="disabled pl-3">({{
+                ('HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.DELETED'
                   | translate
                   : {
                     createdOn: node.data.createdOn | date: 'yyyy-MM-dd / HH:mm',
@@ -55,23 +53,28 @@
               </bc-button>
             </vo-lib-inline-spinner>
           </div>
-          <bc-advanced-table class="w-full" [dataSource]="selectedDomainOfInfluenceCountingCircles">
-            <ng-container bcColumnDef="name">
-              <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</th>
-              <td bc-cell *bcCellDef="let element">{{ element.name }}</td>
-            </ng-container>
-            <ng-container bcColumnDef="bfs">
-              <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</th>
-              <td bc-cell *bcCellDef="let element">{{ element.bfs }}</td>
-            </ng-container>
-            <ng-container bcColumnDef="authority">
-              <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</th>
-              <td bc-cell *bcCellDef="let element">{{ element.responsibleAuthority.name }}</td>
-            </ng-container>
+          <div class="overflow-table">
+            <bc-table class="w-full" [dataSource]="selectedDomainOfInfluenceCountingCircles">
 
-            <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-            <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
-          </bc-advanced-table>
+              <ng-container columnDef="name">
+                <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
+                <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
+              </ng-container>
+
+              <ng-container columnDef="bfs">
+                <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</bc-header-cell>
+                <bc-data-cell *dataCellDef="let element">{{ element.bfs }}</bc-data-cell>
+              </ng-container>
+
+              <ng-container columnDef="authority">
+                <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</bc-header-cell>
+                <bc-data-cell *dataCellDef="let element">{{ element.responsibleAuthority.name }}</bc-data-cell>
+              </ng-container>
+
+              <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+              <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+            </bc-table>
+          </div>
         </ng-container>
       </ng-template>
       <ng-template #noDomainOfInfluenceSelected>

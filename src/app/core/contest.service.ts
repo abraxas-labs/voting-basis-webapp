@@ -15,12 +15,9 @@ import {
   GetContestRequest,
   ListContestPastRequest,
   ListContestSummariesRequest,
-  ListCountingCircleOptionsRequest,
   ListFuturePreconfiguredDatesRequest,
   PastUnlockContestRequest,
   UpdateContestRequest,
-  UpdateCountingCircleOptionRequest,
-  UpdateCountingCircleOptionsRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/contest_requests_pb';
 import { GrpcBackendService, GrpcService, retryForeverWithBackoff, TimestampUtil } from '@abraxas/voting-lib';
 import { Injectable } from '@angular/core';
@@ -29,7 +26,6 @@ import { environment } from '../../environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
 import {
   Contest,
-  ContestCountingCircleOption,
   ContestDateAvailability,
   ContestDetailsChangeMessage,
   ContestDetailsChangeMessageProto,
@@ -156,30 +152,6 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
       req,
       r => r.getContestsList().map(x => this.mapToContestSimple(x)),
     );
-  }
-
-  public listCountingCircleOptions(id: string): Promise<ContestCountingCircleOption[]> {
-    const req = new ListCountingCircleOptionsRequest();
-    req.setId(id);
-    return this.request(
-      c => c.listCountingCircleOptions,
-      req,
-      r => r.toObject().optionsList as ContestCountingCircleOption[],
-    );
-  }
-
-  public updateCountingCircleOptions(id: string, options: ContestCountingCircleOption[]): Promise<void> {
-    const req = new UpdateCountingCircleOptionsRequest();
-    req.setId(id);
-
-    for (const opt of options) {
-      const optReq = new UpdateCountingCircleOptionRequest();
-      optReq.setCountingCircleId(opt.countingCircle.id);
-      optReq.setEVoting(opt.eVoting);
-      req.addOptions(optReq);
-    }
-
-    return this.requestEmptyResp(c => c.updateCountingCircleOptions, req);
   }
 
   public getOverviewChanges(): Observable<ContestOverviewChangeMessage> {

@@ -11,7 +11,9 @@ import {
   GetProportionalElectionUnionCandidatesRequest,
   GetProportionalElectionUnionListsRequest,
   GetProportionalElectionUnionPoliticalBusinessesRequest,
+  ListProportionalElectionUnionsRequest,
   UpdateProportionalElectionUnionEntriesRequest,
+  UpdateProportionalElectionUnionPoliticalBusinessesRequest,
   UpdateProportionalElectionUnionRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/proportional_election_union_requests_pb';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
@@ -26,6 +28,7 @@ import {
   ProportionalElectionUnionListProto,
 } from './models/proportional-election-union.model';
 import { toJsMap } from './utils/map.utils';
+import { ProportionalElectionMandateAlgorithm } from './models/proportional-election.model';
 
 @Injectable({
   providedIn: 'root',
@@ -103,6 +106,23 @@ export class ProportionalElectionUnionService extends GrpcService<ProportionalEl
       req,
       r => r.getProportionalElectionUnionListsList().map(l => this.mapToProportionalElectionUnionList(l)),
     );
+  }
+
+  public list(proportionalElectionId: string): Promise<ProportionalElectionUnion[]> {
+    const req = new ListProportionalElectionUnionsRequest();
+    req.setProportionalElectionId(proportionalElectionId);
+    return this.request(
+      x => x.list,
+      req,
+      x => x.getUnionsList().map(y => y.toObject()),
+    );
+  }
+
+  public updatePoliticalBusinesses(unionIds: string[], mandateAlgorithm: ProportionalElectionMandateAlgorithm) {
+    const req = new UpdateProportionalElectionUnionPoliticalBusinessesRequest();
+    req.setProportionalElectionUnionIdsList(unionIds);
+    req.setMandateAlgorithm(mandateAlgorithm);
+    return this.requestEmptyResp(c => c.updatePoliticalBusinesses, req);
   }
 
   private mapToProportionalElectionUnionList(list: ProportionalElectionUnionListProto): ProportionalElectionUnionList {

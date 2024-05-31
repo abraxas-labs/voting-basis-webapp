@@ -1,97 +1,131 @@
 <bc-spinner class="block" *ngIf="loading; else candidateOverview"></bc-spinner>
 <ng-template #candidateOverview>
   <div class="flex">
-    <bc-button variant="tertiary"
-               icon="plus"
-               [disabled]="expandedCandidates.length >= maxCandidateCount || testingPhaseEnded"
-               [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate"
-               (buttonClick)="createCandidate()"></bc-button>
+    <bc-button variant="tertiary" icon="plus"
+      [disabled]="expandedCandidates.length >= maxCandidateCount || testingPhaseEnded"
+      [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate" (buttonClick)="createCandidate()"></bc-button>
     <div>
       <bc-spinner *ngIf="savingAccumulation"></bc-spinner>
 
-      <bc-button *ngIf="selectedCandidate && selectedCandidate.accumulated"
-                 variant="tertiary"
-                 [disabled]="testingPhaseEnded"
-                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE.REMOVE_ACCUMULATION' | translate"
-                 (buttonClick)="removeAccumulation(selectedCandidate!)"></bc-button>
-      <bc-button *ngIf="!selectedCandidate?.accumulated"
-                 variant="tertiary"
-                 [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded"
-                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ACCUMULATE' | translate"
-                 (buttonClick)="accumulate(selectedCandidate!)"></bc-button>
+      <bc-button *ngIf="selectedCandidate && selectedCandidate.accumulated" variant="tertiary"
+        [disabled]="testingPhaseEnded" [label]="'PROPORTIONAL_ELECTION.CANDIDATE.REMOVE_ACCUMULATION' | translate"
+        (buttonClick)="removeAccumulation(selectedCandidate!)"></bc-button>
+      <bc-button *ngIf="!selectedCandidate?.accumulated" variant="tertiary"
+        [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded"
+        [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ACCUMULATE' | translate"
+        (buttonClick)="accumulate(selectedCandidate!)"></bc-button>
     </div>
   </div>
 
-  <bc-advanced-table class="w-full mb-2"
-                     [dataSource]="expandedCandidates"
-                     cdkDropList
-                     [cdkDropListData]="expandedCandidates"
-                     [cdkDropListDisabled]="testingPhaseEnded"
-                     (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)">
-    <ng-container bcColumnDef="position">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.POSITION' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.position }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="number">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.number }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="lastName">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.LAST_NAME' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.lastName }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="firstName">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.firstName }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="dateOfBirth">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.dateOfBirth | date }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="sex">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.SEX' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element">
-        <div class="overflow">{{'SEX_TYPE.' + element.sex | translate}}</div>
-      </td>
-    </ng-container>
-    <ng-container bcColumnDef="title">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.TITLE' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.title }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="incumbent">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><bc-icon *ngIf="element.incumbent" icon="checkmark"></bc-icon></td>
-    </ng-container>
-    <ng-container bcColumnDef="zipCode">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.zipCode }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="locality">
-      <th bc-header-cell *bcHeaderCellDef><span class="nowrap">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate }}</span></th>
-      <td bc-cell *bcCellDef="let element"><div class="overflow">{{ element.locality }}</div></td>
-    </ng-container>
-    <ng-container bcColumnDef="actions">
-      <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-      <td bc-cell *bcCellDef="let element">
-        <div *ngIf="!locked" class="actions">
-          <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
-          <bc-icon *ngIf="!testingPhaseEnded"
-                   (click)="deleteCandidate(element); $event.stopPropagation()"
-                   icon="trash"
-                   iconColor="error"></bc-icon>
-        </div>
-      </td>
+  <bc-table selection class="w-full mb-2" [dataSource]="expandedCandidates" cdkDropList [cdkDropListData]="expandedCandidates"
+    [cdkDropListDisabled]="testingPhaseEnded"
+    (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)">
+    <ng-container columnDef="position">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.POSITION' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.position }}</div>
+      </bc-data-cell>
     </ng-container>
 
-    <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-    <tr bc-advanced-table-row
-        *bcRowDef="let row; columns: columns"
-        cdkDrag
-        [cdkDragDisabled]="testingPhaseEnded"
-        [cdkDragData]="row"
-        [selectable]="true"
-        (rowSelected)="selectCandidate(row)"></tr>
-  </bc-advanced-table>
+    <ng-container columnDef="number">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.number }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="lastName">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.LAST_NAME' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.lastName }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="firstName">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.firstName }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="dateOfBirth">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.dateOfBirth | date }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="sex">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.SEX' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{'SEX_TYPE.' + element.sex | translate}}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="title">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.TITLE' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.title }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="incumbent">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.title }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="zipCode">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.zipCode }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="locality">
+      <bc-header-cell *headerCellDef>
+        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate }}</div>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.locality }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="actions">
+      <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div *ngIf="!locked" class="actions">
+          <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
+          <bc-icon *ngIf="!testingPhaseEnded" (click)="deleteCandidate(element); $event.stopPropagation()" icon="trash"
+            iconColor="error"></bc-icon>
+        </div>
+      </bc-data-cell>
+    </ng-container>
+
+    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+    <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
+      selectionRow [selectionRowValue]="row" (click)="selectCandidate(row)" cdkDrag
+      [cdkDragDisabled]="testingPhaseEnded" [cdkDragData]="row"></bc-data-row>
+  </bc-table>
 
   <p *ngIf="expandedCandidates.length === maxCandidateCount; else candidateCount" translate>
     PROPORTIONAL_ELECTION.CANDIDATE.SAME_CANDIDATE_COUNT_AS_ALLOWED
@@ -99,12 +133,14 @@
   <ng-template #candidateCount>
     <p class="error">
       <span>
-        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.COUNT_OF_CANDIDATES_' + (expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
+        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.COUNT_OF_CANDIDATES_' + (expandedCandidates.length === 1 ? 'SINGLE' :
+        'PLURAL')
         | translate: {current: expandedCandidates.length} }}
       </span>
 
       <span *ngIf="expandedCandidates.length > maxCandidateCount">
-        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.MORE_CANDIDATES_THAN_ALLOWED_' + (maxCandidateCount === 1 ? 'SINGLE' : 'PLURAL')
+        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.MORE_CANDIDATES_THAN_ALLOWED_' + (maxCandidateCount === 1 ? 'SINGLE' :
+        'PLURAL')
         | translate: {max: maxCandidateCount} }}
       </span>
 
@@ -112,7 +148,7 @@
         {{
         'PROPORTIONAL_ELECTION.CANDIDATE.LESS_CANDIDATES_THAN_ALLOWED_' +
         (maxCandidateCount - expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
-          | translate: { diff: maxCandidateCount - expandedCandidates.length }
+        | translate: { diff: maxCandidateCount - expandedCandidates.length }
         }}
       </span>
     </p>

@@ -4,11 +4,10 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { ComparisonCountOfVotersCategory } from '../../core/models/plausibilisation.model';
@@ -19,14 +18,12 @@ import { ComparisonCountOfVotersCategory } from '../../core/models/plausibilisat
 })
 export class ComparisonCountOfVotersCountingCircleAssignDialogComponent implements AfterViewInit {
   public readonly translationPrefix: string = 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.PLAUSIBILISATION_CONFIGURATION.';
-  public readonly dataSource: MatTableDataSource<ComparisonCountOfVotersCountingCircleTableItem> =
-    new MatTableDataSource<ComparisonCountOfVotersCountingCircleTableItem>();
+  public readonly dataSource = new TableDataSource<ComparisonCountOfVotersCountingCircleTableItem>();
   public readonly categoryItems: EnumItemDescription<ComparisonCountOfVotersCategory>[] = [];
   public readonly disabled: boolean;
   public readonly columns = ['name', 'category'];
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
   public domainOfInfluence!: DomainOfInfluence;
 

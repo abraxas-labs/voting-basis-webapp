@@ -4,10 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { CountingCircle } from '../../core/models/counting-circle.model';
 
@@ -19,12 +18,12 @@ import { CountingCircle } from '../../core/models/counting-circle.model';
 export class CountingCircleMergerSelectComponent implements OnDestroy, AfterViewInit {
   public readonly columns = ['select', 'name', 'bfs', 'authority'];
   public readonly columnsSelected = ['name', 'actions'];
-  public readonly dataSource: MatTableDataSource<CountingCircle> = new MatTableDataSource<CountingCircle>();
+  public readonly dataSource = new TableDataSource<CountingCircle>();
   public selection = new SelectionModel<CountingCircle>(true, []);
+  public selected = new TableDataSource<CountingCircle>(this.selection.selected);
   public isAllSelected: boolean = false;
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
   @Input()
   public selectedCountingCircles: CountingCircle[] = [];

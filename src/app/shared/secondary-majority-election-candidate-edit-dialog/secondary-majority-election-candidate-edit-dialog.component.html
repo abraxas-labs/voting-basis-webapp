@@ -31,7 +31,8 @@
 
       <app-majority-election-candidate-edit *ngIf="!selectCandidateFromPrimaryElection"
                                             [candidate]="candidate"
-                                            [testingPhaseEnded]="testingPhaseEnded">
+                                            [testingPhaseEnded]="testingPhaseEnded"
+                                            (contentChanged)="contentChanged()">
       </app-majority-election-candidate-edit>
       <app-majority-election-candidate-edit *ngIf="selectCandidateFromPrimaryElection"
                                             [candidate]="selectedMajorityElectionCandidate"
@@ -40,7 +41,9 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="allowedCandidateTypes.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MUST_NOT_EXIST_IN_PRIMARY_ELECTION">
-      <app-majority-election-candidate-edit [candidate]="candidate" [testingPhaseEnded]="testingPhaseEnded">
+      <app-majority-election-candidate-edit [candidate]="candidate"
+                                            [testingPhaseEnded]="testingPhaseEnded"
+                                            (contentChanged)="contentChanged()">
       </app-majority-election-candidate-edit>
     </ng-container>
   </ng-container>
@@ -51,6 +54,6 @@
                     [saving]="saving"
                     [sticky]="false"
                     (save)="save()"
-                    (cancel)="cancel()"></vo-lib-button-bar>
+                    (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

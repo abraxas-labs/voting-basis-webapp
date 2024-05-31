@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContactPerson } from '../../core/models/contact-person.model';
 
 @Component({
@@ -18,4 +18,7 @@ export class ContactPersonEditComponent {
 
   @Input()
   public contactPerson!: ContactPerson;
+
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 }

@@ -1,30 +1,32 @@
-<bc-advanced-table *ngIf="parties.length > 0; else noData" class="w-full" [dataSource]="parties">
-  <ng-container bcColumnDef="name">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'DOMAIN_OF_INFLUENCE.PARTY.NAME' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.name | getTranslation }}</td>
-  </ng-container>
-  <ng-container bcColumnDef="shortDescription">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'DOMAIN_OF_INFLUENCE.PARTY.SHORT_DESCRIPTION' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.shortDescription | getTranslation }}</td>
-  </ng-container>
-  <ng-container bcColumnDef="description">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.description }}</td>
+<bc-table *ngIf="parties.length > 0; else noData" class="w-full" [dataSource]="parties">
+  <ng-container columnDef="name">
+    <bc-header-cell *headerCellDef>{{ 'DOMAIN_OF_INFLUENCE.PARTY.NAME' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.name | getTranslation }}</bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="actions">
-    <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-    <td bc-cell *bcCellDef="let element">
+  <ng-container columnDef="shortDescription">
+    <bc-header-cell *headerCellDef>{{ 'DOMAIN_OF_INFLUENCE.PARTY.SHORT_DESCRIPTION' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.shortDescription | getTranslation }}</bc-data-cell>
+  </ng-container>
+
+  <ng-container columnDef="description">
+    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.description }}</bc-data-cell>
+  </ng-container>
+
+  <ng-container columnDef="actions">
+    <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
       <div *ngIf="!disabled && !element.inherited" class="flex">
         <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
         <bc-icon class="clickable ml-2" (click)="delete.emit(element)" icon="trash" iconColor="error"></bc-icon>
       </div>
-    </td>
+    </bc-data-cell>
   </ng-container>
 
-  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
-</bc-advanced-table>
+  <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+  <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+</bc-table>
 
 <ng-template #noData>
   <p *ngIf="disabled" class="no-data mt-1" translate>DOMAIN_OF_INFLUENCE.PARTY.NO_DATA</p>

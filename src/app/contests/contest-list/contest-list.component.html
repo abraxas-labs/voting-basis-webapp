@@ -1,99 +1,131 @@
-<bc-advanced-table class="w-full" [dataSource]="dataSource">
-  <ng-container bcColumnDef="date">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.DATE' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.date | date }}</td>
+<bc-table selection filter sort [sortActive]="[{ id: 'date', direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
+  <ng-container columnDef="date">
+    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>{{ 'CONTEST.DATE' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.date | date }}</bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="endOfTestingPhase">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.END_OF_TESTING_PHASE' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.endOfTestingPhase | date:'short' }}</td>
+  <ng-container columnDef="type">
+    <bc-header-cell filter filterType="text" sort *headerCellDef>{{ 'CONTEST.TYPE.TITLE' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.type }}</bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="archivePer">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.ARCHIVE.TITLE_PER' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.archivePer | date:'short' }}</td>
+  <ng-container columnDef="description">
+    <bc-header-cell filter filterType="text" sort *headerCellDef class="description-header">
+      {{ 'CONTEST.DESCRIPTION_HEADER' | translate }}
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <span [class.pcd]="element.isPreconfiguredDate">
+        {{ element.description }}
+      </span>
+    </bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="state">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.STATE' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{'CONTEST.STATES.' + (!!element.state ? element.state : 0) | translate}}</td>
+  <ng-container columnDef="endOfTestingPhase">
+    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
+      <span>{{ 'CONTEST.END_OF_TESTING_PHASE' | translate }}</span>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.endOfTestingPhase | date: 'short' }}</bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="owner">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.OWNER' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{element.domainOfInfluence?.authorityName}}</td>
+  <ng-container columnDef="archivePer">
+    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>{{ 'CONTEST.ARCHIVE.TITLE_PER' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.archivePer | date: 'short' }}</bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="pcd">
-    <th bc-header-cell *bcHeaderCellDef class="pcd-header"></th>
-    <td bc-cell *bcCellDef="let element">
-      <span *ngIf="element.isPreconfiguredDate" translate class="pcd">CONTEST.PRECONFIGURED_DATE</span>
-      <span *ngIf="element | ownsContest:domainOfInfluences" translate class="pcd">CONTEST.OWN_CONTEST</span>
-    </td>
+  <ng-container columnDef="state">
+    <bc-header-cell
+      filter
+      filterType="list"
+      [filterItems]="contestStateList"
+      filterDisplayExpr="description"
+      filterValueExpr="value"
+      sort
+      *headerCellDef
+      >{{ 'CONTEST.STATE' | translate }}</bc-header-cell
+    >
+    <bc-data-cell *dataCellDef="let element">{{ 'CONTEST.STATES.' + (!!element.state ? element.state : 0) | translate }}</bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="politicalBusinesses">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'CONTEST.POLITICAL_BUSINESSES' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">
-      <div class="my-1" *ngFor="let detail of element.contestEntriesDetails">
-        {{'DOMAIN_OF_INFLUENCE.TYPES.' + detail.domainOfInfluenceType | translate}}: {{detail.contestEntriesCount}}
-      </div>
-    </td>
+  <ng-container columnDef="politicalBusinesses">
+    <bc-header-cell sort filter filterType="text" *headerCellDef>
+      <span>{{ 'CONTEST.POLITICAL_BUSINESSES' | translate }}</span>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <span class="political-businesses">{{ element.politicalBusinesses }}</span>
+    </bc-data-cell>
   </ng-container>
 
-  <ng-container bcColumnDef="actions">
-    <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-    <td bc-cell *bcCellDef="let element">
-      <vo-lib-action-menu>
+  <ng-container columnDef="owner">
+    <bc-header-cell filter filterType="text" sort *headerCellDef>
+      <span>{{ 'CONTEST.OWNER' | translate }}</span></bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.owner }}</bc-data-cell>
+  </ng-container>
+
+  <ng-container columnDef="actions">
+    <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <vo-lib-action-menu *ngIf="canCreate || !element.isPreconfiguredDate">
         <vo-lib-action-menu-item
-          *ngIf="!element.isPreconfiguredDate"
+          *ngIf="!element.isPreconfiguredDate && !element.isPoliticalAssembly"
           (click)="view.emit(element)"
           icon="eye"
-          text="ACTIONS.OPEN">
+          text="ACTIONS.OPEN"
+        >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
           *ngIf="element.isPreconfiguredDate"
           (click)="create.emit(element)"
           icon="plus"
-          text="CONTEST.CREATE_FROM_PRECONFIGURED_DATE">
+          text="CONTEST.CREATE_FROM_PRECONFIGURED_DATE"
+        >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
-          *ngIf="element | canEditContest:domainOfInfluences"
+          *ngIf="canEdit && !element.locked && element.ownerId === tenantId"
           (click)="edit.emit(element)"
           icon="edit"
-          text="ACTIONS.EDIT">
+          text="ACTIONS.EDIT"
+        >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
-          *ngIf="element.state === contestStates.CONTEST_STATE_PAST_LOCKED"
-          (click)="archive.emit(element)"
+          *ngIf="canEdit && element.state === contestStates.CONTEST_STATE_PAST_LOCKED && !element.isPoliticalAssembly"
+          (click)="archive.emit(element.contest)"
           icon="archive"
-          text="CONTEST.ARCHIVE.ACTION">
+          text="CONTEST.ARCHIVE.ACTION"
+        >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
-          *ngIf="element.state === contestStates.CONTEST_STATE_PAST_LOCKED"
-          (click)="pastUnlock.emit(element)"
+          *ngIf="canEdit && element.state === contestStates.CONTEST_STATE_PAST_LOCKED && !element.isPoliticalAssembly"
+          (click)="pastUnlock.emit(element.contest)"
           icon="unlock"
-          text="CONTEST.PAST_UNLOCK.ACTION">
+          text="CONTEST.PAST_UNLOCK.ACTION"
+        >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
-          *ngIf="element | canDeleteContest:domainOfInfluences"
+          *ngIf="canDelete && !element.testingPhaseEnded && element.ownerId === tenantId"
           (click)="delete.emit(element)"
           icon="trash"
-          text="ACTIONS.DELETE">
+          text="ACTIONS.DELETE"
+        >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
-          *ngIf="!element.isPreconfiguredDate"
+          *ngIf="!element.isPreconfiguredDate && !element.isPoliticalAssembly"
           (click)="export.emit(element)"
           icon="download"
-          text="ACTIONS.EXPORT">
+          text="ACTIONS.EXPORT"
+        >
         </vo-lib-action-menu-item>
       </vo-lib-action-menu>
-    </td>
+    </bc-data-cell>
   </ng-container>
 
-  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"
-      [selectable]="true"
-      (rowSelected)="!row.isPreconfiguredDate ? view.emit(row) : undefined"></tr>
-</bc-advanced-table>
-<bc-table-paginator *ngIf="showPaginator" [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+  <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+  <bc-data-row
+    *dataRowDef="let row; columns: columns; let i = index"
+    selectionToggle
+    [selectionToggleValue]="row"
+    selectionRow
+    [selectionRowValue]="row"
+    (click)="!row.isPreconfiguredDate && !row.isPoliticalAssembly ? view.emit(row) : undefined"
+  ></bc-data-row>
+</bc-table>
+<bc-paginator *ngIf="showPaginator" #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>

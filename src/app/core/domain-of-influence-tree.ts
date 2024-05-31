@@ -51,7 +51,7 @@ export class DomainOfInfluenceTree extends Tree<DomainOfInfluence> {
 
   protected buildDisplayName(data: DomainOfInfluence): string {
     const typeName = DomainOfInfluenceTree.domainOfInfluenceTypes.find(x => x.value === data.type)?.description;
-    return `${data.name} (${typeName})`;
+    return `${data.name}` + (data.virtualTopLevel ? '' : ` (${typeName})`);
   }
 
   protected areEqual(left: DomainOfInfluence, right: DomainOfInfluence): boolean {

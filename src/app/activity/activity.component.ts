@@ -4,12 +4,12 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EventLogService } from '../core/event-log.service';
 import { EventLog } from '../core/models/event-log.model';
 import { ServerSidePaginationDataSource } from '../core/server-side-pagination-data-source';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-activity',
@@ -17,10 +17,8 @@ import { ServerSidePaginationDataSource } from '../core/server-side-pagination-d
   styleUrls: ['./activity.component.scss'],
 })
 export class ActivityComponent implements AfterViewInit, OnDestroy {
-  public readonly dataSource: ServerSidePaginationDataSource<EventLog> = new ServerSidePaginationDataSource();
-
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  public readonly dataSource = new ServerSidePaginationDataSource<EventLog>();
+  @ViewChild('paginator') public paginator!: MatPaginator;
 
   private pagingSubscription: Subscription = Subscription.EMPTY;
 

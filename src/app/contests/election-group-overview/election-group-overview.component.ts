@@ -14,6 +14,7 @@ import {
   ElectionGroupEditDialogData,
   ElectionGroupEditDialogResult,
 } from '../election-group-edit-dialog/election-group-edit-dialog.component';
+import { TableDataSource } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-election-group-overview',
@@ -30,6 +31,7 @@ export class ElectionGroupOverviewComponent implements OnInit {
 
   public loading: boolean = false;
   private tenantDomainOfInfluences: DomainOfInfluence[] = [];
+  public dataSource = new TableDataSource<ElectionGroup>();
 
   constructor(private readonly domainOfInfluenceService: DomainOfInfluenceService, private readonly dialogService: DialogService) {}
 
@@ -39,6 +41,7 @@ export class ElectionGroupOverviewComponent implements OnInit {
       this.tenantDomainOfInfluences = await this.domainOfInfluenceService.listForCurrentTenant();
     } finally {
       this.loading = false;
+      this.dataSource.data = this.electionGroups;
     }
   }
 

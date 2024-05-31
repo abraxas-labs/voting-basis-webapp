@@ -39,7 +39,10 @@ export class CantonSettingsOverviewComponent implements OnInit {
   public async ngOnInit(): Promise<void> {
     try {
       this.canCreate = await this.permissionService.hasPermission(Permissions.CantonSettings.Create);
-      this.canEdit = await this.permissionService.hasPermission(Permissions.CantonSettings.Update);
+      this.canEdit = await this.permissionService.hasAnyPermission(
+        Permissions.CantonSettings.UpdateSameTenant,
+        Permissions.CantonSettings.UpdateAll,
+      );
       this.cantonSettingsList = await this.cantonSettingsService.list();
     } finally {
       this.loading = false;
@@ -67,7 +70,7 @@ export class CantonSettingsOverviewComponent implements OnInit {
       readonly: !this.canEdit,
     };
 
-    const result = await this.dialogService.openForResult(CantonSettingsEditDialogComponent, data);
+    const result = await this.dialogService.openForResult(CantonSettingsEditDialogComponent, data, { autoFocus: 'first-heading' });
     this.handleCreateOrEdit(result);
   }
 

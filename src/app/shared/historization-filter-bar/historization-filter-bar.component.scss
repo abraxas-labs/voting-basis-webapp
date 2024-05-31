@@ -1,10 +1,15 @@
 .flex {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: baseline;
 
   bc-date {
     display: inline-block;
     max-width: 200px;
+  }
+
+  bc-radio-button-group {
+    min-width: 300px;
+    margin-left: -10px;
   }
 }

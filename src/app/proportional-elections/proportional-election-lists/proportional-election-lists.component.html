@@ -5,85 +5,83 @@
       <h2 translate>PROPORTIONAL_ELECTION.LIST.TITLE</h2>
 
       <div class="buttons">
-        <bc-button variant="tertiary"
-                   icon="plus"
-                   [disabled]="testingPhaseEnded"
-                   [label]="'PROPORTIONAL_ELECTION.LIST.NEW' | translate"
-                   (buttonClick)="createList()"></bc-button>
+        <bc-button variant="tertiary" icon="plus" [disabled]="testingPhaseEnded"
+          [label]="'PROPORTIONAL_ELECTION.LIST.NEW' | translate" (buttonClick)="createList()"></bc-button>
 
-        <bc-button [disabled]="testingPhaseEnded"
-                   variant="tertiary"
-                   icon="download"
-                   [label]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
-                   (buttonClick)="importListsAndCandidates()"></bc-button>
+        <bc-button [disabled]="testingPhaseEnded" variant="tertiary" icon="download"
+          [label]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
+          (buttonClick)="importListsAndCandidates()"></bc-button>
 
         <bc-button *ngIf="hasHagenbachBischoffDistribution"
-                   variant="tertiary"
-                   (buttonClick)="manageListUnions()"
-                   [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate"
-                   [disabled]="testingPhaseEnded"></bc-button>
+        variant="tertiary" (buttonClick)="manageListUnions()"
+          [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate" [disabled]="testingPhaseEnded"></bc-button>
       </div>
 
-      <bc-advanced-table class="w-full"
-                         [dataSource]="lists"
-                         cdkDropList [cdkDropListData]="lists"
-                         [cdkDropListDisabled]="testingPhaseEnded"
-                         (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)">
-        <ng-container bcColumnDef="orderNumber">
-          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate }}</th>
-          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">{{ element.orderNumber }}</td>
+      <bc-table selection class="w-full" [dataSource]="lists" cdkDropList [cdkDropListData]="lists"
+        [cdkDropListDisabled]="testingPhaseEnded"
+        (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)">
+        <ng-container columnDef="orderNumber">
+          <bc-header-cell *headerCellDef>
+            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate }}</div>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">{{ element.orderNumber }}</bc-data-cell>
         </ng-container>
-        <ng-container bcColumnDef="shortDescription">
-          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate }}</th>
-          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
-            {{ element.shortDescription | getTranslation }}
-          </td>
+
+        <ng-container columnDef="shortDescription">
+          <bc-header-cell *headerCellDef [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
+            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate }}</div>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">{{ element.shortDescription | getTranslation }}</bc-data-cell>
         </ng-container>
-        <ng-container bcColumnDef="blankRowCount">
-          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate }}</th>
-          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
-            {{ element.blankRowCount }}
-          </td>
+
+        <ng-container columnDef="blankRowCount">
+          <bc-header-cell *headerCellDef>
+            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate }}</div>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">{{ element.blankRowCount }}</bc-data-cell>
         </ng-container>
-        <ng-container bcColumnDef="listUnionDescription">
-          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate }}</th>
-          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
-            <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.listUnionDescription}"></ng-container>
-          </td>
+
+        <ng-container columnDef="listUnionDescription">
+          <bc-header-cell *headerCellDef>
+            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate }}</div>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <ng-container
+              *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.listUnionDescription}"></ng-container>
+          </bc-data-cell>
         </ng-container>
-        <ng-container bcColumnDef="subListUnionDescription">
-          <th bc-header-cell *bcHeaderCellDef>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate }}</th>
-          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
-            <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.subListUnionDescription}"></ng-container>
-          </td>
+
+        <ng-container columnDef="subListUnionDescription">
+          <bc-header-cell *headerCellDef>
+            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate }}</div>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <ng-container
+              *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.subListUnionDescription}"></ng-container>
+          </bc-data-cell>
         </ng-container>
-        <ng-container bcColumnDef="actions">
-          <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-          <td bc-cell *bcCellDef="let element" [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
+
+        <ng-container columnDef="actions">
+          <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
             <div *ngIf="!locked" class="actions">
               <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
-              <bc-icon *ngIf="!testingPhaseEnded"
-                       (click)="deleteList(element); $event.stopPropagation()"
-                       icon="trash"
-                       iconColor="error"></bc-icon>
+              <bc-icon *ngIf="!testingPhaseEnded" (click)="deleteList(element); $event.stopPropagation()" icon="trash"
+                iconColor="error"></bc-icon>
             </div>
-          </td>
+          </bc-data-cell>
         </ng-container>
 
-        <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-        <tr bc-advanced-table-row
-            *bcRowDef="let row; columns: columns"
-            cdkDrag [cdkDragData]="row"
-            [cdkDragDisabled]="testingPhaseEnded"
-            [selectable]="true"
-            (rowSelected)="selectList(row)"></tr>
-
+        <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+        <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
+          selectionRow [selectionRowValue]="row" (click)="selectList(row)" cdkDrag [cdkDragDisabled]="testingPhaseEnded"
+          [cdkDragData]="row"></bc-data-row>
         <ng-template #listUnionDescriptionCol let-element>
-          <!-- List union descriptions are validated on the server, they do not contain user-controlled HTML.
-             It is safe to display the description directly as HTML -->
+          <!-- 'List union descriptions are validated on the server, they do not contain user-controlled HTML.
+          It is safe to display the description directly as HTML' -->
           <div class="list-union-description" [innerHTML]="element | getTranslation | safeHtml"></div>
         </ng-template>
-      </bc-advanced-table>
+      </bc-table>
     </ng-template>
   </div>
 
@@ -92,22 +90,16 @@
   <div right>
     <ng-container *ngIf="selectedList; else noListSelected">
       <h2>{{ selectedList.shortDescription | getTranslation }}</h2>
-      <app-proportional-election-candidates
-        [list]="selectedList"
-        [domainOfInfluenceId]="proportionalElection.domainOfInfluenceId"
-        [testingPhaseEnded]="testingPhaseEnded"
-        [locked]="locked"
-        (candidateCreated)="candidateCreated(selectedList, $event)"
+      <app-proportional-election-candidates [list]="selectedList"
+        [domainOfInfluenceId]="proportionalElection.domainOfInfluenceId" [testingPhaseEnded]="testingPhaseEnded"
+        [locked]="locked" (candidateCreated)="candidateCreated(selectedList, $event)"
         (candidateDeleted)="candidateDeleted(selectedList, $event)"
         (candidateUpdated)="candidateAccumulationUpdated(selectedList, $event.candidate.accumulated, $event.wasAccumulated)"
-        [maxCandidateCount]="proportionalElection.numberOfMandates - selectedList.blankRowCount"
-        [parties]="parties"
-      >
+        [maxCandidateCount]="proportionalElection.numberOfMandates - selectedList.blankRowCount" [parties]="parties">
       </app-proportional-election-candidates>
     </ng-container>
     <ng-template #noListSelected>
-      <p class="no-items-message"
-         translate>PROPORTIONAL_ELECTION.LIST.NO_LIST_SELECTED</p>
+      <p class="no-items-message" translate>PROPORTIONAL_ELECTION.LIST.NO_LIST_SELECTED</p>
     </ng-template>
   </div>
 </div>

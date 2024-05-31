@@ -74,10 +74,22 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     try {
-      this.canCreate = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.Create);
-      this.canAssignCountingCircles = await this.permissionService.hasPermission(Permissions.DomainOfInfluenceHierarchy.Update);
-      this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateAll);
-      this.canDelete = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.Delete);
+      this.canCreate = await this.permissionService.hasAnyPermission(
+        Permissions.DomainOfInfluence.CreateSameCanton,
+        Permissions.DomainOfInfluence.CreateAll,
+      );
+      this.canAssignCountingCircles = await this.permissionService.hasAnyPermission(
+        Permissions.DomainOfInfluenceHierarchy.UpdateSameCanton,
+        Permissions.DomainOfInfluenceHierarchy.UpdateAll,
+      );
+      this.canEditEverything = await this.permissionService.hasAnyPermission(
+        Permissions.DomainOfInfluence.UpdateSameCanton,
+        Permissions.DomainOfInfluence.UpdateAll,
+      );
+      this.canDelete = await this.permissionService.hasAnyPermission(
+        Permissions.DomainOfInfluence.DeleteSameCanton,
+        Permissions.DomainOfInfluence.DeleteAll,
+      );
       this.tenant = await this.auth.getActiveTenant();
       await this.loadTree();
     } finally {

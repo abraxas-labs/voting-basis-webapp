@@ -4,11 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import {
   newProportionalElection,
@@ -34,6 +32,7 @@ import {
   ProportionalElectionListUnionMainListEditDialogResult,
 } from '../proportional-election-list-union-main-list-edit-dialog/proportional-election-list-union-main-list-edit-dialog.component';
 import { ProportionalElectionListUnionUtil } from './proportional-election-list-union-util';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-proportional-election-list-unions-dialog',
@@ -45,14 +44,13 @@ export class ProportionalElectionListUnionsDialogComponent implements OnInit, Af
 
   public readonly columnsSubList = ['number', 'description', 'listEnumeration', 'mainListNumber', 'actions'];
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
   public proportionalElection: ProportionalElection = newProportionalElection();
   public lists: ProportionalElectionList[] = [];
 
-  public dataSource: MatTableDataSource<ProportionalElectionListUnion> = new MatTableDataSource<ProportionalElectionListUnion>();
-  public dataSourceSubLists: MatTableDataSource<ProportionalElectionListUnion> = new MatTableDataSource<ProportionalElectionListUnion>();
+  public dataSource = new TableDataSource<ProportionalElectionListUnion>();
+  public dataSourceSubLists = new TableDataSource<ProportionalElectionListUnion>();
   public selectedListUnion?: ProportionalElectionListUnion;
   public selectedSubListUnion?: ProportionalElectionListUnion;
 

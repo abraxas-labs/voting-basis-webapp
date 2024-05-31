@@ -8,7 +8,6 @@ import { SimpleStepperComponent } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterContentChecked, ChangeDetectorRef, Component, Inject, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { ImportService } from '../../../core/import.service';
@@ -17,6 +16,7 @@ import { ImportFileContent, ImportType, ProportionalElectionListImport } from '.
 import { ProportionalElection, ProportionalElectionListUnionProto } from '../../../core/models/proportional-election.model';
 import { ProportionalElectionPartyMappingService } from '../../../core/proportional-election-party-mapping.service';
 import { flatMap } from '../../../core/utils/array.utils';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-proportional-election-lists-and-candidates-import-dialog',

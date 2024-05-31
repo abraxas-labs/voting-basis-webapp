@@ -13,6 +13,7 @@ import { newContactPerson } from './contact-person.model';
 import { DomainOfInfluenceCountingCircle } from './counting-circle.model';
 import { DomainOfInfluenceParty } from './domain-of-influence-party.model';
 import { PlausibilisationConfiguration } from './plausibilisation.model';
+import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared/voting_card_color_pb';
 
 export { DomainOfInfluenceProto };
 export { DomainOfInfluenceTypeProto as DomainOfInfluenceType };
@@ -41,6 +42,10 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     externalPrintingCenterEaiMessageType: '',
     sapCustomerOrderNumber: '',
     nameForProtocol: '',
+    virtualTopLevel: false,
+    viewCountingCirclePartialResults: false,
+    votingCardColor: VotingCardColor.VOTING_CARD_COLOR_UNSPECIFIED,
+    electoralRegistrationEnabled: false,
   } as DomainOfInfluence;
 }
 

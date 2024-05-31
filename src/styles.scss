@@ -1,4 +1,4 @@
-@use '~normalize.css/normalize';
+@use '../node_modules/normalize.css/normalize.css';
 @use '@abraxas/voting-lib/style' as *;
 @use './sharedStyles';
 
@@ -35,7 +35,7 @@ body {
   font-style: italic;
 }
 
-.mat-dialog-container {
+.mat-mdc-dialog-container {
   overflow: visible !important;
 
   // custom dialog component needs to be flex to have a fixed child height
@@ -44,16 +44,16 @@ body {
   }
 }
 
-.mat-step-header {
-  // disable material stepping by mat-step click
+.mat-mdc-step-header {
+  // disable material stepping by mat-mdc-step click
   pointer-events: none !important;
 
-  .mat-step-icon {
+  .mat-mdc-step-icon {
     color: $color-white !important;
     background-color: $color-primary;
   }
 
-  &[aria-selected='true'] ~ .mat-step-header .mat-step-icon {
+  &[aria-selected='true'] ~ .mat-mdc-step-header .mat-mdc-step-icon {
     background-color: rgba(0 0 0 / 54%) !important;
   }
 }
@@ -73,10 +73,28 @@ body {
   @extend .mt-4;
 }
 
-.mat-form-field-wrapper {
+.mat-mdc-form-field-wrapper {
   padding-bottom: 0;
 }
 
 .snackbar {
   margin-top: 5rem !important;
+}
+
+vo-lib-dialog {
+  margin: 1.5rem;
+}
+
+bc-radio-button-group .mat-mdc-radio-button ~ .mat-mdc-radio-button:not(.inline) {
+  margin-top: 0 !important;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+bc-switch .error-msg {
+  margin-top: 0;
 }

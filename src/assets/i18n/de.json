@@ -18,7 +18,15 @@
     "NEXT": "Weiter",
     "FINISH": "Abschliessen",
     "CANCEL": "Abbrechen",
-    "OPTIONAL": "optional"
+    "OPTIONAL": "optional",
+    "YES": "Ja",
+    "CHANGE": "Anpassen",
+    "CHANGES": {
+      "TITLE": "Änderungen",
+      "MSG": "Sind Sie sicher, dass Sie die Seite ohne zu Speichern verlassen wollen?"
+    },
+    "RELOAD": "Neu laden",
+    "NO_PERMISSIONS": "Keine Berechtigung"
   },
   "ACTIONS": {
     "EDIT": "Bearbeiten",
@@ -40,6 +48,7 @@
   },
   "ERROR_MESSAGES": {
     "DuplicatedBfsException": "Diese BFS-Nummber ist bereits vergeben.",
+    "DuplicatedPoliticalBusinessNumberException": "Die Geschäftsnummer ist auf dieser Geschäftsebene bereits vergeben.",
     "NonUniqueCandidateNumberException": "Die Kandidaten/innen-Nummer ist bereits vergeben.",
     "ContestWithExistingPoliticalBusinessesException": "Der Urnengang beinhaltet eingerichtete Geschäfte. Bitte löschen Sie zuerst die Geschäfte.",
     "CountingCircleInScheduledMergeException": "Der Auszählungskreis befindet sich in einer Fusion und ist nicht bearbeitbar.",
@@ -68,6 +77,7 @@
     "CODE": "Code",
     "SORT_NUMBER": "Sortierungsnummer",
     "NAME_FOR_PROTOCOL": "Bezeichnung für Protokoll",
+    "E_VOTING": "E-Voting Auszählungskreis",
     "AUTHORITY": "Behörde",
     "DOMAIN_OF_INFLUENCE": {
       "ASSIGNMENT": "Wahlkreis-Zuordnung",
@@ -77,7 +87,8 @@
     "STATES": {
       "1": "Aktiv",
       "2": "Gelöscht",
-      "3": "Fusioniert"
+      "3": "Fusioniert",
+      "4": "Inaktiv"
     },
     "MODIFIED_ON": "Zuletzt geändert",
     "DETAIL": {
@@ -143,6 +154,8 @@
     "SORT_NUMBER": "Sortierungsnummer",
     "NAME_FOR_PROTOCOL": "Bezeichnung für Protokoll",
     "NO_DOMAIN_OF_INFLUENCE_SELECTED": "Kein Wahlkreis ausgewählt",
+    "VIRTUAL_TOP_LEVEL": "Virtueller Wahlkreis (oberste Ebene)",
+    "VIEW_COUNTING_CIRCLE_PARTIAL_RESULTS": "Teilergebnisse von untergeordneten Auszählungskreisen anzeigen",
     "COUNTING_CIRCLE": {
       "ASSIGN": "Auszählungskreise zuordnen",
       "ASSIGN_SELECTED": "Ausgewählte Auszählungskreise",
@@ -185,6 +198,18 @@
     "STIMMUNTERLAGEN": {
       "TITLE": "Stimmunterlagen",
       "RESPONSIBLE_FOR_VOTING_CARDS": "Wahlkreis generiert Stimmrechtsausweise",
+      "ELECTORAL_REGISTRATION_ENABLED": "Wahlkreis verwendet Stimmregister",
+      "VOTING_CARD_COLOR": "Farbe des Stimmrechtsausweis",
+      "VOTING_CARD_COLORS": {
+        "1": "Blau",
+        "2": "Chamois",
+        "3": "Gelb",
+        "4": "Gold",
+        "5": "Grau",
+        "6": "Rosa",
+        "7": "Rot",
+        "8": "Grün"
+      },
       "VOTING_CARD_SHIPPING_FRANKING": {
         "1": "B1 Post",
         "2": "B2 Post",
@@ -305,6 +330,7 @@
     "CREATE_FROM_PRECONFIGURED_DATE": "Urnengang eröffnen",
     "CUSTOM_DATE": "Anderer Abstimmungstermin",
     "DESCRIPTION": "Bezeichnung",
+    "DESCRIPTION_HEADER": "Bezeichnung Urnengang",
     "END_OF_TESTING_PHASE": "Testphase bis",
     "CHOOSE_CUSTOM_DATE": "anderen Termin auswählen",
     "DOMAIN_OF_INFLUENCE": "Wahlkreis auf der höchsten Hierarchiestufe, auf der Geschäfte stattfinden (wird benötigt, um Abhängigkeiten zu anderen Urnengängen zu prüfen):",
@@ -338,10 +364,6 @@
       "DESCRIPTION": "Der Urnengang wurde am {{date}} um 23.59 Uhr für die Erfassung gesperrt. Zu diesem Zeitpunkt wurde der Signaturprozess ausgesetzt/beendet. Damit die Nachvollziehbarkeit gewährleistet ist, muss der Urnengang aktiv freigegeben werden. Möchten Sie den Urnengang entsperren und den Signaturprozess erneut bis heute um 23.59 Uhr starten?",
       "SAVE": "Urnengang entsperren"
     },
-    "COUNTING_CIRCLES": {
-      "DESCRIPTION": "Bezeichnung",
-      "E_VOTING": "E-Voting"
-    },
     "PREVIOUS_CONTEST": "Urnengang zum Vergleich von Plausibilisierungen",
     "STATE": "Status",
     "STATES": {
@@ -351,7 +373,23 @@
       "3": "Vergangen (Gesperrt)",
       "4": "Vergangen (Entsperrt)",
       "5": "Archiviert"
+    },
+    "TYPE": {
+      "TITLE": "Typ",
+      "CONTEST": "Urnengang",
+      "POLITICAL_ASSEMBLY": "Versammlung"
     }
+  },
+  "POLITICAL_ASSEMBLY": {
+    "NEW": "Versammlung hinzufügen",
+    "EDIT": "Versammlung bearbeiten",
+    "DOMAIN_OF_INFLUENCE": "Wahlkreis auf der höchsten Hierarchiestufe, auf der Geschäfte stattfinden (wird benötigt, um Abhängigkeiten zu anderen Urnengängen zu prüfen):",
+    "PRECONFIGURED_DATE": "Blanko-Abstimmungstermin",
+    "CUSTOM_DATE": "Anderer Abstimmungstermin",
+    "DESCRIPTION": "Bezeichnung",
+    "CHOOSE_CUSTOM_DATE": "anderen Termin auswählen",
+    "CONTEST_DATE": "Abstimmungstermin",
+    "CONFIRM_DELETE": "Sind Sie sicher, dass die Versammlung gelöscht werden soll?"
   },
   "POLITICAL_BUSINESS": {
     "NEW": "Geschäft hinzufügen",
@@ -429,9 +467,10 @@
     "RESULT_ALGORITHM": {
       "TITLE": "Berechnungsverfahren",
       "TYPES": {
-        "1": "Mehrheit der Stimmenden",
-        "2": "Einstimmigkeit aller beteiligten Auszählungskreise",
-        "3": "Mehrheit aller beteiligten Auszählungskreise"
+        "1": "Mehrheit der Stimmen",
+        "2": "Alle Gemeinden",
+        "3": "Mehrheit der Gemeinden",
+        "4": "Mehrheit der Stimmen und Gemeinden"
       }
     },
     "BALLOT": {
@@ -448,14 +487,24 @@
     },
     "QUESTION": {
       "TITLE_STANDARD" : "Frage",
-      "TITLE_VARIANT_FIRST" : "Frage 1",
-      "TITLE_VARIANT" : "Frage {{number}} (Gegenvorschlag / Variante {{number}})",
+      "TITLE_VARIANT" : "Frage {{number}}",
       "ADD": "weitere Frage hinzufügen"
     },
     "TIE_BREAK_QUESTION": {
       "TITLE": "Stichfrage(n)",
-      "SINGLE_TITLE": "Stichfrage {{number}} (Frage {{question1Number}} / Frage {{question2Number}})",
+      "SINGLE_TITLE": "Stichfrage {{number}}",
       "HAS_TIE_BREAK_QUESTIONS": "Vorlage mit Stichfrage(n)"
+    },
+    "BALLOT_QUESTION_TYPE": {
+      "TYPES": {
+        "1": "Hauptvorlage",
+        "2": "Gegenvorschlag",
+        "2_WITH_NUMBER": "Gegenvorschlag {{number}}",
+        "3": "Variante",
+        "3_WITH_NUMBER": "Variante {{number}}"
+      },
+      "TIE_BREAK": "Stichfrage",
+      "TIE_BREAK_WITH_NUMBER": "Stichfrage {{number}}"
     },
     "RESULT_ENTRY": {
       "TITLE": "Erfassungsweise",
@@ -524,7 +573,7 @@
       "NEW": "Liste hinzufügen",
       "EDIT": "Liste bearbeiten",
       "NO_LIST_SELECTED": "Keine Liste ausgewählt",
-      "ORDER_NUMBER": "Listennummer",
+      "ORDER_NUMBER": "Listen-Nr.",
       "DESCRIPTION": "Bezeichnung",
       "SHORT_DESCRIPTION": "Kurzbezeichnung",
       "BLANK_ROW_COUNT": "Leere Zeilen",
@@ -617,6 +666,10 @@
       "TITLE": "Prüfziffer",
       "USE": "Prüfziffer verwenden",
       "ENFORCE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+    },
+    "IS_IN_UNION": {
+      "TITLE": "Verbundenes Geschäft",
+      "MSG": "Berechnungsverfahren wird bei allen verbundenen Geschäften geändert und bestehende Ergebnisse werden zurückgesetzt."
     }
   },
   "MAJORITY_ELECTION": {
@@ -765,7 +818,7 @@
     "IMPORT_CONTEST": "Urnengang importieren",
     "IMPORT_POLITICAL_BUSINESS": "Geschäft(e) importieren",
     "IMPORT_MAJORITY_ELECTION_CANDIDATES": "Kandidierende importieren",
-    "IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES": "Listen/Kandidierende importieren",
+    "IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES": "Importieren",
     "POLITICAL_BUSINESS_INFOS": "Geschäftsinformationen",
     "CONTEST_INFOS": "Urnenganginformationen",
     "IMPORT_SUCCESSFUL": "Die importierten Daten werden verarbeitet. Dies kann etwas Zeit in Anspruch nehmen.",
@@ -809,10 +862,6 @@
       "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden",
       "MANDATE_ALGORITHM": "Sitzverteilungsverfahren"
     },
-    "ELECTORAL_REGISTRATION": {
-      "TITLE": "Stimmregister",
-      "ENABLED": "Kanton verwendet Stimmregister"
-    },
     "MAJORITY_ELECTION": {
       "TITLE": "Majorzwahl",
       "ABSOLUTE_MAJORITY_ALGORITHM": "Berechungsverfahren",
@@ -825,6 +874,7 @@
     },
     "GENERAL": "Allgemein",
     "NEW_ZH_FEATURES": "Neue ZH Features",
+    "PUBLISH_RESULTS": "Status Publiziert",
     "SWISS_ABROAD_VOTING_RIGHT": {
       "TITLE": "Auslandschweizerinnen und Auslandschweizer",
       "DOMAIN_OF_INFLUENCE_TYPES": "Stimmrecht auf folgenden Geschäftsebenen"
@@ -874,6 +924,10 @@
           "2": "Alphabetisch"
         }
       }
+    },
+    "COUNTING_CIRCLE_RESULT_STATE": {
+      "TITLE": "Bezeichnung Geschäftsstatus",
+      "USE_STATE": "Status verwenden"
     }
   },
   "VOTING_CHANNELS": {
@@ -989,7 +1043,18 @@
       "ExportConfigurationDeleted": "Schnittstellendefinition gelöscht",
       "DomainOfInfluencePartyCreated": "Partei oder andere Gruppierung erstellt",
       "DomainOfInfluencePartyUpdated": "Partei oder andere Gruppierung editiert",
-      "DomainOfInfluencePartyDeleted": "Partei oder andere Gruppierung gelöscht"
+      "DomainOfInfluencePartyDeleted": "Partei oder andere Gruppierung gelöscht",
+      "PoliticalAssemblyCreated": "Versammlung eingerichtet",
+      "PoliticalAssemblyUpdated": "Versammlung editiert",
+      "PoliticalAssemblyDeleted": "Versammlung gelöscht"
     }
+  },
+  "PAGINATOR": {
+    "ITEMS_PER_PAGE": "Einträge pro Seite",
+    "NEXT_PAGE": "Nächste Seite",
+    "PREVIOUS_PAGE": "Vorherige Seite",
+    "FIRST_PAGE": "Erste Seite",
+    "LAST_PAGE": "Letzte Seite",
+    "OF_LABEL": "von"
   }
 }

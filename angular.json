@@ -18,7 +18,11 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             // required by the base components
-            "allowedCommonJsDependencies": ["moment/locale/de", "js-sha256", "lodash"],
+            "allowedCommonJsDependencies": [
+              "moment/locale/de",
+              "js-sha256",
+              "lodash"
+            ],
             "outputPath": "dist/voting-basis",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -40,7 +44,9 @@
                 "output": "assets"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.scss"
+            ],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "node_modules/"
@@ -93,22 +99,22 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "voting-basis:build",
-            "hmr": true
+            "hmr": true,
+            "buildTarget": "voting-basis:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "voting-basis:build:production"
+              "buildTarget": "voting-basis:build:production"
             },
             "local-sta": {
-              "browserTarget": "voting-basis:build:local-sta"
+              "buildTarget": "voting-basis:build:local-sta"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "voting-basis:build"
+            "buildTarget": "voting-basis:build"
           }
         },
         "test": {
@@ -118,15 +124,23 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.component.html"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.component.html"
+            ]
           }
         },
         "e2e": {
@@ -144,5 +158,15 @@
       }
     }
   },
-  "defaultProject": "voting-basis"
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
 }

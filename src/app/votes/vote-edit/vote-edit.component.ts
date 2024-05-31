@@ -7,7 +7,7 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
@@ -17,12 +17,18 @@ import { VoteService } from '../../core/vote.service';
 import { VoteGeneralInformationsComponent } from '../vote-general-informations/vote-general-informations.component';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
+import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
 
 @Component({
   selector: 'app-vote-edit',
   templateUrl: './vote-edit.component.html',
 })
-export class VoteEditComponent implements OnInit, AfterContentChecked {
+export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+
   @ViewChild(SimpleStepperComponent, { static: true })
   public stepper!: SimpleStepperComponent;
 
@@ -38,6 +44,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
   public eVoting: boolean = false;
   public isVariantsBallot: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
+  public hasChanges: boolean = false;
 
   private persistedData: Vote = {} as Vote;
 
@@ -79,11 +86,15 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
     this.cd.detectChanges();
   }
 
+  public get hasUnsavedChanges(): boolean {
+    return this.hasChanges;
+  }
+
   public async submitVote(): Promise<void> {
     this.stepLoading = true;
 
     try {
-      if (!isEqual(this.data, this.persistedData)) {
+      if (this.hasChanges) {
         if (this.isNew) {
           this.data.id = await this.voteService.create(this.data);
         } else {
@@ -91,6 +102,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
         }
         this.persistedData = { ...this.data };
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+        this.hasChanges = false;
       }
 
       const newlyCreated = this.isNew;
@@ -157,6 +169,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
 
       if (ballotsToDelete.length > 0 || ballotsToUpdate.length > 0 || ballotsToCreate.length > 0) {
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+        this.hasChanges = false;
       }
 
       this.stepper.next();
@@ -169,16 +182,21 @@ export class VoteEditComponent implements OnInit, AfterContentChecked {
     this.stepLoading = true;
 
     try {
-      if (!isEqual(this.data, this.persistedData)) {
+      if (this.hasChanges) {
         await this.voteService.update(this.data);
         this.persistedData = { ...this.data };
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+        this.hasChanges = false;
       }
 
       await this.router.navigate(['../../'], { relativeTo: this.route });
     } finally {
       this.stepLoading = false;
     }
+  }
+
+  public contentChanged(): void {
+    this.hasChanges = !isEqual(this.data, this.persistedData);
   }
 
   private prepareBallots(): void {

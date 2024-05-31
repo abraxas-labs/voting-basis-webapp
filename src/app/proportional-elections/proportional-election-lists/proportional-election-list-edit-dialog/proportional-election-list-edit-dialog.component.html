@@ -6,17 +6,20 @@
              [required]="true"
              [disabled]="testingPhaseEnded"
              [maxlength]="6"
-             [(value)]="list.orderNumber"></bc-text>
+             [value]="list.orderNumber"
+             (valueChange)="list.orderNumber = $event; contentChanged()"></bc-text>
 
     <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.LIST.DESCRIPTION' | translate"
-                  [maxlength]="100"
-                  [(value)]="list.description"
-                  [singleLanguageInput]="true"></app-translated-formfield>
+                              [maxlength]="100"
+                              [value]="list.description"
+                              (valueChange)="list.description = $event; contentChanged()"
+                              [singleLanguageInput]="true"></app-translated-formfield>
 
     <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate"
-                  [maxlength]="20"
-                  [(value)]="list.shortDescription"
-                  [singleLanguageInput]="true"></app-translated-formfield>
+                              [maxlength]="20"
+                              [value]="list.shortDescription"
+                              (valueChange)="list.shortDescription = $event; contentChanged()"
+                              [singleLanguageInput]="true"></app-translated-formfield>
 
     <bc-number [label]="'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate"
                [required]="true"
@@ -24,7 +27,7 @@
                [max]="numberOfMandates"
                [min]="0"
                [value]="list.blankRowCount"
-               (valueChange)="list.blankRowCount = $event"></bc-number>
+               (valueChange)="list.blankRowCount = $event; contentChanged()"></bc-number>
   </div>
 
   <div footer class="mr-3">
@@ -33,6 +36,6 @@
                     [saving]="saving"
                     [sticky]="false"
                     (save)="save()"
-                    (cancel)="cancel()"></vo-lib-button-bar>
+                    (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

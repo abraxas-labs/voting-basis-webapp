@@ -4,9 +4,8 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
 import { ElectionCandidate } from '../../core/models/election-candidate.model';
 import { PoliticalBusinessUnion, PoliticalBusinessUnionType } from '../../core/models/political-business-union.model';
@@ -20,11 +19,10 @@ import { ProportionalElectionUnionService } from '../../core/proportional-electi
 export class PoliticalBusinessUnionDetailCandidatesTabComponent implements AfterViewInit {
   public readonly columns = ['number', 'lastName', 'firstName', 'dateOfBirth', 'sex', 'title', 'incumbent', 'zipCode', 'locality'];
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
   public loading: boolean = false;
-  public dataSource: MatTableDataSource<ElectionCandidate> = new MatTableDataSource<ElectionCandidate>();
+  public dataSource = new TableDataSource<ElectionCandidate>();
 
   private politicalBusinessUnionValue!: PoliticalBusinessUnion;
 

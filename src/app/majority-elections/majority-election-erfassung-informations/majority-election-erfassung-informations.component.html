@@ -7,8 +7,11 @@
                  displayExpr="description"
                  valueExpr="value"
                  [required]="true"
-                 [(value)]="data.resultEntry"></bc-dropdown>
-    <bc-checkbox [(checked)]="data.enforceResultEntryForCountingCircles"
+                 [value]="data.resultEntry"
+                 (valueChange)="data.resultEntry = $event; contentChanged.emit()"
+                 [subscriptSizing]="'dynamic'"></bc-dropdown>
+    <bc-checkbox [checked]="data.enforceResultEntryForCountingCircles"
+                 (checkedChange)="data.enforceResultEntryForCountingCircles = $event; contentChanged.emit()"
                  [label]="'MAJORITY_ELECTION.ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES' | translate"
                  [disabled]="locked"></bc-checkbox>
   </div>
@@ -16,11 +19,15 @@
   <ng-container *ngIf="data.resultEntry === resultEntryType.MAJORITY_ELECTION_RESULT_ENTRY_DETAILED">
     <bc-number [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_SIZE' | translate"
                [disabled]="testingPhaseEnded"
-               [(value)]="ballotBundleSize"></bc-number>
+               [value]="ballotBundleSize"
+               (valueChange)="ballotBundleSize = $event; contentChanged.emit()"
+               [subscriptSizing]="'dynamic'"></bc-number>
     <bc-number [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_SAMPLE_SIZE' | translate"
                [disabled]="testingPhaseEnded"
                [max]="data.ballotBundleSize"
-               [(value)]="ballotBundleSampleSize"></bc-number>
+               [value]="ballotBundleSampleSize"
+               (valueChange)="ballotBundleSampleSize = $event; contentChanged.emit()"
+               [subscriptSizing]="'dynamic'"></bc-number>
 
     <div class="flex-grid">
       <bc-label class="full-width" [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
@@ -29,11 +36,12 @@
                    [(checked)]="data.automaticBallotBundleNumberGeneration"
                    [disabled]="testingPhaseEnded"
                    [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.AUTOMATIC' | translate"
-                   (checkedChange)="refreshBallotNumberGenerationChoices()"></bc-checkbox>
+                   (checkedChange)="refreshBallotNumberGenerationChoices(); contentChanged.emit()"></bc-checkbox>
       <bc-radio-button-group class="ml-2"
                              orientation="vertical"
                              [items]="ballotNumberGenerationChoices"
-                             [(value)]="data.ballotNumberGeneration">
+                             [value]="data.ballotNumberGeneration"
+                             (valueChange)="data.ballotNumberGeneration = $event; contentChanged.emit()">
       </bc-radio-button-group>
     </div>
 
@@ -42,11 +50,13 @@
       <bc-radio-button-group class="ml-2"
                              orientation="vertical"
                              [items]="automaticEmptyVoteCountingChoices"
-                             [(value)]="data.automaticEmptyVoteCounting"
+                             [value]="data.automaticEmptyVoteCounting"
+                             (valueChange)="data.automaticEmptyVoteCounting = $event; contentChanged.emit()"
                              [disabled]="testingPhaseEnded">
       </bc-radio-button-group>
       <bc-checkbox class="ml-2"
-                   [(checked)]="data.enforceEmptyVoteCountingForCountingCircles"
+                   [checked]="data.enforceEmptyVoteCountingForCountingCircles"
+                   (checkedChange)="data.enforceEmptyVoteCountingForCountingCircles = $event; contentChanged.emit()"
                    [label]="'MAJORITY_ELECTION.ENFORCE_EMPTY_VOTE_COUNTING_FOR_COUNTING_CIRCLES' | translate"
                    [disabled]="locked"></bc-checkbox>
     </div>
@@ -56,11 +66,13 @@
       <bc-radio-button-group class="ml-2"
                              [items]="reviewProcedureChoices"
                              orientation="vertical"
-                             [(value)]="data.reviewProcedure"
+                             [value]="data.reviewProcedure"
+                             (valueChange)="data.reviewProcedure = $event; contentChanged.emit()"
                              [disabled]="testingPhaseEnded">
       </bc-radio-button-group>
       <bc-checkbox class="ml-2"
-                   [(checked)]="data.enforceReviewProcedureForCountingCircles"
+                   [checked]="data.enforceReviewProcedureForCountingCircles"
+                   (checkedChange)="data.enforceReviewProcedureForCountingCircles = $event; contentChanged.emit()"
                    [label]="'MAJORITY_ELECTION.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
                    [disabled]="testingPhaseEnded"></bc-checkbox>
     </div>
@@ -68,11 +80,13 @@
     <div *ngIf="useCandidateCheckDigit" class="flex-grid">
       <bc-label class="full-width col-span-2" [label]="'MAJORITY_ELECTION.CANDIDATE_CHECK_DIGIT.TITLE' | translate"></bc-label>
       <bc-checkbox class="ml-2"
-                   [(checked)]="data.candidateCheckDigit"
+                   [checked]="data.candidateCheckDigit"
+                   (checkedChange)="data.candidateCheckDigit = $event; contentChanged.emit()"
                    [disabled]="testingPhaseEnded"
                    [label]="'MAJORITY_ELECTION.CANDIDATE_CHECK_DIGIT.USE' | translate"></bc-checkbox>
       <bc-checkbox class="ml-2"
-                   [(checked)]="data.enforceCandidateCheckDigitForCountingCircles"
+                   [checked]="data.enforceCandidateCheckDigitForCountingCircles"
+                   (checkedChange)="data.enforceCandidateCheckDigitForCountingCircles = $event; contentChanged.emit()"
                    [label]="'MAJORITY_ELECTION.CANDIDATE_CHECK_DIGIT.ENFORCE_FOR_COUNTING_CIRCLES' | translate"
                    [disabled]="testingPhaseEnded"></bc-checkbox>
     </div>

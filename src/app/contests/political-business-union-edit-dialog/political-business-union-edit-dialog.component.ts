@@ -7,11 +7,11 @@
 import { AuthorizationService } from '@abraxas/base-components';
 import { EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
 import { PoliticalBusinessUnion, PoliticalBusinessUnionType } from '../../core/models/political-business-union.model';
 import { ProportionalElectionUnionService } from '../../core/proportional-election-union.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-political-business-union-edit-dialog',

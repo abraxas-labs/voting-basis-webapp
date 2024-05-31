@@ -4,12 +4,12 @@
  * For license information see LICENSE file.
  */
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { EnumUtil } from '@abraxas/voting-lib';
+import { TableDataSource } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-counting-circle-electorate-assign-dialog',
@@ -20,7 +20,7 @@ export class CountingCircleElectorateAssignDialogComponent {
   public readonly columns = ['select', 'domainOfInfluenceType'];
   public readonly columnsSelected = ['domainOfInfluenceType'];
 
-  public dataSource: MatTableDataSource<DomainOfInfluenceType> = new MatTableDataSource<DomainOfInfluenceType>();
+  public dataSource = new TableDataSource<DomainOfInfluenceType>();
   public selection = new SelectionModel<DomainOfInfluenceType>(true, []);
   public isAllSelected: boolean = false;
 

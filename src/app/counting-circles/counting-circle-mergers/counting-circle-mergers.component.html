@@ -8,47 +8,51 @@
                (buttonClick)="create()"></bc-button>
   </div>
 
-  <bc-advanced-table *ngIf="mergers.length > 0; else noData" class="w-full" [dataSource]="mergers">
-    <ng-container bcColumnDef="name">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.NAME' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.newCountingCircle.name }}</td>
+  <bc-table *ngIf="mergers.length > 0; else noData" class="w-full" [dataSource]="mergers">
+    <ng-container columnDef="name">
+      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.NAME' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.newCountingCircle.name }}</bc-data-cell>
     </ng-container>
-    <ng-container bcColumnDef="bfs">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.BFS' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.newCountingCircle.bfs }}</td>
+
+    <ng-container columnDef="bfs">
+      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.BFS' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.newCountingCircle.bfs }}</bc-data-cell>
     </ng-container>
-    <ng-container bcColumnDef="code">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.CODE' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.newCountingCircle.code }}</td>
+
+    <ng-container columnDef="code">
+      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.CODE' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.newCountingCircle.code }}</bc-data-cell>
     </ng-container>
-    <ng-container bcColumnDef="activeFrom">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.ACTIVE_FROM' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.activeFrom | date }}</td>
+
+    <ng-container columnDef="activeFrom">
+      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.ACTIVE_FROM' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.activeFrom | date }}</bc-data-cell>
     </ng-container>
-    <ng-container bcColumnDef="mergedCountingCircles">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.MERGED_COUNTING_CIRCLES' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">
+
+    <ng-container columnDef="mergedCountingCircles">
+      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.MERGED_COUNTING_CIRCLES' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
         <div class="py-2">
           <div *ngFor="let cc of element.mergedCountingCircles">
             <span>{{ cc.name }}</span>
           </div>
         </div>
-      </td>
+      </bc-data-cell>
     </ng-container>
 
-    <ng-container bcColumnDef="actions">
-      <th bc-header-cell class="actions-header" *bcHeaderCellDef></th>
-      <td bc-cell *bcCellDef="let element">
+    <ng-container columnDef="actions">
+      <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
         <div class="flex">
           <bc-icon *ngIf="!element.merged" class="clickable" (click)="edit(element)" icon="edit"></bc-icon>
           <bc-icon *ngIf="!element.merged" class="clickable ml-2" (click)="delete(element)" icon="trash" iconColor="error"></bc-icon>
         </div>
-      </td>
+      </bc-data-cell>
     </ng-container>
 
-    <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-    <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
-  </bc-advanced-table>
+    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+    <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>  
+  </bc-table>
 </vo-lib-page>
 
 <ng-template #noData>

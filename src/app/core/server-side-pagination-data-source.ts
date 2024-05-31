@@ -8,7 +8,7 @@ import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Page, Pageable } from './models/page.model';
 import { MatTableDataSource } from '@angular/material/table';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@abraxas/base-components';
 
 // TableDataSource inherits from MatTableDataSource which is used for client side filtering and pagination.
 // This class overrides the client side filtering and pagination behavior, so that it can be used with server side pagination.

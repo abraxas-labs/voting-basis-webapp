@@ -100,7 +100,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
       throw new Error('could not access doi of contest');
     }
 
-    this.domainOfInfluences = await this.domainOfInfluenceService.filterOnlyManagedByCurrentTenant(
+    this.domainOfInfluences = await this.domainOfInfluenceService.filterOnlyManagedByCurrentTenantAndNotVirtualTopLevel(
       this.domainOfInfluenceTree.getSelfAndChildrenAsFlatList(contestDomainOfInfluenceNode),
     );
 

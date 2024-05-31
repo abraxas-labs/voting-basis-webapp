@@ -81,5 +81,6 @@ export function newMajorityElectionCandidate(position: number, majorityElectionI
     majorityElectionId,
     position,
     origin: '',
+    sex: undefined,
   };
 }

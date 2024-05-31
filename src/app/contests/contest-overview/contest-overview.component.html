@@ -1,38 +1,63 @@
 <vo-lib-page [contentLoading]="loading" header="CONTEST.TITLE">
-  <div class="flex">
-    <bc-button variant="tertiary"
-               icon="plus"
-               label="{{'CONTEST.NEW' | translate}}"
-               (buttonClick)="create()"></bc-button>
-    <bc-button class="ml-2"
-               variant="tertiary"
-               icon="download"
-               label="{{'IMPORT.IMPORT_CONTEST' | translate}}"
-               (click)="import()"></bc-button>
+  <div *ngIf="canCreate" class="flex">
+    <bc-button
+      *ngIf="canAddPoliticalAssembly"
+      variant="tertiary"
+      icon="plus"
+      label="{{ 'POLITICAL_ASSEMBLY.NEW' | translate }}"
+      (buttonClick)="createPoliticalAssembly()"
+    ></bc-button>
+    <bc-button variant="tertiary" icon="plus" label="{{ 'CONTEST.NEW' | translate }}" (buttonClick)="create()"></bc-button>
+    <bc-button
+      class="ml-2"
+      variant="tertiary"
+      icon="download"
+      label="{{ 'IMPORT.IMPORT_CONTEST' | translate }}"
+      (click)="import()"
+    ></bc-button>
   </div>
-  <app-contest-list (create)="create($event.date)"
-                    (edit)="edit($event)"
-                    (delete)="delete($event.id)"
-                    (view)="view($event.id)"
-                    (export)="export($event.id)"
-                    [contests]="contests"
-                    [showEndOfTestingPhase]="true">
+  <app-contest-list
+    (create)="create($event.date)"
+    (edit)="edit($event)"
+    (delete)="delete($event)"
+    (view)="view($event.id)"
+    (export)="export($event.id)"
+    [contests]="contests"
+    [showEndOfTestingPhase]="true"
+    [showType]="canAddPoliticalAssembly"
+    [canCreate]="canCreate"
+    [canEdit]="canEdit"
+    [canDelete]="canDelete"
+    [politicalAssemblies]="politicalAssemblies"
+  >
   </app-contest-list>
 
   <h2 translate>CONTEST.PAST_CONTESTS</h2>
-  <app-contest-list (archive)="archive($event)"
-                    (pastUnlock)="pastUnlock($event)"
-                    (edit)="edit($event)"
-                    (view)="view($event.id)"
-                    (export)="export($event.id)"
-                    [showArchivePer]="true"
-                    [contests]="pastContests"></app-contest-list>
+  <app-contest-list
+    (archive)="archive($event)"
+    (pastUnlock)="pastUnlock($event)"
+    (edit)="edit($event)"
+    (view)="view($event.id)"
+    (export)="export($event.id)"
+    [showArchivePer]="true"
+    [contests]="pastContests"
+    [canCreate]="canCreate"
+    [canEdit]="canEdit"
+    [canDelete]="canDelete"
+    [showType]="false"
+  ></app-contest-list>
 
   <h2 translate>CONTEST.ARCHIVED_CONTESTS</h2>
-  <app-contest-list class="mb-4 block"
-                    (view)="view($event.id)"
-                    (export)="export($event.id)"
-                    [showArchivePer]="true"
-                    [showPaginator]="true"
-                    [contests]="archivedContests"></app-contest-list>
+  <app-contest-list
+    class="mb-4 block"
+    (view)="view($event.id)"
+    (export)="export($event.id)"
+    [showArchivePer]="true"
+    [showPaginator]="true"
+    [contests]="archivedContests"
+    [canCreate]="canCreate"
+    [canEdit]="canEdit"
+    [canDelete]="canDelete"
+    [showType]="false"
+  ></app-contest-list>
 </vo-lib-page>

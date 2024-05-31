@@ -5,5 +5,34 @@
 }
 
 bc-checkbox {
-  margin-left: 0;
+  margin-left: -10px;
+}
+
+bc-radio-button-group {
+  margin-left: -10px;
+}
+
+.state-colorbox {
+  border-radius: 4px;
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.counting-circle-result-state-descriptions {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+}
+
+.text-checkbox-container {
+  display: flex;
+
+  bc-text {
+    flex: 1;
+  }
+
+  bc-checkbox {
+    margin-left: 1rem;
+    align-self: center;
+  }
 }

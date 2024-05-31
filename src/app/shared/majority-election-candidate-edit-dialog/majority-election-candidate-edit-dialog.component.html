@@ -5,7 +5,8 @@
     content
     [candidate]="data"
     [testingPhaseEnded]="testingPhaseEnded"
-    [isCommunalDoiType]="isCommunalDoiType">
+    [isCommunalDoiType]="isCommunalDoiType"
+    (contentChanged)="contentChanged()">
   </app-majority-election-candidate-edit>
 
   <div footer class="mr-3">
@@ -14,6 +15,6 @@
                     [saving]="saving"
                     [sticky]="false"
                     (save)="save()"
-                    (cancel)="cancel()"></vo-lib-button-bar>
+                    (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

@@ -1,0 +1,54 @@
+<vo-lib-dialog [contentLoading]="loading">
+  <h1 header>{{!isNew ? ('POLITICAL_ASSEMBLY.EDIT' | translate) : ('POLITICAL_ASSEMBLY.NEW' | translate)}}</h1>
+
+  <div content class="form mr-3">
+    <bc-dropdown *ngIf="domainOfInfluences.length !== 1"
+                 [items]="domainOfInfluences"
+                 [disabled]="!isNew"
+                 displayExpr="name"
+                 valueExpr="id"
+                 [required]="true"
+                 [value]="data.domainOfInfluenceId"
+                 (valueChange)="updateDomainOfInfluenceId($event); contentChanged()"
+                 [label]="'POLITICAL_ASSEMBLY.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
+
+    <ng-container *ngIf="isNew; else editDate">
+      <bc-dropdown [label]="'POLITICAL_ASSEMBLY.PRECONFIGURED_DATE' | translate"
+                   [disabled]="customDateSelected"
+                   [items]="preconfiguredDates"
+                   [value]="selectedPreconfiguredDate"
+                   [required]="true"
+                   (valueChange)="updateSelectedPreconfiguredDate($event); contentChanged()"
+                   displayExpr="displayValue"></bc-dropdown>
+      <bc-checkbox [checked]="customDateSelected"
+                   (checkedChange)="customDateSelected = $event; contentChanged()"
+                   [label]="'POLITICAL_ASSEMBLY.CHOOSE_CUSTOM_DATE' | translate"></bc-checkbox>
+      <bc-date [label]="'POLITICAL_ASSEMBLY.CUSTOM_DATE' | translate"
+                    [disabled]="!customDateSelected"
+                    [required]="customDateSelected"
+                    [value]="data.date | date"
+                    (valueChange)="updateDate($event); contentChanged()"></bc-date>
+    </ng-container>
+    <ng-template #editDate>
+      <bc-date [label]="'POLITICAL_ASSEMBLY.CONTEST_DATE' | translate"
+                    [required]="true"
+                    [value]="data.date | date"
+                    (valueChange)="updateDate($event); contentChanged()"></bc-date>
+    </ng-template>
+
+    <app-translated-formfield [label]="'POLITICAL_ASSEMBLY.DESCRIPTION' | translate"
+                              [maxlength]="100"
+                              [value]="data.description"
+                              (valueChange)="data.description = $event; contentChanged()"
+                              [singleLanguageInput]="true"></app-translated-formfield>
+  </div>
+
+  <div footer class="mr-3">
+    <vo-lib-button-bar footer
+                       [canSave]="canSave"
+                       [saving]="saving"
+                       [sticky]="false"
+                       (save)="save()"
+                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
+  </div>
+</vo-lib-dialog>

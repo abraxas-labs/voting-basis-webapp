@@ -4,13 +4,15 @@
   <div content class="form mr-3">
     <bc-text [label]="'MAJORITY_ELECTION.BALLOT_GROUP.SHORT_DESCRIPTION' | translate"
              [required]="true"
-             [(value)]="ballotGroup.shortDescription"></bc-text>
+             [value]="ballotGroup.shortDescription"
+             (valueChange)="ballotGroup.shortDescription = $event; contentChanged()"></bc-text>
 
     <div class="form-group">
       <bc-label [label]="'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate"></bc-label>
       <bc-textarea [required]="true"
                    class="full-width"
-                   [(value)]="ballotGroup.description"></bc-textarea>
+                   [value]="ballotGroup.description"
+                   (valueChange)="ballotGroup.description = $event; contentChanged()"></bc-textarea>
     </div>
 
     <div *ngFor="let election of elections">
@@ -20,7 +22,7 @@
                  [min]="0"
                  [max]="election.numberOfMandates"
                  [value]="ballotGroup | majorityElectionBallotGroupBlankRows:election.id"
-                 (valueChange)="setBlankRows(election.id, +$event)"></bc-number>
+                 (valueChange)="setBlankRows(election.id, +$event); contentChanged()"></bc-number>
     </div>
   </div>
 
@@ -29,6 +31,6 @@
                        [canSave]="canSave"
                        (save)="save()"
                        [saving]="saving"
-                       (cancel)="cancel()"></vo-lib-button-bar>
+                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

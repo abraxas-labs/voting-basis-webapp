@@ -1,0 +1,10 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+.modified {
+  color: $color-grey-4;
+  font-style: italic;
+}
+
+bc-checkbox {
+  margin-left: -10px;
+}

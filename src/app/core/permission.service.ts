@@ -14,18 +14,32 @@ import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
   providedIn: 'root',
 })
 export class PermissionService extends GrpcService<PermissionServicePromiseClient> {
-  private permissionCache?: string[];
+  private permissionCache?: Set<string>;
 
   constructor(grpcBackend: GrpcBackendService) {
     super(PermissionServicePromiseClient, environment, grpcBackend);
   }
 
   public async hasPermission(permission: string): Promise<boolean> {
-    if (this.permissionCache === undefined) {
-      this.permissionCache = await this.listPermissions();
+    await this.ensurePermissionsLoaded();
+    return this.permissionCache!.has(permission);
+  }
+
+  public async hasAnyPermission(...permissions: string[]): Promise<boolean> {
+    await this.ensurePermissionsLoaded();
+    for (const permission of permissions) {
+      if (this.permissionCache!.has(permission)) {
+        return true;
+      }
     }
 
-    return this.permissionCache.includes(permission);
+    return false;
+  }
+
+  private async ensurePermissionsLoaded(): Promise<void> {
+    if (this.permissionCache === undefined) {
+      this.permissionCache = new Set<string>(await this.listPermissions());
+    }
   }
 
   private listPermissions(): Promise<string[]> {

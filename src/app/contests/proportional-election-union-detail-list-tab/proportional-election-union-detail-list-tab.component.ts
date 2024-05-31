@@ -4,9 +4,8 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { PoliticalBusinessUnion } from '../../core/models/political-business-union.model';
 import { ProportionalElectionUnionList } from '../../core/models/proportional-election-union.model';
 import { ProportionalElectionUnionService } from '../../core/proportional-election-union.service';
@@ -14,15 +13,15 @@ import { ProportionalElectionUnionService } from '../../core/proportional-electi
 @Component({
   selector: 'app-proportional-election-union-detail-list-tab',
   templateUrl: './proportional-election-union-detail-list-tab.component.html',
+  styleUrls: ['./proportional-election-union-detail-list-tab.component.scss'],
 })
 export class ProportionalElectionUnionDetailListTabComponent implements AfterViewInit {
   public readonly columns = ['orderNumber', 'shortDescription', 'politicalBusinessNumbers', 'listCount'];
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
   public loading: boolean = false;
-  public dataSource: MatTableDataSource<ProportionalElectionUnionList> = new MatTableDataSource<ProportionalElectionUnionList>();
+  public dataSource = new TableDataSource<ProportionalElectionUnionList>();
 
   private politicalBusinessUnionValue!: PoliticalBusinessUnion;
 

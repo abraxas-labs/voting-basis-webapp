@@ -8,26 +8,36 @@
                (buttonClick)="createOrEdit()"></bc-button>
   </div>
 
-  <bc-advanced-table class="w-full" [dataSource]="cantonSettingsList">
+  <bc-table selection class="w-full" [dataSource]="cantonSettingsList">
 
-    <ng-container bcColumnDef="name">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'CANTON_SETTINGS.NAME' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{'CANTON_SETTINGS.CANTON.NAMES.' + element.canton | translate}}</td>
+    <ng-container columnDef="name">
+      <bc-header-cell *headerCellDef>{{ 'CANTON_SETTINGS.NAME' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        {{'CANTON_SETTINGS.CANTON.NAMES.' + element.canton | translate}}
+      </bc-data-cell>
     </ng-container>
 
-    <ng-container bcColumnDef="shortName">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'CANTON_SETTINGS.SHORT_NAME' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{'CANTON_SETTINGS.CANTON.SHORT_NAMES.' + element.canton | translate}}</td>
+    <ng-container columnDef="shortName">
+      <bc-header-cell *headerCellDef>{{ 'CANTON_SETTINGS.SHORT_NAME' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        {{'CANTON_SETTINGS.CANTON.SHORT_NAMES.' + element.canton | translate}}
+      </bc-data-cell>
     </ng-container>
 
-    <ng-container bcColumnDef="authority">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'CANTON_SETTINGS.AUTHORITY' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.authorityName }}</td>
+    <ng-container columnDef="authority">
+      <bc-header-cell *headerCellDef>{{ 'CANTON_SETTINGS.AUTHORITY' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        {{ element.authorityName }}
+      </bc-data-cell>
     </ng-container>
 
-    <tr bc-header-row *bcHeaderRowDef="['name', 'shortName', 'authority']"></tr>
-    <tr bc-advanced-table-row *bcRowDef="let row; columns: ['name', 'shortName', 'authority']"
-        [selectable]="true"
-        (rowSelected)="createOrEdit(row)"></tr>
-  </bc-advanced-table>
+    <bc-header-row *headerRowDef="let row; columns: ['name', 'shortName', 'authority']"></bc-header-row>
+    <bc-data-row *dataRowDef="let row; columns: ['name', 'shortName', 'authority']; let i = index" 
+    selectionToggle
+    [selectionToggleValue]="row"
+    selectionRow
+    [selectionRowValue]="row"
+    (click)="createOrEdit(row)">
+  </bc-data-row>
+  </bc-table>
 </vo-lib-page>

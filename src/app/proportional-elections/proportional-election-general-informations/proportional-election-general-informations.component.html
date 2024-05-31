@@ -2,12 +2,15 @@
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
            [disabled]="contest.locked"
            [required]="true"
-           [(value)]="data.politicalBusinessNumber"></bc-text>
+           [value]="data.politicalBusinessNumber"
+           (valueChange)="data.politicalBusinessNumber = $event; contentChanged.emit()"
+           [subscriptSizing]="'dynamic'"></bc-text>
 
   <app-translated-formfield [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
                             [disabled]="contest.locked"
                             [maxlength]="100"
-                            [(value)]="data.shortDescription"
+                            [value]="data.shortDescription"
+                            (valueChange)="data.shortDescription = $event; contentChanged.emit()"
                             [singleLanguageInput]="true"></app-translated-formfield>
 
   <div class="form-group">
@@ -15,7 +18,8 @@
                              [disabled]="contest.locked"
                              [maxlength]="500"
                              class="full-width"
-                             [(value)]="data.officialDescription"
+                             [value]="data.officialDescription"
+                             (valueChange)="data.officialDescription = $event; contentChanged.emit()"
                              [singleLanguageInput]="!contest.eVoting"></app-translated-textarea>
   </div>
 
@@ -23,7 +27,8 @@
              [disabled]="contest.testingPhaseEnded"
              [required]="true"
              [value]="data.numberOfMandates"
-             (valueChange)="data.numberOfMandates = +$event"></bc-number>
+             (valueChange)="data.numberOfMandates = +$event; contentChanged.emit()"
+             [subscriptSizing]="'dynamic'"></bc-number>
 
   <bc-dropdown class="full-width"
                *ngIf="domainOfInfluenceTypes.length > 1"
@@ -34,7 +39,9 @@
                [required]="true"
                displayExpr="description"
                valueExpr="value"
-               [(value)]="selectedDomainOfInfluenceType"></bc-dropdown>
+               [value]="selectedDomainOfInfluenceType"
+               (valueChange)="selectedDomainOfInfluenceType = $event; contentChanged.emit()"
+               [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <bc-dropdown class="full-width"
                *ngIf="selectedDomainOfInfluenceType"
@@ -42,8 +49,10 @@
                [disabled]="contest.testingPhaseEnded"
                displayExpr="name"
                [required]="true"
-               [(value)]="selectedDomainOfInfluence"
-               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
+               [value]="selectedDomainOfInfluence"
+               (valueChange)="selectedDomainOfInfluence = $event; contentChanged.emit()"
+               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
+               [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <bc-dropdown class="full-width"
                [label]="'PROPORTIONAL_ELECTION.MANDATE_ALGORITHM.TITLE' | translate"
@@ -52,5 +61,7 @@
                displayExpr="description"
                valueExpr="value"
                [required]="true"
-               [(value)]="data.mandateAlgorithm"></bc-dropdown>
+               [(value)]="data.mandateAlgorithm"
+               (valueChange)="data.mandateAlgorithm = $event; contentChanged.emit()"
+               [subscriptSizing]="'dynamic'"></bc-dropdown>
 </div>

@@ -4,9 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionBallotGroupService } from '../../../core/majority-election-ballot-group.service';
@@ -22,19 +22,34 @@ import { MajorityElection, MajorityElectionCandidate } from '../../../core/model
 import { SecondaryMajorityElection } from '../../../core/models/secondary-majority-election.model';
 import { SecondaryMajorityElectionService } from '../../../core/secondary-majority-election.service';
 import { groupBySingle } from '../../../core/utils/array.utils';
+import { cloneDeep, isEqual } from 'lodash';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-majority-election-ballot-group-assign-candidates-dialog',
   templateUrl: './majority-election-ballot-group-assign-candidates-dialog.component.html',
   styleUrls: ['./majority-election-ballot-group-assign-candidates-dialog.component.scss'],
 })
-export class MajorityElectionBallotGroupAssignCandidatesDialogComponent implements OnInit {
+export class MajorityElectionBallotGroupAssignCandidatesDialogComponent implements OnInit, OnDestroy {
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+  @HostListener('window:keyup.esc')
+  public async keyUpEscape(): Promise<void> {
+    await this.closeWithUnsavedChangesCheck();
+  }
+
   public ballotGroup: MajorityElectionBallotGroup;
   public ballotGroupEntries: BallotGroupUiEntry[];
 
   public saving: boolean = false;
   public loading: boolean = true;
   private readonly elections: (MajorityElection | SecondaryMajorityElection)[];
+
+  public hasChanges: boolean = false;
+  public originalBallotGroupEntries: BallotGroupUiEntry[] = [];
+  public readonly backdropClickSubscription: Subscription;
 
   constructor(
     private readonly dialogRef: MatDialogRef<MajorityElectionBallotGroupAssignCandidatesDialogComponent>,
@@ -43,6 +58,7 @@ export class MajorityElectionBallotGroupAssignCandidatesDialogComponent implemen
     private readonly i18n: TranslateService,
     private readonly majorityElectionService: MajorityElectionService,
     private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
+    private readonly dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) dialogData: MajorityElectionBallotGroupAssignCandidatesDialogData,
   ) {
     this.ballotGroup = dialogData.ballotGroup;
@@ -72,6 +88,13 @@ export class MajorityElectionBallotGroupAssignCandidatesDialogComponent implemen
         selection: new SelectionModel<MajorityElectionCandidate>(),
       }))
       .filter(x => x.election !== undefined);
+
+    this.dialogRef.disableClose = true;
+    this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+  }
+
+  public ngOnDestroy(): void {
+    this.backdropClickSubscription.unsubscribe();
   }
 
   public async ngOnInit(): Promise<void> {
@@ -89,6 +112,8 @@ export class MajorityElectionBallotGroupAssignCandidatesDialogComponent implemen
         entry.candidates = candidates;
         updateMajorityElectionBallotGroupEntryCandidateCountOk(entry.entry, entry.election.numberOfMandates);
       }
+
+      this.originalBallotGroupEntries = cloneDeep(this.ballotGroupEntries);
     } finally {
       this.loading = false;
     }
@@ -112,8 +137,20 @@ export class MajorityElectionBallotGroupAssignCandidatesDialogComponent implemen
     }
   }
 
-  public cancel(): void {
+  public async closeWithUnsavedChangesCheck(): Promise<void> {
+    if (await this.leaveDialogOpen()) {
+      return;
+    }
+
     this.dialogRef.close();
+  }
+
+  public contentChanged(): void {
+    this.hasChanges = !isEqual(this.ballotGroupEntries, this.originalBallotGroupEntries);
+  }
+
+  private async leaveDialogOpen(): Promise<boolean> {
+    return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
 
   private buildUpdatedBallotGroupCandidates(): MajorityElectionBallotGroupCandidates {

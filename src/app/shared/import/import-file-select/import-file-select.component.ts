@@ -6,9 +6,9 @@
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { ImportService } from '../../../core/import.service';
 import { ImportFileContent, ImportType } from '../../../core/models/import.model';
+import { TableDataSource } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-import-file-select',
@@ -17,7 +17,7 @@ import { ImportFileContent, ImportType } from '../../../core/models/import.model
 })
 export class ImportFileSelectComponent {
   public readonly columns = ['filename', 'type', 'actions'];
-  public dataSource: MatTableDataSource<ImportFileContent> = new MatTableDataSource<ImportFileContent>();
+  public dataSource: TableDataSource<ImportFileContent> = new TableDataSource<ImportFileContent>();
   public importTypeItemDescriptions: EnumItemDescription<ImportType>[] = [];
   public draggingFiles: boolean = false;
   public selectedEchType?: ImportType;

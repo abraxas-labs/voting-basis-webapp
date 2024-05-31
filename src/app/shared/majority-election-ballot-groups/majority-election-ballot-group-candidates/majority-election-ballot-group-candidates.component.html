@@ -1,19 +1,21 @@
-<bc-advanced-table class="w-full" [dataSource]="selectedCandidates">
-  <ng-container bcColumnDef="number">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.number }}</td>
-  </ng-container>
-  <ng-container bcColumnDef="lastName">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.lastName }}</td>
-  </ng-container>
-  <ng-container bcColumnDef="firstName">
-    <th bc-header-cell *bcHeaderCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</th>
-    <td bc-cell *bcCellDef="let element">{{ element.firstName }}</td>
+<bc-table class="w-full" [dataSource]="selectedCandidates">
+  <ng-container columnDef="number">
+    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.number }}</bc-data-cell>
   </ng-container>
 
-  <tr bc-header-row *bcHeaderRowDef="columns"></tr>
-  <tr bc-advanced-table-row *bcRowDef="let row; columns: columns"></tr>
-</bc-advanced-table>
+  <ng-container columnDef="lastName">
+    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.lastName }}</bc-data-cell>
+  </ng-container>
+
+  <ng-container columnDef="firstName">
+    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">{{ element.firstName }}</bc-data-cell>
+  </ng-container>
+
+  <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+  <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+</bc-table>
 
 <p class="mt-2">{{'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate}}: {{individualCandidatesVoteCount}}</p>

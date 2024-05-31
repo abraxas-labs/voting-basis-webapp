@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Authority } from '../../core/models/counting-circle.model';
 
 @Component({
@@ -17,4 +17,7 @@ export class AuthorityAddressEditComponent {
 
   @Input()
   public disabled: boolean = true;
+
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 }

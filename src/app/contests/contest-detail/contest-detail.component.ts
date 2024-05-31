@@ -4,10 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { AuthorizationService, AdvancedTablePaginatorComponent } from '@abraxas/base-components';
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { AuthorizationService, FilterDirective, PaginatorComponent, SortDirective, TableDataSource } from '@abraxas/base-components';
+import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -18,7 +17,7 @@ import { ExportService } from '../../core/export.service';
 import { MajorityElectionService } from '../../core/majority-election.service';
 import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 import { Contest } from '../../core/models/contest.model';
-import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
+import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { ElectionGroup, ElectionGroupMessage } from '../../core/models/election-group.model';
 import { ExportEntityType } from '../../core/models/export.model';
 import { EntityState } from '../../core/models/message.model';
@@ -28,7 +27,6 @@ import { ProportionalElectionService } from '../../core/proportional-election.se
 import { SecondaryMajorityElectionService } from '../../core/secondary-majority-election.service';
 import { sortElectionGroups } from '../../core/utils/election-group.utils';
 import { sortPoliticalBusinessUnions } from '../../core/utils/political-business-union.utils';
-import { sortPoliticalBusinesses } from '../../core/utils/political-business.utils';
 import { VoteService } from '../../core/vote.service';
 import {
   PoliticalBusinessImportDialogComponent,
@@ -43,6 +41,7 @@ import {
   PoliticalBusinessUnionsDialogComponent,
   PoliticalBusinessUnionsDialogData,
 } from '../political-business-unions-dialog/political-business-unions-dialog.component';
+import { LanguageService } from '../../core/language.service';
 
 const POLITICAL_BUSINESS_TYPE_TO_EXPORT_ENTITY_TYPE: { [key in PoliticalBusinessType]?: ExportEntityType } = {
   [PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE]: ExportEntityType.EXPORT_ENTITY_TYPE_VOTE,
@@ -58,19 +57,23 @@ const POLITICAL_BUSINESS_TYPE_TO_EXPORT_ENTITY_TYPE: { [key in PoliticalBusiness
 export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly columns = [
     'number',
+    'domainOfInfluenceType',
     'shortDescription',
     'officialDescription',
-    'domainOfInfluenceType',
     'domainOfInfluenceName',
     'type',
-    'enable',
+    'active',
     'owner',
-    'ownerDescription',
     'actions',
   ];
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
+
+  @ViewChild(SortDirective, { static: true })
+  public sort!: SortDirective;
+
+  @ViewChild(FilterDirective, { static: true })
+  public filter!: FilterDirective;
 
   public loading: boolean = true;
   public contest: Contest = {
@@ -79,10 +82,11 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public tenantId: string = '';
   public electionGroups: ElectionGroup[] = [];
   public readonly politicalBusinessTypes: typeof PoliticalBusinessType = PoliticalBusinessType;
+  public politicalBusinessTypeList: EnumItemDescription<PoliticalBusinessType>[] = [];
+  public domainOfInfluenceTypeList: EnumItemDescription<DomainOfInfluenceType>[] = [];
   public cantonDefaults?: DomainOfInfluenceCantonDefaults;
-  public dataSource: MatTableDataSource<PoliticalBusiness> = new MatTableDataSource<PoliticalBusiness>();
+  public dataSource = new TableDataSource<PoliticalBusinessListType>();
 
-  private tenantDomainOfInfluences: DomainOfInfluence[] = [];
   private readonly routeSubscription: Subscription;
   private detailsChangesSubscription?: Subscription;
 
@@ -101,6 +105,8 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     private readonly snackbarService: SnackbarService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly languageService: LanguageService,
+    private readonly enumUtil: EnumUtil,
   ) {
     this.routeSubscription = route.params.subscribe(({ contestId }) => this.load(contestId));
   }
@@ -108,7 +114,14 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public async ngOnInit(): Promise<void> {
     const tenant = await this.auth.getActiveTenant();
     this.tenantId = tenant.id;
-    this.tenantDomainOfInfluences = await this.domainOfInfluenceService.listForTenant(this.tenantId);
+    this.politicalBusinessTypeList = this.enumUtil.getArrayWithDescriptions<PoliticalBusinessType>(
+      PoliticalBusinessType,
+      'POLITICAL_BUSINESS.TYPE.',
+    );
+    this.domainOfInfluenceTypeList = this.enumUtil.getArrayWithDescriptions<DomainOfInfluenceType>(
+      DomainOfInfluenceType,
+      'DOMAIN_OF_INFLUENCE.TYPES.',
+    );
   }
 
   public async ngOnDestroy(): Promise<void> {
@@ -116,8 +129,14 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.detailsChangesSubscription?.unsubscribe();
   }
 
+  public isSelectionDisabled = (row: PoliticalBusinessListType): boolean => {
+    return row.ownerId !== this.tenantId;
+  };
+
   public ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filter = this.filter;
+    this.dataSource.sort = this.sort;
   }
 
   public async createVote(): Promise<void> {
@@ -135,7 +154,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public async createSecondaryElection(): Promise<void> {
     const possiblePrimaryElections = this.contest.politicalBusinesses.filter(
       pb =>
-        this.ownsPoliticalBusiness(pb) &&
+        pb.domainOfInfluence.secureConnectId === this.tenantId &&
         (pb.politicalBusinessType === PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION ||
           pb.politicalBusinessType === PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION),
     );
@@ -153,8 +172,12 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  public async open(row: PoliticalBusiness): Promise<void> {
-    switch (row.politicalBusinessType) {
+  public async open(row: PoliticalBusinessListType): Promise<void> {
+    if (row.ownerId !== this.tenantId) {
+      return;
+    }
+
+    switch (row.type) {
       case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE:
         await this.router.navigate(['votes', row.id], { relativeTo: this.route });
         break;
@@ -170,14 +193,14 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  public async delete(politicalBusiness: PoliticalBusiness): Promise<void> {
+  public async delete(politicalBusiness: PoliticalBusinessListType): Promise<void> {
     const shouldDelete = await this.dialogService.confirm('APP.DELETE', 'POLITICAL_BUSINESS.CONFIRM_DELETE', 'APP.DELETE');
     if (!shouldDelete) {
       return;
     }
 
     const politicalBusinessId = politicalBusiness.id;
-    switch (politicalBusiness.politicalBusinessType) {
+    switch (politicalBusiness.type) {
       case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE:
         await this.voteService.delete(politicalBusinessId);
         break;
@@ -196,12 +219,8 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.removePoliticalBusinessFromUi(politicalBusiness.id);
   }
 
-  public ownsPoliticalBusiness(politicalBusiness: PoliticalBusiness): boolean {
-    return !!this.tenantDomainOfInfluences.find(doi => doi.id === politicalBusiness.domainOfInfluence.id);
-  }
-
-  public async activeStateChange(row: PoliticalBusiness, active: boolean): Promise<void> {
-    switch (row.politicalBusinessType) {
+  public async activeStateChange(row: PoliticalBusinessListType, active: boolean): Promise<void> {
+    switch (row.type) {
       case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE:
         await this.voteService.updateActiveState(row.id, active);
         break;
@@ -240,10 +259,10 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.dialogService.open(PoliticalBusinessImportDialogComponent, dialogData);
   }
 
-  public export(politicalBusiness: PoliticalBusiness): Promise<void> {
-    const entityType = POLITICAL_BUSINESS_TYPE_TO_EXPORT_ENTITY_TYPE[politicalBusiness.politicalBusinessType];
+  public export(politicalBusiness: PoliticalBusinessListType): Promise<void> {
+    const entityType = POLITICAL_BUSINESS_TYPE_TO_EXPORT_ENTITY_TYPE[politicalBusiness.type];
     if (entityType === undefined) {
-      throw new Error(`political business type ${politicalBusiness.politicalBusinessType} does not support exports`);
+      throw new Error(`political business type ${politicalBusiness.type} does not support exports`);
     }
 
     return this.exportService.downloadExportOrShowDialog(entityType, politicalBusiness.id);
@@ -258,7 +277,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     try {
       this.contest = await this.contestService.get(contestId);
-      this.dataSource.data = this.contest.politicalBusinesses;
+      this.updatePoliticalBusinessesList();
       this.electionGroups = await this.electionGroupService.list(contestId);
       this.cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(this.contest.domainOfInfluenceId);
       this.startChangesListener();
@@ -269,6 +288,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
   private removePoliticalBusinessFromUi(politicalBusinessId: string): void {
     this.contest.politicalBusinesses = this.contest.politicalBusinesses.filter(pb => pb.id !== politicalBusinessId);
+    this.updatePoliticalBusinessesList();
     this.removePoliticalBusinessFromElectionGroups(politicalBusinessId);
   }
 
@@ -315,8 +335,8 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.contest.politicalBusinesses.push(politicalBusiness);
     }
 
-    sortPoliticalBusinesses(this.contest.politicalBusinesses);
     this.contest.politicalBusinesses = [...this.contest.politicalBusinesses];
+    this.updatePoliticalBusinessesList();
   }
 
   private handlePoliticalBusinessUnionMessage(e: PoliticalBusinessUnionMessage): void {
@@ -357,4 +377,38 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     sortElectionGroups(this.electionGroups);
     this.electionGroups = [...this.electionGroups];
   }
+
+  private updatePoliticalBusinessesList(): void {
+    this.dataSource.data = this.contest.politicalBusinesses.map(x => this.mapToListType(x));
+  }
+
+  // To make the table component filter work out of the box, map political businesses
+  // into a type which can be displayed and filtered directly
+  private mapToListType(politicalBusiness: PoliticalBusiness): PoliticalBusinessListType {
+    return {
+      id: politicalBusiness.id,
+      number: politicalBusiness.politicalBusinessNumber,
+      type: politicalBusiness.politicalBusinessType,
+      shortDescription: this.languageService.getTranslationForCurrentLang(politicalBusiness.shortDescription),
+      officialDescription: this.languageService.getTranslationForCurrentLang(politicalBusiness.officialDescription),
+      active: politicalBusiness.active,
+      domainOfInfluenceType: politicalBusiness.domainOfInfluence.type,
+      domainOfInfluenceName: politicalBusiness.domainOfInfluence.name,
+      owner: politicalBusiness.domainOfInfluence.authorityName,
+      ownerId: politicalBusiness.domainOfInfluence.secureConnectId,
+    };
+  }
 }
+
+export type PoliticalBusinessListType = {
+  id: string;
+  number: string;
+  type: PoliticalBusinessType;
+  shortDescription: string;
+  officialDescription: string;
+  domainOfInfluenceType: DomainOfInfluenceType;
+  domainOfInfluenceName: string;
+  owner: string;
+  ownerId: string;
+  active: boolean;
+};

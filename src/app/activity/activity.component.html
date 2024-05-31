@@ -1,30 +1,33 @@
 <vo-lib-page [contentLoading]="false" header="ACTIVITY.TITLE">
-  <bc-advanced-table class="w-full" [dataSource]="dataSource">
-    <ng-container bcColumnDef="eventName">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'ACTIVITY.EVENT_NAME' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ 'ACTIVITY.EVENT.' + element.eventName | translate }}</td>
+  <bc-table class="w-full" [dataSource]="dataSource">
+
+    <ng-container columnDef="eventName">
+      <bc-header-cell *headerCellDef>{{ 'ACTIVITY.EVENT_NAME' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        {{ 'ACTIVITY.EVENT.' + element.eventName | translate }}
+      </bc-data-cell>
     </ng-container>
 
-    <ng-container bcColumnDef="timestamp">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'ACTIVITY.TIMESTAMP' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.timestamp | date:'short' }}</td>
+    <ng-container columnDef="timestamp">
+      <bc-header-cell *headerCellDef>{{ 'ACTIVITY.TIMESTAMP' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.timestamp | date:'short' }}</bc-data-cell>
     </ng-container>
 
-    <ng-container bcColumnDef="user">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'ACTIVITY.USER' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.eventUser.firstName }} {{ element.eventUser.lastName }}</td>
+    <ng-container columnDef="user">
+      <bc-header-cell *headerCellDef>{{ 'ACTIVITY.USER' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.eventUser.firstName }} {{ element.eventUser.lastName }}</bc-data-cell>
     </ng-container>
 
-    <ng-container bcColumnDef="tenantName">
-      <th bc-header-cell *bcHeaderCellDef>{{ 'ACTIVITY.TENANT' | translate }}</th>
-      <td bc-cell *bcCellDef="let element">{{ element.eventTenant.tenantName }}</td>
+    <ng-container columnDef="tenantName">
+      <bc-header-cell *headerCellDef>{{ 'ACTIVITY.TENANT' | translate }}</bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">{{ element.eventTenant.tenantName }}</bc-data-cell>
     </ng-container>
 
-    <tr bc-header-row *bcHeaderRowDef="['eventName', 'timestamp', 'user', 'tenantName']"></tr>
-    <tr bc-advanced-table-row *bcRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']"></tr>
-  </bc-advanced-table>
+    <bc-header-row *headerRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']"></bc-header-row>
+    <bc-data-row *dataRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']; let i = index"></bc-data-row>
+  </bc-table>
 
-  <bc-table-paginator [pageSize]="10" [showFirstLastButtons]="true" [tooltips]="false"></bc-table-paginator>
+  <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator> 
 
   <bc-spinner *ngIf="dataSource.loading"></bc-spinner>
 </vo-lib-page>

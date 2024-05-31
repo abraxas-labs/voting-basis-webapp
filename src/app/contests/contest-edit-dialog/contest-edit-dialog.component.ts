@@ -6,18 +6,18 @@
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { DatePipe } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { ContestService } from '../../core/contest.service';
-import { CountingCircleService } from '../../core/counting-circle.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { LanguageService } from '../../core/language.service';
-import { Contest, ContestCountingCircleOption, ContestDateAvailability, newContest } from '../../core/models/contest.model';
+import { Contest, ContestDateAvailability, newContest } from '../../core/models/contest.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { getDefaultTimeDate } from '../../core/utils/time.utils';
-import { CountingCircle } from '../../core/models/counting-circle.model';
+import { Subscription } from 'rxjs';
+import { cloneDeep, isEqual } from 'lodash';
 
 @Component({
   selector: 'app-contest-edit-dialog',
@@ -25,8 +25,19 @@ import { CountingCircle } from '../../core/models/counting-circle.model';
   styleUrls: ['./contest-edit-dialog.component.scss'],
   providers: [DatePipe],
 })
-export class ContestEditDialogComponent implements OnInit {
+export class ContestEditDialogComponent implements OnInit, OnDestroy {
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+  @HostListener('window:keyup.esc')
+  public async keyUpEscape(): Promise<void> {
+    await this.closeWithUnsavedChangesCheck();
+  }
+
   public readonly now: Date = new Date();
+  public readonly defaultEndOfTestingPhaseOffsetDate: number = 2;
+  public readonly defaultEndOfTestingPhaseTime: Date = new Date('1970-01-01T16:00:00');
 
   public data: Contest = newContest();
   public isNew: boolean = true;
@@ -39,9 +50,6 @@ export class ContestEditDialogComponent implements OnInit {
   public loading: boolean = false;
   public selectedPreconfiguredDate?: DisplayPreconfiguredDate;
 
-  public countingCircleOptionsLoading: boolean = true;
-  public countingCircleOptions?: ContestCountingCircleOption[];
-
   public pastContestsLoading: boolean = false;
   public pastContests: ContestPastDropdownItem[] = [];
   public endOfTestingPhaseTimeValue?: Date;
@@ -51,11 +59,14 @@ export class ContestEditDialogComponent implements OnInit {
   private oldContestDate?: Date;
   private dateStringValue: string = '';
 
+  public hasChanges: boolean = false;
+  public originalContest?: Contest;
+  public readonly backdropClickSubscription: Subscription;
+
   constructor(
     private readonly dialogRef: MatDialogRef<ContestEditDialogData>,
     private readonly contestService: ContestService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly countingCircleService: CountingCircleService,
     private readonly i18n: TranslateService,
     private readonly dialogService: DialogService,
     private readonly snackbarService: SnackbarService,
@@ -64,6 +75,13 @@ export class ContestEditDialogComponent implements OnInit {
   ) {
     this.dialogData = dialogData;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
+
+    this.dialogRef.disableClose = true;
+    this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+  }
+
+  public ngOnDestroy(): void {
+    this.backdropClickSubscription.unsubscribe();
   }
 
   public set dateString(value: string) {
@@ -162,6 +180,14 @@ export class ContestEditDialogComponent implements OnInit {
           pcd => pcd.date.getTime() === this.dialogData.preconfiguredDate!.getTime(),
         );
         this.data.date = this.selectedPreconfiguredDate?.date;
+        this.updateEndOfTestingPhaseDateAndTime();
+      }
+
+      const rootDomainOfInfluences = this.domainOfInfluences.filter(x => !x.parentId);
+
+      // if the user has one or more root DomainOfInfluence, only these can be chosen
+      if (rootDomainOfInfluences.length > 0) {
+        this.domainOfInfluences = rootDomainOfInfluences;
       }
 
       // if the user has only one DomainOfInfluence, he doesn't need to choose it
@@ -169,10 +195,13 @@ export class ContestEditDialogComponent implements OnInit {
         this.data.domainOfInfluenceId = this.domainOfInfluences[0].id;
       }
 
-      await Promise.all([this.loadCountingCircleOptionsIfNeeded(), this.loadPastContestsIfNeeded()]);
+      await this.loadPastContestsIfNeeded();
     } finally {
       this.loading = false;
     }
+
+    this.originalContest = cloneDeep(this.data);
+    this.contentChanged();
   }
 
   public async updateDomainOfInfluenceId(doiId: string): Promise<void> {
@@ -181,7 +210,7 @@ export class ContestEditDialogComponent implements OnInit {
     }
 
     this.data.domainOfInfluenceId = doiId;
-    await Promise.all([this.updateCountingCircleOptions(), this.loadPastContestsIfNeeded()]);
+    await this.loadPastContestsIfNeeded();
   }
 
   public async updateSelectedPreconfiguredDate(preconfiguredDate: DisplayPreconfiguredDate): Promise<void> {
@@ -191,6 +220,7 @@ export class ContestEditDialogComponent implements OnInit {
 
     this.selectedPreconfiguredDate = preconfiguredDate;
     this.data.date = !!preconfiguredDate ? preconfiguredDate.date : undefined;
+    this.updateEndOfTestingPhaseDateAndTime();
     await this.loadPastContestsIfNeeded();
   }
 
@@ -200,16 +230,17 @@ export class ContestEditDialogComponent implements OnInit {
     }
 
     this.dateString = date;
+
+    // update end of testing phase only when creating a contest with custom date selection
+    if (this.customDateSelected) {
+      this.updateEndOfTestingPhaseDateAndTime();
+    }
+
     await this.loadPastContestsIfNeeded();
   }
 
   public async save(): Promise<void> {
     if (!this.data || !this.canSave) {
-      return;
-    }
-
-    if (this.testingPhaseEnded) {
-      await this.saveContestAfterTestingPhase();
       return;
     }
 
@@ -226,58 +257,27 @@ export class ContestEditDialogComponent implements OnInit {
         await this.contestService.update(this.data);
       }
 
-      if (this.data.eVoting) {
-        await this.contestService.updateCountingCircleOptions(this.data.id, this.countingCircleOptions ?? []);
-      }
-
+      this.hasChanges = false;
       this.closeWithSuccessToast();
     } finally {
       this.saving = false;
     }
   }
 
-  public cancel(): void {
+  public async closeWithUnsavedChangesCheck(): Promise<void> {
+    if (await this.leaveDialogOpen()) {
+      return;
+    }
+
     this.dialogRef.close();
   }
 
-  public async loadCountingCircleOptionsIfNeeded(): Promise<void> {
-    if (!this.data.eVoting || this.countingCircleOptions !== undefined) {
-      return;
-    }
-
-    if (this.isNew) {
-      this.countingCircleOptions = [];
-      await this.updateCountingCircleOptions();
-      return;
-    }
-
-    try {
-      this.countingCircleOptionsLoading = true;
-      this.countingCircleOptions = await this.contestService.listCountingCircleOptions(this.data.id);
-    } finally {
-      this.countingCircleOptionsLoading = false;
-    }
+  public contentChanged(): void {
+    this.hasChanges = !isEqual(this.data, this.originalContest);
   }
 
-  public async updateCountingCircleOptions(): Promise<void> {
-    if (!this.data.eVoting || !this.data.domainOfInfluenceId) {
-      return;
-    }
-
-    try {
-      this.countingCircleOptionsLoading = true;
-      const countingCircles = await this.countingCircleService.listAssignedForDomainOfInfluence(this.data.domainOfInfluenceId);
-      this.countingCircleOptions = countingCircles.map(countingCircle => ({
-        countingCircle: {
-          ...countingCircle,
-          electoratesList: [], // required for the counting circle type (!= domain of influence counting circle)
-        },
-        eVoting: false,
-        contestId: this.data.id,
-      }));
-    } finally {
-      this.countingCircleOptionsLoading = false;
-    }
+  private async leaveDialogOpen(): Promise<boolean> {
+    return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
 
   public setTime(time?: Date, date?: Date): void {
@@ -287,20 +287,6 @@ export class ContestEditDialogComponent implements OnInit {
 
     date.setHours(time.getHours());
     date.setMinutes(time.getMinutes());
-  }
-
-  private async saveContestAfterTestingPhase(): Promise<void> {
-    if (!this.data.eVoting) {
-      return;
-    }
-
-    try {
-      this.saving = true;
-      await this.contestService.updateCountingCircleOptions(this.data.id, this.countingCircleOptions ?? []);
-      this.closeWithSuccessToast();
-    } finally {
-      this.saving = false;
-    }
   }
 
   private async loadPastContestsIfNeeded(): Promise<void> {
@@ -367,6 +353,17 @@ export class ContestEditDialogComponent implements OnInit {
       contest: this.data,
     };
     this.dialogRef.close(result);
+  }
+
+  private updateEndOfTestingPhaseDateAndTime(): void {
+    if (!this.data.date) {
+      return;
+    }
+
+    this.data.endOfTestingPhase = new Date(this.data.date);
+    this.data.endOfTestingPhase.setDate(this.data.endOfTestingPhase.getDate() - this.defaultEndOfTestingPhaseOffsetDate);
+    this.setTime(this.defaultEndOfTestingPhaseTime, this.data.endOfTestingPhase);
+    this.endOfTestingPhaseTimeValue = this.defaultEndOfTestingPhaseTime;
   }
 }
 

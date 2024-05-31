@@ -3,7 +3,9 @@
     [label]="'MAJORITY_ELECTION.CANDIDATE.NUMBER' | translate"
     [required]="true"
     [disabled]="testingPhaseEnded || isCandidateReference"
-    [(value)]="candidate.number"
+    [value]="candidate.number"
+    (valueChange)="candidate.number = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <bc-text
@@ -11,7 +13,9 @@
     [required]="true"
     [maxlength]="100"
     [disabled]="isCandidateReference"
-    [(value)]="candidate.firstName"
+    [value]="candidate.firstName"
+    (valueChange)="candidate.firstName = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <bc-text
@@ -19,7 +23,9 @@
     [required]="true"
     [maxlength]="100"
     [disabled]="isCandidateReference"
-    [(value)]="candidate.lastName"
+    [value]="candidate.lastName"
+    (valueChange)="candidate.lastName = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <bc-text
@@ -27,7 +33,9 @@
     [maxlength]="100"
     [disabled]="isCandidateReference"
     [placeholder]="candidate.firstName"
-    [(value)]="candidate.politicalFirstName"
+    [value]="candidate.politicalFirstName"
+    (valueChange)="candidate.politicalFirstName = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <bc-text
@@ -35,7 +43,9 @@
     [maxlength]="100"
     [disabled]="isCandidateReference"
     [placeholder]="candidate.lastName"
-    [(value)]="candidate.politicalLastName"
+    [value]="candidate.politicalLastName"
+    (valueChange)="candidate.politicalLastName = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <bc-date
@@ -44,13 +54,16 @@
     [disabled]="isCandidateReference"
     [error]="candidate.dateOfBirth !== undefined && !isDateOfBirthValid()"
     [value]="candidate.dateOfBirth | date: 'yyyy-MM-dd'"
-    (valueChange)="dateOfBirth = $event"
+    (valueChange)="dateOfBirth = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-date>
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH_YEAR' | translate"
     [disabled]="true"
+    [required]="true"
     [value]="'' + (candidate.dateOfBirth?.getFullYear() || '')"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <bc-dropdown
@@ -62,7 +75,9 @@
     displayExpr="description"
     valueExpr="value"
     [required]="true"
-    [(value)]="candidate.sex"
+    [value]="candidate.sex"
+    (valueChange)="candidate.sex = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-dropdown>
 
   <app-translated-formfield
@@ -71,14 +86,17 @@
     [maxlength]="250"
     [disabled]="isCandidateReference"
     [singleLanguageInput]="true"
-    [(value)]="candidate.occupation"
+    [value]="candidate.occupation"
+    (valueChange)="candidate.occupation = $event; contentChanged.emit()"
   ></app-translated-formfield>
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.TITLE' | translate"
     [maxlength]="50"
     [disabled]="isCandidateReference"
-    [(value)]="candidate.title"
+    [value]="candidate.title"
+    (valueChange)="candidate.title = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <app-translated-formfield
@@ -87,7 +105,8 @@
     [maxlength]="250"
     [disabled]="isCandidateReference"
     [singleLanguageInput]="true"
-    [(value)]="candidate.occupationTitle"
+    [value]="candidate.occupationTitle"
+    (valueChange)="candidate.occupationTitle = $event; contentChanged.emit()"
   ></app-translated-formfield>
 
   <app-translated-formfield
@@ -95,32 +114,40 @@
     [maxlength]="12"
     [disabled]="isCandidateReference"
     [singleLanguageInput]="true"
-    [(value)]="candidate.party"
+    [value]="candidate.party"
+    (valueChange)="candidate.party = $event; contentChanged.emit()"
   ></app-translated-formfield>
 
   <!-- incumbent may be edited even if this is a candidate reference -->
   <bc-checkbox
-    [(checked)]="candidate.incumbent"
+    [checked]="candidate.incumbent"
+    (checkedChange)="candidate.incumbent = $event; contentChanged.emit()"
     [label]="'MAJORITY_ELECTION.CANDIDATE.INCUMBENT' | translate"
   ></bc-checkbox>
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.ZIP_CODE' | translate"
     [disabled]="isCandidateReference"
-    [(value)]="candidate.zipCode"
+    [value]="candidate.zipCode"
+    (valueChange)="candidate.zipCode = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate"
     [required]="!isCommunalDoiType"
     [disabled]="isCandidateReference"
-    [(value)]="candidate.locality"
+    [value]="candidate.locality"
+    (valueChange)="candidate.locality = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.ORIGIN' | translate"
     [required]="!isCommunalDoiType"
     [disabled]="isCandidateReference"
-    [(value)]="candidate.origin"
+    [value]="candidate.origin"
+    (valueChange)="candidate.origin = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
   ></bc-text>
 </div>

@@ -8,16 +8,18 @@ import {
   CantonSettings as CantonSettingsProto,
   CantonSettingsVotingCardChannel as CantonSettingsVotingCardChannelProto,
   DomainOfInfluenceCantonDefaults as DomainOfInfluenceCantonDefaultsProto,
+  CountingCircleResultStateDescription as CountingCircleResultStateDescriptionProto,
 } from '@abraxas/voting-basis-service-proto/grpc/models/canton_settings_pb';
 import {
   CantonMajorityElectionAbsoluteMajorityAlgorithm as CantonMajorityElectionAbsoluteMajorityAlgorithmProto,
-  SwissAbroadVotingRight as SwissAbroadVotingRightProto,
   ProtocolCountingCircleSortType as ProtocolCountingCircleSortTypeProto,
   ProtocolDomainOfInfluenceSortType as ProtocolDomainOfInfluenceSortTypeProto,
+  SwissAbroadVotingRight as SwissAbroadVotingRightProto,
 } from '@abraxas/voting-basis-service-proto/grpc/shared/canton_settings_pb';
 import { VotingChannel } from '@abraxas/voting-basis-service-proto/grpc/shared/voting_channel_pb';
 import { DomainOfInfluenceCanton } from './domain-of-influence.model';
 import { PoliticalBusinessUnionType } from './political-business-union.model';
+import { CountingCircleResultState } from '@abraxas/voting-basis-service-proto/grpc/shared/counting_circle_pb';
 
 export { CantonSettingsProto };
 export { SwissAbroadVotingRightProto as SwissAbroadVotingRight };
@@ -30,6 +32,7 @@ export {
   ProtocolDomainOfInfluenceSortTypeProto as ProtocolDomainOfInfluenceSortType,
 };
 export type CantonSettingsVotingCardChannel = CantonSettingsVotingCardChannelProto.AsObject;
+export type CountingCircleResultStateDescription = CountingCircleResultStateDescriptionProto.AsObject;
 
 export function newCantonSettings(): CantonSettings {
   return {
@@ -68,11 +71,22 @@ export function newCantonSettings(): CantonSettings {
     ],
     protocolCountingCircleSortType: ProtocolCountingCircleSortTypeProto.PROTOCOL_COUNTING_CIRCLE_SORT_TYPE_SORT_NUMBER,
     protocolDomainOfInfluenceSortType: ProtocolDomainOfInfluenceSortTypeProto.PROTOCOL_DOMAIN_OF_INFLUENCE_SORT_TYPE_SORT_NUMBER,
-    electoralRegistrationEnabled: false,
     multipleVoteBallotsEnabled: false,
     countingMachineEnabled: false,
     newZhFeaturesEnabled: false,
     majorityElectionUseCandidateCheckDigit: false,
     proportionalElectionUseCandidateCheckDigit: false,
+    countingCircleResultStateDescriptionsList: allCountingCircleResultStateDescriptions.map(x => ({ state: x, description: '' })),
+    statePlausibilisedDisabled: false,
+    publishResultsEnabled: false,
   };
 }
+
+export const allCountingCircleResultStateDescriptions = [
+  CountingCircleResultState.COUNTING_CIRCLE_RESULT_STATE_SUBMISSION_ONGOING,
+  CountingCircleResultState.COUNTING_CIRCLE_RESULT_STATE_SUBMISSION_DONE,
+  CountingCircleResultState.COUNTING_CIRCLE_RESULT_STATE_READY_FOR_CORRECTION,
+  CountingCircleResultState.COUNTING_CIRCLE_RESULT_STATE_CORRECTION_DONE,
+  CountingCircleResultState.COUNTING_CIRCLE_RESULT_STATE_AUDITED_TENTATIVELY,
+  CountingCircleResultState.COUNTING_CIRCLE_RESULT_STATE_PLAUSIBILISED,
+];

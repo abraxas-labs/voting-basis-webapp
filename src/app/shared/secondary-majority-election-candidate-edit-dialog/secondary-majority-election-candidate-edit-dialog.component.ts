@@ -4,9 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../core/language.service';
 import { MajorityElectionService } from '../../core/majority-election.service';
@@ -19,13 +19,24 @@ import {
 } from '../../core/models/secondary-majority-election.model';
 import { SecondaryMajorityElectionService } from '../../core/secondary-majority-election.service';
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
+import { cloneDeep, isEqual } from 'lodash';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-secondary-majority-election-candidate-edit-dialog',
   templateUrl: './secondary-majority-election-candidate-edit-dialog.component.html',
   styleUrls: ['./secondary-majority-election-candidate-edit-dialog.component.scss'],
 })
-export class SecondaryMajorityElectionCandidateEditDialogComponent implements OnInit {
+export class SecondaryMajorityElectionCandidateEditDialogComponent implements OnInit, OnDestroy {
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+  @HostListener('window:keyup.esc')
+  public async keyUpEscape(): Promise<void> {
+    await this.closeWithUnsavedChangesCheck();
+  }
+
   public allowedCandidateTypes: typeof SecondaryMajorityElectionAllowedCandidates = SecondaryMajorityElectionAllowedCandidates;
   public candidate: SecondaryMajorityElectionCandidate;
   public isNew: boolean = false;
@@ -36,6 +47,9 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
   public secondaryMajorityElection: SecondaryMajorityElection;
   public majorityElectionCandidates: (MajorityElectionCandidate & { displayName: string })[] = [];
   public selectedMajorityElectionCandidate: MajorityElectionCandidate & { displayName: string };
+  public hasChanges: boolean = false;
+  public originalCandidate: MajorityElectionCandidate;
+  public readonly backdropClickSubscription: Subscription;
 
   constructor(
     private readonly dialogRef: MatDialogRef<SecondaryMajorityElectionCandidateEditDialogData>,
@@ -43,6 +57,7 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     private readonly snackbarService: SnackbarService,
     private readonly majorityElectionService: MajorityElectionService,
     private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
+    private readonly dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) dialogData: SecondaryMajorityElectionCandidateEditDialogData,
   ) {
     this.candidate = dialogData.candidate;
@@ -58,6 +73,14 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       this.selectCandidateFromPrimaryElection = true;
     }
     this.selectedMajorityElectionCandidate = { ...newMajorityElectionCandidate(-1, ''), displayName: '' };
+    this.originalCandidate = cloneDeep(this.candidate);
+
+    this.dialogRef.disableClose = true;
+    this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+  }
+
+  public ngOnDestroy(): void {
+    this.backdropClickSubscription.unsubscribe();
   }
 
   public get canSave(): boolean {
@@ -141,6 +164,7 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       }
 
       this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+      this.hasChanges = false;
       const result: SecondaryMajorityElectionCandidateEditDialogResult = {
         candidate: this.candidate,
       };
@@ -150,7 +174,11 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     }
   }
 
-  public cancel(): void {
+  public async closeWithUnsavedChangesCheck(): Promise<void> {
+    if (await this.leaveDialogOpen()) {
+      return;
+    }
+
     this.dialogRef.close();
   }
 
@@ -196,6 +224,14 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
         referencedCandidateId: this.selectedMajorityElectionCandidate.id,
       };
     }
+  }
+
+  public contentChanged(): void {
+    this.hasChanges = !isEqual(this.candidate, this.originalCandidate);
+  }
+
+  private async leaveDialogOpen(): Promise<boolean> {
+    return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
 }
 

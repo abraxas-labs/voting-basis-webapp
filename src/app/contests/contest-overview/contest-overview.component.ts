@@ -15,7 +15,6 @@ import { ExportService } from '../../core/export.service';
 import { ContestMessage, ContestState, ContestSummary, PreconfiguredContestDate } from '../../core/models/contest.model';
 import { ExportEntityType } from '../../core/models/export.model';
 import { EntityState } from '../../core/models/message.model';
-import { sortContests } from '../../core/utils/contest.utils';
 import { ContestImportDialogComponent } from '../../shared/import/contest-import-dialog/contest-import-dialog.component';
 import { ContestArchiveDialogComponent, ContestArchiveDialogData } from '../contest-archive-dialog/contest-archive-dialog.component';
 import {
@@ -27,6 +26,18 @@ import {
   ContestPastUnlockDialogComponent,
   ContestPastUnlockDialogData,
 } from '../contest-past-unlock-dialog/contest-past-unlock-dialog.component';
+import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
+import { AuthorizationService } from '@abraxas/base-components';
+import { PoliticalAssembly } from '../../core/models/political-assembly.model';
+import { PoliticalAssemblyService } from '../../core/political-assembly.service';
+import {
+  PoliticalAssemblyEditDialogComponent,
+  PoliticalAssemblyEditDialogData,
+  PoliticalAssemblyEditDialogResult,
+} from '../political-assembly-edit-dialog/political-assembly-edit-dialog.component';
+import { ContestListType } from '../contest-list/contest-list.component';
+import { Permissions } from '../../core/models/permissions.model';
+import { PermissionService } from '../../core/permission.service';
 
 @Component({
   selector: 'app-contest-overview',
@@ -38,6 +49,11 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
   public contests: ContestSummary[] = [];
   public pastContests: ContestSummary[] = [];
   public archivedContests: ContestSummary[] = [];
+  public canAddPoliticalAssembly: boolean = false;
+  public politicalAssemblies: PoliticalAssembly[] = [];
+  public canCreate: boolean = false;
+  public canEdit: boolean = false;
+  public canDelete: boolean = false;
 
   private preconfiguredDates: PreconfiguredContestDate[] = [];
   private overviewChangesSubscription?: Subscription;
@@ -50,19 +66,34 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
     private readonly contestService: ContestService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly auth: AuthorizationService,
+    private readonly politicalAssemblyService: PoliticalAssemblyService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
     try {
-      [this.preconfiguredDates, this.contests, this.pastContests, this.archivedContests] = await Promise.all([
-        this.contestService.listFuturePreconfiguredDates(),
-        this.contestService.listSummaries(ContestState.CONTEST_STATE_ACTIVE, ContestState.CONTEST_STATE_TESTING_PHASE),
-        this.contestService.listSummaries(ContestState.CONTEST_STATE_PAST_UNLOCKED, ContestState.CONTEST_STATE_PAST_LOCKED),
-        this.contestService.listSummaries(ContestState.CONTEST_STATE_ARCHIVED),
-      ]);
+      [this.preconfiguredDates, this.contests, this.pastContests, this.archivedContests, this.canCreate, this.canEdit, this.canDelete] =
+        await Promise.all([
+          this.contestService.listFuturePreconfiguredDates(),
+          this.contestService.listSummaries(ContestState.CONTEST_STATE_ACTIVE, ContestState.CONTEST_STATE_TESTING_PHASE),
+          this.contestService.listSummaries(ContestState.CONTEST_STATE_PAST_UNLOCKED, ContestState.CONTEST_STATE_PAST_LOCKED),
+          this.contestService.listSummaries(ContestState.CONTEST_STATE_ARCHIVED),
+          this.permissionService.hasPermission(Permissions.Contest.Create),
+          this.permissionService.hasPermission(Permissions.Contest.Update),
+          this.permissionService.hasPermission(Permissions.Contest.Delete),
+        ]);
       this.attachPreconfiguredDates();
-      this.sortContests();
       this.startChangesListener();
+
+      const tenant = await this.auth.getActiveTenant();
+      const domainOfInfluences = await this.domainOfInfluenceService.listForTenant(tenant.id);
+      this.canAddPoliticalAssembly = domainOfInfluences.some(x => x.responsibleForVotingCards);
+
+      if (this.canAddPoliticalAssembly) {
+        this.politicalAssemblies = await this.politicalAssemblyService.list();
+      }
     } finally {
       this.loading = false;
     }
@@ -82,24 +113,47 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
     this.handleCreateContest(result);
   }
 
-  public async edit(summary: ContestSummary): Promise<void> {
-    const data: ContestEditDialogData = {
-      contestId: summary.id,
-      testingPhaseEnded: summary.testingPhaseEnded,
-    };
-
-    const result = await this.dialogService.openForResult(ContestEditDialogComponent, data);
-    this.handleEditContest(result);
+  public async createPoliticalAssembly(): Promise<void> {
+    const result = await this.dialogService.openForResult(PoliticalAssemblyEditDialogComponent, {});
+    this.handleCreatePoliticalAssembly(result);
   }
 
-  public async delete(id: string): Promise<void> {
-    const shouldDelete = await this.dialogService.confirm('APP.DELETE', 'CONTEST.CONFIRM_DELETE', 'APP.DELETE');
+  public async edit(contestListType: ContestListType): Promise<void> {
+    if (contestListType.isPoliticalAssembly) {
+      const data: PoliticalAssemblyEditDialogData = {
+        politicalAssemblyId: contestListType.id,
+      };
+
+      const result = await this.dialogService.openForResult(PoliticalAssemblyEditDialogComponent, data);
+      this.handleEditPoliticalAssembly(result);
+    } else {
+      const data: ContestEditDialogData = {
+        contestId: contestListType.id,
+        testingPhaseEnded: contestListType.testingPhaseEnded ?? false,
+      };
+
+      const result = await this.dialogService.openForResult(ContestEditDialogComponent, data);
+      this.handleEditContest(result);
+    }
+  }
+
+  public async delete(contestListType: ContestListType): Promise<void> {
+    const shouldDelete = await this.dialogService.confirm(
+      'APP.DELETE',
+      contestListType.isPoliticalAssembly ? 'POLITICAL_ASSEMBLY.CONFIRM_DELETE' : 'CONTEST.CONFIRM_DELETE',
+      'APP.DELETE',
+    );
     if (!shouldDelete) {
       return;
     }
 
-    await this.contestService.delete(id);
-    this.removeContestFromUi(id);
+    if (contestListType.isPoliticalAssembly) {
+      await this.politicalAssemblyService.delete(contestListType.id);
+    } else {
+      await this.contestService.delete(contestListType.id);
+    }
+
+    this.removeContestListTypeFromUi(contestListType.id, contestListType.isPoliticalAssembly);
     this.snackbarService.success(this.i18n.instant('APP.DELETED'));
   }
 
@@ -147,7 +201,14 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
 
     // we may have overwritten a "child contest" or a preconfigured contest date
     this.contests = [...this.contests.filter(({ date }) => !moment(date).isSame(createdContest.date, 'day')), createdContest];
-    this.sortContests();
+  }
+
+  private handleCreatePoliticalAssembly(data?: PoliticalAssemblyEditDialogResult): void {
+    if (!data) {
+      return;
+    }
+
+    this.politicalAssemblies = [...this.politicalAssemblies, data.politicalAssembly];
   }
 
   private handleEditContest(data?: ContestEditDialogResult): void {
@@ -160,13 +221,18 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
       ...this.contests[existingContestIndex],
       ...data.contest,
     };
-
-    this.sortContests();
   }
 
-  private sortContests(): void {
-    sortContests(this.contests);
-    this.contests = [...this.contests];
+  private handleEditPoliticalAssembly(data?: PoliticalAssemblyEditDialogResult): void {
+    if (!data) {
+      return;
+    }
+
+    const existingPoliticalAssemblyIndex = this.politicalAssemblies.findIndex(c => c.id === data.politicalAssembly.id);
+    this.politicalAssemblies[existingPoliticalAssemblyIndex] = {
+      ...this.politicalAssemblies[existingPoliticalAssemblyIndex],
+      ...data.politicalAssembly,
+    };
   }
 
   private attachPreconfiguredDates(): void {
@@ -191,7 +257,7 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
   private handleContestMessage(e: ContestMessage): void {
     const contest = e.data;
     if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
-      this.removeContestFromUi(contest.id);
+      this.removeContestListTypeFromUi(contest.id, false);
       return;
     }
 
@@ -214,24 +280,25 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
     } else {
       this.contests.push(contestSummary);
     }
-
-    this.sortContests();
   }
 
-  private removeContestFromUi(contestId: string): void {
-    const existingContest = this.contests.find(c => c.id === contestId);
-    this.contests = this.contests.filter(c => c.id !== contestId);
+  private removeContestListTypeFromUi(id: string, isPoliticalAssembly: boolean): void {
+    if (isPoliticalAssembly) {
+      this.politicalAssemblies = this.politicalAssemblies.filter(c => c.id !== id);
+    } else {
+      const existingContest = this.contests.find(c => c.id === id);
+      this.contests = this.contests.filter(c => c.id !== id);
 
-    // re-add the preconfigured date, if there was one for the removed contest
-    if (existingContest && !!this.preconfiguredDates.find(x => moment(x.date).isSame(existingContest.date, 'day'))) {
-      this.contests = [
-        ...this.contests,
-        {
-          date: existingContest.date,
-          isPreconfiguredDate: true,
-        } as ContestSummary,
-      ];
-      this.sortContests();
+      // re-add the preconfigured date, if there was one for the removed contest
+      if (existingContest && !!this.preconfiguredDates.find(x => moment(x.date).isSame(existingContest.date, 'day'))) {
+        this.contests = [
+          ...this.contests,
+          {
+            date: existingContest.date,
+            isPreconfiguredDate: true,
+          } as ContestSummary,
+        ];
+      }
     }
   }
 }

@@ -5,8 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, Input } from '@angular/core';
-import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MajorityElectionCandidate } from '../../core/models/majority-election.model';
 import { SexType } from '../../core/models/sex-type.model';
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
@@ -29,6 +28,9 @@ export class MajorityElectionCandidateEditComponent {
 
   @Input()
   public isCommunalDoiType: boolean = false;
+
+  @Output()
+  public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   public sexTypes: EnumItemDescription<SexType>[] = [];
 

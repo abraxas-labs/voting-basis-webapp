@@ -7,7 +7,6 @@
 import { AuthorizationService } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
@@ -34,6 +33,7 @@ import {
   PoliticalBusinessUnionEntriesEditDialogData,
   PoliticalBusinessUnionEntriesEditDialogResult,
 } from '../political-business-union-entries-edit-dialog/political-business-union-entries-edit-dialog.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-political-business-unions-dialog',

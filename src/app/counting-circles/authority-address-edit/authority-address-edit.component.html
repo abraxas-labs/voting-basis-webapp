@@ -2,7 +2,9 @@
 <bc-text
   [label]="'COUNTING_CIRCLE.DETAIL.STREET' | translate"
   [disabled]="disabled"
-  [(value)]="authority.street"
+  [value]="authority.street"
+  (valueChange)="authority.street = $event; contentChanged.emit()"
+  [subscriptSizing]="'dynamic'"
 ></bc-text>
 
 <div class="full-width form-field">
@@ -10,24 +12,32 @@
     class="flex-shrink-3"
     [label]="'COUNTING_CIRCLE.DETAIL.ZIP' | translate"
     [disabled]="disabled"
-    [(value)]="authority.zip"
+    [value]="authority.zip"
+    (valueChange)="authority.zip = $event; contentChanged.emit()"
+    [subscriptSizing]="'dynamic'"
   ></bc-text>
   <bc-text
     class="ml-2"
     [label]="'COUNTING_CIRCLE.DETAIL.CITY' | translate"
     [disabled]="disabled"
-    [(value)]="authority.city"
+    [value]="authority.city"
+    (valueChange)="authority.city = $event; contentChanged.emit()"
+    [subscriptSizing]="'dynamic'"
   ></bc-text>
 </div>
 <bc-text
   [label]="'CONTACT_PERSON.PHONE' | translate"
   type="phone"
   [disabled]="disabled"
-  [(value)]="authority.phone"
+  [value]="authority.phone"
+  (valueChange)="authority.phone = $event; contentChanged.emit()"
+  [subscriptSizing]="'dynamic'"
 ></bc-text>
 <bc-text
   [label]="'CONTACT_PERSON.EMAIL' | translate"
   type="email"
   [disabled]="disabled"
-  [(value)]="authority.email"
+  [value]="authority.email"
+  (valueChange)="authority.email = $event; contentChanged.emit()"
+  [subscriptSizing]="'dynamic'"
 ></bc-text>

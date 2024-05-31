@@ -1,15 +1,40 @@
-<bc-nav-layout >
+<bc-nav-layout>
   <bc-nav-drawer [opened]="true" [autoFocus]="false" [disableClose]="true" mode="side">
-      <bc-nav-item [label]="'NAV.VOTING_CONTEST' | translate" [routerLink]="['/', theme, 'contests']">
-      </bc-nav-item>
-      <bc-nav-item [label]="'NAV.COUNTING_CIRCLE' | translate" [routerLink]="['/', theme, 'counting-circles']">
-      </bc-nav-item>
-      <bc-nav-item [label]="'NAV.DOMAIN_OF_INFLUENCE' | translate" [routerLink]="['/', theme, 'domain-of-influences']">
-      </bc-nav-item>
-      <bc-nav-item [label]="'NAV.ACTIVITY' | translate" [routerLink]="['/', theme, 'activities']">
-      </bc-nav-item>
-      <bc-nav-item [label]="'NAV.CANTON_SETTINGS' | translate" [routerLink]="['/', theme, 'canton-settings']">
-      </bc-nav-item>
+    <bc-nav-item
+      [label]="'NAV.VOTING_CONTEST' | translate"
+      [routerLink]="['/', theme, contestUrl]"
+      [active]="active === contestNavIndex"
+      (click)="active = contestNavIndex"
+    >
+    </bc-nav-item>
+    <bc-nav-item
+      [label]="'NAV.COUNTING_CIRCLE' | translate"
+      [routerLink]="['/', theme, countingCircleUrl]"
+      [active]="active === countingCircleNavIndex"
+      (click)="active = countingCircleNavIndex"
+    >
+    </bc-nav-item>
+    <bc-nav-item
+      [label]="'NAV.DOMAIN_OF_INFLUENCE' | translate"
+      [routerLink]="['/', theme, domainOfInfluenceUrl]"
+      [active]="active === domainOfInfluenceNavIndex"
+      (click)="active = domainOfInfluenceNavIndex"
+    >
+    </bc-nav-item>
+    <bc-nav-item
+      [label]="'NAV.ACTIVITY' | translate"
+      [routerLink]="['/', theme, activityUrl]"
+      [active]="active === activityNavIndex"
+      (click)="active = activityNavIndex"
+    >
+    </bc-nav-item>
+    <bc-nav-item
+      [label]="'NAV.CANTON_SETTINGS' | translate"
+      [routerLink]="['/', theme, cantonSettingsUrl]"
+      [active]="active === cantonSettingsNavIndex"
+      (click)="active = cantonSettingsNavIndex"
+    >
+    </bc-nav-item>
   </bc-nav-drawer>
 
   <ng-content></ng-content>

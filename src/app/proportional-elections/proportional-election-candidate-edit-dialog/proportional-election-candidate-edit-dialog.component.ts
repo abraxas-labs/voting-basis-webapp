@@ -4,9 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
+import { Component, HostListener, Inject, OnDestroy } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
 import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
@@ -16,6 +16,8 @@ import { ProportionalElectionService } from '../../core/proportional-election.se
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
 import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 import { GetTranslationPipe } from '../../shared/get-translation.pipe';
+import { Subscription } from 'rxjs';
+import { cloneDeep, isEqual } from 'lodash';
 
 @Component({
   selector: 'app-proportional-election-candidate-edit-dialog',
@@ -23,7 +25,16 @@ import { GetTranslationPipe } from '../../shared/get-translation.pipe';
   styleUrls: ['./proportional-election-candidate-edit-dialog.component.scss'],
   providers: [GetTranslationPipe],
 })
-export class ProportionalElectionCandidateEditDialogComponent {
+export class ProportionalElectionCandidateEditDialogComponent implements OnDestroy {
+  @HostListener('window:beforeunload')
+  public beforeUnload(): boolean {
+    return !this.hasChanges;
+  }
+  @HostListener('window:keyup.esc')
+  public async keyUpEscape(): Promise<void> {
+    await this.closeWithUnsavedChangesCheck();
+  }
+
   public data: ProportionalElectionCandidate;
   public isNew: boolean = false;
   public testingPhaseEnded: boolean = false;
@@ -33,6 +44,10 @@ export class ProportionalElectionCandidateEditDialogComponent {
   public selectedPartyId?: string;
   public isCommunalDoiType: boolean;
 
+  public hasChanges: boolean = false;
+  public originalCandidate: ProportionalElectionCandidate;
+  public readonly backdropClickSubscription: Subscription;
+
   constructor(
     private readonly dialogRef: MatDialogRef<ProportionalElectionCandidateEditDialogData>,
     private readonly i18n: TranslateService,
@@ -40,6 +55,7 @@ export class ProportionalElectionCandidateEditDialogComponent {
     private readonly snackbarService: SnackbarService,
     private readonly proportionalElectionService: ProportionalElectionService,
     private readonly getTranslationPipe: GetTranslationPipe,
+    private readonly dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionCandidateEditDialogData,
   ) {
     this.data = dialogData.candidate;
@@ -50,6 +66,14 @@ export class ProportionalElectionCandidateEditDialogComponent {
     this.initPartiesDropdownData(dialogData.parties);
 
     this.isCommunalDoiType = isCommunalDoiType(dialogData.doiType);
+    this.originalCandidate = cloneDeep(this.data);
+
+    this.dialogRef.disableClose = true;
+    this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+  }
+
+  public ngOnDestroy(): void {
+    this.backdropClickSubscription.unsubscribe();
   }
 
   public set dateOfBirth(value: string) {
@@ -103,6 +127,7 @@ export class ProportionalElectionCandidateEditDialogComponent {
       }
 
       this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+      this.hasChanges = false;
       const result: ProportionalElectionCandidateEditDialogResult = {
         candidate: this.data,
       };
@@ -116,8 +141,20 @@ export class ProportionalElectionCandidateEditDialogComponent {
     return isValidDateOfBirth(this.data.dateOfBirth);
   }
 
-  public cancel(): void {
+  public async closeWithUnsavedChangesCheck(): Promise<void> {
+    if (await this.leaveDialogOpen()) {
+      return;
+    }
+
     this.dialogRef.close();
+  }
+
+  public contentChanged(): void {
+    this.hasChanges = !isEqual(this.data, this.originalCandidate);
+  }
+
+  private async leaveDialogOpen(): Promise<boolean> {
+    return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
 
   private initPartiesDropdownData(parties: DomainOfInfluenceParty[]): void {

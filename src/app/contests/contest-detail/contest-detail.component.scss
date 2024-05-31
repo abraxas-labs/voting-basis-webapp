@@ -1,50 +1,37 @@
-.mat-column-number {
-  width: 5%;
+@use '../../../sharedStyles/table' as table;
+
+::ng-deep .bc-column-active {
+  @include table.truncate-long-sortable-table-header();
 }
 
-// stylelint-disable-next-line
-.mat-column-shortDescription {
-  width: 15%;
+::ng-deep .bc-column-owner {
+  @include table.truncate-long-sortable-table-header();
 }
 
-// stylelint-disable-next-line
-.mat-column-officialDescription {
-  width: 25%;
+::ng-deep .bc-column-number {
+  @include table.truncate-long-sortable-table-header();
 }
 
-// stylelint-disable-next-line
-.mat-column-domainOfInfluenceType {
-  width: 8%;
+::ng-deep .bc-column-official-description {
+  @include table.truncate-long-sortable-table-header();
 }
 
-// stylelint-disable-next-line
-.mat-column-domainOfInfluenceName {
-  width: 8%;
+::ng-deep .bc-column-short-description {
+  @include table.truncate-long-sortable-table-header();
 }
 
-.mat-column-type {
-  width: 8%;
+::ng-deep .bc-column-domain-of-influence-type {
+  @include table.truncate-long-sortable-table-header();
 }
 
-.mat-column-enable {
-  width: 10%;
+.bc-column-actions {
+  width: 2%;
 }
 
-.mat-column-owner {
-  width: 12%;
-}
-
-// stylelint-disable-next-line
-.mat-column-ownerDescription {
-  width: 12%;
-}
-
-.nowrap {
-  white-space: nowrap;
-}
-
-.overflow {
-  white-space: nowrap;
+bc-paginator {
   overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+bc-table {
+  overflow-x: hidden;
 }

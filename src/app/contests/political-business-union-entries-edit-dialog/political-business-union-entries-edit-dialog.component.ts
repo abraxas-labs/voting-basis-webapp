@@ -4,17 +4,16 @@
  * For license information see LICENSE file.
  */
 
-import { AdvancedTablePaginatorComponent } from '@abraxas/base-components';
+import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
 import { PoliticalBusinessUnion, PoliticalBusinessUnionType } from '../../core/models/political-business-union.model';
 import { PoliticalBusiness } from '../../core/models/political-business.model';
 import { ProportionalElectionUnionService } from '../../core/proportional-election-union.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-political-business-union-entries-edit-dialog',
@@ -24,12 +23,11 @@ import { ProportionalElectionUnionService } from '../../core/proportional-electi
 export class PoliticalBusinessUnionEntriesEditDialogComponent implements AfterViewInit {
   public readonly columns = ['select', 'politicalBusinessNumber', 'shortDescription'];
   public readonly columnsSelected = ['politicalBusinessNumber', 'actions'];
-  public readonly dataSource: MatTableDataSource<PoliticalBusiness> = new MatTableDataSource<PoliticalBusiness>();
+  public readonly dataSource = new TableDataSource<PoliticalBusiness>();
   public selection = new SelectionModel<PoliticalBusiness>(true, []);
   public isAllSelected: boolean = false;
 
-  @ViewChild(AdvancedTablePaginatorComponent)
-  public paginator!: AdvancedTablePaginatorComponent;
+  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
   public data: PoliticalBusinessUnion;
   public saving: boolean = false;

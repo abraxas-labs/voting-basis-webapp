@@ -8,11 +8,11 @@ import { SimpleStepperComponent } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterContentChecked, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { ImportService } from '../../../core/import.service';
 import { ContestImport, ImportFileContent } from '../../../core/models/import.model';
 import { ImportPoliticalBusinessesComponent } from '../import-political-businesses/import-political-businesses.component';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   templateUrl: './contest-import-dialog.component.html',

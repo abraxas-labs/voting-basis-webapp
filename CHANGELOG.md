@@ -1,4 +1,4 @@
-# ✨ Changelog (`v2.10.1`)
+# ✨ Changelog (`v3.6.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,180 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v2.10.1
-Previous version ---- v2.3.2
+This version -------- v3.6.0
+Previous version ---- v2.10.1
 Initial version ----- v1.23.0
-Total commits ------- 19
+Total commits ------- 32
 ```
+
+## [v3.6.0] - 2024-05-29
+
+### 🆕 Added
+
+- add publish results enabled canton setting
+
+## [v3.5.4] - 2024-05-27
+
+### 🔄 Changed
+
+- change plausibilisiert state color
+
+## [v3.5.3] - 2024-05-27
+
+### 🔄 Changed
+
+- app loading spinner
+
+## [v3.5.2] - 2024-05-22
+
+### 🔄 Changed
+
+- more space between dropdown and label
+- checkbox text is now inline
+
+## [v3.5.1] - 2024-05-22
+
+### 🔄 Changed
+
+- angular update UI optimizations
+
+## [v3.5.0] - 2024-05-22
+
+### 🆕 Added
+
+- add ballot question type
+
+## [v3.4.0] - 2024-05-21
+
+### 🆕 Added
+
+- add counting circle table sort and filter
+
+## [v3.3.1] - 2024-05-13
+
+### 🔄 Changed
+
+- app loading spinner
+
+## [v3.3.0] - 2024-05-07
+
+### 🆕 Added
+
+- update mandate algorithm for proportional elections in unions
+
+## [v3.2.0] - 2024-05-04
+
+### 🔄 Changed
+
+- move Stimmregister flag from canton settings to DOI
+
+## [v3.1.4] - 2024-04-25
+
+### 🔄 Changed
+
+- only root domain of influences should be visible on contest creation
+
+## [v3.1.3] - 2024-04-24
+
+### :arrows_counterclockwise: Changed
+
+- bugfixes for contest and political business list
+
+## [v3.1.2] - 2024-04-24
+
+### :new: Added
+
+- add sorting and filterting to political business list
+
+## [v3.1.1] - 2024-04-24
+
+### 🔄 Changed
+
+- add sorting and filtering to contest list
+
+## [v3.1.0] - 2024-04-24
+
+### :new: Added
+
+- check for unique political business number
+
+## [v3.0.0] - 2024-04-19
+
+BREAKING CHANGE: update to Angular 17 version
+
+### 🔄 Changed
+
+- Angular Update to version 17
+
+## [v2.16.0] - 2024-04-19
+
+### 🆕 Added
+
+- add state plausibilised disabled canton setting
+
+## [v2.15.0] - 2024-04-18
+
+### 🆕 Added
+
+- add counting circle result state descriptions
+
+## [v2.14.0] - 2024-04-17
+
+### :new: Added
+
+- added voting card color to domain of influence
+
+## [v2.13.0] - 2024-04-15
+
+### :arrows_counterclockwise: Changed
+
+- users may not be able to create, edit or delete contests
+
+- add evoting counting circle
+
+- added view partial counting circle results flag to domain of influence
+
+### 🔄 Changed
+
+- adjust domain of influence overview overflow height
+
+### 🆕 Added
+
+- add couting circle table overflow
+
+- add unsaved changes guard and unload host listener
+
+### 🔄 Changed
+
+- ux improvements
+
+## [v2.12.0] - 2024-04-08
+
+### 🆕 Added
+
+- add evoting counting circle
+
+## [v2.11.0] - 2024-03-14
+
+### 🆕 Added
+
+- add virtual top level domain of influence
+
+### 🆕 Added
+
+- add vote result algorithm popular and counting circle majority
+
+### 🆕 Added
+
+- add political assembly
+
+### :new: Added
+
+- added permissions for canton admin
+
+### :new: Added
+
+- added canton to counting circle
 
 ## [v2.10.1] - 2024-02-06
 
@@ -92,6 +261,268 @@ Total commits ------- 19
 
 - configure caching for statically named resource config.js
 - set version tag for referenced config.js in index.html to enforce initial client-side cache invalidation
+
+### :new: Added
+
+- add support for custom oauth scopes.
+
+### :new: Added
+
+- add environment indicator badge in header
+
+### :arrows_counterclockwise: Changed
+
+- setup automatic refresh to only listen for the access_token lifetime since the IdP only responds with the access_token
+
+### 🔄 Changed
+
+- political first name of candidate from simple text to complex text
+
+### 🔄 Changed
+
+- display list and order number for created lists correctly
+
+### ❌ Removed
+
+- remove swiss post order number
+
+### 🆕 Added
+
+- party import mappings for proportional election candidates
+
+### ❌ Removed
+
+- revert commit 6c24fa62023da2dbd9473ee23f438faab4878903
+
+BREAKING CHANGE: update to Angular 14 version
+
+### 🔄 Changed
+
+- Angular 14 Update
+
+### 🆕 Added
+
+- add swiss post data
+
+### 🆕 Added
+
+- Add domain of influence voting card shipping choice
+
+### 🔄 Changed
+
+- end of testing phase time component disabled if testing phase ended
+
+### 🔄 Changed
+
+- disable candidate move buttons during reordering
+
+### 🔄 Changed
+
+- show list unions on lists
+
+### 🔄 Changed
+
+- update cd-templates to resolve blocking deploy-trigger
+
+### 🔄 Changed
+
+- canton settings add electoral register settings
+
+### 🆕 Added
+
+- Added domain of influence sap customer order number
+
+### 🔄 Changed
+
+- wrap buttons for proportional election lists
+
+### 🆕 Added
+
+- List union main list selection: show list order number and description
+
+### 🔄 Changed
+
+- prevent loop of selection/deselection of contest import files
+
+### 🔄 Changed
+
+- Domain of influence BFS is required and needs to be unique if the domain of influence is of type MU
+
+### 🔄 Changed
+
+- update base-components library
+
+### ❌ Removed
+
+- remove internal description, invalid votes and individual empty ballots allowed from elections
+
+### 🔄 Changed
+
+- add optional text for formfield default options
+
+### 🆕 Added
+
+- add domain of influence canton
+
+### 🔄 Changed
+
+- changed path to logo for whitelabeling
+
+### 🆕 Added
+
+- add white labeling logo for customers
+
+### 🔄 Changed
+
+- reorder candidates
+
+### 🆕 Added
+
+- add candidate origin
+
+### 🔄 Changed
+
+- proportional election candidate party selection
+
+### 🔄 Changed
+
+- set authority name for domain of influence
+
+### 🔒 Security
+
+- configure client refresh token flow (rfc-6749)
+
+### 🆕 Added
+
+- Name for protocol for domain of influence and counting circle
+- Sortnumber for counting circle
+- Protocol sort types for domain of influence and counting circle
+
+### 🔄 Changed
+
+- Updated voting-library to fix layouting issues
+
+### 🔒 Security
+
+- disable style inline optimization to allow a more restictive CPS eleminating script-src unsafe-inline
+
+### 🆕 Added
+
+- added review procedure and enforce for counting circle property for vote, majority election and proportional election
+
+### 🔄 Changed
+
+- included theme in header bar link
+
+### 🔄 Changed
+
+- optimise white labling to not overwrite the base components styles
+
+### 🆕 Added
+
+- Added white labling option
+
+### 🔄 Changed
+
+- Allow political business number modification on all political businesses after testing phase has ended
+
+### 🔄 Changed
+
+- Refactor and clean up code smells
+
+### ❌ Removed
+
+- TenantGuard, tenant is no longer in the URL
+
+### 🔒 Security
+
+- Changed auth flow to PKCE
+- Use "Fragment" response mode
+- Update dependencies
+
+### 🔄 Changed
+
+- Made political businesses only clickable/viewable for authorized users
+
+### 🆕 Added
+
+- Events to notify political businesses and political business unions about a contest merge
+
+### 🔄 Changed
+
+- contest list columns fixed
+
+### 🔄 Changed
+
+- update base components bugfixes
+
+### 🆕 Added
+
+- gzip on
+- outdated error page
+
+### 🔄 Changed
+
+- adapted authentication module type to match used iam lib
+
+### 🆕 Added
+
+- config.js: definitions of window env-handler (replacement ngssc)
+
+### ❌ Removed
+
+- ngssc-library
+
+### 🔒 Security
+
+- The default NGINX listen port is now 8080 instead of 80
+- nginx:1.19-alpine image changed to nginxinc/nginx-unprivileged:1.20-alpine
+
+### 🆕 Added
+
+- add domain of influence external printing center eai message type
+
+### 🔄 Changed
+
+- secondary majority election module routing fixed
+
+### 🔄 Changed
+
+- revert angular 9 update changes
+
+### 🆕 Added
+
+- added voting documents e-voting message type to canton settings
+
+### 🔄 Changed
+
+- reverted angular 9 update and add workaround for entry components
+
+### 🔄 Changed
+
+- moved files into feature modules
+
+### 🔄 Changed
+
+- extend evoting date with time
+
+### 🆕 Added
+
+- tif support for domain of influence logos
+
+just a temporary fix. will be solved later by migrating to new base components
+
+just a temporary fix. will be solved later by migrating to new base components
+
+just a temporary fix. will be solved later by migrating to new base components
+
+fix: package lock old version
+
+Also allow users to view politicial business in readonly mode when testing phase ended
+
+also removed count of candidates check
+
+use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
 
 ## [v2.3.3] - 2023-11-24
 
@@ -272,178 +703,6 @@ BREAKING CHANGE: update to Angular 14 version
 ### 🔄 Changed
 
 - update base-components library
-
-### ❌ Removed
-
-- remove internal description, invalid votes and individual empty ballots allowed from elections
-
-### 🔄 Changed
-
-- add optional text for formfield default options
-
-### 🆕 Added
-
-- add domain of influence canton
-
-### 🔄 Changed
-
-- changed path to logo for whitelabeling
-
-### 🆕 Added
-
-- add white labeling logo for customers
-
-### 🔄 Changed
-
-- reorder candidates
-
-### 🆕 Added
-
-- add candidate origin
-
-### 🔄 Changed
-
-- proportional election candidate party selection
-
-### 🔄 Changed
-
-- set authority name for domain of influence
-
-### 🔒 Security
-
-- configure client refresh token flow (rfc-6749)
-
-### 🆕 Added
-
-- Name for protocol for domain of influence and counting circle
-- Sortnumber for counting circle
-- Protocol sort types for domain of influence and counting circle
-
-### 🔄 Changed
-
-- Updated voting-library to fix layouting issues
-
-### 🔒 Security
-
-- disable style inline optimization to allow a more restictive CPS eleminating script-src unsafe-inline
-
-### 🆕 Added
-
-- added review procedure and enforce for counting circle property for vote, majority election and proportional election
-
-### 🔄 Changed
-
-- included theme in header bar link
-
-### 🔄 Changed
-
-- optimise white labling to not overwrite the base components styles
-
-### 🆕 Added
-
-- Added white labling option
-
-### 🔄 Changed
-
-- Allow political business number modification on all political businesses after testing phase has ended
-
-### 🔄 Changed
-
-- Refactor and clean up code smells
-
-### ❌ Removed
-
-- TenantGuard, tenant is no longer in the URL
-
-### 🔒 Security
-
-- Changed auth flow to PKCE
-- Use "Fragment" response mode
-- Update dependencies
-
-### 🔄 Changed
-
-- Made political businesses only clickable/viewable for authorized users
-
-### 🆕 Added
-
-- Events to notify political businesses and political business unions about a contest merge
-
-### 🔄 Changed
-
-- contest list columns fixed
-
-### 🔄 Changed
-
-- update base components bugfixes
-
-### 🆕 Added
-
-- gzip on
-- outdated error page
-
-### 🔄 Changed
-
-- adapted authentication module type to match used iam lib
-
-### 🆕 Added
-
-- config.js: definitions of window env-handler (replacement ngssc)
-
-### ❌ Removed
-
-- ngssc-library
-
-### 🔒 Security
-
-- The default NGINX listen port is now 8080 instead of 80
-- nginx:1.19-alpine image changed to nginxinc/nginx-unprivileged:1.20-alpine
-
-### 🆕 Added
-
-- add domain of influence external printing center eai message type
-
-### 🔄 Changed
-
-- secondary majority election module routing fixed
-
-### 🔄 Changed
-
-- revert angular 9 update changes
-
-### 🆕 Added
-
-- added voting documents e-voting message type to canton settings
-
-### 🔄 Changed
-
-- reverted angular 9 update and add workaround for entry components
-
-### 🔄 Changed
-
-- moved files into feature modules
-
-### 🔄 Changed
-
-- extend evoting date with time
-
-### 🆕 Added
-
-- tif support for domain of influence logos
-
-just a temporary fix. will be solved later by migrating to new base components
-
-just a temporary fix. will be solved later by migrating to new base components
-
-just a temporary fix. will be solved later by migrating to new base components
-
-fix: package lock old version
-
-Also allow users to view politicial business in readonly mode when testing phase ended
-
-also removed count of candidates check
-
-use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
 
 ## [v1.35.1] - 2023-01-05
 

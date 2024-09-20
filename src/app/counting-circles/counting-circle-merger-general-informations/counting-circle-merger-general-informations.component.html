@@ -7,34 +7,52 @@
                valueExpr="id"
                [required]="true"
                [value]="merger.copyFromCountingCircleId"
-               (valueChange)="copyFromChange($event)"></bc-dropdown>
+               (valueChange)="copyFromChange($event)"
+               [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <bc-date [label]="'COUNTING_CIRCLE.MERGE.DETAIL.ACTIVE_FROM' | translate"
            [required]="true"
            [value]="merger.activeFrom | date"
-           (valueChange)="setActiveFrom($event)"></bc-date>
+           (valueChange)="setActiveFrom($event)"
+           [subscriptSizing]="'dynamic'"></bc-date>
 
   <bc-text [label]="'COUNTING_CIRCLE.NAME' | translate"
            [required]="true"
            [maxlength]="100"
-           [(value)]="merger.newCountingCircle.name"></bc-text>
+           [(value)]="merger.newCountingCircle.name"
+           [subscriptSizing]="'dynamic'"></bc-text>
   <bc-text [label]="'COUNTING_CIRCLE.NAME_FOR_PROTOCOL' | translate"
            [maxlength]="100"
-           [(value)]="merger.newCountingCircle.nameForProtocol"></bc-text>
+           [(value)]="merger.newCountingCircle.nameForProtocol"
+           [subscriptSizing]="'dynamic'"></bc-text>
   <bc-text [label]="'COUNTING_CIRCLE.BFS' | translate"
            [required]="true"
-           [(value)]="merger.newCountingCircle.bfs"></bc-text>
+           [(value)]="merger.newCountingCircle.bfs"
+           [subscriptSizing]="'dynamic'"></bc-text>
   <bc-text [label]="'COUNTING_CIRCLE.CODE' | translate"
            [maxlength]="10"
-           [(value)]="merger.newCountingCircle.code"></bc-text>
+           [(value)]="merger.newCountingCircle.code"
+           [subscriptSizing]="'dynamic'"></bc-text>
   <bc-number [label]="'COUNTING_CIRCLE.SORT_NUMBER' | translate"
              [max]="999999999"
              [min]="0"
              [error]="merger.newCountingCircle.sortNumber < 0 || merger.newCountingCircle.sortNumber > 999999999"
-             [(value)]="merger.newCountingCircle.sortNumber"></bc-number>
+             [(value)]="merger.newCountingCircle.sortNumber"
+             [subscriptSizing]="'dynamic'"></bc-number>
 
   <vo-lib-tenant-selection label="COUNTING_CIRCLE.AUTHORITY"
                            [(selectedTenant)]="selectedResponsibleAuthority"></vo-lib-tenant-selection>
+
+  <bc-checkbox [label]="'COUNTING_CIRCLE.E_VOTING' | translate"
+               [checked]="showEVotingActiveFrom"
+               (checkedChange)="updateShowEVotingActiveFrom($event)"></bc-checkbox>
+
+  <bc-date *ngIf="showEVotingActiveFrom"
+           [label]="'COUNTING_CIRCLE.E_VOTING_ACTIVE_FROM' | translate"
+           [required]="true"
+           [value]="merger.newCountingCircle.eVotingActiveFrom | date"
+           (valueChange)="updateEVotingActiveFrom($event)"
+           [subscriptSizing]="'dynamic'"></bc-date>
 
   <app-authority-address-edit [authority]="merger.newCountingCircle.responsibleAuthority"
                               [disabled]="false">

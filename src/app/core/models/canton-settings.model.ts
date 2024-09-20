@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -79,6 +79,10 @@ export function newCantonSettings(): CantonSettings {
     countingCircleResultStateDescriptionsList: allCountingCircleResultStateDescriptions.map(x => ({ state: x, description: '' })),
     statePlausibilisedDisabled: false,
     publishResultsEnabled: false,
+    endResultFinalizeDisabled: false,
+    createContestOnHighestHierarchicalLevelEnabled: false,
+    internalPlausibilisationDisabled: false,
+    publishResultsBeforeAuditedTentatively: false,
   };
 }
 

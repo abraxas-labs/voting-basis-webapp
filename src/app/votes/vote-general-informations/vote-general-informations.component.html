@@ -29,9 +29,9 @@
            (valueChange)="data.internalDescription = $event; contentChanged.emit()"
            [subscriptSizing]="'dynamic'"></bc-text>
   <bc-dropdown class="full-width"
-               *ngIf="domainOfInfluenceTypes.length > 1"
+               *ngIf="domainOfInfluenceTypeItems.length > 1"
                [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
-               [items]="domainOfInfluenceTypes"
+               [items]="domainOfInfluenceTypeItems"
                [disabled]="contest.testingPhaseEnded"
                [clearable]="false"
                [required]="true"

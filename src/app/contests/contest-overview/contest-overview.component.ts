@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -8,7 +8,7 @@ import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Subscription } from 'rxjs';
 import { ContestService } from '../../core/contest.service';
 import { ExportService } from '../../core/export.service';
@@ -196,7 +196,7 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const missingProps = { isPreconfiguredDate: false, contestEntriesDetails: [] };
+    const missingProps = { isPreconfiguredDate: false, contestEntriesDetails: [], state: ContestState.CONTEST_STATE_TESTING_PHASE };
     const createdContest = { ...data.contest, ...missingProps };
 
     // we may have overwritten a "child contest" or a preconfigured contest date
@@ -221,6 +221,9 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
       ...this.contests[existingContestIndex],
       ...data.contest,
     };
+
+    // trigger angular change detection
+    this.contests = [...this.contests];
   }
 
   private handleEditPoliticalAssembly(data?: PoliticalAssemblyEditDialogResult): void {
@@ -233,6 +236,9 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
       ...this.politicalAssemblies[existingPoliticalAssemblyIndex],
       ...data.politicalAssembly,
     };
+
+    // trigger angular change detection
+    this.politicalAssemblies = [...this.politicalAssemblies];
   }
 
   private attachPreconfiguredDates(): void {
@@ -243,7 +249,7 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
           ({
             date,
             isPreconfiguredDate: true,
-          } as ContestSummary),
+          }) as ContestSummary,
       );
     this.contests = [...this.contests, ...dates];
   }
@@ -277,8 +283,11 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
     if (contestToReplaceIdx >= 0) {
       contestSummary.contestEntriesDetails = this.contests[contestToReplaceIdx].contestEntriesDetails ?? [];
       this.contests[contestToReplaceIdx] = contestSummary;
+
+      // trigger angular change detection
+      this.contests = [...this.contests];
     } else {
-      this.contests.push(contestSummary);
+      this.contests = [...this.contests, contestSummary];
     }
   }
 

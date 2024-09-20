@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -22,7 +22,12 @@ import { ElectionGroup, ElectionGroupMessage } from '../../core/models/election-
 import { ExportEntityType } from '../../core/models/export.model';
 import { EntityState } from '../../core/models/message.model';
 import { PoliticalBusinessUnionMessage } from '../../core/models/political-business-union.model';
-import { PoliticalBusiness, PoliticalBusinessMessage, PoliticalBusinessType } from '../../core/models/political-business.model';
+import {
+  PoliticalBusiness,
+  PoliticalBusinessMessage,
+  PoliticalBusinessSubType,
+  PoliticalBusinessType,
+} from '../../core/models/political-business.model';
 import { ProportionalElectionService } from '../../core/proportional-election.service';
 import { SecondaryMajorityElectionService } from '../../core/secondary-majority-election.service';
 import { sortElectionGroups } from '../../core/utils/election-group.utils';
@@ -32,11 +37,6 @@ import {
   PoliticalBusinessImportDialogComponent,
   PoliticalBusinessImportDialogData,
 } from '../../shared/import/political-business-import-dialog/political-business-import-dialog.component';
-import {
-  SecondaryElectionCreateDialogData,
-  SecondaryElectionCreateDialogResult,
-  SecondaryMajorityElectionCreateDialogComponent,
-} from '../../shared/secondary-majority-election-create-dialog/secondary-majority-election-create-dialog.component';
 import {
   PoliticalBusinessUnionsDialogComponent,
   PoliticalBusinessUnionsDialogData,
@@ -151,25 +151,9 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     await this.router.navigate(['majority-elections', 'new'], { relativeTo: this.route });
   }
 
-  public async createSecondaryElection(): Promise<void> {
-    const possiblePrimaryElections = this.contest.politicalBusinesses.filter(
-      pb =>
-        pb.domainOfInfluence.secureConnectId === this.tenantId &&
-        (pb.politicalBusinessType === PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION ||
-          pb.politicalBusinessType === PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION),
-    );
-
-    const dialogData: SecondaryElectionCreateDialogData = { possiblePrimaryElections };
-    const result = await this.dialogService.openForResult<
-      SecondaryMajorityElectionCreateDialogComponent,
-      SecondaryElectionCreateDialogResult
-    >(SecondaryMajorityElectionCreateDialogComponent, dialogData);
-
-    if (result?.secondaryElection) {
-      const primaryElectionId = result.secondaryElection.primaryElectionId;
-      const routeExtras: NavigationExtras = { relativeTo: this.route, queryParams: { primaryElectionId } };
-      await this.router.navigate(['secondary-majority-elections', 'new'], routeExtras);
-    }
+  public async createSecondaryElection(primaryElectionId: string): Promise<void> {
+    const routeExtras: NavigationExtras = { relativeTo: this.route, queryParams: { primaryElectionId } };
+    await this.router.navigate(['secondary-majority-elections', 'new'], routeExtras);
   }
 
   public async open(row: PoliticalBusinessListType): Promise<void> {
@@ -389,6 +373,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       id: politicalBusiness.id,
       number: politicalBusiness.politicalBusinessNumber,
       type: politicalBusiness.politicalBusinessType,
+      subType: politicalBusiness.politicalBusinessSubType,
       shortDescription: this.languageService.getTranslationForCurrentLang(politicalBusiness.shortDescription),
       officialDescription: this.languageService.getTranslationForCurrentLang(politicalBusiness.officialDescription),
       active: politicalBusiness.active,
@@ -404,6 +389,7 @@ export type PoliticalBusinessListType = {
   id: string;
   number: string;
   type: PoliticalBusinessType;
+  subType: PoliticalBusinessSubType;
   shortDescription: string;
   officialDescription: string;
   domainOfInfluenceType: DomainOfInfluenceType;

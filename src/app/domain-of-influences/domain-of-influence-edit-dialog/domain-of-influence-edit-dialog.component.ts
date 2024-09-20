@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -16,7 +16,7 @@ import { isDistinct } from '../../core/utils/array.utils';
 import { Permissions } from '../../core/models/permissions.model';
 import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
-import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared/voting_card_color_pb';
+import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 
 @Component({
   selector: 'app-domain-of-influence-edit-dialog',
@@ -53,6 +53,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public originalDomainOfInfluence: DomainOfInfluence;
   public originalSecureConnectId?: string;
   public readonly backdropClickSubscription: Subscription;
+  public showInternalPlausibilisation: boolean = false;
 
   constructor(
     private readonly dialogRef: MatDialogRef<DomainOfInfluenceEditDialogData>,
@@ -82,7 +83,6 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
     return (
       !!this.data &&
       !!this.data.name &&
-      !!this.data.shortName &&
       !!this.data.type &&
       (this.data.type !== DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_MU || !!this.data.bfs) &&
       !!this.selectedTenant &&
@@ -104,25 +104,26 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
           !!this.data.swissPostData.invoiceReferenceNumber &&
           !!this.data.swissPostData.frankingLicenceReturnNumber)) &&
       !(!this.data.responsibleForVotingCards && this.data.electoralRegistrationEnabled) &&
-      !!this.data.plausibilisationConfiguration &&
-      this.data.plausibilisationConfiguration.comparisonVoterParticipationConfigurationsList.every(
-        x =>
-          (!x.thresholdPercent || x.thresholdPercent >= 0) &&
-          x.mainLevel > DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_UNSPECIFIED &&
-          x.comparisonLevel > DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_UNSPECIFIED,
-      ) &&
-      isDistinct(
-        this.data.plausibilisationConfiguration.comparisonVoterParticipationConfigurationsList,
-        x => +x.mainLevel + ':' + x.comparisonLevel,
-      ) &&
-      this.data.plausibilisationConfiguration.comparisonCountOfVotersConfigurationsList.every(
-        x => !x.thresholdPercent || x.thresholdPercent >= 0,
-      ) &&
-      this.data.plausibilisationConfiguration.comparisonVotingChannelConfigurationsList.every(
-        x => !x.thresholdPercent || x.thresholdPercent >= 0,
-      ) &&
-      (!this.data.plausibilisationConfiguration.comparisonValidVotingCardsWithAccountedBallotsThresholdPercent ||
-        this.data.plausibilisationConfiguration.comparisonValidVotingCardsWithAccountedBallotsThresholdPercent >= 0)
+      (!this.showInternalPlausibilisation ||
+        (!!this.data.plausibilisationConfiguration &&
+          this.data.plausibilisationConfiguration.comparisonVoterParticipationConfigurationsList.every(
+            x =>
+              (!x.thresholdPercent || x.thresholdPercent >= 0) &&
+              x.mainLevel > DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_UNSPECIFIED &&
+              x.comparisonLevel > DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_UNSPECIFIED,
+          ) &&
+          isDistinct(
+            this.data.plausibilisationConfiguration.comparisonVoterParticipationConfigurationsList,
+            x => +x.mainLevel + ':' + x.comparisonLevel,
+          ) &&
+          this.data.plausibilisationConfiguration.comparisonCountOfVotersConfigurationsList.every(
+            x => !x.thresholdPercent || x.thresholdPercent >= 0,
+          ) &&
+          this.data.plausibilisationConfiguration.comparisonVotingChannelConfigurationsList.every(
+            x => !x.thresholdPercent || x.thresholdPercent >= 0,
+          ) &&
+          (!this.data.plausibilisationConfiguration.comparisonValidVotingCardsWithAccountedBallotsThresholdPercent ||
+            this.data.plausibilisationConfiguration.comparisonValidVotingCardsWithAccountedBallotsThresholdPercent >= 0)))
     );
   }
 
@@ -139,6 +140,9 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
       this.selectedTenant = { id: this.data.secureConnectId, name: this.data.authorityName } as Tenant;
       this.originalSecureConnectId = this.data.secureConnectId;
     }
+
+    await this.loadCantonDefaults();
+    this.resetInternalPlausibilisation();
   }
 
   public async save(): Promise<void> {
@@ -262,6 +266,31 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
       this.logoChanged = false;
       delete this.updatedLogo;
     }
+  }
+
+  private async loadCantonDefaults(): Promise<void> {
+    if (this.data.id) {
+      const cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(this.data.id);
+      this.showInternalPlausibilisation = !cantonDefaults.internalPlausibilisationDisabled;
+    } else {
+      const domainOfInfluences = await this.domainOfInfluenceService.listForCurrentTenant();
+
+      if (domainOfInfluences.length === 0) {
+        return;
+      }
+
+      // take first domain of influence since all domain of influences of a tenant should be in the same canton
+      const cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluences[0].id);
+      this.showInternalPlausibilisation = !cantonDefaults.internalPlausibilisationDisabled;
+    }
+  }
+
+  private resetInternalPlausibilisation(): void {
+    if (this.showInternalPlausibilisation) {
+      return;
+    }
+
+    this.data.plausibilisationConfiguration = undefined;
   }
 }
 

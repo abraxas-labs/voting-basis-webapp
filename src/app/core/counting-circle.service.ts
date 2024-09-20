@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -9,6 +9,7 @@ import {
   CreateCountingCircleRequest,
   DeleteCountingCircleRequest,
   DeleteScheduledCountingCirclesMergerRequest,
+  GetCountingCircleChangesRequest,
   GetCountingCircleRequest,
   ListAssignableCountingCircleRequest,
   ListAssignedCountingCircleRequest,
@@ -20,7 +21,7 @@ import {
   UpdateCountingCircleRequest,
   UpdateScheduledCountingCirclesMergerRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/counting_circle_requests_pb';
-import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
+import { GrpcBackendService, GrpcService, retryForeverWithBackoff, TimestampUtil } from '@abraxas/voting-lib';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
@@ -34,8 +35,11 @@ import {
   CountingCirclesMergerProto,
   DomainOfInfluenceCountingCircle,
   DomainOfInfluenceCountingCircleProto,
+  CountingCircleChangeMessage,
+  CountingCircleChangeMessageProto,
 } from './models/counting-circle.model';
 import { mapToProtoContactPerson } from './utils/contact-person.utils';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root',
@@ -63,7 +67,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     return this.request(
       c => c.get,
       req,
-      r => r.toObject(),
+      r => this.mapToCountingCircle(r),
     );
   }
 
@@ -88,7 +92,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     return this.request(
       c => c.listAssignable,
       req,
-      r => this.mapToDomainOfInfluenceCountingCircles(r.toObject().countingCirclesList),
+      r => this.mapToDomainOfInfluenceCountingCircles(r.getCountingCirclesList().map(cc => this.mapToCountingCircle(cc))),
     );
   }
 
@@ -153,6 +157,15 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     );
   }
 
+  public getChanges(): Observable<CountingCircleChangeMessage> {
+    const req = new GetCountingCircleChangesRequest();
+    return this.requestServerStream(
+      c => c.getChanges,
+      req,
+      r => this.mapToCountingCircleChangeMessage(r),
+    ).pipe(retryForeverWithBackoff());
+  }
+
   private mapToDomainOfInfluenceCountingCircles(data: CountingCircle[]): DomainOfInfluenceCountingCircle[] {
     return data.map(d => this.mapToDomainOfInfluenceCountingCircle(d));
   }
@@ -170,6 +183,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     result.setNameForProtocol(data.nameForProtocol);
     result.setSortNumber(data.sortNumber);
     result.setEVoting(data.eVoting);
+    result.setEVotingActiveFrom(TimestampUtil.toTimestamp(data.eVotingActiveFrom));
     return result.toObject();
   }
 
@@ -187,7 +201,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     result.setSortNumber(data.sortNumber);
     result.setElectoratesList(data.electoratesList.map(e => this.mapToProtoElectorate(e)));
     result.setCanton(data.canton);
-    result.setEVoting(data.eVoting);
+    result.setEVotingActiveFrom(TimestampUtil.toTimestamp(data.eVotingActiveFrom));
     return result;
   }
 
@@ -204,7 +218,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     result.setSortNumber(data.sortNumber);
     result.setElectoratesList(data.electoratesList.map(e => this.mapToProtoElectorate(e)));
     result.setCanton(data.canton);
-    result.setEVoting(data.eVoting);
+    result.setEVotingActiveFrom(TimestampUtil.toTimestamp(data.eVotingActiveFrom));
     return result;
   }
 
@@ -234,7 +248,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
     req.setActiveFrom(TimestampUtil.toTimestamp(data.activeFrom));
     req.setNameForProtocol(data.newCountingCircle.nameForProtocol);
     req.setSortNumber(data.newCountingCircle.sortNumber);
-    req.setEVoting(data.newCountingCircle.eVoting);
+    req.setEVotingActiveFrom(TimestampUtil.toTimestamp(data.newCountingCircle.eVotingActiveFrom));
   }
 
   private mapToProtoAuthority(data?: Authority): AuthorityProto {
@@ -278,6 +292,7 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
       electoratesList: cc.getElectoratesList().map(x => x.toObject()),
       canton: cc.getCanton(),
       eVoting: cc.getEVoting(),
+      eVotingActiveFrom: cc.getEVotingActiveFrom()?.toDate(),
     };
   }
 
@@ -289,6 +304,16 @@ export class CountingCircleService extends GrpcService<CountingCircleServiceProm
       mergedCountingCircles: merger.getMergedCountingCirclesList().map(cc => this.mapToCountingCircle(cc)),
       newCountingCircle: this.mapToCountingCircle(merger.getNewCountingCircle()!),
       merged: merger.getMerged(),
+    };
+  }
+
+  private mapToCountingCircleChangeMessage(data: CountingCircleChangeMessageProto): CountingCircleChangeMessage {
+    const countingCircleMessage = data.getCountingCircle()!;
+    return {
+      countingCircle: {
+        data: this.mapToCountingCircle(countingCircleMessage.getData()!),
+        newEntityState: countingCircleMessage.getNewEntityState(),
+      },
     };
   }
 }

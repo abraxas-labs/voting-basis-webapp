@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr) repeat(1, max-content);
   grid-gap: 0.5rem;
-  align-items: center;
+  align-items: baseline;
 }
 
 bc-button {

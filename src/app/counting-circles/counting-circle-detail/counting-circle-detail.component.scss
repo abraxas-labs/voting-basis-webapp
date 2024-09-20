@@ -1,16 +1,13 @@
 @use '@abraxas/voting-lib/style/color' as *;
 
-.content {
-  max-width: 31rem;
-}
-
 .subtitle {
   color: $color-grey-3;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(min-content, 31rem) minmax(min-content, 31rem) 20rem;
+  column-gap: 3rem;
 }
 
 bc-checkbox {

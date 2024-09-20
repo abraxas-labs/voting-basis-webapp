@@ -7,7 +7,8 @@
              [disabled]="testingPhaseEnded"
              [maxlength]="6"
              [value]="list.orderNumber"
-             (valueChange)="list.orderNumber = $event; contentChanged()"></bc-text>
+             (valueChange)="list.orderNumber = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.LIST.DESCRIPTION' | translate"
                               [maxlength]="100"
@@ -27,7 +28,19 @@
                [max]="numberOfMandates"
                [min]="0"
                [value]="list.blankRowCount"
-               (valueChange)="list.blankRowCount = $event; contentChanged()"></bc-number>
+               (valueChange)="list.blankRowCount = $event; contentChanged()"
+               subscriptSizing="dynamic"></bc-number>
+
+    <bc-dropdown class="full-width"
+                 [label]="'PROPORTIONAL_ELECTION.LIST.PARTY' | translate"
+                 [items]="parties"
+                 [clearable]="false"
+                 displayExpr="shortDescriptionTranslated"
+                 valueExpr="id"
+                 [disabled]="testingPhaseEnded"
+                 [value]="selectedPartyId"
+                 (valueChange)="selectedPartyId = $event; contentChanged()"
+                 subscriptSizing="dynamic"></bc-dropdown>
   </div>
 
   <div footer class="mr-3">

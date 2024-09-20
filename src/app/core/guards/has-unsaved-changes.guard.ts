@@ -1,10 +1,9 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
-import { CanDeactivate } from '@angular/router';
 import { DialogService } from '@abraxas/voting-lib';
 import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
@@ -12,8 +11,11 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class HasUnsavedChangesGuard<T extends HasUnsavedChanges> implements CanDeactivate<T> {
-  constructor(private readonly dialog: DialogService, private readonly i18n: TranslateService) {}
+export class HasUnsavedChangesGuard<T extends HasUnsavedChanges> {
+  constructor(
+    private readonly dialog: DialogService,
+    private readonly i18n: TranslateService,
+  ) {}
 
   public async canDeactivate(component: T): Promise<boolean> {
     if (!component.hasUnsavedChanges) {

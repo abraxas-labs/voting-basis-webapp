@@ -34,4 +34,9 @@
                [required]="true"
                [(value)]="data.allowedCandidates"
                [label]="'SECONDARY_ELECTION.MAJORITY.ALLOWED_CANDIDATES.TITLE' | translate"></bc-dropdown>
+
+  <bc-checkbox [checked]="!data.individualCandidatesDisabled"
+               (checkedChange)="data.individualCandidatesDisabled = !$event;"
+               [label]="'SECONDARY_ELECTION.MAJORITY.INDIVIDUAL_CANDIDATES' | translate"
+               [disabled]="testingPhaseEnded"></bc-checkbox>
 </div>

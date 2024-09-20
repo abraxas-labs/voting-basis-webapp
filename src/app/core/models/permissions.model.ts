@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -60,7 +60,6 @@ export class Permissions {
   public static readonly CantonSettings = {
     Create: Permissions.CantonSettingsPrefix + CreateSuffix,
     UpdateAll: Permissions.CantonSettingsPrefix + UpdateAllSuffix,
-    UpdateSameTenant: Permissions.CantonSettingsPrefix + UpdateSameTenantSuffix,
     ReadSameTenant: Permissions.CantonSettingsPrefix + ReadSameTenantSuffix,
     ReadAll: Permissions.CantonSettingsPrefix + ReadAllSuffix,
   };

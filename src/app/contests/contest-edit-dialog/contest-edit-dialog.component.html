@@ -76,7 +76,7 @@
 
     <bc-spinner class="block" size="1.5rem" *ngIf="pastContestsLoading; else pastContestsDropdown"></bc-spinner>
     <ng-template #pastContestsDropdown>
-      <bc-dropdown *ngIf="pastContests.length > 0"
+      <bc-dropdown *ngIf="pastContests.length > 0 && !this.cantonDefaults?.internalPlausibilisationDisabled"
                    [disabled]="testingPhaseEnded"
                    [items]="pastContests"
                    displayExpr="dateString"

@@ -2,20 +2,3 @@
 th.actions-header {
   width: 2rem;
 }
-
-@mixin truncate-long-sortable-table-header {
-  .bc-header-sort-container {
-    max-width: calc(100% - 30px); // Leave some space for the sort indicators
-
-    .bc-header-sort-content {
-      max-width: 100%;
-
-      span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        word-break: break-all;
-        white-space: nowrap;
-      }
-    }
-  }
-}

@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -40,7 +40,10 @@ export class ProportionalElectionErfassungInformationsComponent implements OnIni
   public automaticEmptyVoteCountingChoices: RadioButton[];
   public reviewProcedureChoices: RadioButton[];
 
-  constructor(enumUtil: EnumUtil, private readonly i18n: TranslateService) {
+  constructor(
+    enumUtil: EnumUtil,
+    private readonly i18n: TranslateService,
+  ) {
     this.ballotNumberGenerationChoices = enumUtil
       .getArrayWithDescriptions<BallotNumberGeneration>(BallotNumberGeneration, 'PROPORTIONAL_ELECTION.BALLOT_NUMBER_GENERATION.TYPES.')
       .map(item => ({

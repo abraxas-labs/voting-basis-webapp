@@ -5,15 +5,20 @@
     <bc-dropdown class="full-width"
                  [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.TITLE' | translate"
                  [items]="lists"
-                 [required]="true"
                  displayExpr="orderNumberAndDescription"
                  valueExpr="id"
-                 [(value)]="data.proportionalElectionMainListId"></bc-dropdown>
+                 [value]="data.proportionalElectionMainListId"
+                 (valueChange)="setMainListId($event)"
+                 subscriptSizing="dynamic"></bc-dropdown>
+
+    <bc-checkbox [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.NO_LIST' | translate"
+                 [checked]="noMainList"
+                 (checkedChange)="setNoMainList($event)"></bc-checkbox>
   </div>
   <vo-lib-button-bar footer
                      [saving]="saving"
                      [sticky]="false"
                      (save)="save()"
-                     [canSave]="!!data.proportionalElectionMainListId"
+                     [canSave]="!!data.proportionalElectionMainListId || noMainList"
                      (cancel)="cancel()"></vo-lib-button-bar>
 </vo-lib-dialog>

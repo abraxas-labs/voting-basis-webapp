@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -45,7 +45,10 @@ export class CountingCircleElectoratesComponent {
   @Output()
   public electoratesChange: EventEmitter<CountingCircleElectorate[]> = new EventEmitter<CountingCircleElectorate[]>();
 
-  constructor(private readonly i18n: TranslateService, private readonly dialogService: DialogService) {}
+  constructor(
+    private readonly i18n: TranslateService,
+    private readonly dialogService: DialogService,
+  ) {}
 
   public async assign(electorate: CountingCircleElectorate): Promise<void> {
     const disabledDoiTypes = flatMap(this.electorates.filter(e => e !== electorate).map(e => e.domainOfInfluenceTypesList));

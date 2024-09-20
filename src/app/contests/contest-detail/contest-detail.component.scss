@@ -1,4 +1,4 @@
-@use '../../../sharedStyles/table' as table;
+@use '@abraxas/voting-lib/style/table' as table;
 
 ::ng-deep .bc-column-active {
   @include table.truncate-long-sortable-table-header();

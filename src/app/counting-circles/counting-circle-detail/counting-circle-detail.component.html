@@ -1,8 +1,15 @@
 <vo-lib-page [contentLoading]="loading"
              [header]="!isNew && data?.name || 'COUNTING_CIRCLE.NEW'"
              [showBackButton]="true">
-  <div class="grid">
-    <div *ngIf="data" class="content form">
+  <div class="grid" *ngIf="data">
+    <h2 class="mx-1" translate>COUNTING_CIRCLE.DETAIL.GENERAL_INFORMATION</h2>
+    <div class="mx-1">
+      <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
+      <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_DURING_EVENT</span>
+    </div>
+    <h2 translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.ASSIGNMENT</h2>
+
+    <div class="form">
       <bc-text [label]="'COUNTING_CIRCLE.NAME' | translate"
                [required]="true"
                [maxlength]="100"
@@ -33,7 +40,7 @@
                (valueChange)="data.bfs = $event; contentChanged()"
                [subscriptSizing]="'dynamic'"></bc-text>
       <bc-text [label]="'COUNTING_CIRCLE.CODE' | translate"
-               [maxlength]="10"
+               [maxlength]="20"
                [disabled]="!canEditEverything"
                [value]="data.code"
                (valueChange)="data.code = $event; contentChanged()"
@@ -53,16 +60,23 @@
                                (selectedTenantChange)="selectedResponsibleAuthority = $event; contentChanged()"></vo-lib-tenant-selection>
 
       <bc-checkbox [label]="'COUNTING_CIRCLE.E_VOTING' | translate"
-                   [checked]="data.eVoting"
-                   (checkedChange)="data.eVoting = $event; contentChanged()"
+                   [checked]="showEVotingActiveFrom"
+                   (checkedChange)="updateShowEVotingActiveFrom($event); contentChanged()"
                    [disabled]="!canEditEverything"></bc-checkbox>
+
+      <bc-date *ngIf="showEVotingActiveFrom"
+               [label]="'COUNTING_CIRCLE.E_VOTING_ACTIVE_FROM' | translate"
+               [required]="true"
+               [disabled]="!canEditEverything"
+               [value]="data.eVotingActiveFrom | date"
+               (valueChange)="updateEVotingActiveFrom($event); contentChanged()"></bc-date>
 
       <app-authority-address-edit [authority]="data.responsibleAuthority!"
                                   (contentChanged)="contentChanged()"
                                   [disabled]="!isResponsibleAuthorityOrCanEditEverything"></app-authority-address-edit>
+    </div>
 
-      <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
-      <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_DURING_EVENT</span>
+    <div class="form">
       <app-contact-person-edit class="form"
                                [disabled]="!isResponsibleAuthorityOrCanEditEverything"
                                [contactPerson]="data.contactPersonDuringEvent"
@@ -87,16 +101,9 @@
       <app-counting-circle-electorates [(electorates)]="data.electoratesList"
                                        (electoratesChange)="data.electoratesList = $event; contentChanged()"
                                        [disabled]="!canEditEverything"></app-counting-circle-electorates>
-
-      <vo-lib-button-bar *ngIf="isResponsibleAuthorityOrCanEditEverything"
-                         (cancel)="cancel()"
-                         [saving]="saving"
-                         [canSave]="canSave"
-                         (save)="save()"></vo-lib-button-bar>
     </div>
 
     <div>
-      <h2 translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.ASSIGNMENT</h2>
       <bc-spinner *ngIf="loading; else domainOfInfluencesList"></bc-spinner>
       <ng-template #domainOfInfluencesList>
         <ng-container *ngIf="domainOfInfluences.length; else domainOfInfluencesEmpty">
@@ -108,4 +115,12 @@
       </ng-template>
     </div>
   </div>
+
+  <ng-container page-footer>
+    <vo-lib-button-bar *ngIf="isResponsibleAuthorityOrCanEditEverything"
+                       (cancel)="cancel()"
+                       [saving]="saving"
+                       [canSave]="canSave"
+                       (save)="save()"></vo-lib-button-bar>
+  </ng-container>
 </vo-lib-page>

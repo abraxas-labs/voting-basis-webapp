@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -10,7 +10,7 @@ import { SnackbarService, ThemeService } from '@abraxas/voting-lib';
 import { LocationStrategy } from '@angular/common';
 import { Component, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import 'moment/locale/de';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { CursorService, CursorType } from './core/cursor.service';

@@ -1,24 +1,24 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
-import { NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProportionalElectionEditComponent } from './proportional-election-edit/proportional-election-edit.component';
-import { HasUnsavedChangesGuard } from '../core/guards/has-unsaved-changes.guard';
+import { HasUnsavedChanges, HasUnsavedChangesGuard } from '../core/guards/has-unsaved-changes.guard';
 
 const routes: Routes = [
   {
     path: 'new',
     component: ProportionalElectionEditComponent,
-    canDeactivate: [HasUnsavedChangesGuard],
+    canDeactivate: [(component: HasUnsavedChanges) => inject(HasUnsavedChangesGuard).canDeactivate(component)],
   },
   {
     path: ':proportionalElectionId',
     component: ProportionalElectionEditComponent,
-    canDeactivate: [HasUnsavedChangesGuard],
+    canDeactivate: [(component: HasUnsavedChanges) => inject(HasUnsavedChangesGuard).canDeactivate(component)],
   },
 ];
 

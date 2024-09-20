@@ -31,7 +31,7 @@
         </app-proportional-election-lists>
 
         <div class="stepper-footer">
-          <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>
+          <bc-button (buttonClick)="back()" [label]="'APP.BACK' | translate"></bc-button>
 
           <bc-button variant="primary"
                      [disabled]="!step2.canSave"
@@ -53,7 +53,7 @@
         ></app-proportional-election-erfassung-informations>
 
         <div class="stepper-footer">
-          <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>
+          <bc-button (buttonClick)="back()" [label]="'APP.BACK' | translate"></bc-button>
 
           <bc-button variant="primary"
                      [disabled]="!step3.canSave"

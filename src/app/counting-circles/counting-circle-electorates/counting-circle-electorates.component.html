@@ -8,14 +8,13 @@
     *ngIf="!disabled; else empty"
     variant="tertiary"
     icon="plus"
-    class="pt-3"
     [label]="'COUNTING_CIRCLE.ELECTORATE.ASSIGN_OPEN' | translate"
     (buttonClick)="assign(electorate)"></bc-button>
   <bc-icon
     *ngIf="!disabled; else empty"
     icon="trash"
     iconColor="error"
-    class="pt-2 clickable"
+    class="clickable"
     (click)="remove(index)"></bc-icon>
 </div>
 

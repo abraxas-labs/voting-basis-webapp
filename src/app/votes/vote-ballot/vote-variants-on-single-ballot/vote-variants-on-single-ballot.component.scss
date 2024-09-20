@@ -1,0 +1,20 @@
+@use '@abraxas/voting-lib/style/color' as *;
+
+:is(h2, h3):not(:first-child) {
+  margin-top: 2rem !important;
+}
+
+::ng-deep bc-icon:hover {
+  color: $color-error;
+}
+
+bc-checkbox {
+  margin-left: -10px;
+}
+
+.remove-button {
+  align-self: end;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}

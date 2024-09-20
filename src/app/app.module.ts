@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -25,7 +25,7 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TranslateService } from './core/translate.service';
-import { WebpackTranslateLoader } from './core/webpack-translate-loader';
+import { TranslationLoader } from './core/translation-loader';
 import { SharedModule } from './shared/shared.module';
 import { TranslatedPaginatorIntl } from './shared/translatedPaginatorIntl';
 
@@ -49,7 +49,7 @@ registerLocaleData(localeDeCh);
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useClass: WebpackTranslateLoader,
+        useClass: TranslationLoader,
       },
     }),
     BrowserAnimationsModule,

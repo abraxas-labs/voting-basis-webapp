@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -57,7 +57,10 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
 
   public selectedBallotGroup?: MajorityElectionBallotGroup;
 
-  constructor(private readonly ballotGroupService: MajorityElectionBallotGroupService, private readonly dialogService: DialogService) {}
+  constructor(
+    private readonly ballotGroupService: MajorityElectionBallotGroupService,
+    private readonly dialogService: DialogService,
+  ) {}
 
   public async ngOnInit(): Promise<void> {
     try {

@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -36,7 +36,10 @@ export class VoteErfassungInformationsComponent {
   public automaticBallotBundleNumberGenerationChoices: RadioButton[];
   public reviewProcedureChoices: RadioButton[];
 
-  constructor(enumUtil: EnumUtil, private readonly i18n: TranslateService) {
+  constructor(
+    enumUtil: EnumUtil,
+    private readonly i18n: TranslateService,
+  ) {
     this.resultEntryChoices = enumUtil.getArrayWithDescriptions<VoteResultEntry>(VoteResultEntry, 'VOTE.RESULT_ENTRY.TYPES.');
 
     this.automaticBallotBundleNumberGenerationChoices = [

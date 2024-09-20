@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -128,7 +128,7 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
           await this.proportionalElectionService.update(this.data);
         }
 
-        this.persistedData = { ...this.data };
+        this.persistedData = cloneDeep(this.data);
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
         this.hasChanges = false;
       }
@@ -155,5 +155,17 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
 
   public contentChanged(): void {
     this.hasChanges = !isEqual(this.data, this.persistedData);
+  }
+
+  public async back(): Promise<void> {
+    if (this.hasChanges && !(await this.confirmToLeaveWithUnsavedChanges())) {
+      return;
+    }
+
+    this.stepper.previous();
+  }
+
+  private async confirmToLeaveWithUnsavedChanges(): Promise<boolean> {
+    return await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES');
   }
 }

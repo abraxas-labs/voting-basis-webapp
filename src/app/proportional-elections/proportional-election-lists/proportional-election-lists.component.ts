@@ -1,11 +1,11 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
@@ -15,6 +15,7 @@ import {
   ProportionalElection,
   ProportionalElectionCandidate,
   ProportionalElectionList,
+  ProportionalElectionListMessage,
   ProportionalElectionMandateAlgorithm,
   updateProportionalElectionListCandidateCountOk,
 } from '../../core/models/proportional-election.model';
@@ -32,13 +33,15 @@ import {
   ProportionalElectionListUnionsDialogComponent,
   ProportionalElectionListUnionsDialogData,
 } from './proportional-election-list-unions-dialog/proportional-election-list-unions-dialog.component';
+import { Subscription } from 'rxjs';
+import { EntityState } from '../../core/models/message.model';
 
 @Component({
   selector: 'app-proportional-election-lists',
   templateUrl: './proportional-election-lists.component.html',
   styleUrls: ['./proportional-election-lists.component.scss'],
 })
-export class ProportionalElectionListsComponent implements OnInit {
+export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   public columns: string[] = [];
 
   @Input()
@@ -56,6 +59,8 @@ export class ProportionalElectionListsComponent implements OnInit {
   public canSave: boolean = false;
   public parties: DomainOfInfluenceParty[] = [];
   public hasHagenbachBischoffDistribution: boolean = false;
+
+  private changesSubscription?: Subscription;
 
   constructor(
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
@@ -77,9 +82,14 @@ export class ProportionalElectionListsComponent implements OnInit {
       await this.loadLists();
       this.updateAllListCandidatesOk();
       this.updateCanSave();
+      this.startChangesListener();
     } finally {
       this.loading = false;
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.changesSubscription?.unsubscribe();
   }
 
   public async createList(): Promise<void> {
@@ -87,9 +97,14 @@ export class ProportionalElectionListsComponent implements OnInit {
       list: newProportionalElectionList(this.lists.length + 1, this.proportionalElection.id),
       numberOfMandates: this.proportionalElection.numberOfMandates,
       testingPhaseEnded: false,
+      parties: this.parties,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionListEditDialogComponent, dialogData);
-    this.handleCreateList(result);
+    if (!result) {
+      return;
+    }
+
+    this.handleCreateList(result.list);
   }
 
   public async editList(list: ProportionalElectionList): Promise<void> {
@@ -97,6 +112,7 @@ export class ProportionalElectionListsComponent implements OnInit {
       list: { ...list },
       numberOfMandates: this.proportionalElection.numberOfMandates,
       testingPhaseEnded: this.testingPhaseEnded,
+      parties: this.parties,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionListEditDialogComponent, dialogData);
     this.handleEditList(result);
@@ -123,10 +139,8 @@ export class ProportionalElectionListsComponent implements OnInit {
     }
 
     await this.proportionalElectionService.deleteList(list.id);
-    this.lists = this.lists.filter(l => l.id !== list.id);
-    this.updateListPositions();
     this.snackbarService.success(this.i18n.instant('APP.DELETED'));
-    this.updateCanSave();
+    this.handleDeleteList(list);
   }
 
   public selectList(row: ProportionalElectionList): void {
@@ -187,12 +201,8 @@ export class ProportionalElectionListsComponent implements OnInit {
     this.lists = await this.proportionalElectionService.listLists(this.proportionalElection.id);
   }
 
-  private handleCreateList(data?: ProportionalElectionListEditDialogResult): void {
-    if (!data) {
-      return;
-    }
-
-    this.lists = [...this.lists, data.list];
+  private handleCreateList(list: ProportionalElectionList): void {
+    this.lists = [...this.lists, list];
     this.updateCanSave();
   }
 
@@ -211,6 +221,12 @@ export class ProportionalElectionListsComponent implements OnInit {
     // trigger angular change detection
     this.lists = this.lists.concat([]);
     this.selectedList = data.list;
+    this.updateCanSave();
+  }
+
+  private handleDeleteList(list: ProportionalElectionList): void {
+    this.lists = this.lists.filter(l => l.id !== list.id);
+    this.updateListPositions();
     this.updateCanSave();
   }
 
@@ -236,5 +252,34 @@ export class ProportionalElectionListsComponent implements OnInit {
     if (this.hasHagenbachBischoffDistribution) {
       this.columns.splice(3, 0, 'listUnionDescription', 'subListUnionDescription');
     }
+  }
+
+  private startChangesListener(): void {
+    this.changesSubscription?.unsubscribe();
+
+    this.changesSubscription = this.proportionalElectionService
+      .getListChanges()
+      .subscribe(e => this.handleProportionalElectionListMessage(e.list));
+  }
+
+  private handleProportionalElectionListMessage(e: ProportionalElectionListMessage): void {
+    if (e.newEntityState === EntityState.ENTITY_STATE_MODIFIED) {
+      // do not handle modified event since this is handled already correctly (with reload of the candidates) in the UI.
+      return;
+    }
+
+    const list = e.data;
+    if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
+      this.handleDeleteList(list);
+      return;
+    }
+
+    const existingListIndex = this.lists.findIndex(l => l.id === list.id);
+    if (existingListIndex >= 0) {
+      // list is already created
+      return;
+    }
+
+    this.handleCreateList(list);
   }
 }

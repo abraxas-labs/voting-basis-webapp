@@ -28,7 +28,7 @@
                                           [majorityElection]="data">
         </app-majority-election-candidates>
         <div class="stepper-footer">
-          <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>
+          <bc-button (buttonClick)="back()" [label]="'APP.BACK' | translate"></bc-button>
 
           <bc-button variant="primary"
                      [label]="'APP.NEXT' | translate"
@@ -49,7 +49,7 @@
       ></app-majority-election-erfassung-informations>
 
       <div class="stepper-footer">
-        <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>
+        <bc-button (buttonClick)="back()" [label]="'APP.BACK' | translate"></bc-button>
 
         <bc-button variant="primary"
                    [label]="'APP.FINISH' | translate"

@@ -37,6 +37,10 @@
                [required]="true"
                [(value)]="data.mandateAlgorithm"></bc-dropdown>
 
+  <bc-checkbox [checked]="!data.individualCandidatesDisabled"
+               (checkedChange)="data.individualCandidatesDisabled = !$event"
+               [label]="'MAJORITY_ELECTION.INDIVIDUAL_CANDIDATES' | translate"></bc-checkbox>
+
   <div class="button-container">
     <bc-button variant="primary"
                [label]="'ACTIONS.APPLY' | translate"

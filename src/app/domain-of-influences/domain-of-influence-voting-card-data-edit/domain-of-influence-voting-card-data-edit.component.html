@@ -8,6 +8,7 @@
                displayExpr="description"
                valueExpr="value"
                [disabled]="disabled"
+               [clearable]="true"
                [value]="domainOfInfluence.votingCardColor"
                (valueChange)="domainOfInfluence.votingCardColor = $event; contentChanged.emit()"></bc-dropdown>
   <div>

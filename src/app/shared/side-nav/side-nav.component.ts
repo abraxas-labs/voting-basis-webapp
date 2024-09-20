@@ -1,19 +1,19 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ThemeService } from '@abraxas/voting-lib';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, startWith } from 'rxjs';
+import { filter, startWith, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-side-nav',
   templateUrl: './side-nav.component.html',
 })
-export class SideNavComponent {
+export class SideNavComponent implements OnDestroy {
   public readonly contestNavIndex: number = 1;
   public readonly contestUrl: string = 'contests';
   public readonly countingCircleNavIndex: number = 2;
@@ -28,9 +28,15 @@ export class SideNavComponent {
   public theme: string = '';
   public active: number = 0;
 
-  constructor(themeService: ThemeService, private readonly route: ActivatedRoute, private readonly router: Router) {
+  private routerSubscription: Subscription;
+
+  constructor(
+    themeService: ThemeService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) {
     themeService.theme$.subscribe(theme => (this.theme = theme ?? ''));
-    this.router.events
+    this.routerSubscription = this.router.events
       .pipe(
         filter(evt => evt instanceof NavigationEnd),
         startWith(this.router),
@@ -56,5 +62,9 @@ export class SideNavComponent {
             break;
         }
       });
+  }
+
+  public ngOnDestroy(): void {
+    this.routerSubscription.unsubscribe();
   }
 }

@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -33,6 +33,7 @@ import {
   VoteProto,
 } from './models/vote.model';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
+import { createInt32Value } from './utils/proto.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -56,6 +57,8 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
       ...ballot.toObject(),
       ballotQuestions: ballot.getBallotQuestionsList().map(q => this.mapToBallotQuestion(q)),
       tieBreakQuestions: ballot.getTieBreakQuestionsList().map(q => this.mapToTieBreakQuestion(q)),
+      shortDescription: toJsMap(ballot.getShortDescriptionMap()),
+      officialDescription: toJsMap(ballot.getOfficialDescriptionMap()),
     };
   }
 
@@ -64,6 +67,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
       number: question.getNumber(),
       question: toJsMap(question.getQuestionMap()),
       type: question.getType(),
+      federalIdentification: question.getFederalIdentification()?.getValue(),
     };
   }
 
@@ -73,6 +77,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
       question1Number: question.getQuestion1Number(),
       question2Number: question.getQuestion2Number(),
       question: toJsMap(question.getQuestionMap()),
+      federalIdentification: question.getFederalIdentification()?.getValue(),
     };
   }
 
@@ -158,6 +163,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     result.setAutomaticBallotBundleNumberGeneration(data.automaticBallotBundleNumberGeneration);
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
+    result.setType(data.type);
   }
 
   private mapToCreateBallotRequest(data: Ballot): CreateBallotRequest {
@@ -181,6 +187,9 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     result.setHasTieBreakQuestions(data.hasTieBreakQuestions);
     result.setBallotQuestionsList(data.ballotQuestions.map(this.mapToProtoBallotQuestion));
     result.setTieBreakQuestionsList(data.tieBreakQuestions.map(this.mapToProtoTieBreakQuestion));
+    fillProtoMap(result.getOfficialDescriptionMap(), data.officialDescription);
+    fillProtoMap(result.getShortDescriptionMap(), data.shortDescription);
+    result.setSubType(data.subType);
   }
 
   private mapToProtoBallotQuestion(data: BallotQuestion): ProtoBallotQuestion {
@@ -188,6 +197,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     result.setNumber(data.number);
     fillProtoMap(result.getQuestionMap(), data.question);
     result.setType(data.type);
+    result.setFederalIdentification(createInt32Value(data.federalIdentification));
     return result;
   }
 
@@ -197,6 +207,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     fillProtoMap(result.getQuestionMap(), data.question);
     result.setQuestion1Number(data.question1Number);
     result.setQuestion2Number(data.question2Number);
+    result.setFederalIdentification(createInt32Value(data.federalIdentification));
     return result;
   }
 }

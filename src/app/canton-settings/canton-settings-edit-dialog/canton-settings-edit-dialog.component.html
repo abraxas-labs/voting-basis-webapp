@@ -29,6 +29,7 @@
     <bc-label class="full-width" [label]="'CANTON_SETTINGS.COUNTING_CIRCLE.PROTOCOL_SORT.TITLE' | translate"></bc-label>
     <bc-radio-button-group class="mb-3"
                            orientation="vertical"
+                           [disabled]="readonly"
                            [items]="protocolCountingCircleSortTypeChoices"
                            [value]="data.protocolCountingCircleSortType"
                            (valueChange)="data.protocolCountingCircleSortType = $event; contentChanged()"></bc-radio-button-group>
@@ -37,6 +38,7 @@
     <bc-label class="full-width" [label]="'CANTON_SETTINGS.DOMAIN_OF_INFLUENCE.PROTOCOL_SORT.TITLE' | translate"></bc-label>
     <bc-radio-button-group class="mb-3"
                            orientation="vertical"
+                           [disabled]="readonly"
                            [items]="protocolDomainOfInfluenceSortTypeChoices"
                            [value]="data.protocolDomainOfInfluenceSortType"
                            (valueChange)="data.protocolDomainOfInfluenceSortType = $event; contentChanged()"></bc-radio-button-group>
@@ -110,7 +112,36 @@
     <bc-checkbox [checked]="data.publishResultsEnabled"
                  (checkedChange)="data.publishResultsEnabled = $event; contentChanged()"
                  [disabled]="readonly"
-                 [label]="'CANTON_SETTINGS.PUBLISH_RESULTS' | translate">
+                 [label]="'CANTON_SETTINGS.PUBLISH_RESULTS' | translate"
+                 class="full-width">
+    </bc-checkbox>
+
+    <bc-checkbox [checked]="data.publishResultsBeforeAuditedTentatively"
+                 (checkedChange)="data.publishResultsBeforeAuditedTentatively = $event; contentChanged()"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.PUBLISH_RESULTS_BEFORE_AUDITED_TENTATIVELY' | translate">
+    </bc-checkbox>
+
+
+    <bc-checkbox [checked]="!data.endResultFinalizeDisabled"
+                 (checkedChange)="data.endResultFinalizeDisabled = !$event; contentChanged()"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.END_RESULT_FINALIZE' | translate"
+                 class="full-width">
+    </bc-checkbox>
+
+    <bc-checkbox [checked]="data.createContestOnHighestHierarchicalLevelEnabled"
+                 (checkedChange)="data.createContestOnHighestHierarchicalLevelEnabled = $event; contentChanged()"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.CREATE_CONTEST_ON_HIGHEST_HIERARCHICAL_LEVEL' | translate"
+                 class="full-width">
+    </bc-checkbox>
+
+    <bc-checkbox [checked]="!data.internalPlausibilisationDisabled"
+                 (checkedChange)="data.internalPlausibilisationDisabled = !$event; contentChanged()"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.INTERNAL_PLAUSIBILISATION' | translate"
+                 class="full-width">
     </bc-checkbox>
 
     <bc-label class="mt-2 full-width" [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.TITLE' | translate"></bc-label>

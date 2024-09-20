@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -36,6 +36,7 @@ export function newSecondaryMajorityElection(): SecondaryMajorityElection {
     primaryMajorityElectionId: '',
     shortDescription: new Map<string, string>(),
     active: false,
+    individualCandidatesDisabled: false,
   };
 }
 

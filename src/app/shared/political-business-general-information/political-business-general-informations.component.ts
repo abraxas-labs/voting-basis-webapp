@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -18,9 +18,12 @@ import { groupBy } from '../../core/utils/array.utils';
 
 @Directive()
 export abstract class PoliticalBusinessGeneralInformationsComponent<T extends PoliticalBusinessBase> implements OnInit {
+  public readonly domainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
+  public readonly federalIdentificationMaxValue: number = 2147483647;
+
   public loading: boolean = true;
 
-  public domainOfInfluenceTypes: EnumItemDescription<DomainOfInfluenceType>[] = [];
+  public domainOfInfluenceTypeItems: EnumItemDescription<DomainOfInfluenceType>[] = [];
   public domainOfInfluencesByType: Partial<Record<DomainOfInfluenceType, DomainOfInfluence[]>> = {};
   public domainOfInfluenceLevels: DomainOfInfluenceLevel[] = [];
   public contest: Contest = {} as Contest;
@@ -110,7 +113,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
     this.selectedDomainOfInfluence = this.domainOfInfluenceTree.findById(this.data.domainOfInfluenceId);
 
     const availableDomainOfInfluenceTypes = this.domainOfInfluences.map(d => d.type);
-    this.domainOfInfluenceTypes = this.enumUtil
+    this.domainOfInfluenceTypeItems = this.enumUtil
       .getArrayWithDescriptions<DomainOfInfluenceType>(DomainOfInfluenceType, 'DOMAIN_OF_INFLUENCE.TYPES.')
       .filter(dit => availableDomainOfInfluenceTypes.includes(dit.value));
 

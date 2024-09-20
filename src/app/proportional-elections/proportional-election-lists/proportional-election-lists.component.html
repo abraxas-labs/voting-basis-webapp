@@ -5,21 +5,40 @@
       <h2 translate>PROPORTIONAL_ELECTION.LIST.TITLE</h2>
 
       <div class="buttons">
-        <bc-button variant="tertiary" icon="plus" [disabled]="testingPhaseEnded"
-          [label]="'PROPORTIONAL_ELECTION.LIST.NEW' | translate" (buttonClick)="createList()"></bc-button>
+        <bc-button
+          variant="tertiary"
+          icon="plus"
+          [disabled]="testingPhaseEnded"
+          [label]="'PROPORTIONAL_ELECTION.LIST.NEW' | translate"
+          (buttonClick)="createList()"
+        ></bc-button>
 
-        <bc-button [disabled]="testingPhaseEnded" variant="tertiary" icon="download"
+        <bc-button
+          [disabled]="testingPhaseEnded"
+          variant="tertiary"
+          icon="download"
           [label]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
-          (buttonClick)="importListsAndCandidates()"></bc-button>
+          (buttonClick)="importListsAndCandidates()"
+        ></bc-button>
 
-        <bc-button *ngIf="hasHagenbachBischoffDistribution"
-        variant="tertiary" (buttonClick)="manageListUnions()"
-          [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate" [disabled]="testingPhaseEnded"></bc-button>
+        <bc-button
+          *ngIf="hasHagenbachBischoffDistribution"
+          variant="tertiary"
+          (buttonClick)="manageListUnions()"
+          [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate"
+          [disabled]="testingPhaseEnded"
+        ></bc-button>
       </div>
 
-      <bc-table selection class="w-full" [dataSource]="lists" cdkDropList [cdkDropListData]="lists"
+      <bc-table
+        selection
+        class="w-full"
+        [dataSource]="lists"
+        cdkDropList
+        [cdkDropListData]="lists"
         [cdkDropListDisabled]="testingPhaseEnded"
-        (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)">
+        (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)"
+      >
         <ng-container columnDef="orderNumber">
           <bc-header-cell *headerCellDef>
             <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate }}</div>
@@ -46,8 +65,7 @@
             <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate }}</div>
           </bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
-            <ng-container
-              *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.listUnionDescription}"></ng-container>
+            <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: { $implicit: element.listUnionDescription }"></ng-container>
           </bc-data-cell>
         </ng-container>
 
@@ -57,7 +75,8 @@
           </bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
             <ng-container
-              *ngTemplateOutlet="listUnionDescriptionCol; context: {$implicit: element.subListUnionDescription}"></ng-container>
+              *ngTemplateOutlet="listUnionDescriptionCol; context: { $implicit: element.subListUnionDescription }"
+            ></ng-container>
           </bc-data-cell>
         </ng-container>
 
@@ -66,16 +85,29 @@
           <bc-data-cell *dataCellDef="let element">
             <div *ngIf="!locked" class="actions">
               <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
-              <bc-icon *ngIf="!testingPhaseEnded" (click)="deleteList(element); $event.stopPropagation()" icon="trash"
-                iconColor="error"></bc-icon>
+              <bc-icon
+                *ngIf="!testingPhaseEnded"
+                (click)="deleteList(element); $event.stopPropagation()"
+                icon="trash"
+                iconColor="error"
+              ></bc-icon>
             </div>
           </bc-data-cell>
         </ng-container>
 
         <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-        <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
-          selectionRow [selectionRowValue]="row" (click)="selectList(row)" cdkDrag [cdkDragDisabled]="testingPhaseEnded"
-          [cdkDragData]="row"></bc-data-row>
+        <bc-data-row
+          *dataRowDef="let row; columns: columns; let i = index"
+          #rowSelection="selectionToggle"
+          selectionToggle
+          [selectionToggleValue]="row"
+          selectionRow
+          [selectionRowValue]="row"
+          (click)="rowSelection.toggle(); selectList(row)"
+          cdkDrag
+          [cdkDragDisabled]="testingPhaseEnded"
+          [cdkDragData]="row"
+        ></bc-data-row>
         <ng-template #listUnionDescriptionCol let-element>
           <!-- 'List union descriptions are validated on the server, they do not contain user-controlled HTML.
           It is safe to display the description directly as HTML' -->
@@ -90,12 +122,17 @@
   <div right>
     <ng-container *ngIf="selectedList; else noListSelected">
       <h2>{{ selectedList.shortDescription | getTranslation }}</h2>
-      <app-proportional-election-candidates [list]="selectedList"
-        [domainOfInfluenceId]="proportionalElection.domainOfInfluenceId" [testingPhaseEnded]="testingPhaseEnded"
-        [locked]="locked" (candidateCreated)="candidateCreated(selectedList, $event)"
+      <app-proportional-election-candidates
+        [list]="selectedList"
+        [domainOfInfluenceId]="proportionalElection.domainOfInfluenceId"
+        [testingPhaseEnded]="testingPhaseEnded"
+        [locked]="locked"
+        (candidateCreated)="candidateCreated(selectedList, $event)"
         (candidateDeleted)="candidateDeleted(selectedList, $event)"
         (candidateUpdated)="candidateAccumulationUpdated(selectedList, $event.candidate.accumulated, $event.wasAccumulated)"
-        [maxCandidateCount]="proportionalElection.numberOfMandates - selectedList.blankRowCount" [parties]="parties">
+        [maxCandidateCount]="proportionalElection.numberOfMandates - selectedList.blankRowCount"
+        [parties]="parties"
+      >
       </app-proportional-election-candidates>
     </ng-container>
     <ng-template #noListSelected>

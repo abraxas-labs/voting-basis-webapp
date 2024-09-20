@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -16,8 +16,10 @@ export class CountingCircleMergerGeneralInformationsComponent implements OnInit,
   @Input()
   public merger!: CountingCirclesMerger;
 
-  private viewInitialized: boolean = false;
+  public showEVotingActiveFrom: boolean = false;
 
+  private viewInitialized: boolean = false;
+  private eVotingActiveFromString: string = '';
   private selectedResponsibleAuthorityValue: Tenant | undefined;
 
   public get selectedResponsibleAuthority(): Tenant | undefined {
@@ -72,10 +74,36 @@ export class CountingCircleMergerGeneralInformationsComponent implements OnInit,
     this.merger.newCountingCircle.responsibleAuthority = countingCircle.responsibleAuthority;
     this.merger.newCountingCircle.nameForProtocol = countingCircle.nameForProtocol;
     this.merger.newCountingCircle.sortNumber = countingCircle.sortNumber;
+    this.merger.newCountingCircle.eVotingActiveFrom = countingCircle.eVotingActiveFrom;
+
+    this.showEVotingActiveFrom = !!countingCircle.eVotingActiveFrom;
 
     this.selectedResponsibleAuthority = {
       name: countingCircle.responsibleAuthority!.name,
       id: countingCircle.responsibleAuthority!.secureConnectId,
     } as Tenant;
+  }
+
+  public updateShowEVotingActiveFrom(showEVotingActiveFrom: boolean): void {
+    if (!this.merger.newCountingCircle) {
+      return;
+    }
+
+    this.showEVotingActiveFrom = showEVotingActiveFrom;
+
+    if (!this.showEVotingActiveFrom) {
+      this.merger.newCountingCircle.eVotingActiveFrom = undefined;
+    } else {
+      this.merger.newCountingCircle.eVotingActiveFrom ??= new Date();
+    }
+  }
+
+  public updateEVotingActiveFrom(eVotingActiveFrom: string): void {
+    if (!this.merger.newCountingCircle || !eVotingActiveFrom || this.eVotingActiveFromString === eVotingActiveFrom) {
+      return;
+    }
+
+    this.eVotingActiveFromString = eVotingActiveFrom;
+    this.merger.newCountingCircle.eVotingActiveFrom = new Date(eVotingActiveFrom);
   }
 }

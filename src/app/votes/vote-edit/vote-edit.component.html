@@ -25,16 +25,17 @@
 
     <bc-simple-step [label]="'VOTE.BALLOT.TITLE' | translate" [disabled]="!step1?.canSave || stepLoading">
       <app-vote-ballot #step2
-                       [data]="data.ballots"
+                       [vote]="data"
                        [testingPhaseEnded]="testingPhaseEnded"
                        [locked]="locked"
                        [multipleVoteBallotsEnabled]="contestDomainOfInfluenceDefaults.multipleVoteBallotsEnabled"
                        [eVoting]="eVoting"
+                       [domainOfInfluenceType]="step1?.selectedDomainOfInfluenceType"
                        (contentChanged)="contentChanged()">
       </app-vote-ballot>
 
       <div class="stepper-footer">
-        <bc-button [label]="'APP.BACK' | translate" (buttonClick)="stepper.previous()"></bc-button>
+        <bc-button [label]="'APP.BACK' | translate" (buttonClick)="back()"></bc-button>
 
         <vo-lib-inline-spinner position="left"
                                [loading]="stepLoading">
@@ -57,7 +58,7 @@
       </app-vote-erfassung-informations>
 
       <div class="stepper-footer">
-        <bc-button (buttonClick)="stepper.previous()" [label]="'APP.BACK' | translate"></bc-button>
+        <bc-button (buttonClick)="back()" [label]="'APP.BACK' | translate"></bc-button>
 
         <bc-button variant="primary"
                    [disabled]="!step3.canSave"

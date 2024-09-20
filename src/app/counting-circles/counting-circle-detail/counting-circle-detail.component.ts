@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -18,6 +18,7 @@ import { PermissionService } from '../../core/permission.service';
 import { Permissions } from '../../core/models/permissions.model';
 import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
 import { cloneDeep, isEqual } from 'lodash';
+import { distinct } from '../../core/utils/array.utils';
 
 @Component({
   selector: 'app-counting-circle-detail',
@@ -25,6 +26,8 @@ import { cloneDeep, isEqual } from 'lodash';
   styleUrls: ['./counting-circle-detail.component.scss'],
 })
 export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsavedChanges {
+  private eVotingActiveFromString: string = '';
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -45,8 +48,9 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
   public tenantId: string = '';
   public isNew: boolean = false;
   public hasChanges: boolean = false;
+  public showEVotingActiveFrom: boolean = false;
+  public cantons: EnumItemDescription<DomainOfInfluenceCanton>[];
 
-  public readonly cantons: EnumItemDescription<DomainOfInfluenceCanton>[];
   private readonly routeSubscription: Subscription;
 
   constructor(
@@ -75,7 +79,8 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
       !!this.data.bfs &&
       !!this.selectedResponsibleAuthority &&
       !!this.selectedResponsibleAuthority.id &&
-      !!this.data.canton
+      !!this.data.canton &&
+      (!this.showEVotingActiveFrom || !!this.data.eVotingActiveFrom)
     );
   }
 
@@ -116,6 +121,9 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
     );
     const tenant = await this.auth.getActiveTenant();
     this.tenantId = tenant.id;
+
+    // if the tenant has only domain of influences within one canton, only this canton should be selectable
+    await this.filterCantons();
   }
 
   public async ngOnDestroy(): Promise<void> {
@@ -126,6 +134,29 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
     this.hasChanges =
       !isEqual(this.data, this.persistedData) ||
       !isEqual(this.selectedResponsibleAuthority?.id, this.originalSelectedResponsibleAuthoritySecureConnectId);
+  }
+
+  public updateShowEVotingActiveFrom(showEVotingActiveFrom: boolean): void {
+    if (!this.data) {
+      return;
+    }
+
+    this.showEVotingActiveFrom = showEVotingActiveFrom;
+
+    if (!this.showEVotingActiveFrom) {
+      this.data.eVotingActiveFrom = undefined;
+    } else {
+      this.data.eVotingActiveFrom ??= new Date();
+    }
+  }
+
+  public updateEVotingActiveFrom(eVotingActiveFrom: string): void {
+    if (!this.data || !eVotingActiveFrom || this.eVotingActiveFromString === eVotingActiveFrom) {
+      return;
+    }
+
+    this.eVotingActiveFromString = eVotingActiveFrom;
+    this.data.eVotingActiveFrom = new Date(eVotingActiveFrom);
   }
 
   private async load(countingCircleId?: string): Promise<void> {
@@ -148,6 +179,8 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
         return;
       }
 
+      this.showEVotingActiveFrom = !!this.data.eVotingActiveFrom;
+
       this.selectedResponsibleAuthority = {
         name: this.data.responsibleAuthority.name,
         id: this.data.responsibleAuthority.secureConnectId,
@@ -160,5 +193,21 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
     } finally {
       this.loading = false;
     }
+  }
+
+  private async filterCantons(): Promise<void> {
+    const domainOfInfluences = await this.domainOfInfluenceService.listForCurrentTenant();
+    const cantons = distinct(
+      domainOfInfluences.map(x => x.canton),
+      x => x,
+    );
+
+    if (!this.data || cantons.length !== 1) {
+      return;
+    }
+
+    const canton = cantons[0];
+    this.cantons = this.cantons.filter(x => x.value === canton);
+    this.data.canton = canton;
   }
 }

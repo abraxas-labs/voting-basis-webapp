@@ -1,5 +1,5 @@
 @use '../node_modules/normalize.css/normalize.css';
-@use '@abraxas/voting-lib/style' as *;
+@use '@abraxas/voting-lib/style' as lib;
 @use './sharedStyles';
 
 body {
@@ -49,8 +49,8 @@ body {
   pointer-events: none !important;
 
   .mat-mdc-step-icon {
-    color: $color-white !important;
-    background-color: $color-primary;
+    color: lib.$color-white !important;
+    background-color: lib.$color-primary;
   }
 
   &[aria-selected='true'] ~ .mat-mdc-step-header .mat-mdc-step-icon {

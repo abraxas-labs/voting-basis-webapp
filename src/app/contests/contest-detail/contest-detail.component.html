@@ -20,7 +20,6 @@
         (click)="createProportionalElection()"
         text="POLITICAL_BUSINESS.PROPORTIONAL_ELECTION"
       ></vo-lib-action-menu-item>
-      <vo-lib-action-menu-item (click)="createSecondaryElection()" text="POLITICAL_BUSINESS.SECONDARY_ELECTION"></vo-lib-action-menu-item>
     </mat-menu>
 
     <bc-button
@@ -120,7 +119,12 @@
         <span>{{ 'POLITICAL_BUSINESS.TYPE.TITLE' | translate }}</span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ 'POLITICAL_BUSINESS.TYPE.' + element.type | translate }}</div>
+        <div class="truncate">
+          {{ 'POLITICAL_BUSINESS.TYPE.' + element.type | translate }}
+          <span *ngIf="element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_VOTE">
+            ({{ 'POLITICAL_BUSINESS.VOTE_SUB_TYPE.' + element.subType | translate }})
+          </span>
+        </div>
       </bc-data-cell>
     </ng-container>
 
@@ -172,6 +176,12 @@
             text="ACTIONS.EXPORT"
             *ngIf="element.type !== politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION"
             (click)="export(element)"
+          ></vo-lib-action-menu-item>
+          <vo-lib-action-menu-item
+            icon="plus"
+            text="POLITICAL_BUSINESS.ADD_SECONDARY_ELECTION"
+            *ngIf="element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION"
+            (click)="createSecondaryElection(element.id)"
           ></vo-lib-action-menu-item>
         </vo-lib-action-menu>
       </bc-data-cell>

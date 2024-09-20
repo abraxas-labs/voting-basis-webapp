@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -11,6 +11,7 @@ import {
   ProportionalElectionListUnion as ProportionalElectionListUnionProto,
   ProportionalElectionListUnionEntries as ProportionalElectionListUnionEntriesProto,
   ProportionalElectionListUnionMainList as ProportionalElectionListUnionMainListProto,
+  ProportionalElectionListChangeMessage as ProportionalElectionListChangeMessageProto,
 } from '@abraxas/voting-basis-service-proto/grpc/models/proportional_election_pb';
 import {
   ProportionalElectionMandateAlgorithm as ProportionalElectionMandateAlgorithmProto,
@@ -20,29 +21,41 @@ import { LanguageService } from '../language.service';
 import { BallotNumberGeneration } from './ballot-number-generation.model';
 import { DomainOfInfluenceParty, newDomainOfInfluenceParty } from './domain-of-influence-party.model';
 import { SexType } from './sex-type.model';
+import { BaseEntityMessage } from './message.model';
 
 export { ProportionalElectionProto };
-export type ProportionalElection = Omit<ProportionalElectionProto.AsObject, 'shortDescriptionMap' | 'officialDescriptionMap'> & {
+export type ProportionalElection = Omit<
+  ProportionalElectionProto.AsObject,
+  'shortDescriptionMap' | 'officialDescriptionMap' | 'federalIdentification'
+> & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
+  federalIdentification?: number;
 };
 export { ProportionalElectionMandateAlgorithmProto as ProportionalElectionMandateAlgorithm };
 export { ProportionalElectionReviewProcedureProto as ProportionalElectionReviewProcedure };
 export { ProportionalElectionListProto };
 export type ProportionalElectionList = Omit<
   ProportionalElectionListProto.AsObject,
-  'shortDescriptionMap' | 'descriptionMap' | 'listUnionDescriptionMap' | 'subListUnionDescriptionMap'
+  'shortDescriptionMap' | 'descriptionMap' | 'listUnionDescriptionMap' | 'subListUnionDescriptionMap' | 'party'
 > & {
   shortDescription: Map<string, string>;
   description: Map<string, string>;
   listUnionDescription: Map<string, string>;
   subListUnionDescription: Map<string, string>;
   orderNumberAndDescription: string;
+  party?: DomainOfInfluenceParty;
 };
 export { ProportionalElectionListUnionProto };
 export type ProportionalElectionListUnionEntries = ProportionalElectionListUnionEntriesProto.AsObject;
 export type ProportionalElectionListUnionMainList = ProportionalElectionListUnionMainListProto.AsObject;
 export { ProportionalElectionCandidateProto };
+
+export { ProportionalElectionListChangeMessageProto };
+export type ProportionalElectionListMessage = BaseEntityMessage<ProportionalElectionList>;
+export interface ProportionalElectionListChangeMessage {
+  list: ProportionalElectionListMessage;
+}
 
 export type ProportionalElectionCandidate = {
   id: string;

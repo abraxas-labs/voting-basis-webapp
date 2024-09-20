@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -16,6 +16,7 @@ import {
   DeleteProportionalElectionListUnionRequest,
   DeleteProportionalElectionRequest,
   GetProportionalElectionCandidatesRequest,
+  GetProportionalElectionListChangesRequest,
   GetProportionalElectionListsRequest,
   GetProportionalElectionListUnionsRequest,
   GetProportionalElectionRequest,
@@ -31,7 +32,7 @@ import {
   UpdateProportionalElectionListUnionRequest,
   UpdateProportionalElectionRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/proportional_election_requests_pb';
-import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
+import { GrpcBackendService, GrpcService, retryForeverWithBackoff, TimestampUtil } from '@abraxas/voting-lib';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
@@ -46,16 +47,23 @@ import {
   ProportionalElectionListUnion,
   ProportionalElectionListUnionProto,
   ProportionalElectionProto,
+  ProportionalElectionListChangeMessage,
+  ProportionalElectionListChangeMessageProto,
 } from './models/proportional-election.model';
 import { mapToEntityOrders } from './utils/entity-order.utils';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
 import { SexType } from '@abraxas/voting-basis-service-proto/grpc/shared/sex_pb';
+import { Observable } from 'rxjs/internal/Observable';
+import { createInt32Value } from './utils/proto.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProportionalElectionService extends GrpcService<ProportionalElectionServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService, private readonly languageService: LanguageService) {
+  constructor(
+    grpcBackend: GrpcBackendService,
+    private readonly languageService: LanguageService,
+  ) {
     super(ProportionalElectionServicePromiseClient, environment, grpcBackend);
   }
 
@@ -64,6 +72,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       ...election.toObject(),
       shortDescription: toJsMap(election.getShortDescriptionMap()),
       officialDescription: toJsMap(election.getOfficialDescriptionMap()),
+      federalIdentification: election.getFederalIdentification()?.getValue(),
     };
   }
 
@@ -181,10 +190,10 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     return this.requestEmptyResp(c => c.updateListUnionEntries, req);
   }
 
-  public updateListUnionMainList(listUnionId: string, mainListId: string): Promise<void> {
+  public updateListUnionMainList(listUnionId: string, mainListId?: string): Promise<void> {
     const req = new UpdateProportionalElectionListUnionMainListRequest();
     req.setProportionalElectionListUnionId(listUnionId);
-    req.setProportionalElectionMainListId(mainListId);
+    req.setProportionalElectionMainListId(mainListId ?? '');
 
     return this.requestEmptyResp(c => c.updateListUnionMainList, req);
   }
@@ -258,6 +267,15 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     return this.requestEmptyResp(c => c.deleteCandidate, req);
   }
 
+  public getListChanges(): Observable<ProportionalElectionListChangeMessage> {
+    const req = new GetProportionalElectionListChangesRequest();
+    return this.requestServerStream(
+      c => c.getListChanges,
+      req,
+      r => this.mapToProportionalElectionListChangeMessage(r),
+    ).pipe(retryForeverWithBackoff());
+  }
+
   public mapToProportionalElectionListUnions(data: ProportionalElectionListUnionProto[]): ProportionalElectionListUnion[] {
     return data.map(lu => this.mapDetailToProportionalElectionListUnion(lu));
   }
@@ -304,6 +322,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       listUnionDescription: toJsMap(list.getListUnionDescriptionMap()),
       subListUnionDescription: toJsMap(list.getSubListUnionDescriptionMap()),
       orderNumberAndDescription: `${list.getOrderNumber()} ${this.languageService.getTranslationForCurrentLang(description)}`,
+      party: DomainOfInfluenceService.mapToParty(list.getParty()),
     };
   }
 
@@ -326,6 +345,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
+    result.setFederalIdentification(createInt32Value(data.federalIdentification));
     return result;
   }
 
@@ -348,6 +368,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setContestId(data.contestId);
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
+    result.setFederalIdentification(createInt32Value(data.federalIdentification));
     return result;
   }
 
@@ -359,6 +380,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setBlankRowCount(data.blankRowCount);
     result.setPosition(data.position);
     result.setProportionalElectionId(data.proportionalElectionId);
+    result.setPartyId(data.party?.id ?? '');
     return result;
   }
 
@@ -371,6 +393,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setBlankRowCount(data.blankRowCount);
     result.setPosition(data.position);
     result.setProportionalElectionId(data.proportionalElectionId);
+    result.setPartyId(data.party?.id ?? '');
     return result;
   }
 
@@ -431,7 +454,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     fillProtoMap(result.getOccupationMap(), data.occupation);
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
-    result.setSex(data.sex ?? SexType.SEX_TYPE_UNDEFINED);
+    result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setProportionalElectionListId(data.proportionalElectionListId);
     result.setPosition(data.position);
@@ -456,7 +479,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     fillProtoMap(result.getOccupationMap(), data.occupation);
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
-    result.setSex(data.sex ?? SexType.SEX_TYPE_UNDEFINED);
+    result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setProportionalElectionListId(data.proportionalElectionListId);
     result.setPosition(data.position);
@@ -465,5 +488,17 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setPartyId(data.party!.id);
     result.setOrigin(data.origin);
     return result;
+  }
+
+  private mapToProportionalElectionListChangeMessage(
+    data: ProportionalElectionListChangeMessageProto,
+  ): ProportionalElectionListChangeMessage {
+    const proportionalElectionListMessage = data.getList()!;
+    return {
+      list: {
+        data: this.mapToProportionalElectionList(proportionalElectionListMessage.getData()!),
+        newEntityState: proportionalElectionListMessage.getNewEntityState(),
+      },
+    };
   }
 }

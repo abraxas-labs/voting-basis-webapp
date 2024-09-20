@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -11,7 +11,6 @@ import { AuthConfig } from 'angular-oauth2-oidc';
 
 export interface Environment extends TenantConfig, UserConfig, AuthorizationConfig {
   production: boolean;
-  hmr: boolean;
   env: Environments;
   authenticationConfig: AuthConfig & Required<Pick<AuthConfig, 'clientId' | 'issuer' | 'scope'>>;
   authAllowedUrls?: string[];

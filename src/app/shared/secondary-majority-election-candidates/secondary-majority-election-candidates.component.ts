@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -183,9 +183,12 @@ export class SecondaryMajorityElectionCandidatesComponent {
   private refreshExpandedCandidates(): void {
     const candidateList: SecondaryMajorityElectionCandidate[] = [...this.candidates];
 
-    const individualPlaceholderCandidate: SecondaryMajorityElectionCandidate = newSecondaryMajorityElectionCandidate(999, '');
-    individualPlaceholderCandidate.lastName = this.i18n.instant('MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_PLACEHOLDER');
-    candidateList.push(individualPlaceholderCandidate);
+    if (!this.currentSecondaryMajorityElection!.individualCandidatesDisabled) {
+      const individualPlaceholderCandidate: SecondaryMajorityElectionCandidate = newSecondaryMajorityElectionCandidate(999, '');
+      individualPlaceholderCandidate.lastName = this.i18n.instant('MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_PLACEHOLDER');
+      candidateList.push(individualPlaceholderCandidate);
+    }
+
     candidateList.sort((a, b) => a.position - b.position);
     this.expandedCandidates = candidateList;
   }

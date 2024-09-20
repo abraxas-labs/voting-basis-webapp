@@ -4,12 +4,23 @@
     <bc-spinner class="block" *ngIf="loading; else ballotGroupList"></bc-spinner>
     <ng-template #ballotGroupList>
       <div class="flex-end">
-        <bc-button variant="tertiary" icon="plus" class="my-2" *ngIf="!forSecondaryElection" [disabled]="locked"
-          [label]="'MAJORITY_ELECTION.BALLOT_GROUP.NEW' | translate" (buttonClick)="create()"></bc-button>
-        <bc-button variant="tertiary" class="my-2" *ngIf="!!forSecondaryElection"
+        <bc-button
+          variant="tertiary"
+          icon="plus"
+          class="my-2"
+          *ngIf="!forSecondaryElection"
+          [disabled]="locked"
+          [label]="'MAJORITY_ELECTION.BALLOT_GROUP.NEW' | translate"
+          (buttonClick)="create()"
+        ></bc-button>
+        <bc-button
+          variant="tertiary"
+          class="my-2"
+          *ngIf="!!forSecondaryElection"
           [disabled]="!selectedBallotGroup || testingPhaseEnded"
           [label]="'MAJORITY_ELECTION.BALLOT_GROUP.FILL_BLANK_ROWS' | translate"
-          (buttonClick)="fillBlankRows()"></bc-button>
+          (buttonClick)="fillBlankRows()"
+        ></bc-button>
       </div>
 
       <bc-table selection class="w-full" [dataSource]="ballotGroups">
@@ -19,8 +30,7 @@
         </ng-container>
 
         <ng-container columnDef="shortDescription">
-          <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.BALLOT_GROUP.SHORT_DESCRIPTION' | translate
-            }}</bc-header-cell>
+          <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.BALLOT_GROUP.SHORT_DESCRIPTION' | translate }}</bc-header-cell>
           <bc-data-cell *dataCellDef="let element">{{ element.shortDescription }}</bc-data-cell>
         </ng-container>
 
@@ -33,33 +43,52 @@
           <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
             <div *ngIf="!forSecondaryElection && !locked" class="flex">
-              <bc-icon *ngIf="element | canEditBallotGroup:testingPhaseEnded" class="clickable"
-                (click)="edit(element); $event.stopPropagation()" icon="edit"></bc-icon>
-              <bc-icon *ngIf="!testingPhaseEnded" class="clickable ml-2"
-                (click)="delete(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
+              <bc-icon
+                *ngIf="element | canEditBallotGroup: testingPhaseEnded"
+                class="clickable"
+                (click)="edit(element); $event.stopPropagation()"
+                icon="edit"
+              ></bc-icon>
+              <bc-icon
+                *ngIf="!testingPhaseEnded"
+                class="clickable ml-2"
+                (click)="delete(element); $event.stopPropagation()"
+                icon="trash"
+                iconColor="error"
+              ></bc-icon>
             </div>
           </bc-data-cell>
         </ng-container>
 
         <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-        <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
-          selectionRow [selectionRowValue]="row" (click)="selectedBallotGroup = row"></bc-data-row>
+        <bc-data-row
+          *dataRowDef="let row; columns: columns; let i = index"
+          #rowSelection="selectionToggle"
+          selectionToggle
+          [selectionToggleValue]="row"
+          selectionRow
+          [selectionRowValue]="row"
+          (click)="rowSelection.toggle(); selectedBallotGroup = row"
+        ></bc-data-row>
       </bc-table>
 
       <p class="warn mt-2" *ngIf="ballotGroupsWithMissingSecondaryElection.length > 0">
         {{
-        'MAJORITY_ELECTION.BALLOT_GROUP.BALLOT_GROUP_WITHOUT_ELECTION_WARNING'
-        | translate: { ballotGroups: ballotGroupsWithMissingSecondaryElectionDescription }
+          'MAJORITY_ELECTION.BALLOT_GROUP.BALLOT_GROUP_WITHOUT_ELECTION_WARNING'
+            | translate: { ballotGroups: ballotGroupsWithMissingSecondaryElectionDescription }
         }}
       </p>
     </ng-template>
   </div>
   <bc-divider orientation="vertical" class="ml-4"></bc-divider>
   <div class="ml-4">
-    <app-majority-election-ballot-group-detail [majorityElection]="majorityElection"
-      [secondaryMajorityElections]="secondaryMajorityElections" [ballotGroup]="selectedBallotGroup"
+    <app-majority-election-ballot-group-detail
+      [majorityElection]="majorityElection"
+      [secondaryMajorityElections]="secondaryMajorityElections"
+      [ballotGroup]="selectedBallotGroup"
       [forSecondaryElection]="forSecondaryElection"
-      [readonly]="!(selectedBallotGroup | canEditBallotGroup:testingPhaseEnded)"
-      (candidatesAssigned)="updateCanSave()"></app-majority-election-ballot-group-detail>
+      [readonly]="!(selectedBallotGroup | canEditBallotGroup: testingPhaseEnded)"
+      (candidatesAssigned)="updateCanSave()"
+    ></app-majority-election-ballot-group-detail>
   </div>
 </div>

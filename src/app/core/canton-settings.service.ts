@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -84,6 +84,10 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     );
     result.setStatePlausibilisedDisabled(data.statePlausibilisedDisabled);
     result.setPublishResultsEnabled(data.publishResultsEnabled);
+    result.setPublishResultsBeforeAuditedTentatively(data.publishResultsBeforeAuditedTentatively);
+    result.setEndResultFinalizeDisabled(data.endResultFinalizeDisabled);
+    result.setCreateContestOnHighestHierarchicalLevelEnabled(data.createContestOnHighestHierarchicalLevelEnabled);
+    result.setInternalPlausibilisationDisabled(data.internalPlausibilisationDisabled);
     return result;
   }
 
@@ -112,6 +116,10 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     );
     result.setStatePlausibilisedDisabled(data.statePlausibilisedDisabled);
     result.setPublishResultsEnabled(data.publishResultsEnabled);
+    result.setPublishResultsBeforeAuditedTentatively(data.publishResultsBeforeAuditedTentatively);
+    result.setEndResultFinalizeDisabled(data.endResultFinalizeDisabled);
+    result.setCreateContestOnHighestHierarchicalLevelEnabled(data.createContestOnHighestHierarchicalLevelEnabled);
+    result.setInternalPlausibilisationDisabled(data.internalPlausibilisationDisabled);
     return result;
   }
 

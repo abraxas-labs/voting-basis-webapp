@@ -1,18 +1,18 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
 import { SimpleStepperComponent } from '@abraxas/base-components';
-import { SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
 import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
 import { ContestService } from '../../core/contest.service';
-import { BallotType, newBallot, newVote, Vote, VoteResultEntry } from '../../core/models/vote.model';
+import { BallotType, newVote, Vote, VoteResultEntry } from '../../core/models/vote.model';
 import { VoteService } from '../../core/vote.service';
 import { VoteGeneralInformationsComponent } from '../vote-general-informations/vote-general-informations.component';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
@@ -41,7 +41,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
   public isNew: boolean = false;
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
-  public eVoting: boolean = false;
+  public eVoting?: boolean;
   public isVariantsBallot: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public hasChanges: boolean = false;
@@ -58,6 +58,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
     private readonly voteService: VoteService,
     private readonly contestService: ContestService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly dialogService: DialogService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -100,14 +101,13 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
         } else {
           await this.voteService.update(this.data);
         }
-        this.persistedData = { ...this.data };
+        this.persistedData = cloneDeep(this.data);
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
         this.hasChanges = false;
       }
 
       const newlyCreated = this.isNew;
       this.isNew = false;
-      this.prepareBallots();
       this.stepper.next();
 
       // change URL from '/new' to '/{id}' without reloading the view
@@ -146,6 +146,11 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
         await this.setResultEntryToFinalResultsAndUpdateEnforceForCountingCircles();
       }
 
+      if (this.data.type !== this.persistedData.type) {
+        await this.voteService.update(this.data);
+        this.persistedData = cloneDeep(this.data);
+      }
+
       for (const ballot of ballotsToDelete) {
         await this.voteService.deleteBallot(ballot.id, ballot.voteId);
       }
@@ -162,6 +167,10 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
 
       this.data.ballots = this.data.ballots.filter(b => !deletedBallotIds.includes(b.id));
       this.persistedData.ballots = cloneDeep(this.data.ballots);
+
+      // trigger angular change detection
+      // since the vote is updated in step 2 in subcomponents
+      this.data = { ...this.data };
 
       if (isVariantsBallotChanged && this.isVariantsBallot) {
         await this.setResultEntryToFinalResultsAndUpdateEnforceForCountingCircles();
@@ -184,7 +193,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
     try {
       if (this.hasChanges) {
         await this.voteService.update(this.data);
-        this.persistedData = { ...this.data };
+        this.persistedData = cloneDeep(this.data);
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
         this.hasChanges = false;
       }
@@ -199,10 +208,16 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
     this.hasChanges = !isEqual(this.data, this.persistedData);
   }
 
-  private prepareBallots(): void {
-    if (this.data.ballots.length === 0) {
-      this.data.ballots.push(newBallot());
+  public async back(): Promise<void> {
+    if (this.hasChanges && !(await this.confirmToLeaveWithUnsavedChanges())) {
+      return;
     }
+
+    this.stepper.previous();
+  }
+
+  private async confirmToLeaveWithUnsavedChanges(): Promise<boolean> {
+    return await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES');
   }
 
   private refreshIsVariantsBallot(): void {
@@ -216,6 +231,6 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
     this.data.enforceResultEntryForCountingCircles = !this.isVariantsBallot;
 
     await this.voteService.update(this.data);
-    this.persistedData = { ...this.data };
+    this.persistedData = cloneDeep(this.data);
   }
 }

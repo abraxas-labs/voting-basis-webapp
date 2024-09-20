@@ -31,9 +31,9 @@
              [subscriptSizing]="'dynamic'"></bc-number>
 
   <bc-dropdown class="full-width"
-               *ngIf="domainOfInfluenceTypes.length > 1"
+               *ngIf="domainOfInfluenceTypeItems.length > 1"
                [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
-               [items]="domainOfInfluenceTypes"
+               [items]="domainOfInfluenceTypeItems"
                [disabled]="contest.testingPhaseEnded"
                [clearable]="false"
                [required]="true"
@@ -42,6 +42,14 @@
                [value]="selectedDomainOfInfluenceType"
                (valueChange)="selectedDomainOfInfluenceType = $event; contentChanged.emit()"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
+
+  <bc-number *ngIf="selectedDomainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH"
+             [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
+             [disabled]="contest.testingPhaseEnded"
+             [value]="data.federalIdentification"
+             (valueChange)="data.federalIdentification = $event; contentChanged.emit()"
+             [max]="federalIdentificationMaxValue"
+             [subscriptSizing]="'dynamic'"></bc-number>
 
   <bc-dropdown class="full-width"
                *ngIf="selectedDomainOfInfluenceType"

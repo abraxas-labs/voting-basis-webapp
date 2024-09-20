@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -31,7 +31,10 @@ export class ImportFileSelectComponent {
   @ViewChild('fileInput', { static: false })
   private fileInput!: ElementRef;
 
-  constructor(private readonly enumUtil: EnumUtil, private readonly importService: ImportService) {
+  constructor(
+    private readonly enumUtil: EnumUtil,
+    private readonly importService: ImportService,
+  ) {
     this.importTypes = [ImportType.IMPORT_TYPE_ECH_159, ImportType.IMPORT_TYPE_ECH_157];
   }
 

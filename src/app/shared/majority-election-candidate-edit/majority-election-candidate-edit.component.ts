@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -35,7 +35,10 @@ export class MajorityElectionCandidateEditComponent {
   public sexTypes: EnumItemDescription<SexType>[] = [];
 
   constructor(private readonly enumUtil: EnumUtil) {
-    this.sexTypes = this.enumUtil.getArrayWithDescriptions<SexType>(SexType, 'SEX_TYPE.');
+    this.sexTypes = this.enumUtil.getArrayWithDescriptions<SexType>(SexType, 'SEX_TYPE.').filter(
+      // deprecated values
+      p => p.value !== SexType.SEX_TYPE_UNDEFINED,
+    );
   }
 
   public set dateOfBirth(value: string) {

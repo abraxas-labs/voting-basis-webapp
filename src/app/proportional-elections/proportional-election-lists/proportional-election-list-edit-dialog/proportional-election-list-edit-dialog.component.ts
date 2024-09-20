@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -13,11 +13,14 @@ import { ProportionalElectionList, updateProportionalElectionListCandidateCountO
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
 import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
+import { DomainOfInfluenceParty } from '../../../core/models/domain-of-influence-party.model';
+import { GetTranslationPipe } from '../../../shared/get-translation.pipe';
 
 @Component({
   selector: 'app-proportional-election-list-edit-dialog',
   templateUrl: './proportional-election-list-edit-dialog.component.html',
   styleUrls: ['./proportional-election-list-edit-dialog.component.scss'],
+  providers: [GetTranslationPipe],
 })
 export class ProportionalElectionListEditDialogComponent implements OnDestroy {
   @HostListener('window:beforeunload')
@@ -34,6 +37,8 @@ export class ProportionalElectionListEditDialogComponent implements OnDestroy {
   public isNew: boolean = false;
   public testingPhaseEnded: boolean = false;
   public saving: boolean = false;
+  public parties: DomainOfInfluencePartyDropdownData[] = [];
+  public selectedPartyId?: string;
 
   public hasChanges: boolean = false;
   public originalList: ProportionalElectionList;
@@ -46,6 +51,7 @@ export class ProportionalElectionListEditDialogComponent implements OnDestroy {
     private readonly proportionalElectionService: ProportionalElectionService,
     private readonly languageService: LanguageService,
     private readonly dialogService: DialogService,
+    private readonly getTranslationPipe: GetTranslationPipe,
     @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionListEditDialogData,
   ) {
     this.list = dialogData.list;
@@ -56,6 +62,8 @@ export class ProportionalElectionListEditDialogComponent implements OnDestroy {
 
     this.dialogRef.disableClose = true;
     this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+
+    this.initPartiesDropdownData(dialogData.parties);
   }
 
   public ngOnDestroy(): void {
@@ -77,6 +85,8 @@ export class ProportionalElectionListEditDialogComponent implements OnDestroy {
     if (!this.list || !this.canSave) {
       return;
     }
+
+    this.list.party = this.parties.find(x => x.id === this.selectedPartyId);
 
     try {
       this.saving = true;
@@ -121,12 +131,45 @@ export class ProportionalElectionListEditDialogComponent implements OnDestroy {
   private async leaveDialogOpen(): Promise<boolean> {
     return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
+
+  private initPartiesDropdownData(parties: DomainOfInfluenceParty[]): void {
+    this.parties = parties.map(p => this.mapPartyToDropdownData(p));
+
+    if (!this.list.party?.id) {
+      return;
+    }
+
+    const listParty = this.mapPartyToDropdownData(this.list.party);
+    const hasListParty = !!this.parties.find(p => p.id === listParty.id);
+
+    this.selectedPartyId = listParty.id;
+
+    if (hasListParty) {
+      return;
+    }
+
+    // it could be that the list has a soft deleted party, which isn't included in the default party list
+    // but should be updatable as well.
+    this.parties = [listParty, ...this.parties];
+  }
+
+  private mapPartyToDropdownData(party: DomainOfInfluenceParty): DomainOfInfluencePartyDropdownData {
+    return {
+      ...party,
+      shortDescriptionTranslated: this.getTranslationPipe.transform(party.shortDescription),
+    };
+  }
+}
+
+interface DomainOfInfluencePartyDropdownData extends DomainOfInfluenceParty {
+  shortDescriptionTranslated: string;
 }
 
 export interface ProportionalElectionListEditDialogData {
   list: ProportionalElectionList;
   numberOfMandates: number;
   testingPhaseEnded: boolean;
+  parties: DomainOfInfluenceParty[];
 }
 
 export interface ProportionalElectionListEditDialogResult {

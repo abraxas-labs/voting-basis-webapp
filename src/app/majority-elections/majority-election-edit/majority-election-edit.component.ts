@@ -1,11 +1,11 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
 import { SimpleStepperComponent } from '@abraxas/base-components';
-import { SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
 import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -61,6 +61,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
     private readonly majorityElectionService: MajorityElectionService,
     private readonly contestService: ContestService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly dialogService: DialogService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -102,7 +103,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
           await this.majorityElectionService.update(this.data);
         }
 
-        this.persistedData = { ...this.data };
+        this.persistedData = cloneDeep(this.data);
         this.snackbarService.success(this.i18n.instant('APP.SAVED'));
         this.hasChanges = false;
       }
@@ -129,5 +130,17 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
 
   public contentChanged(): void {
     this.hasChanges = !isEqual(this.data, this.persistedData);
+  }
+
+  public async back(): Promise<void> {
+    if (this.hasChanges && !(await this.confirmToLeaveWithUnsavedChanges())) {
+      return;
+    }
+
+    this.stepper.previous();
+  }
+
+  private async confirmToLeaveWithUnsavedChanges(): Promise<boolean> {
+    return await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES');
   }
 }

@@ -1,25 +1,42 @@
 <bc-spinner class="block" *ngIf="loading; else candidateOverview"></bc-spinner>
 <ng-template #candidateOverview>
   <div class="flex">
-    <bc-button variant="tertiary" icon="plus"
+    <bc-button
+      variant="tertiary"
+      icon="plus"
       [disabled]="expandedCandidates.length >= maxCandidateCount || testingPhaseEnded"
-      [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate" (buttonClick)="createCandidate()"></bc-button>
+      [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate"
+      (buttonClick)="createCandidate()"
+    ></bc-button>
     <div>
       <bc-spinner *ngIf="savingAccumulation"></bc-spinner>
 
-      <bc-button *ngIf="selectedCandidate && selectedCandidate.accumulated" variant="tertiary"
-        [disabled]="testingPhaseEnded" [label]="'PROPORTIONAL_ELECTION.CANDIDATE.REMOVE_ACCUMULATION' | translate"
-        (buttonClick)="removeAccumulation(selectedCandidate!)"></bc-button>
-      <bc-button *ngIf="!selectedCandidate?.accumulated" variant="tertiary"
+      <bc-button
+        *ngIf="selectedCandidate && selectedCandidate.accumulated"
+        variant="tertiary"
+        [disabled]="testingPhaseEnded"
+        [label]="'PROPORTIONAL_ELECTION.CANDIDATE.REMOVE_ACCUMULATION' | translate"
+        (buttonClick)="removeAccumulation(selectedCandidate!)"
+      ></bc-button>
+      <bc-button
+        *ngIf="!selectedCandidate?.accumulated"
+        variant="tertiary"
         [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded"
         [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ACCUMULATE' | translate"
-        (buttonClick)="accumulate(selectedCandidate!)"></bc-button>
+        (buttonClick)="accumulate(selectedCandidate!)"
+      ></bc-button>
     </div>
   </div>
 
-  <bc-table selection class="w-full mb-2" [dataSource]="expandedCandidates" cdkDropList [cdkDropListData]="expandedCandidates"
+  <bc-table
+    selection
+    class="w-full mb-2"
+    [dataSource]="expandedCandidates"
+    cdkDropList
+    [cdkDropListData]="expandedCandidates"
     [cdkDropListDisabled]="testingPhaseEnded"
-    (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)">
+    (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)"
+  >
     <ng-container columnDef="position">
       <bc-header-cell *headerCellDef>
         <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.POSITION' | translate }}</div>
@@ -70,7 +87,7 @@
         <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.SEX' | translate }}</div>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{'SEX_TYPE.' + element.sex | translate}}</div>
+        <div class="truncate">{{ 'SEX_TYPE.' + element.sex | translate }}</div>
       </bc-data-cell>
     </ng-container>
 
@@ -115,16 +132,29 @@
       <bc-data-cell *dataCellDef="let element">
         <div *ngIf="!locked" class="actions">
           <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
-          <bc-icon *ngIf="!testingPhaseEnded" (click)="deleteCandidate(element); $event.stopPropagation()" icon="trash"
-            iconColor="error"></bc-icon>
+          <bc-icon
+            *ngIf="!testingPhaseEnded"
+            (click)="deleteCandidate(element); $event.stopPropagation()"
+            icon="trash"
+            iconColor="error"
+          ></bc-icon>
         </div>
       </bc-data-cell>
     </ng-container>
 
     <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-    <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
-      selectionRow [selectionRowValue]="row" (click)="selectCandidate(row)" cdkDrag
-      [cdkDragDisabled]="testingPhaseEnded" [cdkDragData]="row"></bc-data-row>
+    <bc-data-row
+      *dataRowDef="let row; columns: columns; let i = index"
+      #rowSelection="selectionToggle"
+      selectionToggle
+      [selectionToggleValue]="row"
+      selectionRow
+      [selectionRowValue]="row"
+      (click)="rowSelection.toggle(); selectCandidate(row)"
+      cdkDrag
+      [cdkDragDisabled]="testingPhaseEnded"
+      [cdkDragData]="row"
+    ></bc-data-row>
   </bc-table>
 
   <p *ngIf="expandedCandidates.length === maxCandidateCount; else candidateCount" translate>
@@ -133,22 +163,24 @@
   <ng-template #candidateCount>
     <p class="error">
       <span>
-        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.COUNT_OF_CANDIDATES_' + (expandedCandidates.length === 1 ? 'SINGLE' :
-        'PLURAL')
-        | translate: {current: expandedCandidates.length} }}
+        {{
+          'PROPORTIONAL_ELECTION.CANDIDATE.COUNT_OF_CANDIDATES_' + (expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
+            | translate: { current: expandedCandidates.length }
+        }}
       </span>
 
       <span *ngIf="expandedCandidates.length > maxCandidateCount">
-        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.MORE_CANDIDATES_THAN_ALLOWED_' + (maxCandidateCount === 1 ? 'SINGLE' :
-        'PLURAL')
-        | translate: {max: maxCandidateCount} }}
+        {{
+          'PROPORTIONAL_ELECTION.CANDIDATE.MORE_CANDIDATES_THAN_ALLOWED_' + (maxCandidateCount === 1 ? 'SINGLE' : 'PLURAL')
+            | translate: { max: maxCandidateCount }
+        }}
       </span>
 
       <span *ngIf="expandedCandidates.length < maxCandidateCount">
         {{
-        'PROPORTIONAL_ELECTION.CANDIDATE.LESS_CANDIDATES_THAN_ALLOWED_' +
-        (maxCandidateCount - expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
-        | translate: { diff: maxCandidateCount - expandedCandidates.length }
+          'PROPORTIONAL_ELECTION.CANDIDATE.LESS_CANDIDATES_THAN_ALLOWED_' +
+            (maxCandidateCount - expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
+            | translate: { diff: maxCandidateCount - expandedCandidates.length }
         }}
       </span>
     </p>

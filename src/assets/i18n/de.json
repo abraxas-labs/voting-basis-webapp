@@ -57,6 +57,7 @@
     "ContestSetAsPreviousContestException": "Der Urnengang wird als Vergleich für Plausibilisierungen verwendet und kann daher nicht gelöscht werden.",
     "ContestInMergeSetAsPreviousContestException": "Ein Urnengang der für diesen Urnengang zusammengeführt wird, wird als Vergleich für Plausibilisierungen verwendet und kann daher nicht zusammengeführt werden.",
     "MajorityElectionWithExistingSecondaryElectionsException": "Eine Wahl mit Nebenwahlen kann nicht gelöscht werden. Bitte zuerst sämtliche Nebenwahlen löschen.",
+    "MajorityElectionCandidateIsInBallotGroupException": "Diese Kandidat/in ist in einer Wahlzettelgruppe und kann nicht gelöscht werden. Bereinigen Sie zuerst die Wahlzettelgruppe.",
     "ProportionalElectionUnionMultipleMandateAlgorithmsException": "Es dürfen nur Proporzwahlen mit gleichem Berechnungsverfahren miteinander verbunden werden.",
     "ProportionalElectionEditMandateAlgorithmInUnionException": "Die Sitzverteilung darf nur bei unverbundenen Proporzwahlen geändert werden."
   },
@@ -78,6 +79,7 @@
     "SORT_NUMBER": "Sortierungsnummer",
     "NAME_FOR_PROTOCOL": "Bezeichnung für Protokoll",
     "E_VOTING": "E-Voting Auszählungskreis",
+    "E_VOTING_ACTIVE_FROM": "ab",
     "AUTHORITY": "Behörde",
     "DOMAIN_OF_INFLUENCE": {
       "ASSIGNMENT": "Wahlkreis-Zuordnung",
@@ -99,7 +101,8 @@
       "CITY": "Ort",
       "CONTACT_PERSON_DURING_EVENT": "Vor und während der Abstimmung/Wahl",
       "CONTACT_PERSON_AFTER_EVENT": "nach dem Schliessen des Wahlbüros",
-      "SAME_CONTACT_PERSON": "gleiche Kontaktdaten wie vor/während der Abstimmung/Wahl"
+      "SAME_CONTACT_PERSON": "gleiche Kontaktdaten wie vor/während der Abstimmung/Wahl",
+      "GENERAL_INFORMATION": "Allgemeine Angaben"
     },
     "MERGE": {
       "TITLE": "Fusionen",
@@ -396,7 +399,7 @@
     "VOTE": "Abstimmung",
     "MAJORITY_ELECTION": "Majorzwahl",
     "PROPORTIONAL_ELECTION": "Proporzwahl",
-    "SECONDARY_ELECTION": "Nebenwahl",
+    "ADD_SECONDARY_ELECTION": "Nebenwahl hinzufügen",
     "NUMBER": "Geschäfts-Nr.",
     "SHORT_DESCRIPTION": "Kurzbezeichnung",
     "OFFICIAL_DESCRIPTION": "Offizielle Bezeichnung",
@@ -414,6 +417,10 @@
       "3": "Proporzwahl",
       "4": "Majorzwahl"
     },
+    "VOTE_SUB_TYPE": {
+      "0": "SGS",
+      "1": "SGV"
+    },
     "SWISS_ABROAD_VOTING_RIGHT": {
       "TITLE": "Auslandschweizer",
       "TYPES": {
@@ -423,8 +430,9 @@
       }
     },
     "GENERAL_INFORMATION": "Allgemeine Angaben",
-    "ENABLE_TITLE": "Zur Ergebniserfassung freigeben",
-    "RESULT_ENTRY_INFORMATION": "Erfassungsweise"
+    "ENABLE_TITLE": "Erfassungsfreigabe",
+    "RESULT_ENTRY_INFORMATION": "Erfassungsweise",
+    "FEDERAL_IDENTIFICATION": "Bundes-ID"
   },
   "POLITICAL_BUSINESS_UNION": {
     "TITLE": "Geschäftsverbindungen",
@@ -473,18 +481,38 @@
         "4": "Mehrheit der Stimmen und Gemeinden"
       }
     },
-    "BALLOT": {
-      "TITLE": "Vorlage",
-      "MULTIPLE_TITLE": "Frage",
-      "ADD": "Weitere Frage hinzufügen"
-    },
-    "BALLOT_TYPE": {
+    "USER_VOTE_TYPE": {
       "TITLE": "Abstimmungstyp",
       "TYPES": {
-        "1": "Einfache Vorlage",
-        "2": "Varianten-Vorlage"
+        "standard-vote": "Einfache Vorlage",
+        "variant-questions-on-single-ballot": "Varianten-Vorlage auf einem Stimmzettel",
+        "variant-questions-on-multiple-ballots": "Varianten-Vorlage auf getrennten Stimmzetteln"
       }
     },
+    "BALLOT": {
+      "TITLE": "Vorlage",
+      "ADD": "Weitere Vorlage hinzufügen"
+    },
+    "BALLOT_SUB_TYPE":{
+      "TITLE": "Geschäftsart",
+      "TYPES": {
+        "1": "Hauptvorlage (A)",
+        "2": "Gegenvorschlag 1 (B)",
+        "3": "Gegenvorschlag 2 (C)",
+        "4": "Variante 1 (B)",
+        "5": "Variante 2 (C)",
+        "6": "Stichfrage 1 (A oder B)",
+        "7": "Stichfrage 2 (A oder C)",
+        "8": "Stichfrage 3 (B oder C)"
+      }
+    },
+    "TIE_BREAK_QUESTION_COUNT": {
+      "TITLE": "Anzahl Stichfragen",
+      "0": "Keine Stichfragen",
+      "1": "Eine Stichfrage",
+      "3": "Drei Stichfragen"
+    },
+    "MAIN_QUESTION_ID": "Geschäfts-Nr.",
     "QUESTION": {
       "TITLE_STANDARD" : "Frage",
       "TITLE_VARIANT" : "Frage {{number}}",
@@ -532,8 +560,7 @@
   "SEX_TYPE": {
     "TITLE": "Geschlecht",
     "1": "männlich",
-    "2": "weiblich",
-    "3": "unbestimmt"
+    "2": "weiblich"
   },
   "PROPORTIONAL_ELECTION": {
     "NEW": "Proporzwahl hinzufügen",
@@ -577,7 +604,8 @@
       "DESCRIPTION": "Bezeichnung",
       "SHORT_DESCRIPTION": "Kurzbezeichnung",
       "BLANK_ROW_COUNT": "Leere Zeilen",
-      "CONFIRM_DELETE": "Diese Liste wirklich löschen?"
+      "CONFIRM_DELETE": "Diese Liste wirklich löschen?",
+      "PARTY": "Partei"
     },
     "LIST_UNION": {
       "TITLE": "Listenverbindungen",
@@ -599,7 +627,8 @@
       "MAIN_LIST": {
         "TITLE": "Stammliste",
         "EDIT": "Stammliste bearbeiten",
-        "SET": "Stammliste festlegen"
+        "SET": "Stammliste festlegen",
+        "NO_LIST": "Keine Stammliste"
       }
     },
     "SUB_LIST_UNION": {
@@ -678,6 +707,7 @@
     "NUMBER_OF_MANDATES": "Anzahl Sitze",
     "BALLOT_BUNDLE_SIZE": "Bundgrösse",
     "BALLOT_BUNDLE_SAMPLE_SIZE": "Stichprobengrösse",
+    "INDIVIDUAL_CANDIDATES": "Vereinzelte",
     "MANDATE_ALGORITHM": {
       "TITLE": "Massgebliches Mehr",
       "TYPES": {
@@ -789,7 +819,8 @@
         "2": "Können in der Hauptwahl sein",
         "3": "Dürfen nicht in der Hauptwahl sein"
       },
-      "SELECT_CANDIDATE_FROM_PRIMARY": "Aus der Hauptwahl hinzufügen"
+      "SELECT_CANDIDATE_FROM_PRIMARY": "Aus der Hauptwahl hinzufügen",
+      "INDIVIDUAL_CANDIDATES": "Vereinzelte"
     }
   },
   "STEPPER": {
@@ -875,6 +906,10 @@
     "GENERAL": "Allgemein",
     "NEW_ZH_FEATURES": "Neue ZH Features",
     "PUBLISH_RESULTS": "Status Publiziert",
+    "PUBLISH_RESULTS_BEFORE_AUDITED_TENTATIVELY": "Publikation in Status \"übermittelt\" und \"zur Korrektur\" möglich",
+    "END_RESULT_FINALIZE": "Schlussergebnis setzen",
+    "CREATE_CONTEST_ON_HIGHEST_HIERARCHICAL_LEVEL": "Urnengangseröffnung immer auf höchster Hierarchieebene",
+    "INTERNAL_PLAUSIBILISATION": "Interne Plausibilisierungen",
     "SWISS_ABROAD_VOTING_RIGHT": {
       "TITLE": "Auslandschweizerinnen und Auslandschweizer",
       "DOMAIN_OF_INFLUENCE_TYPES": "Stimmrecht auf folgenden Geschäftsebenen"

@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -39,10 +39,7 @@ export class CantonSettingsOverviewComponent implements OnInit {
   public async ngOnInit(): Promise<void> {
     try {
       this.canCreate = await this.permissionService.hasPermission(Permissions.CantonSettings.Create);
-      this.canEdit = await this.permissionService.hasAnyPermission(
-        Permissions.CantonSettings.UpdateSameTenant,
-        Permissions.CantonSettings.UpdateAll,
-      );
+      this.canEdit = await this.permissionService.hasPermission(Permissions.CantonSettings.UpdateAll);
       this.cantonSettingsList = await this.cantonSettingsService.list();
     } finally {
       this.loading = false;

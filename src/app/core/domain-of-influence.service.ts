@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -66,7 +66,11 @@ import { firstValueFrom } from 'rxjs';
 export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServicePromiseClient> {
   private readonly restApiUrl: string;
 
-  constructor(grpcBackend: GrpcBackendService, private readonly http: HttpClient, private readonly auth: AuthorizationService) {
+  constructor(
+    grpcBackend: GrpcBackendService,
+    private readonly http: HttpClient,
+    private readonly auth: AuthorizationService,
+  ) {
     super(DomainOfInfluenceServicePromiseClient, environment, grpcBackend);
     this.restApiUrl = `${environment.restApiEndpoint}/domain-of-influences`;
   }

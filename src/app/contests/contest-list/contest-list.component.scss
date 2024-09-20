@@ -1,4 +1,4 @@
-@use '../../../sharedStyles/table' as table;
+@use '@abraxas/voting-lib/style/table' as table;
 
 ::ng-deep .bc-column-political-businesses {
   @include table.truncate-long-sortable-table-header();
@@ -17,7 +17,7 @@
 }
 
 .description-header {
-  width: 12rem;
+  width: 13rem;
 }
 
 .political-businesses {

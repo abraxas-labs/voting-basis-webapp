@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -71,7 +71,6 @@ import { PoliticalBusinessUnionDetailComponent } from './political-business-unio
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { SecondaryMajorityElectionCandidateEditDialogComponent } from './secondary-majority-election-candidate-edit-dialog/secondary-majority-election-candidate-edit-dialog.component';
 import { SecondaryMajorityElectionCandidatesComponent } from './secondary-majority-election-candidates/secondary-majority-election-candidates.component';
-import { SecondaryMajorityElectionCreateDialogComponent } from './secondary-majority-election-create-dialog/secondary-majority-election-create-dialog.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { TranslatedFormfieldComponent } from './translated-formfield/translated-formfield.component';
 import { TranslatedTextareaComponent } from './translated-textarea/translated-textarea.component';
@@ -101,7 +100,6 @@ const components = [
   ExportDialogComponent,
   SecondaryMajorityElectionCandidatesComponent,
   SecondaryMajorityElectionCandidateEditDialogComponent,
-  SecondaryMajorityElectionCreateDialogComponent,
   MajorityElectionBallotGroupAssignCandidatesDialogComponent,
   MajorityElectionBallotGroupCandidatesComponent,
   MajorityElectionBallotGroupDetailComponent,

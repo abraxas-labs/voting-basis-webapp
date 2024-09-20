@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -31,6 +31,7 @@ import {
 import { PoliticalBusiness, PoliticalBusinessType } from './models/political-business.model';
 import { mapToEntityOrders } from './utils/entity-order.utils';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
+import { createInt32Value } from './utils/proto.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -68,6 +69,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       ...election.toObject(),
       shortDescription: toJsMap(election.getShortDescriptionMap()),
       officialDescription: toJsMap(election.getOfficialDescriptionMap()),
+      federalIdentification: election.getFederalIdentification()?.getValue(),
     };
   }
 
@@ -195,6 +197,8 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
+    result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
+    result.setFederalIdentification(createInt32Value(data.federalIdentification));
     return result;
   }
 
@@ -221,6 +225,8 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
+    result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
+    result.setFederalIdentification(createInt32Value(data.federalIdentification));
     return result;
   }
 
@@ -238,7 +244,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
     fillProtoMap(result.getPartyMap(), data.party);
-    result.setSex(data.sex ?? SexType.SEX_TYPE_UNDEFINED);
+    result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);
@@ -261,7 +267,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
     fillProtoMap(result.getPartyMap(), data.party);
-    result.setSex(data.sex ?? SexType.SEX_TYPE_UNDEFINED);
+    result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);

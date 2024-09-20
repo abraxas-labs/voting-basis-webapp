@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -41,7 +41,10 @@ export class PlausibilisationConfigurationComponent {
   private domainOfInfluenceValue!: DomainOfInfluence;
   private domainOfInfluenceTypeValue!: DomainOfInfluenceType;
 
-  constructor(private readonly enumUtil: EnumUtil, public readonly dialogService: DialogService) {}
+  constructor(
+    private readonly enumUtil: EnumUtil,
+    public readonly dialogService: DialogService,
+  ) {}
 
   public get domainOfInfluence(): DomainOfInfluence {
     return this.domainOfInfluenceValue;

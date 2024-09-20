@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -43,7 +43,10 @@ export class MajorityElectionErfassungInformationsComponent implements OnInit {
   public automaticEmptyVoteCountingChoices: RadioButton[];
   public reviewProcedureChoices: RadioButton[];
 
-  constructor(enumUtil: EnumUtil, private readonly i18n: TranslateService) {
+  constructor(
+    enumUtil: EnumUtil,
+    private readonly i18n: TranslateService,
+  ) {
     this.resultEntryChoices = enumUtil.getArrayWithDescriptions<MajorityElectionResultEntry>(
       MajorityElectionResultEntry,
       'MAJORITY_ELECTION.RESULT_ENTRY.TYPES.',

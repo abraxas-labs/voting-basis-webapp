@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -62,8 +62,11 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnDestr
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
     this.isNew = !this.data.id;
 
-    this.sexTypes = this.enumUtil.getArrayWithDescriptions<SexType>(SexType, 'SEX_TYPE.');
-    this.initPartiesDropdownData(dialogData.parties);
+    this.sexTypes = this.enumUtil.getArrayWithDescriptions<SexType>(SexType, 'SEX_TYPE.').filter(
+      // deprecated values
+      p => p.value !== SexType.SEX_TYPE_UNDEFINED,
+    );
+    this.initPartiesDropdownData(dialogData.parties, dialogData.listParty);
 
     this.isCommunalDoiType = isCommunalDoiType(dialogData.doiType);
     this.originalCandidate = cloneDeep(this.data);
@@ -157,8 +160,12 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnDestr
     return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
 
-  private initPartiesDropdownData(parties: DomainOfInfluenceParty[]): void {
+  private initPartiesDropdownData(parties: DomainOfInfluenceParty[], listParty?: DomainOfInfluenceParty): void {
     this.parties = parties.map(p => this.mapPartyToDropdownData(p));
+
+    if (this.isNew && listParty) {
+      this.selectedPartyId = listParty.id;
+    }
 
     if (!this.data.party?.id) {
       return;
@@ -195,6 +202,7 @@ export interface ProportionalElectionCandidateEditDialogData {
   testingPhaseEnded: boolean;
   parties: DomainOfInfluenceParty[];
   doiType: DomainOfInfluenceType;
+  listParty?: DomainOfInfluenceParty;
 }
 
 export interface ProportionalElectionCandidateEditDialogResult {

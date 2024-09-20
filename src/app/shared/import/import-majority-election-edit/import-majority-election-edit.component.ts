@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -42,6 +42,7 @@ export class ImportMajorityElectionEditComponent extends ImportPoliticalBusiness
     majorityElection.setDomainOfInfluenceId(this.data.domainOfInfluenceId);
     majorityElection.setReportDomainOfInfluenceLevel(this.data.reportDomainOfInfluenceLevel);
     majorityElection.setMandateAlgorithm(this.data.mandateAlgorithm);
+    majorityElection.setIndividualCandidatesDisabled(this.data.individualCandidatesDisabled);
     this.setValid();
   }
 }

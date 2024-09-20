@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.6.0`)
+# ✨ Changelog (`v3.20.1`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,268 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.6.0
-Previous version ---- v2.10.1
+This version -------- v3.20.1
+Previous version ---- v3.6.0
 Initial version ----- v1.23.0
-Total commits ------- 32
+Total commits ------- 44
 ```
+
+## [v3.20.1] - 2024-09-11
+
+### 🔄 Changed
+
+- move federal identification to ballot question
+
+## [v3.20.0] - 2024-09-06
+
+### 🆕 Added
+
+- add federal identification
+
+## [v3.19.4] - 2024-09-04
+
+### 🔄 Changed
+
+- migrate from gcr to harbor
+
+## [v3.19.3] - 2024-09-04
+
+### 🔄 Changed
+
+- reset internal plausibilisation
+
+## [v3.19.2] - 2024-09-04
+
+### 🔄 Changed
+
+- adjust with from tableheader
+- includes voting-angular-library update to 5.1.2
+
+## [v3.19.1] - 2024-08-28
+
+### :arrows_counterclockwise: Changed
+
+- improve warning when creating secondary election with existing ballot groups
+
+## [v3.19.0] - 2024-08-28
+
+### 🆕 Added
+
+- optional individual candidates on majority elections
+
+### 🔄 Changed
+
+- proportional election list change listener
+
+## [v3.18.1] - 2024-08-28
+
+🔄 Changed
+
+update bug bounty template reference
+patch ci-cd template version, align with new defaults
+
+## [v3.18.0] - 2024-08-22
+
+### 🆕 Added
+
+- add counting circle and proportional election list change listener
+
+## [v3.17.4] - 2024-08-21
+
+### 🔄 Changed
+
+- enforce final results for standard ballot
+
+## [v3.17.3] - 2024-08-15
+
+### 🔄 Changed
+
+- delete candidate throws if candidate is in a ballot group
+
+## [v3.17.2] - 2024-08-15
+
+### :arrows_counterclockwise: Changed
+
+- show ballot question id and allow different count of tie break questions
+
+## [v3.17.1] - 2024-08-14
+
+### 🔄 Changed
+
+- proportional election union main list optional
+
+## [v3.17.0] - 2024-08-14
+
+### :arrows_counterclockwise: Changed
+
+- improve domain of influence search
+
+## [v3.16.1] - 2024-08-14
+
+### 🔄 Changed
+
+- use current date as default on counting circle e-voting
+
+## [v3.16.0] - 2024-08-13
+
+### 🆕 Added
+
+- add party to proportional election list
+
+## [v3.15.4] - 2024-08-12
+
+### 🔄 Changed
+
+- deprecated sex type undefined
+
+## [v3.15.3] - 2024-08-07
+
+### :arrows_counterclockwise: Changed
+
+- show political business sub types for votes
+
+## [v3.15.2] - 2024-08-06
+
+### 🔄 Changed
+
+- creating counting circles with only valid cantons
+
+## [v3.15.1] - 2024-08-06
+
+### :x: Removed
+
+- remove canton settings update same tenant permission
+
+## [v3.15.0] - 2024-07-31
+
+### :arrows_counterclockwise: Changed
+
+- only display vote questions in e-voting contests
+
+## [v3.14.0] - 2024-07-29
+
+### :new: Added
+
+- added variant questions on multiple ballots
+
+## [v3.13.0] - 2024-07-26
+
+### 🔄 Changed
+
+- Make DOI short name optional
+- Increase max length of DOI/counting circle code to 20 from 12
+
+## [v3.12.0] - 2024-07-19
+
+### 🆕 Added
+
+- canton settings with publish results before audited tentatively
+
+## [v3.11.0] - 2024-07-16
+
+### 🔄 Changed
+
+- set counting circle e-voting at a specific date
+
+## [v3.10.2] - 2024-07-15
+
+### 🔄 Changed
+
+- index.html set default language to german and disable google translation
+
+## [v3.10.1] - 2024-07-11
+
+### :arrows_counterclockwise: Changed
+
+- update dependencies and use esbuild
+
+## [v3.10.0] - 2024-07-04
+
+### 🔄 Changed
+
+- change enable title
+
+### 🆕 Added
+
+- create secondary election in context menu
+
+## [v3.9.2] - 2024-07-03
+
+### 🔄 Changed
+
+- fix contest is created twice in the contest list
+
+## [v3.9.1] - 2024-07-03
+
+### 🔄 Changed
+
+- add and edit contest updates
+
+## [v3.9.0] - 2024-06-27
+
+### 🆕 Added
+
+- add internal plausibilisation canton settings
+
+## [v3.8.1] - 2024-06-26
+
+### 🔄 Changed
+
+- create contest updates values correctly
+
+## [v3.8.0] - 2024-06-25
+
+### 🆕 Added
+
+- add create contest on highest hierarchical level canton settings
+
+## [v3.7.1] - 2024-06-25
+
+### 🔄 Changed
+
+- unsaved changes dialog in political business edit
+
+## [v3.7.0] - 2024-06-21
+
+### 🆕 Added
+
+- add political business finalize canton settings
+
+## [v3.6.6] - 2024-06-19
+
+### 🔄 Changed
+
+- move truncate long table header to voting lib
+
+## [v3.6.5] - 2024-06-12
+
+### 🔄 Changed
+
+- adjust counting circle detail layout
+
+## [v3.6.4] - 2024-06-06
+
+### :arrows_counterclockwise: Changed
+
+- update voting lib to fix outdated access tokens on server streaming retries
+
+## [v3.6.3] - 2024-06-05
+
+### :arrows_counterclockwise: Changed
+
+- allow to clear voting card color
+
+## [v3.6.2] - 2024-06-04
+
+### 🔄 Changed
+
+- keep navigation activated state after navigation cancel
+
+## [v3.6.1] - 2024-06-04
+
+### 🔄 Changed
+
+- stick button bar to the bottom
 
 ## [v3.6.0] - 2024-05-29
 
@@ -51,61 +308,37 @@ Total commits ------- 32
 
 - add ballot question type
 
-## [v3.4.0] - 2024-05-21
-
 ### 🆕 Added
 
 - add counting circle table sort and filter
-
-## [v3.3.1] - 2024-05-13
 
 ### 🔄 Changed
 
 - app loading spinner
 
-## [v3.3.0] - 2024-05-07
-
 ### 🆕 Added
 
 - update mandate algorithm for proportional elections in unions
-
-## [v3.2.0] - 2024-05-04
 
 ### 🔄 Changed
 
 - move Stimmregister flag from canton settings to DOI
 
-## [v3.1.4] - 2024-04-25
-
 ### 🔄 Changed
 
 - only root domain of influences should be visible on contest creation
-
-## [v3.1.3] - 2024-04-24
 
 ### :arrows_counterclockwise: Changed
 
 - bugfixes for contest and political business list
 
-## [v3.1.2] - 2024-04-24
-
 ### :new: Added
 
 - add sorting and filterting to political business list
 
-## [v3.1.1] - 2024-04-24
-
-### 🔄 Changed
-
-- add sorting and filtering to contest list
-
-## [v3.1.0] - 2024-04-24
-
 ### :new: Added
 
 - check for unique political business number
-
-## [v3.0.0] - 2024-04-19
 
 BREAKING CHANGE: update to Angular 17 version
 
@@ -113,25 +346,17 @@ BREAKING CHANGE: update to Angular 17 version
 
 - Angular Update to version 17
 
-## [v2.16.0] - 2024-04-19
-
 ### 🆕 Added
 
 - add state plausibilised disabled canton setting
-
-## [v2.15.0] - 2024-04-18
 
 ### 🆕 Added
 
 - add counting circle result state descriptions
 
-## [v2.14.0] - 2024-04-17
-
 ### :new: Added
 
 - added voting card color to domain of influence
-
-## [v2.13.0] - 2024-04-15
 
 ### :arrows_counterclockwise: Changed
 
@@ -155,13 +380,9 @@ BREAKING CHANGE: update to Angular 17 version
 
 - ux improvements
 
-## [v2.12.0] - 2024-04-08
-
 ### 🆕 Added
 
 - add evoting counting circle
-
-## [v2.11.0] - 2024-03-14
 
 ### 🆕 Added
 
@@ -183,79 +404,45 @@ BREAKING CHANGE: update to Angular 17 version
 
 - added canton to counting circle
 
-## [v2.10.1] - 2024-02-06
-
 ### 🔄 Changed
 
 - Standardized proportional election mandate algorithms in unions
-
-## [v2.10.0] - 2024-02-06
 
 ### 🆕 Added
 
 - Double proportional election mandate algorithms
 
-## [v2.9.2] - 2024-02-02
-
 ### 🔄 Changed
 
 - update voting-lib to v2.6.3
-
-## [v2.9.1] - 2024-02-01
-
-### 🔄 Changed
-
-- remove domain of influence type hierarchy checks
-
-## [v2.9.0] - 2024-01-31
 
 ### 🆕 Added
 
 - Add counting circle electorate
 
-## [v2.8.0] - 2024-01-26
-
 ### 🆕 Added
 
 - add candidate check digit
-
-## [v2.7.0] - 2024-01-10
 
 ### :lock: Security
 
 - change from roles to permissions
 
-## [v2.6.0] - 2024-01-04
-
 ### 🆕 Added
 
 - add new zh features flag
-
-## [v2.5.1] - 2023-12-22
-
-### 🔄 Changed
-
-- load canton defaults for vote
-
-## [v2.5.0] - 2023-12-20
 
 ### 🆕 Added
 
 - Add counting machine flag to canton settings
 
-## [v2.4.0] - 2023-12-19
-
 ### 🆕 Added
 
 - add multiple vote ballots
 
-## [v2.3.5] - 2023-11-28
-
 ### :arrows_counterclockwise: Changed
 
 - apply strict policy for files that should not be cached
-
-## [v2.3.4] - 2023-11-27
 
 ### :arrows_counterclockwise: Changed
 
@@ -523,6 +710,217 @@ Also allow users to view politicial business in readonly mode when testing phase
 also removed count of candidates check
 
 use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
+
+## [v3.4.0] - 2024-05-21
+
+### 🆕 Added
+
+- add counting circle table sort and filter
+
+## [v3.3.1] - 2024-05-13
+
+### 🔄 Changed
+
+- app loading spinner
+
+## [v3.3.0] - 2024-05-07
+
+### 🆕 Added
+
+- update mandate algorithm for proportional elections in unions
+
+## [v3.2.0] - 2024-05-04
+
+### 🔄 Changed
+
+- move Stimmregister flag from canton settings to DOI
+
+## [v3.1.4] - 2024-04-25
+
+### 🔄 Changed
+
+- only root domain of influences should be visible on contest creation
+
+## [v3.1.3] - 2024-04-24
+
+### :arrows_counterclockwise: Changed
+
+- bugfixes for contest and political business list
+
+## [v3.1.2] - 2024-04-24
+
+### :new: Added
+
+- add sorting and filterting to political business list
+
+## [v3.1.1] - 2024-04-24
+
+### 🔄 Changed
+
+- add sorting and filtering to contest list
+
+## [v3.1.0] - 2024-04-24
+
+### :new: Added
+
+- check for unique political business number
+
+## [v3.0.0] - 2024-04-19
+
+BREAKING CHANGE: update to Angular 17 version
+
+### 🔄 Changed
+
+- Angular Update to version 17
+
+## [v2.16.0] - 2024-04-19
+
+### 🆕 Added
+
+- add state plausibilised disabled canton setting
+
+## [v2.15.0] - 2024-04-18
+
+### 🆕 Added
+
+- add counting circle result state descriptions
+
+## [v2.14.0] - 2024-04-17
+
+### :new: Added
+
+- added voting card color to domain of influence
+
+## [v2.13.0] - 2024-04-15
+
+### :arrows_counterclockwise: Changed
+
+- users may not be able to create, edit or delete contests
+
+- add evoting counting circle
+
+- added view partial counting circle results flag to domain of influence
+
+### 🔄 Changed
+
+- adjust domain of influence overview overflow height
+
+### 🆕 Added
+
+- add couting circle table overflow
+
+- add unsaved changes guard and unload host listener
+
+### 🔄 Changed
+
+- ux improvements
+
+## [v2.12.0] - 2024-04-08
+
+### 🆕 Added
+
+- add evoting counting circle
+
+## [v2.11.0] - 2024-03-14
+
+### 🆕 Added
+
+- add virtual top level domain of influence
+
+### 🆕 Added
+
+- add vote result algorithm popular and counting circle majority
+
+### 🆕 Added
+
+- add political assembly
+
+### :new: Added
+
+- added permissions for canton admin
+
+### :new: Added
+
+- added canton to counting circle
+
+## [v2.10.1] - 2024-02-06
+
+### 🔄 Changed
+
+- Standardized proportional election mandate algorithms in unions
+
+## [v2.10.0] - 2024-02-06
+
+### 🆕 Added
+
+- Double proportional election mandate algorithms
+
+## [v2.9.2] - 2024-02-02
+
+### 🔄 Changed
+
+- update voting-lib to v2.6.3
+
+## [v2.9.1] - 2024-02-01
+
+### 🔄 Changed
+
+- remove domain of influence type hierarchy checks
+
+## [v2.9.0] - 2024-01-31
+
+### 🆕 Added
+
+- Add counting circle electorate
+
+## [v2.8.0] - 2024-01-26
+
+### 🆕 Added
+
+- add candidate check digit
+
+## [v2.7.0] - 2024-01-10
+
+### :lock: Security
+
+- change from roles to permissions
+
+## [v2.6.0] - 2024-01-04
+
+### 🆕 Added
+
+- add new zh features flag
+
+## [v2.5.1] - 2023-12-22
+
+### 🔄 Changed
+
+- load canton defaults for vote
+
+## [v2.5.0] - 2023-12-20
+
+### 🆕 Added
+
+- Add counting machine flag to canton settings
+
+## [v2.4.0] - 2023-12-19
+
+### 🆕 Added
+
+- add multiple vote ballots
+
+## [v2.3.5] - 2023-11-28
+
+### :arrows_counterclockwise: Changed
+
+- apply strict policy for files that should not be cached
+
+## [v2.3.4] - 2023-11-27
+
+### :arrows_counterclockwise: Changed
+
+- configure caching for statically named resource config.js
+- set version tag for referenced config.js in index.html to enforce initial client-side cache invalidation
 
 ## [v2.3.3] - 2023-11-24
 

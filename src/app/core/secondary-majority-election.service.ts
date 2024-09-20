@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -178,6 +178,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setAllowedCandidates(data.allowedCandidates);
     result.setPrimaryMajorityElectionId(data.primaryMajorityElectionId);
     result.setActive(data.active);
+    result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
     return result;
   }
 
@@ -191,6 +192,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setAllowedCandidates(data.allowedCandidates);
     result.setPrimaryMajorityElectionId(data.primaryMajorityElectionId);
     result.setActive(data.active);
+    result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
     return result;
   }
 
@@ -210,7 +212,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
     fillProtoMap(result.getPartyMap(), data.party);
-    result.setSex(data.sex ?? SexType.SEX_TYPE_UNDEFINED);
+    result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setSecondaryMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);
@@ -235,7 +237,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
     fillProtoMap(result.getPartyMap(), data.party);
-    result.setSex(data.sex ?? SexType.SEX_TYPE_UNDEFINED);
+    result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setSecondaryMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);

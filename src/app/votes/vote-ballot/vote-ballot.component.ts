@@ -1,30 +1,25 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { LanguageService } from '../../core/language.service';
-import { Ballot, BallotQuestion, BallotQuestionType, BallotType, newBallot } from '../../core/models/vote.model';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Vote } from '../../core/models/vote.model';
+import { BallotType, VoteType } from '@abraxas/voting-basis-service-proto/grpc/shared/vote_pb';
+import { VoteStandardBallotComponent } from './vote-standard-ballot/vote-standard-ballot.component';
+import { VoteVariantsOnSingleBallotComponent } from './vote-variants-on-single-ballot/vote-variants-on-single-ballot.component';
+import { VoteVariantsOnMultipleBallotsComponent } from './vote-variants-on-multiple-ballots/vote-variants-on-multiple-ballots.component';
+import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-vote-ballot',
   templateUrl: './vote-ballot.component.html',
-  styleUrls: ['./vote-ballot.component.scss'],
 })
-export class VoteBallotComponent implements OnInit {
-  private static readonly maxVariantBallotQuestions: number = 3;
-
-  public BallotType: typeof BallotType = BallotType;
-  public BallotQuestionType: typeof BallotQuestionType = BallotQuestionType;
-  public ballotTypes: EnumItemDescription<BallotType>[] = [];
-  public mainBallotQuestionTypes: EnumItemDescription<BallotQuestionType>[] = [];
-
-  @Input()
-  public data!: Ballot[];
+export class VoteBallotComponent {
+  public userVoteTypeDescriptions: EnumItemDescription<UserVoteType>[] = [];
+  public userVoteTypes: typeof UserVoteType = UserVoteType;
 
   @Input()
   public testingPhaseEnded: boolean = false;
@@ -33,125 +28,76 @@ export class VoteBallotComponent implements OnInit {
   public locked: boolean = false;
 
   @Input()
-  public eVoting: boolean = false;
+  public eVoting?: boolean;
 
   @Input()
-  public multipleVoteBallotsEnabled: boolean = false;
+  public domainOfInfluenceType?: DomainOfInfluenceType;
 
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private readonly enumUtil: EnumUtil, private readonly i18n: TranslateService) {}
+  @ViewChild(VoteStandardBallotComponent)
+  public standardBallotComponent?: VoteStandardBallotComponent;
+
+  @ViewChild(VoteVariantsOnSingleBallotComponent)
+  public variantsOnSingleBallotComponent?: VoteVariantsOnSingleBallotComponent;
+
+  @ViewChild(VoteVariantsOnMultipleBallotsComponent)
+  public variantsOnMultipleBallotComponent?: VoteVariantsOnMultipleBallotsComponent;
+
+  public userVoteType?: UserVoteType;
+  private _vote?: Vote;
+  private readonly allUserVoteTypeDescriptions: EnumItemDescription<UserVoteType>[];
+
+  constructor(private readonly enumUtil: EnumUtil) {
+    this.allUserVoteTypeDescriptions = this.enumUtil.getArrayWithDescriptions<UserVoteType>(UserVoteType, 'VOTE.USER_VOTE_TYPE.TYPES.');
+    this.userVoteTypeDescriptions = [...this.allUserVoteTypeDescriptions];
+  }
+
+  @Input()
+  public set vote(value: Vote) {
+    if (value.ballots === undefined) {
+      return;
+    }
+
+    this._vote = value;
+    if (value.type === VoteType.VOTE_TYPE_VARIANT_QUESTIONS_ON_MULTIPLE_BALLOTS) {
+      this.userVoteType = UserVoteType.VariantQuestionsOnMultipleBallots;
+    } else if (value.ballots.length > 0 && value.ballots[0].ballotType == BallotType.BALLOT_TYPE_VARIANTS_BALLOT) {
+      this.userVoteType = UserVoteType.VariantQuestionsOnSingleBallot;
+    } else {
+      this.userVoteType = UserVoteType.StandardVote;
+    }
+  }
+
+  public get vote(): Vote | undefined {
+    return this._vote;
+  }
+
+  @Input()
+  public set multipleVoteBallotsEnabled(value: boolean) {
+    if (value === undefined) {
+      return;
+    }
+
+    this.userVoteTypeDescriptions = [...this.allUserVoteTypeDescriptions];
+
+    if (!value && this.userVoteType !== UserVoteType.VariantQuestionsOnMultipleBallots) {
+      this.userVoteTypeDescriptions = this.userVoteTypeDescriptions.filter(x => x.value !== UserVoteType.VariantQuestionsOnMultipleBallots);
+    }
+  }
 
   public get canSave(): boolean {
     return (
-      this.data &&
-      this.data.every(
-        b =>
-          b.ballotQuestions.every(bq => LanguageService.allLanguagesPresent(bq.question)) &&
-          b.tieBreakQuestions.every(tbq => LanguageService.allLanguagesPresent(tbq.question)),
-      )
+      !!this.standardBallotComponent?.canSave ||
+      !!this.variantsOnSingleBallotComponent?.canSave ||
+      !!this.variantsOnMultipleBallotComponent?.canSave
     );
   }
+}
 
-  public ngOnInit(): void {
-    this.ballotTypes = this.enumUtil.getArrayWithDescriptions<BallotType>(BallotType, 'VOTE.BALLOT_TYPE.TYPES.');
-    this.mainBallotQuestionTypes = [
-      {
-        value: BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT,
-        description: this.i18n.instant('VOTE.BALLOT_QUESTION_TYPE.TYPES.' + BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT),
-      },
-    ];
-  }
-
-  public addQuestion(ballot: Ballot): void {
-    const nextQuestionNumber = ballot.ballotQuestions.length + 1;
-    ballot.ballotQuestions.push({
-      number: nextQuestionNumber,
-      question: new Map<string, string>(),
-      type:
-        nextQuestionNumber === 1
-          ? BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT
-          : BallotQuestionType.BALLOT_QUESTION_TYPE_COUNTER_PROPOSAL,
-    });
-    this.updateTieBreakQuestions(ballot);
-  }
-
-  public canAddQuestion(ballot: Ballot): boolean {
-    return (
-      ballot.ballotType === BallotType.BALLOT_TYPE_VARIANTS_BALLOT &&
-      ballot.ballotQuestions.length < VoteBallotComponent.maxVariantBallotQuestions
-    );
-  }
-
-  public ballotTypeChange(ballot: Ballot, ballotType: BallotType): void {
-    ballot.ballotType = ballotType;
-
-    if (ballotType === BallotType.BALLOT_TYPE_STANDARD_BALLOT) {
-      ballot.ballotQuestions = ballot.ballotQuestions.filter(bq => bq.number === 1);
-      ballot.tieBreakQuestions = [];
-      ballot.hasTieBreakQuestions = false;
-      return;
-    }
-
-    if (ballot.ballotQuestions.length > 1) {
-      return;
-    }
-
-    ballot.ballotQuestions.push({
-      number: 2,
-      question: new Map<string, string>(),
-      type: BallotQuestionType.BALLOT_QUESTION_TYPE_COUNTER_PROPOSAL,
-    });
-  }
-
-  public removeQuestion(question: BallotQuestion, ballot: Ballot): void {
-    const questionNumber = question.number;
-    ballot.ballotQuestions = ballot.ballotQuestions.filter(bq => bq !== question);
-
-    const questionsToRenumber = ballot.ballotQuestions.filter(bq => bq.number > questionNumber);
-    for (const q of questionsToRenumber) {
-      q.number -= 1;
-    }
-
-    this.updateTieBreakQuestions(ballot);
-  }
-
-  public updateTieBreakQuestions(ballot: Ballot): void {
-    const existingQuestions = ballot.tieBreakQuestions;
-    ballot.tieBreakQuestions = [];
-    if (!ballot.hasTieBreakQuestions) {
-      return;
-    }
-
-    let idx = 0;
-    for (let i = 0; i < ballot.ballotQuestions.length - 1; i++) {
-      for (let j = i + 1; j < ballot.ballotQuestions.length; j++) {
-        ballot.tieBreakQuestions.push({
-          number: ballot.tieBreakQuestions.length + 1,
-          question: existingQuestions.length > idx ? existingQuestions[idx].question : LanguageService.fillAllLanguages(''),
-          question1Number: i + 1,
-          question2Number: j + 1,
-        });
-        idx++;
-      }
-    }
-  }
-
-  public addBallot(): void {
-    const ballot = newBallot();
-    ballot.position = this.data.length + 1;
-    this.data.push(ballot);
-  }
-
-  public removeBallot(ballot: Ballot): void {
-    const ballotPosition = ballot.position;
-    this.data.splice(ballotPosition - 1, 1);
-
-    const ballotsToReposition = this.data.filter(b => b.position > ballotPosition);
-
-    for (const b of ballotsToReposition) {
-      b.position -= 1;
-    }
-  }
+enum UserVoteType {
+  StandardVote = 'standard-vote',
+  VariantQuestionsOnSingleBallot = 'variant-questions-on-single-ballot',
+  VariantQuestionsOnMultipleBallots = 'variant-questions-on-multiple-ballots',
 }

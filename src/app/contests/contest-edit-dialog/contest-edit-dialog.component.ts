@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -9,7 +9,7 @@ import { DatePipe } from '@angular/common';
 import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { ContestService } from '../../core/contest.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { LanguageService } from '../../core/language.service';
@@ -18,6 +18,7 @@ import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { getDefaultTimeDate } from '../../core/utils/time.utils';
 import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
+import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 
 @Component({
   selector: 'app-contest-edit-dialog',
@@ -49,6 +50,7 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
   public preconfiguredDates: DisplayPreconfiguredDate[] = [];
   public loading: boolean = false;
   public selectedPreconfiguredDate?: DisplayPreconfiguredDate;
+  public cantonDefaults?: DomainOfInfluenceCantonDefaults;
 
   public pastContestsLoading: boolean = false;
   public pastContests: ContestPastDropdownItem[] = [];
@@ -183,18 +185,8 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
         this.updateEndOfTestingPhaseDateAndTime();
       }
 
-      const rootDomainOfInfluences = this.domainOfInfluences.filter(x => !x.parentId);
-
-      // if the user has one or more root DomainOfInfluence, only these can be chosen
-      if (rootDomainOfInfluences.length > 0) {
-        this.domainOfInfluences = rootDomainOfInfluences;
-      }
-
-      // if the user has only one DomainOfInfluence, he doesn't need to choose it
-      if (this.domainOfInfluences.length === 1) {
-        this.data.domainOfInfluenceId = this.domainOfInfluences[0].id;
-      }
-
+      await this.loadCantonDefaults();
+      await this.setDomainOfInfluences();
       await this.loadPastContestsIfNeeded();
     } finally {
       this.loading = false;
@@ -210,6 +202,7 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
     }
 
     this.data.domainOfInfluenceId = doiId;
+    this.data.domainOfInfluence = this.domainOfInfluences.find(x => x.id === doiId)!;
     await this.loadPastContestsIfNeeded();
   }
 
@@ -290,7 +283,7 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
   }
 
   private async loadPastContestsIfNeeded(): Promise<void> {
-    if (!this.data.date || !this.data.domainOfInfluenceId) {
+    if (!this.data.date || !this.data.domainOfInfluenceId || this.cantonDefaults?.internalPlausibilisationDisabled) {
       return;
     }
 
@@ -364,6 +357,35 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
     this.data.endOfTestingPhase.setDate(this.data.endOfTestingPhase.getDate() - this.defaultEndOfTestingPhaseOffsetDate);
     this.setTime(this.defaultEndOfTestingPhaseTime, this.data.endOfTestingPhase);
     this.endOfTestingPhaseTimeValue = this.defaultEndOfTestingPhaseTime;
+  }
+
+  private async loadCantonDefaults(): Promise<void> {
+    if (this.domainOfInfluences.length === 0) {
+      return;
+    }
+
+    // take first domain of influence since all domain of influences of a tenant should be in the same canton
+    this.cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(this.domainOfInfluences[0].id);
+  }
+
+  private async setDomainOfInfluences(): Promise<void> {
+    if (!this.cantonDefaults) {
+      return;
+    }
+
+    const rootDomainOfInfluences = this.domainOfInfluences.filter(x => !x.parentId);
+
+    // if the user has one or more root DomainOfInfluence and the canton setting to create contest on
+    // highest hierarchical level is enabled, only these can be chosen
+    if (rootDomainOfInfluences.length > 0 && this.cantonDefaults.createContestOnHighestHierarchicalLevelEnabled) {
+      this.domainOfInfluences = rootDomainOfInfluences;
+    }
+
+    // if the user has only one DomainOfInfluence, he doesn't need to choose it
+    if (this.domainOfInfluences.length === 1) {
+      this.data.domainOfInfluenceId = this.domainOfInfluences[0].id;
+      this.data.domainOfInfluence = this.domainOfInfluences[0];
+    }
   }
 }
 

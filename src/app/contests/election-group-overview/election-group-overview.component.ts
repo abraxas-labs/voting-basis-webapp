@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -33,7 +33,10 @@ export class ElectionGroupOverviewComponent implements OnInit {
   private tenantDomainOfInfluences: DomainOfInfluence[] = [];
   public dataSource = new TableDataSource<ElectionGroup>();
 
-  constructor(private readonly domainOfInfluenceService: DomainOfInfluenceService, private readonly dialogService: DialogService) {}
+  constructor(
+    private readonly domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly dialogService: DialogService,
+  ) {}
 
   public async ngOnInit(): Promise<void> {
     this.loading = true;

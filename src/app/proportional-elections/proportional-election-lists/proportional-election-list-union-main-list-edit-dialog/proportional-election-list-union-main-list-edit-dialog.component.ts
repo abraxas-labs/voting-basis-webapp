@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -20,6 +20,7 @@ export class ProportionalElectionListUnionMainListEditDialogComponent {
   public data: ProportionalElectionListUnion;
   public lists: ProportionalElectionList[] = [];
   public saving: boolean = false;
+  public noMainList: boolean = true;
 
   constructor(
     private readonly dialogRef: MatDialogRef<ProportionalElectionListUnionMainListEditDialogData>,
@@ -35,7 +36,7 @@ export class ProportionalElectionListUnionMainListEditDialogComponent {
   public async save(): Promise<void> {
     try {
       this.saving = true;
-      await this.proportionalElectionService.updateListUnionMainList(this.data.id, this.data.proportionalElectionMainListId!);
+      await this.proportionalElectionService.updateListUnionMainList(this.data.id, this.data.proportionalElectionMainListId);
 
       this.snackbarService.success(this.i18n.instant('APP.SAVED'));
       const result: ProportionalElectionListUnionMainListEditDialogResult = {
@@ -49,6 +50,22 @@ export class ProportionalElectionListUnionMainListEditDialogComponent {
 
   public cancel(): void {
     this.dialogRef.close();
+  }
+
+  public setMainListId(value: string): void {
+    this.data.proportionalElectionMainListId = value;
+
+    if (!!value) {
+      this.noMainList = false;
+    }
+  }
+
+  public setNoMainList(value: boolean): void {
+    this.noMainList = value;
+
+    if (this.noMainList) {
+      this.data.proportionalElectionMainListId = '';
+    }
   }
 }
 

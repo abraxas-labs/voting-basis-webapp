@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -30,7 +30,10 @@ export class ExportConfigurationsComponent {
   @Output()
   public configurationsChange: EventEmitter<ExportConfiguration[]> = new EventEmitter<ExportConfiguration[]>();
 
-  constructor(private readonly dialogService: DialogService, private readonly enumUtil: EnumUtil) {
+  constructor(
+    private readonly dialogService: DialogService,
+    private readonly enumUtil: EnumUtil,
+  ) {
     this.providers = enumUtil.getArrayWithDescriptions<ExportProvider>(
       ExportProvider,
       'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDERS.',

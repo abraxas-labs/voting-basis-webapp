@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -60,5 +60,13 @@ export class DomainOfInfluenceTree extends Tree<DomainOfInfluence> {
 
   protected getChildren(node: DomainOfInfluence): DomainOfInfluence[] | undefined {
     return node.childrenList;
+  }
+
+  protected override matches(node: TreeNode<DomainOfInfluence>, upperSearchValue: string): boolean {
+    if (super.matches(node, upperSearchValue)) {
+      return true;
+    }
+
+    return node.data.code.toUpperCase().includes(upperSearchValue) || node.data.authorityName.toUpperCase().includes(upperSearchValue);
   }
 }

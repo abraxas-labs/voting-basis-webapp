@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -9,7 +9,7 @@ import { DatePipe } from '@angular/common';
 import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { ContestService } from '../../core/contest.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { LanguageService } from '../../core/language.service';
@@ -110,17 +110,7 @@ export class PoliticalAssemblyEditDialogComponent implements OnInit, OnDestroy {
         };
       });
 
-      const rootDomainOfInfluences = this.domainOfInfluences.filter(x => !x.parentId);
-
-      // if the user has one or more root DomainOfInfluence, only these can be chosen
-      if (rootDomainOfInfluences.length > 0) {
-        this.domainOfInfluences = rootDomainOfInfluences;
-      }
-
-      // if the user has only one DomainOfInfluence, he doesn't need to choose it
-      if (this.domainOfInfluences.length === 1) {
-        this.data.domainOfInfluenceId = this.domainOfInfluences[0].id;
-      }
+      await this.setDomainOfInfluences();
     } finally {
       this.loading = false;
     }
@@ -197,6 +187,27 @@ export class PoliticalAssemblyEditDialogComponent implements OnInit, OnDestroy {
       politicalAssembly: this.data,
     };
     this.dialogRef.close(result);
+  }
+
+  private async setDomainOfInfluences(): Promise<void> {
+    if (this.domainOfInfluences.length === 0) {
+      return;
+    }
+
+    // take first domain of influence since all domain of influences of a tenant should be in the same canton
+    const cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(this.domainOfInfluences[0].id);
+    const rootDomainOfInfluences = this.domainOfInfluences.filter(x => !x.parentId);
+
+    // if the user has one or more root DomainOfInfluence and the canton setting to create contest on
+    // highest hierarchical level is enabled, only these can be chosen
+    if (rootDomainOfInfluences.length > 0 && cantonDefaults.createContestOnHighestHierarchicalLevelEnabled) {
+      this.domainOfInfluences = rootDomainOfInfluences;
+    }
+
+    // if the user has only one DomainOfInfluence, he doesn't need to choose it
+    if (this.domainOfInfluences.length === 1) {
+      this.data.domainOfInfluenceId = this.domainOfInfluences[0].id;
+    }
   }
 }
 

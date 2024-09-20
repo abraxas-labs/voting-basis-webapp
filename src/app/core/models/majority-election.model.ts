@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -17,9 +17,13 @@ import { BallotNumberGeneration } from './ballot-number-generation.model';
 import { SexType } from './sex-type.model';
 
 export { MajorityElectionProto };
-export type MajorityElection = Omit<MajorityElectionProto.AsObject, 'shortDescriptionMap' | 'officialDescriptionMap'> & {
+export type MajorityElection = Omit<
+  MajorityElectionProto.AsObject,
+  'shortDescriptionMap' | 'officialDescriptionMap' | 'federalIdentification'
+> & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
+  federalIdentification?: number;
 };
 export { MajorityElectionMandateAlgorithmProto as MajorityElectionMandateAlgorithm };
 export { MajorityElectionResultEntryProto as MajorityElectionResultEntry };

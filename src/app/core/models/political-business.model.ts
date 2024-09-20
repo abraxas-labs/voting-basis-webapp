@@ -1,16 +1,20 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
 import { PoliticalBusiness as PoliticalBusinessProto } from '@abraxas/voting-basis-service-proto/grpc/models/political_business_pb';
-import { PoliticalBusinessType as PoliticalBusinessTypeProto } from '@abraxas/voting-basis-service-proto/grpc/shared/political_business_pb';
+import {
+  PoliticalBusinessType as PoliticalBusinessTypeProto,
+  PoliticalBusinessSubType as PoliticalBusinessSubTypeProto,
+} from '@abraxas/voting-basis-service-proto/grpc/shared/political_business_pb';
 import { DomainOfInfluence } from './domain-of-influence.model';
 import { BaseEntityMessage } from './message.model';
 
 export { PoliticalBusinessProto };
 export { PoliticalBusinessTypeProto as PoliticalBusinessType };
+export { PoliticalBusinessSubTypeProto as PoliticalBusinessSubType };
 export type PoliticalBusiness = Omit<PoliticalBusinessProto.AsObject, 'shortDescription' | 'officialDescription' | 'domainOfInfluence'> & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;

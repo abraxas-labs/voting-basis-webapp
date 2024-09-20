@@ -83,7 +83,8 @@
       <bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></bc-data-row>
     </bc-table>
 
-    <bc-number class="mt-2" *ngIf="entry" [label]="'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate" [min]="0"
+    <bc-number *ngIf="entry && !entry.election.individualCandidatesDisabled"
+      [label]="'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate" [min]="0"
       [max]="entry.election.numberOfMandates - entry.entry.blankRowCount"
       [ngModel]="entry.entry.individualCandidatesVoteCount"
       (ngModelChange)="entry.entry.individualCandidatesVoteCount = $event; contentChanged.emit()"></bc-number>

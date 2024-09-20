@@ -1,0 +1,102 @@
+<div class="form mt-4" *ngIf="!!vote">
+  <ng-container *ngFor="let ballot of filterBallots(false); let last = last">
+    <ng-container *ngTemplateOutlet="ballotTemplate; context: { $implicit: ballot, canRemove: last && ballot.position > 2 }">
+    </ng-container>
+  </ng-container>
+
+  <bc-button
+    *ngIf="!locked && canAddBallot()"
+    variant="tertiary"
+    icon="plus"
+    class="block"
+    (click)="addBallot(); contentChanged.emit()"
+    [label]="'VOTE.BALLOT.ADD' | translate"
+  >
+  </bc-button>
+
+  <h3 translate class="my-2">VOTE.TIE_BREAK_QUESTION.TITLE</h3>
+  <bc-dropdown
+    [items]="getPossibleTieBreakQuestionCount()"
+    [label]="'VOTE.TIE_BREAK_QUESTION_COUNT.TITLE' | translate"
+    [disabled]="testingPhaseEnded"
+    displayExpr="description"
+    valueExpr="value"
+    [required]="true"
+    [(value)]="tieBreakQuestionCount"
+    (valueChange)="updateTieBreakBallots(); tryPrefillQuestions(); contentChanged.emit()"
+    [subscriptSizing]="'dynamic'"
+  ></bc-dropdown>
+
+  <ng-container *ngFor="let ballot of filterBallots(true)">
+    <ng-container *ngTemplateOutlet="ballotTemplate; context: { $implicit: ballot, canRemove: false }"> </ng-container>
+  </ng-container>
+
+  <ng-template #ballotTemplate let-ballot let-canRemove="canRemove">
+    <h2 *ngIf="vote.ballots.length > 1">
+      <span>{{ 'VOTE.BALLOT.TITLE' | translate }} {{ ballot.position }}</span>
+      <bc-icon
+        *ngIf="!locked && canRemove"
+        icon="trash"
+        iconColor="error"
+        class="ml-2 clickable"
+        (click)="removeBallot(ballot); contentChanged.emit()"
+      >
+      </bc-icon>
+    </h2>
+
+    <div class="form-group">
+      <div class="flex">
+        <bc-dropdown
+          [items]="getPossibleSubTypes(ballot)"
+          [label]="'VOTE.BALLOT_SUB_TYPE.TITLE' | translate"
+          [disabled]="testingPhaseEnded"
+          displayExpr="description"
+          valueExpr="value"
+          [required]="true"
+          [(value)]="ballot.subType"
+          (valueChange)="tryPrefillQuestions(); contentChanged.emit()"
+          [subscriptSizing]="'dynamic'"
+        ></bc-dropdown>
+        <!-- This id has to match the definition of the eCH-0252 export in Ausmittlung -->
+        <bc-text
+          class="ml-4"
+          [label]="'VOTE.MAIN_QUESTION_ID' | translate"
+          [required]="true"
+          [value]="ballot?.id ? ballot.id + '_1' : ''"
+          [disabled]="true"
+          [subscriptSizing]="'dynamic'"
+        >
+        </bc-text>
+      </div>
+
+      <app-translated-formfield
+        [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
+        [disabled]="locked"
+        [maxlength]="300"
+        [value]="ballot.shortDescription"
+        (valueChange)="ballot.shortDescription = $event; contentChanged.emit()"
+        [singleLanguageInput]="true"
+      ></app-translated-formfield>
+      <app-translated-textarea
+        [label]="'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate"
+        [disabled]="locked"
+        [maxlength]="700"
+        class="full-width"
+        [value]="ballot.officialDescription"
+        (valueChange)="ballot.officialDescription = $event; contentChanged.emit()"
+        [singleLanguageInput]="!eVoting"
+      ></app-translated-textarea>
+
+      <app-translated-textarea
+        *ngIf="eVoting"
+        [label]="'VOTE.QUESTION.TITLE_STANDARD' | translate"
+        [disabled]="locked"
+        [maxlength]="700"
+        [value]="ballot.ballotQuestions[0].question"
+        (valueChange)="ballot.ballotQuestions[0].question = $event; contentChanged.emit()"
+        class="full-width"
+      >
+      </app-translated-textarea>
+    </div>
+  </ng-template>
+</div>

@@ -1,4 +1,4 @@
-<bc-table class="w-full" [dataSource]="selectedCandidates">
+<bc-table class="w-full mb-3" [dataSource]="selectedCandidates">
   <ng-container columnDef="number">
     <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</bc-header-cell>
     <bc-data-cell *dataCellDef="let element">{{ element.number }}</bc-data-cell>
@@ -18,4 +18,7 @@
   <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
 </bc-table>
 
-<p class="mt-2">{{'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate}}: {{individualCandidatesVoteCount}}</p>
+<p *ngIf="(majorityElection && !majorityElection.individualCandidatesDisabled)
+  || (secondaryMajorityElection && !secondaryMajorityElection.individualCandidatesDisabled)">
+  {{'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate}}: {{individualCandidatesVoteCount}}
+</p>

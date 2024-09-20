@@ -1,27 +1,29 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
 
 import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
-import { CountingCircle } from '../../core/models/counting-circle.model';
+import { CountingCircle, CountingCircleMessage } from '../../core/models/counting-circle.model';
 import { PermissionService } from '../../core/permission.service';
 import { HistorizationFilter, newHistorizationFilter } from '../../shared/historization-filter-bar/historization-filter-bar.component';
 import { Permissions } from '../../core/models/permissions.model';
 import { CountingCircleState } from '@abraxas/voting-basis-service-proto/grpc/shared/counting_circle_pb';
 import { FilterDirective, SortDirective, TableDataSource } from '@abraxas/base-components';
+import { Subscription } from 'rxjs';
+import { EntityState } from '../../core/models/message.model';
 
 @Component({
   selector: 'app-counting-circle-overview',
   templateUrl: './counting-circle-overview.component.html',
   styleUrls: ['./counting-circle-overview.component.scss'],
 })
-export class CountingCircleOverviewComponent implements OnInit, AfterViewInit {
+export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public readonly nameColumn = 'name';
   public readonly bfsColumn = 'bfs';
   public readonly codeColumn = 'code';
@@ -55,6 +57,8 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit {
 
   public historizationFilter: HistorizationFilter = newHistorizationFilter();
   public stateList: EnumItemDescription<CountingCircleState>[] = [];
+
+  private changesSubscription?: Subscription;
 
   constructor(
     private readonly router: Router,
@@ -94,6 +98,7 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit {
         Permissions.CountingCircle.MergeAll,
       );
       this.dataSource.data = await this.countingCircleService.list();
+      this.startChangesListener();
     } finally {
       this.loading = false;
     }
@@ -102,6 +107,10 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit {
   public ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.filter = this.filter;
+  }
+
+  public ngOnDestroy(): void {
+    this.changesSubscription?.unsubscribe();
   }
 
   public async create(): Promise<void> {
@@ -143,6 +152,30 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit {
     this.columns = [...this.allColumns];
     if (this.historizationFilter.date) {
       this.columns.splice(-1, 1);
+    }
+  }
+
+  private startChangesListener(): void {
+    this.changesSubscription?.unsubscribe();
+
+    this.changesSubscription = this.countingCircleService.getChanges().subscribe(e => this.handleCountingCircleMessage(e.countingCircle));
+  }
+
+  private handleCountingCircleMessage(e: CountingCircleMessage): void {
+    const countingCircle = e.data;
+    if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
+      this.dataSource.data = this.dataSource.data.filter(c => c.id !== countingCircle.id);
+      return;
+    }
+
+    const existingCountingCircleIndex = this.dataSource.data.map(x => x.id).indexOf(countingCircle.id);
+    if (existingCountingCircleIndex >= 0) {
+      this.dataSource.data[existingCountingCircleIndex] = countingCircle;
+
+      // trigger angular change detection
+      this.dataSource.data = [...this.dataSource.data];
+    } else {
+      this.dataSource.data = [...this.dataSource.data, countingCircle];
     }
   }
 }

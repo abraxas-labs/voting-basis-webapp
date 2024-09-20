@@ -1,5 +1,5 @@
 /**
- * (c) Copyright 2024 by Abraxas Informatik AG
+ * (c) Copyright by Abraxas Informatik AG
  *
  * For license information see LICENSE file.
  */
@@ -107,6 +107,7 @@ export class ProportionalElectionCandidatesComponent {
       testingPhaseEnded: false,
       parties: this.parties,
       doiType: this.currentDomainOfInfluence.type,
+      listParty: this.currentList.party,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);

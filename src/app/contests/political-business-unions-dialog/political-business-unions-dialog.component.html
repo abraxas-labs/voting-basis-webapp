@@ -10,7 +10,7 @@
             (buttonClick)="createPoliticalBusinessUnion()"></bc-button>
 
           <bc-button
-            *ngIf="selectedPoliticalBusinessUnion && selectedPoliticalBusinessUnion.secureConnectId === tenantId"
+            *ngIf="selectedPoliticalBusinessUnion && (selectedPoliticalBusinessUnion.secureConnectId === tenantId || hasAdminPermissions)"
             variant="tertiary" [disabled]="disabled" [label]="'POLITICAL_BUSINESS_UNION.ASSIGN' | translate"
             (buttonClick)="updateAssignedPoliticalBusinesses()"></bc-button>
         </div>
@@ -39,7 +39,7 @@
           <ng-container columnDef="actions">
             <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <div *ngIf="element.secureConnectId === tenantId" class="flex">
+              <div *ngIf="element.secureConnectId === tenantId || hasAdminPermissions" class="flex">
                 <span *ngIf="element.secureConnectId === tenantId"
                   translate>POLITICAL_BUSINESS_UNION.OWN_POLITICAL_BUSINESS_UNION</span>
                 <bc-icon (click)="editPoliticalBusinessUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>

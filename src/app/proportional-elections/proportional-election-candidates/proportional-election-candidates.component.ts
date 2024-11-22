@@ -54,6 +54,12 @@ export class ProportionalElectionCandidatesComponent {
   public locked: boolean = false;
 
   @Input()
+  public candidateLocalityRequired: boolean = false;
+
+  @Input()
+  public candidateOriginRequired: boolean = false;
+
+  @Input()
   public parties: DomainOfInfluenceParty[] = [];
 
   @Input()
@@ -108,6 +114,8 @@ export class ProportionalElectionCandidatesComponent {
       parties: this.parties,
       doiType: this.currentDomainOfInfluence.type,
       listParty: this.currentList.party,
+      candidateLocalityRequired: this.candidateLocalityRequired,
+      candidateOriginRequired: this.candidateOriginRequired,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);
@@ -125,6 +133,8 @@ export class ProportionalElectionCandidatesComponent {
       testingPhaseEnded: this.testingPhaseEnded,
       parties: this.parties,
       doiType: this.currentDomainOfInfluence.type,
+      candidateLocalityRequired: this.candidateLocalityRequired,
+      candidateOriginRequired: this.candidateOriginRequired,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);

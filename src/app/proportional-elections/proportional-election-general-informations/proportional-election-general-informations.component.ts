@@ -15,6 +15,7 @@ import {
   ProportionalElectionMandateAlgorithm,
 } from '../../core/models/proportional-election.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
+import { PermissionService } from '../../core/permission.service';
 
 @Component({
   selector: 'app-proportional-election-general-informations',
@@ -34,8 +35,9 @@ export class ProportionalElectionGeneralInformationsComponent
     enumUtil: EnumUtil,
     contestService: ContestService,
     doiLevelService: DomainOfInfluenceLevelService,
+    permissionService: PermissionService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, newProportionalElection());
+    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, permissionService, newProportionalElection());
   }
 
   public get canSave(): boolean {

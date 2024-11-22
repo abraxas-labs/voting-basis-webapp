@@ -13,8 +13,6 @@ import { ContestListComponent } from './contest-list/contest-list.component';
 import { ContestOverviewComponent } from './contest-overview/contest-overview.component';
 import { ContestPastUnlockDialogComponent } from './contest-past-unlock-dialog/contest-past-unlock-dialog.component';
 import { ContestsRoutingModule } from './contests-routing.module';
-import { ElectionGroupEditDialogComponent } from './election-group-edit-dialog/election-group-edit-dialog.component';
-import { ElectionGroupOverviewComponent } from './election-group-overview/election-group-overview.component';
 import { MajorityElectionUnionDetailComponent } from './majority-election-union-detail/majority-election-union-detail.component';
 import { PoliticalBusinessUnionEditDialogComponent } from './political-business-union-edit-dialog/political-business-union-edit-dialog.component';
 import { PoliticalBusinessUnionEntriesEditDialogComponent } from './political-business-union-entries-edit-dialog/political-business-union-entries-edit-dialog.component';
@@ -30,8 +28,6 @@ const components = [
   ContestListComponent,
   ContestOverviewComponent,
   ContestPastUnlockDialogComponent,
-  ElectionGroupEditDialogComponent,
-  ElectionGroupOverviewComponent,
   MajorityElectionUnionDetailComponent,
   PoliticalBusinessUnionEditDialogComponent,
   PoliticalBusinessUnionEntriesEditDialogComponent,

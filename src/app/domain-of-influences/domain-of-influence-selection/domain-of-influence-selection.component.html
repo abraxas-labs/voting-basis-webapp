@@ -1,0 +1,14 @@
+<bc-autocomplete
+  class="mt-2 full-width"
+  [label]="'DOMAIN_OF_INFLUENCE.SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE' | translate"
+  [items]="filteredDomainOfInfluences"
+  [disabled]="disabled"
+  [required]="true"
+  [clearable]="false"
+  displayExpr="name"
+  [focusOnLoad]="false"
+  [value]="this.selectedDomainOfInfluenceValue?.name"
+  (valueChange)="setSelectedDomainOfInfluence($event)"
+  (filterValueChange)="searchDomainOfInfluences($event)"
+  [subscriptSizing]="'dynamic'"
+></bc-autocomplete>

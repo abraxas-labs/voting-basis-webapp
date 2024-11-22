@@ -135,7 +135,7 @@
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate"
-    [required]="!isCommunalDoiType"
+    [required]="isCandidateLocalityRequired"
     [disabled]="isCandidateReference"
     [value]="candidate.locality"
     (valueChange)="candidate.locality = $event; contentChanged.emit()"
@@ -144,7 +144,7 @@
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.ORIGIN' | translate"
-    [required]="!isCommunalDoiType"
+    [required]="isCandidateOriginRequired"
     [disabled]="isCandidateReference"
     [value]="candidate.origin"
     (valueChange)="candidate.origin = $event; contentChanged.emit()"

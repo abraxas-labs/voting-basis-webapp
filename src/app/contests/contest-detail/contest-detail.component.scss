@@ -2,6 +2,8 @@
 
 ::ng-deep .bc-column-active {
   @include table.truncate-long-sortable-table-header();
+
+  width: 7rem;
 }
 
 ::ng-deep .bc-column-owner {
@@ -10,10 +12,8 @@
 
 ::ng-deep .bc-column-number {
   @include table.truncate-long-sortable-table-header();
-}
 
-::ng-deep .bc-column-official-description {
-  @include table.truncate-long-sortable-table-header();
+  width: 4.5rem;
 }
 
 ::ng-deep .bc-column-short-description {
@@ -22,10 +22,24 @@
 
 ::ng-deep .bc-column-domain-of-influence-type {
   @include table.truncate-long-sortable-table-header();
+
+  width: 10rem;
 }
 
 .bc-column-actions {
   width: 2%;
+}
+
+.bc-column-political-business-union-description {
+  width: 4.5rem;
+}
+
+.bc-column-election-group-number {
+  width: 4.5rem;
+}
+
+.bc-column-type {
+  width: 11rem;
 }
 
 bc-paginator {
@@ -34,4 +48,14 @@ bc-paginator {
 
 bc-table {
   overflow-x: hidden;
+}
+
+::ng-deep .small-filter-component {
+  .mat-mdc-form-field-icon-suffix {
+    display: none;
+  }
+
+  .mat-mdc-form-field-icon-prefix {
+    display: none;
+  }
 }

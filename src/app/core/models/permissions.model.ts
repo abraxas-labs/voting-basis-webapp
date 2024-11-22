@@ -90,6 +90,18 @@ export class Permissions {
     Delete: Permissions.ContestPrefix + DeleteSuffix,
   };
 
+  private static readonly PoliticalBusinessPrefix = 'PoliticalBusiness';
+
+  public static readonly PoliticalBusiness = {
+    ActionsTenantSameCanton: Permissions.PoliticalBusinessPrefix + ':actions-tenant-same-canton',
+  };
+
+  private static readonly PoliticalBusinessUnionPrefix = 'PoliticalBusinessUnion';
+
+  public static readonly PoliticalBusinessUnion = {
+    ActionsTenantSameCanton: Permissions.PoliticalBusinessUnionPrefix + ':actions-tenant-same-canton',
+  };
+
   private static readonly VotePrefix = 'Vote';
   public static readonly Vote = {
     Create: Permissions.VotePrefix + CreateSuffix,

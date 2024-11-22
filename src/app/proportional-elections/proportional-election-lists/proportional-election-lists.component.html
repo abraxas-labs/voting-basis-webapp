@@ -111,7 +111,7 @@
         <ng-template #listUnionDescriptionCol let-element>
           <!-- 'List union descriptions are validated on the server, they do not contain user-controlled HTML.
           It is safe to display the description directly as HTML' -->
-          <div class="list-union-description" [innerHTML]="element | getTranslation | safeHtml"></div>
+          <div class="list-union-description" [innerHTML]="element | safeHtml"></div>
         </ng-template>
       </bc-table>
     </ng-template>
@@ -127,6 +127,8 @@
         [domainOfInfluenceId]="proportionalElection.domainOfInfluenceId"
         [testingPhaseEnded]="testingPhaseEnded"
         [locked]="locked"
+        [candidateLocalityRequired]="candidateLocalityRequired"
+        [candidateOriginRequired]="candidateOriginRequired"
         (candidateCreated)="candidateCreated(selectedList, $event)"
         (candidateDeleted)="candidateDeleted(selectedList, $event)"
         (candidateUpdated)="candidateAccumulationUpdated(selectedList, $event.candidate.accumulated, $event.wasAccumulated)"

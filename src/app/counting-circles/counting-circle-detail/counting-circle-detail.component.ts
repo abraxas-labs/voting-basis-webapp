@@ -196,7 +196,7 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
   }
 
   private async filterCantons(): Promise<void> {
-    const domainOfInfluences = await this.domainOfInfluenceService.listForCurrentTenant();
+    const domainOfInfluences = await this.domainOfInfluenceService.listTree();
     const cantons = distinct(
       domainOfInfluences.map(x => x.canton),
       x => x,
@@ -208,6 +208,8 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
 
     const canton = cantons[0];
     this.cantons = this.cantons.filter(x => x.value === canton);
-    this.data.canton = canton;
+    if (this.isNew) {
+      this.data.canton = canton;
+    }
   }
 }

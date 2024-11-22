@@ -26,11 +26,14 @@ export class MajorityElectionCandidateEditComponent {
   @Input()
   public isCandidateReference: boolean = false;
 
-  @Input()
-  public isCommunalDoiType: boolean = false;
-
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
+
+  @Input()
+  public isCandidateLocalityRequired: boolean = false;
+
+  @Input()
+  public isCandidateOriginRequired: boolean = false;
 
   public sexTypes: EnumItemDescription<SexType>[] = [];
 

@@ -319,8 +319,6 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       ...list.toObject(),
       shortDescription: toJsMap(list.getShortDescriptionMap()),
       description: description,
-      listUnionDescription: toJsMap(list.getListUnionDescriptionMap()),
-      subListUnionDescription: toJsMap(list.getSubListUnionDescriptionMap()),
       orderNumberAndDescription: `${list.getOrderNumber()} ${this.languageService.getTranslationForCurrentLang(description)}`,
       party: DomainOfInfluenceService.mapToParty(list.getParty()),
     };

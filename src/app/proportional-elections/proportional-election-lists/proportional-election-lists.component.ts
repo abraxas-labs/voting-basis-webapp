@@ -53,6 +53,12 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   @Input()
   public locked: boolean = false;
 
+  @Input()
+  public candidateLocalityRequired: boolean = false;
+
+  @Input()
+  public candidateOriginRequired: boolean = false;
+
   public lists: ProportionalElectionList[] = [];
   public selectedList?: ProportionalElectionList;
   public loading: boolean = false;
@@ -202,6 +208,12 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   }
 
   private handleCreateList(list: ProportionalElectionList): void {
+    const existingListIndex = this.lists.findIndex(l => l.id === list.id);
+    if (existingListIndex >= 0) {
+      // list is already created
+      return;
+    }
+
     this.lists = [...this.lists, list];
     this.updateCanSave();
   }
@@ -271,12 +283,6 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
     const list = e.data;
     if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
       this.handleDeleteList(list);
-      return;
-    }
-
-    const existingListIndex = this.lists.findIndex(l => l.id === list.id);
-    if (existingListIndex >= 0) {
-      // list is already created
       return;
     }
 

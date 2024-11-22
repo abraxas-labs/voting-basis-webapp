@@ -91,13 +91,13 @@
              subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate"
-             [required]="!isCommunalDoiType"
+             [required]="isCandidateLocalityRequired"
              [value]="data.locality"
              (valueChange)="data.locality = $event; contentChanged()"
              subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ORIGIN' | translate"
-             [required]="!isCommunalDoiType"
+             [required]="isCandidateOriginRequired"
              [value]="data.origin"
              (valueChange)="data.origin = $event; contentChanged()"
              subscriptSizing="dynamic"></bc-text>

@@ -20,6 +20,8 @@ import { ExportConfigurationAssignDialogComponent } from './export-configuration
 import { ExportConfigurationsComponent } from './export-configurations/export-configurations.component';
 import { PlausibilisationConfigurationComponent } from './plausibilisation-configuration/plausibilisation-configuration.component';
 import { DomainOfInfluenceLogoUrlPipe } from './shared/domain-of-influence-logo-url.pipe';
+import { DomainOfInfluenceSelectionComponent } from './domain-of-influence-selection/domain-of-influence-selection.component';
+import { AutocompleteModule } from '@abraxas/base-components';
 
 const components = [
   ComparisonCountOfVotersCountingCircleAssignDialogComponent,
@@ -30,6 +32,7 @@ const components = [
   DomainOfInfluencePartiesComponent,
   DomainOfInfluencePartyEditDialogComponent,
   DomainOfInfluencePartyTableComponent,
+  DomainOfInfluenceSelectionComponent,
   DomainOfInfluenceVotingCardDataEditComponent,
   ExportConfigurationAssignDialogComponent,
   ExportConfigurationsComponent,
@@ -40,7 +43,7 @@ const pipes = [DomainOfInfluenceLogoUrlPipe];
 
 @NgModule({
   declarations: [...components, ...pipes],
-  imports: [SharedModule, DomainOfInfluencesRoutingModule],
+  imports: [SharedModule, DomainOfInfluencesRoutingModule, AutocompleteModule],
   exports: [...components, ...pipes],
 })
 export class DomainOfInfluencesModule {}

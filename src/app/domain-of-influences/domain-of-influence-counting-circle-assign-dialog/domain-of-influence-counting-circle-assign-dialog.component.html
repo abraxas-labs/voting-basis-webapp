@@ -3,9 +3,8 @@
 
   <div content class="grid">
     <div left>
-      <bc-table selection class="w-full" [dataSource]="dataSource">
-
-        <ng-container columnDef="select">
+      <bc-table filter sort [sortActive]="[{ id: nameColumn, direction: 'asc' }]" selection class="w-full" [dataSource]="dataSource">
+        <ng-container [columnDef]="selectColumn">
           <bc-header-cell *headerCellDef>
             <bc-checkbox class="ml-2 mb-0" (checkedChange)="toggleAllRows($event); contentChanged()"
               [checked]="selection.hasValue() && isAllSelected"
@@ -19,18 +18,18 @@
           </bc-data-cell>
         </ng-container>
 
-        <ng-container columnDef="name">
-          <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
+        <ng-container [columnDef]="nameColumn">
+          <bc-header-cell filter sort *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
           <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
         </ng-container>
 
-        <ng-container columnDef="bfs">
-          <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</bc-header-cell>
+        <ng-container [columnDef]="bfsColumn">
+          <bc-header-cell filter sort *headerCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</bc-header-cell>
           <bc-data-cell *dataCellDef="let element">{{ element.bfs }}</bc-data-cell>
         </ng-container>
 
-        <ng-container columnDef="authority">
-          <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</bc-header-cell>
+        <ng-container [columnDef]="authorityColumn">
+          <bc-header-cell filter sort *headerCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</bc-header-cell>
           <bc-data-cell *dataCellDef="let element">{{ element.responsibleAuthority.name }}</bc-data-cell>
         </ng-container>
 
@@ -45,12 +44,12 @@
       <h2 translate class="mb-0">DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN_SELECTED_OVERVIEW</h2>
       <bc-table class="w-full" [dataSource]="selection.selected">
 
-        <ng-container columnDef="name">
+        <ng-container [columnDef]="nameColumnSelected">
           <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
           <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
         </ng-container>
 
-        <ng-container columnDef="actions">
+        <ng-container [columnDef]="actionsColumnSelected">
           <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
             <bc-icon class="clickable" (click)="selection.deselect(element); contentChanged()" icon="remove"></bc-icon>
@@ -64,7 +63,7 @@
         <h2 translate class="mb-0 mt-3">DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.INHERITED_OVERVIEW</h2>
         <bc-table class="w-full" [dataSource]="inheritedCountingCircles">
 
-          <ng-container columnDef="name">
+          <ng-container [columnDef]="nameColumnInherited">
             <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
             <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
           </ng-container>

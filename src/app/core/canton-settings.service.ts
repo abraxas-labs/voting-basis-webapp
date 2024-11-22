@@ -76,7 +76,6 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setProtocolDomainOfInfluenceSortType(data.protocolDomainOfInfluenceSortType);
     result.setMultipleVoteBallotsEnabled(data.multipleVoteBallotsEnabled);
     result.setCountingMachineEnabled(data.countingMachineEnabled);
-    result.setNewZhFeaturesEnabled(data.newZhFeaturesEnabled);
     result.setMajorityElectionUseCandidateCheckDigit(data.majorityElectionUseCandidateCheckDigit);
     result.setProportionalElectionUseCandidateCheckDigit(data.proportionalElectionUseCandidateCheckDigit);
     result.setCountingCircleResultStateDescriptionsList(
@@ -88,6 +87,8 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setEndResultFinalizeDisabled(data.endResultFinalizeDisabled);
     result.setCreateContestOnHighestHierarchicalLevelEnabled(data.createContestOnHighestHierarchicalLevelEnabled);
     result.setInternalPlausibilisationDisabled(data.internalPlausibilisationDisabled);
+    result.setCandidateLocalityRequired(data.candidateLocalityRequired);
+    result.setCandidateOriginRequired(data.candidateOriginRequired);
     return result;
   }
 
@@ -108,7 +109,6 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setProtocolDomainOfInfluenceSortType(data.protocolDomainOfInfluenceSortType);
     result.setMultipleVoteBallotsEnabled(data.multipleVoteBallotsEnabled);
     result.setCountingMachineEnabled(data.countingMachineEnabled);
-    result.setNewZhFeaturesEnabled(data.newZhFeaturesEnabled);
     result.setMajorityElectionUseCandidateCheckDigit(data.majorityElectionUseCandidateCheckDigit);
     result.setProportionalElectionUseCandidateCheckDigit(data.proportionalElectionUseCandidateCheckDigit);
     result.setCountingCircleResultStateDescriptionsList(
@@ -120,6 +120,8 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setEndResultFinalizeDisabled(data.endResultFinalizeDisabled);
     result.setCreateContestOnHighestHierarchicalLevelEnabled(data.createContestOnHighestHierarchicalLevelEnabled);
     result.setInternalPlausibilisationDisabled(data.internalPlausibilisationDisabled);
+    result.setCandidateLocalityRequired(data.candidateLocalityRequired);
+    result.setCandidateOriginRequired(data.candidateOriginRequired);
     return result;
   }
 

@@ -39,6 +39,12 @@ export class MajorityElectionCandidatesComponent {
   @Input()
   public locked: boolean = false;
 
+  @Input()
+  public candidateLocalityRequired: boolean = false;
+
+  @Input()
+  public candidateOriginRequired: boolean = false;
+
   @ViewChild(MajorityElectionBallotGroupOverviewComponent, { static: false })
   public ballotGroupOverview?: MajorityElectionBallotGroupOverviewComponent;
 
@@ -79,7 +85,10 @@ export class MajorityElectionCandidatesComponent {
       candidate: newMajorityElectionCandidate(this.candidates.length + 1, this.currentMajorityElection.id),
       testingPhaseEnded: false,
       doiType: this.currentDomainOfInfluence.type,
+      candidateLocalityRequired: this.candidateLocalityRequired,
+      candidateOriginRequired: this.candidateOriginRequired,
     };
+
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);
   }
@@ -93,6 +102,8 @@ export class MajorityElectionCandidatesComponent {
       candidate: { ...candidate },
       testingPhaseEnded: this.testingPhaseEnded,
       doiType: this.currentDomainOfInfluence.type,
+      candidateLocalityRequired: this.candidateLocalityRequired,
+      candidateOriginRequired: this.candidateOriginRequired,
     };
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);

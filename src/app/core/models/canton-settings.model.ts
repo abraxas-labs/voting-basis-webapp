@@ -73,7 +73,6 @@ export function newCantonSettings(): CantonSettings {
     protocolDomainOfInfluenceSortType: ProtocolDomainOfInfluenceSortTypeProto.PROTOCOL_DOMAIN_OF_INFLUENCE_SORT_TYPE_SORT_NUMBER,
     multipleVoteBallotsEnabled: false,
     countingMachineEnabled: false,
-    newZhFeaturesEnabled: false,
     majorityElectionUseCandidateCheckDigit: false,
     proportionalElectionUseCandidateCheckDigit: false,
     countingCircleResultStateDescriptionsList: allCountingCircleResultStateDescriptions.map(x => ({ state: x, description: '' })),
@@ -83,6 +82,8 @@ export function newCantonSettings(): CantonSettings {
     createContestOnHighestHierarchicalLevelEnabled: false,
     internalPlausibilisationDisabled: false,
     publishResultsBeforeAuditedTentatively: false,
+    candidateLocalityRequired: false,
+    candidateOriginRequired: false,
   };
 }
 

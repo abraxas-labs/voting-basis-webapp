@@ -6,7 +6,7 @@
 >
   <div class="flex">
     <bc-button
-      [matMenuTriggerFor]="menu"
+      [matMenuTriggerFor]="contest.testingPhaseEnded ? null : menu"
       variant="tertiary"
       icon="plus"
       [disabled]="contest.testingPhaseEnded"
@@ -54,11 +54,29 @@
     [dataSource]="dataSource"
   >
     <ng-container columnDef="number">
-      <bc-header-cell filter sort *headerCellDef>
-        <span>{{ 'POLITICAL_BUSINESS.NUMBER' | translate }}</span>
+      <bc-header-cell filter sort *headerCellDef class="small-filter-component">
+        <span>{{ 'POLITICAL_BUSINESS.NUMBER_SHORT' | translate }}</span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
         <div class="truncate">{{ element.number }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="politicalBusinessUnionDescription">
+      <bc-header-cell filter sort *headerCellDef class="small-filter-component">
+        <span>{{ 'POLITICAL_BUSINESS.POLITICAL_BUSINESS_UNION_DESCRIPTION' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.politicalBusinessUnionDescription }}</div>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="electionGroupNumber">
+      <bc-header-cell filter sort *headerCellDef class="small-filter-component">
+        <span>{{ 'POLITICAL_BUSINESS.ELECTION_GROUP_NUMBER' | translate }}</span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <div class="truncate">{{ element.electionGroupNumber }}</div>
       </bc-data-cell>
     </ng-container>
 
@@ -68,15 +86,6 @@
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
         <div class="truncate">{{ element.shortDescription }}</div>
-      </bc-data-cell>
-    </ng-container>
-
-    <ng-container columnDef="officialDescription">
-      <bc-header-cell filter sort *headerCellDef>
-        <span>{{ 'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate }}</span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.officialDescription }}</div>
       </bc-data-cell>
     </ng-container>
 
@@ -137,7 +146,7 @@
           class="ml-2"
           [checked]="element.active"
           (checkedChange)="activeStateChange(element, $event)"
-          [disabled]="element.ownerId !== tenantId || contest.testingPhaseEnded"
+          [disabled]="(element.ownerId !== tenantId && !hasAdminPermissions) || contest.testingPhaseEnded"
         >
         </bc-switch>
       </bc-data-cell>
@@ -155,7 +164,7 @@
     <ng-container columnDef="actions">
       <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
       <bc-data-cell *dataCellDef="let element; let i = index">
-        <vo-lib-action-menu *ngIf="element.ownerId === tenantId">
+        <vo-lib-action-menu *ngIf="element.ownerId === tenantId || hasAdminPermissions">
           <vo-lib-action-menu-item
             icon="edit"
             text="ACTIONS.EDIT"
@@ -198,10 +207,5 @@
       (click)="open(row)"
     ></bc-data-row>
   </bc-table>
-  <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
-
-  <ng-container *ngIf="contest.id && electionGroups.length > 0">
-    <h2 class="mt-5" translate>ELECTION_GROUP.TITLE</h2>
-    <app-election-group-overview [readonly]="contest.testingPhaseEnded" [electionGroups]="electionGroups"> </app-election-group-overview>
-  </ng-container>
+  <bc-paginator #paginator showFirstLastButtons [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]"></bc-paginator>
 </vo-lib-page>

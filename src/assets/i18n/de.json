@@ -151,7 +151,9 @@
     "SHORT_NAME": "Kurzbezeichnung",
     "TYPE": "Geschäftsebene",
     "CANTON": "Kanton",
-    "AUTHORITY": "Behörde",
+    "AUTHORITY": "zuständige Behörde",
+    "HAS_OTHER_SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE": "Anderer Wahlkreis als Oberbehörde",
+    "SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE": "Oberbehörde (Wahlkreis)",
     "BFS": "BFS-Nummer",
     "CODE": "Code",
     "SORT_NUMBER": "Sortierungsnummer",
@@ -163,7 +165,8 @@
       "ASSIGN": "Auszählungskreise zuordnen",
       "ASSIGN_SELECTED": "Ausgewählte Auszählungskreise",
       "ASSIGN_SELECTED_OVERVIEW": "Zugeordnete Auszählungskreise",
-      "INHERITED_OVERVIEW": "Hoch-aggregierte Auszählungskreise"
+      "INHERITED_OVERVIEW": "Hoch-aggregierte Auszählungskreise",
+      "ASSIGN_CONFIRM_MESSAGE": "Sind Sie sicher, dass Sie Anpassungen an der Zuordnung der Auszählungskreise speichern wollen?"
     },
     "TYPES": {
       "1": "Bund",
@@ -202,6 +205,7 @@
       "TITLE": "Stimmunterlagen",
       "RESPONSIBLE_FOR_VOTING_CARDS": "Wahlkreis generiert Stimmrechtsausweise",
       "ELECTORAL_REGISTRATION_ENABLED": "Wahlkreis verwendet Stimmregister",
+      "STISTAT_MUNICIPALITY": "STISTAT-Gemeinde",
       "VOTING_CARD_COLOR": "Farbe des Stimmrechtsausweis",
       "VOTING_CARD_COLORS": {
         "1": "Blau",
@@ -314,6 +318,11 @@
         "COMPARISON_VALID_VOTING_CARDS_WITH_ACCOUNTED_BALLOTS_THRESHOLD_PERCENT": {
           "TITLE": "Überprüfung der relativen Differenz der gültigen Stimmrechtsausweise mit der Anzahl gültiger Stimmzettel (Schwellenwert in %):"
         }
+      },
+      "VOTER_TYPES": {
+        "TITLE": "Stimmberechtigt",
+        "FOREIGNER": "Ausländer",
+        "MINOR": "Minderjährige"
       }
     }
   },
@@ -401,6 +410,7 @@
     "PROPORTIONAL_ELECTION": "Proporzwahl",
     "ADD_SECONDARY_ELECTION": "Nebenwahl hinzufügen",
     "NUMBER": "Geschäfts-Nr.",
+    "NUMBER_SHORT": "GNr.",
     "SHORT_DESCRIPTION": "Kurzbezeichnung",
     "OFFICIAL_DESCRIPTION": "Offizielle Bezeichnung",
     "INTERNAL_DESCRIPTION": "Spaltentitel (Protokoll)",
@@ -410,6 +420,8 @@
     "OWN_POLITICAL_BUSINESS": "Durch meine Behörde verwaltet",
     "OWNER": "Zuständige Behörde",
     "CONFIRM_DELETE": "Sind Sie sicher, dass das Geschäft gelöscht werden soll?",
+    "POLITICAL_BUSINESS_UNION_DESCRIPTION": "GV",
+    "ELECTION_GROUP_NUMBER": "WG",
     "TYPE": {
       "TITLE": "Geschäftstyp",
       "1": "Abstimmung",
@@ -430,7 +442,7 @@
       }
     },
     "GENERAL_INFORMATION": "Allgemeine Angaben",
-    "ENABLE_TITLE": "Erfassungsfreigabe",
+    "ENABLE_TITLE": "Erfassung",
     "RESULT_ENTRY_INFORMATION": "Erfassungsweise",
     "FEDERAL_IDENTIFICATION": "Bundes-ID"
   },
@@ -798,14 +810,6 @@
       "ENFORCE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
     }
   },
-  "ELECTION_GROUP": {
-    "TITLE": "Wahlgruppen",
-    "EDIT": "Wahlgruppe bearbeiten",
-    "NUMBER": "Nr.",
-    "DESCRIPTION": "Bezeichnung",
-    "PRIMARY_ELECTION": "Hauptwahl",
-    "SECONDARY_ELECTIONS": "Nebenwahl(en)"
-  },
   "SECONDARY_ELECTION": {
     "CREATE": "Nebenwahl erstellen",
     "PRIMARY_ELECTION": "Hauptwahl",
@@ -901,10 +905,10 @@
         "2": "Absolutes Mehr (Kandidatenstimmen geteilt durch doppelte Sitzzahl, nächsthöhere Zahl)"
       },
       "INVALID_VOTES": "Ungültige Stimmen",
-      "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden"
+      "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden",
+      "CANDIDATE_LOCALITY_AND_ORIGIN_REQUIRED": "Heimat- / Wohnort Pflicht (bei Geschäftsebene eidg./kant./bez.) - Gilt auch für Proporzwahlen"
     },
     "GENERAL": "Allgemein",
-    "NEW_ZH_FEATURES": "Neue ZH Features",
     "PUBLISH_RESULTS": "Status Publiziert",
     "PUBLISH_RESULTS_BEFORE_AUDITED_TENTATIVELY": "Publikation in Status \"übermittelt\" und \"zur Korrektur\" möglich",
     "END_RESULT_FINALIZE": "Schlussergebnis setzen",

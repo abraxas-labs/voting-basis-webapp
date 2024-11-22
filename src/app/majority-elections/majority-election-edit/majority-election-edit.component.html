@@ -1,44 +1,57 @@
-<vo-lib-page [contentLoading]="initialLoading"
-             [header]="isNew ? 'MAJORITY_ELECTION.NEW' : 'MAJORITY_ELECTION.EDIT'"
-             [showBackButton]="true"
-             [backButtonNavigateCommands]="['../../']">
-  <bc-simple-stepper #stepper
-                          labelPosition="bottom"
-                          linear>
+<vo-lib-page
+  [contentLoading]="initialLoading"
+  [header]="isNew ? 'MAJORITY_ELECTION.NEW' : 'MAJORITY_ELECTION.EDIT'"
+  [showBackButton]="true"
+  [backButtonNavigateCommands]="['../../']"
+>
+  <bc-simple-stepper #stepper labelPosition="bottom" linear>
     <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
       <ng-container *ngIf="data.contestId">
-        <app-majority-election-general-informations #step1
-                                                    [data]="data"
-                                                    (contentChanged)="contentChanged()"></app-majority-election-general-informations>
+        <app-majority-election-general-informations
+          #step1
+          [data]="data"
+          (contentChanged)="contentChanged()"
+        ></app-majority-election-general-informations>
         <div class="stepper-footer">
-          <bc-button class="align-right"
-                     variant="primary"
-                     [label]="'APP.NEXT' | translate"
-                     [disabled]="!step1.canSave"
-                     (buttonClick)="saveMajorityElection()"></bc-button>
+          <vo-lib-inline-spinner class="align-right"
+                                 position="left"
+                                 [loading]="stepLoading">
+            <bc-button variant="primary"
+                       [disabled]="!step1.canSave || stepLoading"
+                       [label]="'APP.NEXT' | translate"
+                       (buttonClick)="saveMajorityElection()"></bc-button>
+          </vo-lib-inline-spinner>
         </div>
       </ng-container>
     </bc-simple-step>
     <bc-simple-step [label]="'MAJORITY_ELECTION.CANDIDATE_STEP' | translate" [disabled]="!step1?.canSave">
       <ng-container *ngIf="data.id && stepper.selectedIndex === 1">
-        <app-majority-election-candidates #step2
-                                          [testingPhaseEnded]="testingPhaseEnded"
-                                          [locked]="locked"
-                                          [loadDependencies]="!newlyCreated"
-                                          [majorityElection]="data">
+        <app-majority-election-candidates
+          #step2
+          [testingPhaseEnded]="testingPhaseEnded"
+          [locked]="locked"
+          [loadDependencies]="!newlyCreated"
+          [candidateLocalityRequired]="contestDomainOfInfluenceDefaults.candidateLocalityRequired"
+          [candidateOriginRequired]="contestDomainOfInfluenceDefaults.candidateOriginRequired"
+          [majorityElection]="data"
+        >
         </app-majority-election-candidates>
         <div class="stepper-footer">
           <bc-button (buttonClick)="back()" [label]="'APP.BACK' | translate"></bc-button>
 
-          <bc-button variant="primary"
-                     [label]="'APP.NEXT' | translate"
-                     [disabled]="!step2.canSave"
-                     (buttonClick)="stepper.next()"></bc-button>
+          <bc-button
+            variant="primary"
+            [label]="'APP.NEXT' | translate"
+            [disabled]="!step2.canSave"
+            (buttonClick)="stepper.next()"
+          ></bc-button>
         </div>
       </ng-container>
     </bc-simple-step>
-    <bc-simple-step [label]="'POLITICAL_BUSINESS.RESULT_ENTRY_INFORMATION' | translate"
-                    [disabled]="stepper.selectedIndex !== 2 && (!step1?.canSave || !step2?.canSave)">
+    <bc-simple-step
+      [label]="'POLITICAL_BUSINESS.RESULT_ENTRY_INFORMATION' | translate"
+      [disabled]="stepper.selectedIndex !== 2 && (!step1?.canSave || !step2?.canSave)"
+    >
       <app-majority-election-erfassung-informations
         #step3
         [testingPhaseEnded]="testingPhaseEnded"
@@ -51,10 +64,13 @@
       <div class="stepper-footer">
         <bc-button (buttonClick)="back()" [label]="'APP.BACK' | translate"></bc-button>
 
-        <bc-button variant="primary"
-                   [label]="'APP.FINISH' | translate"
-                   [disabled]="!step3.canSave"
-                   (buttonClick)="saveMajorityElection(true)"></bc-button>
+        <vo-lib-inline-spinner position="left"
+                               [loading]="stepLoading">
+          <bc-button variant="primary"
+                     [label]="'APP.FINISH' | translate"
+                     [disabled]="!step3.canSave || stepLoading"
+                     (buttonClick)="saveMajorityElection(true)"></bc-button>
+        </vo-lib-inline-spinner>
       </div>
     </bc-simple-step>
   </bc-simple-stepper>

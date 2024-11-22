@@ -26,6 +26,7 @@ import {
   DomainOfInfluenceEditDialogResult,
 } from '../domain-of-influence-edit-dialog/domain-of-influence-edit-dialog.component';
 import { Permissions } from '../../core/models/permissions.model';
+import { flatMap } from '../../core/utils/array.utils';
 
 @Component({
   selector: 'app-domain-of-influence-overview',
@@ -35,6 +36,7 @@ import { Permissions } from '../../core/models/permissions.model';
 export class DomainOfInfluenceOverviewComponent implements OnInit {
   public readonly columns = ['name', 'bfs', 'authority'];
   public tree: DomainOfInfluenceTree | undefined;
+  public domainOfInfluences: DomainOfInfluence[] = [];
 
   public canCreate: boolean = false;
   public canEditEverything: boolean = false;
@@ -152,6 +154,7 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
       },
       parent: node.parentNode?.data,
       readonly,
+      availableSuperiorAuthorityDomainOfInfluences: this.domainOfInfluences.filter(doi => doi.id !== node.data.id),
     };
 
     const result = await this.dialogService.openForResult(DomainOfInfluenceEditDialogComponent, data);
@@ -195,6 +198,7 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
       domainOfInfluence,
       parent: this.selectedDomainOfInfluence,
       readonly: false,
+      availableSuperiorAuthorityDomainOfInfluences: this.domainOfInfluences,
     };
 
     const result = await this.dialogService.openForResult(DomainOfInfluenceEditDialogComponent, data);
@@ -264,6 +268,7 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
         : await this.domainOfInfluenceService.listTreeSnapshot(this.historizationFilter.includeDeleted, this.historizationFilter.date);
 
       this.tree = new DomainOfInfluenceTree(tree, this.enumUtil);
+      this.domainOfInfluences = flatMap(this.tree.nodes.map(n => this.tree!.getSelfAndChildrenAsFlatList(n)));
     } finally {
       this.loading = false;
     }

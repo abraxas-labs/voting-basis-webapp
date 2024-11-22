@@ -55,6 +55,19 @@
                              [selectedTenant]="selectedTenant"
                              (selectedTenantChange)="selectedTenant = $event; contentChanged()"></vo-lib-tenant-selection>
 
+    <bc-checkbox [disabled]="readonly || !canEditEverything"
+                 [label]="'DOMAIN_OF_INFLUENCE.HAS_OTHER_SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE' | translate"
+                 [checked]="hasOtherSuperiorAuthorityDomainOfInfluence"
+                 (checkedChange)="updateHasOtherSuperiorAuthorityDomainOfInfluence($event); contentChanged()"></bc-checkbox>
+
+    <app-domain-of-influence-selection
+      *ngIf="hasOtherSuperiorAuthorityDomainOfInfluence"
+      [domainOfInfluences]="availableSuperiorAuthorityDomainOfInfluences"
+      [disabled]="readonly || !canEditEverything"
+      [selectedDomainOfInfluence]="data.superiorAuthorityDomainOfInfluence"
+      (selectedDomainOfInfluenceChange)="data.superiorAuthorityDomainOfInfluence = $event; contentChanged()"
+    ></app-domain-of-influence-selection>
+
     <bc-dropdown *ngIf="domainOfInfluenceCantons.length"
                  class="full-width"
                  [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
@@ -103,6 +116,21 @@
       [label]="'DOMAIN_OF_INFLUENCE.VIEW_COUNTING_CIRCLE_PARTIAL_RESULTS' | translate"
       [checked]="data.viewCountingCirclePartialResults"
       (checkedChange)="data.viewCountingCirclePartialResults = $event; contentChanged()"></bc-checkbox>
+
+    <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.VOTER_TYPES.TITLE</h3>
+    <bc-checkbox
+      class="full-width"
+      [disabled]="readonly || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.VOTER_TYPES.FOREIGNER' | translate"
+      [checked]="data.hasForeignerVoters"
+      (checkedChange)="data.hasForeignerVoters = $event; contentChanged()"></bc-checkbox>
+
+    <bc-checkbox
+      class="full-width"
+      [disabled]="readonly || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.VOTER_TYPES.MINOR' | translate"
+      [checked]="data.hasMinorVoters"
+      (checkedChange)="data.hasMinorVoters = $event; contentChanged()"></bc-checkbox>
 
     <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.TITLE</h3>
     <app-export-configurations [disabled]="readonly || !canEditEverything"

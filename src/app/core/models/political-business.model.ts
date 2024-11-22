@@ -4,7 +4,10 @@
  * For license information see LICENSE file.
  */
 
-import { PoliticalBusiness as PoliticalBusinessProto } from '@abraxas/voting-basis-service-proto/grpc/models/political_business_pb';
+import {
+  PoliticalBusiness as PoliticalBusinessProto,
+  PoliticalBusinessSummary as PoliticalBusinessSummaryProto,
+} from '@abraxas/voting-basis-service-proto/grpc/models/political_business_pb';
 import {
   PoliticalBusinessType as PoliticalBusinessTypeProto,
   PoliticalBusinessSubType as PoliticalBusinessSubTypeProto,
@@ -31,3 +34,9 @@ export interface PoliticalBusinessBase {
 }
 
 export type PoliticalBusinessMessage = BaseEntityMessage<PoliticalBusiness>;
+
+export { PoliticalBusinessSummaryProto };
+export type PoliticalBusinessSummary = Omit<PoliticalBusinessSummaryProto.AsObject, 'shortDescription' | 'domainOfInfluence'> & {
+  shortDescription: Map<string, string>;
+  domainOfInfluence: DomainOfInfluence;
+};

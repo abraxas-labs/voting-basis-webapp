@@ -21,6 +21,7 @@ import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared
 @Component({
   selector: 'app-domain-of-influence-voting-card-data-edit',
   templateUrl: './domain-of-influence-voting-card-data-edit.component.html',
+  styleUrls: ['./domain-of-influence-voting-card-data-edit.component.scss'],
 })
 export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
   public shippingAwayItems: EnumItemDescription<VotingCardShippingFranking>[] = [];

@@ -15,6 +15,8 @@ import { Contest } from '../../core/models/contest.model';
 import { DomainOfInfluence, DomainOfInfluenceLevel, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { PoliticalBusinessBase } from '../../core/models/political-business.model';
 import { groupBy } from '../../core/utils/array.utils';
+import { PermissionService } from '../../core/permission.service';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Directive()
 export abstract class PoliticalBusinessGeneralInformationsComponent<T extends PoliticalBusinessBase> implements OnInit {
@@ -27,6 +29,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
   public domainOfInfluencesByType: Partial<Record<DomainOfInfluenceType, DomainOfInfluence[]>> = {};
   public domainOfInfluenceLevels: DomainOfInfluenceLevel[] = [];
   public contest: Contest = {} as Contest;
+  public hasAdminPermissions: boolean = false;
 
   @Input()
   public data: T;
@@ -44,6 +47,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
     protected readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly contestService: ContestService,
     private readonly doiLevelService: DomainOfInfluenceLevelService,
+    private readonly permissionService: PermissionService,
     initialData: T,
   ) {
     this.data = initialData;
@@ -91,7 +95,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
   public async ngOnInit(): Promise<void> {
     try {
       this.contest = await this.contestService.get(this.data.contestId);
-
+      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ActionsTenantSameCanton);
       await this.initDomainOfInfluenceData();
     } finally {
       this.loading = false;
@@ -108,6 +112,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
 
     this.domainOfInfluences = await this.domainOfInfluenceService.filterOnlyManagedByCurrentTenantAndNotVirtualTopLevel(
       this.domainOfInfluenceTree.getSelfAndChildrenAsFlatList(contestDomainOfInfluenceNode),
+      this.hasAdminPermissions,
     );
 
     this.selectedDomainOfInfluence = this.domainOfInfluenceTree.findById(this.data.domainOfInfluenceId);

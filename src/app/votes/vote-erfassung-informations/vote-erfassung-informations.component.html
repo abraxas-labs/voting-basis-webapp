@@ -13,7 +13,7 @@
                  (checkedChange)="data.enforceResultEntryForCountingCircles = $event; contentChanged.emit()"
                  class="mb-1"
                  [label]="'VOTE.ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES' | translate"
-                 [disabled]="locked || !isVariantsBallot"></bc-checkbox>
+                 [disabled]="testingPhaseEnded || !isVariantsBallot"></bc-checkbox>
   </div>
 
   <ng-container *ngIf="data.resultEntry === resultEntryType.VOTE_RESULT_ENTRY_DETAILED">

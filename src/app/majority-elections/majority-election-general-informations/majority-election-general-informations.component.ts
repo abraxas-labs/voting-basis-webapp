@@ -11,6 +11,7 @@ import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-le
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { MajorityElection, MajorityElectionMandateAlgorithm, newMajorityElection } from '../../core/models/majority-election.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
+import { PermissionService } from '../../core/permission.service';
 
 @Component({
   selector: 'app-majority-election-general-informations',
@@ -28,8 +29,9 @@ export class MajorityElectionGeneralInformationsComponent
     enumUtil: EnumUtil,
     contestService: ContestService,
     doiLevelService: DomainOfInfluenceLevelService,
+    permissionService: PermissionService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, newMajorityElection());
+    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, permissionService, newMajorityElection());
   }
 
   public get canSave(): boolean {

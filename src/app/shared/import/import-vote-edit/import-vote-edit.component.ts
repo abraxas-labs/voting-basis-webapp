@@ -12,6 +12,7 @@ import { VoteImport } from '../../../core/models/import.model';
 import { Vote, VoteResultAlgorithm } from '../../../core/models/vote.model';
 import { VoteService } from '../../../core/vote.service';
 import { ImportPoliticalBusinessEditComponent } from '../import-political-business-edit/import-political-business-edit.component';
+import { PermissionService } from '../../../core/permission.service';
 
 @Component({
   selector: 'app-import-vote-edit',
@@ -22,8 +23,13 @@ export class ImportVoteEditComponent extends ImportPoliticalBusinessEditComponen
   public resultAlgorithms: EnumItemDescription<VoteResultAlgorithm>[] = [];
   private voteImport?: VoteImport;
 
-  constructor(enumUtil: EnumUtil, doiLevelService: DomainOfInfluenceLevelService, domainOfInfluenceService: DomainOfInfluenceService) {
-    super(enumUtil, doiLevelService, domainOfInfluenceService);
+  constructor(
+    enumUtil: EnumUtil,
+    doiLevelService: DomainOfInfluenceLevelService,
+    domainOfInfluenceService: DomainOfInfluenceService,
+    permissionService: PermissionService,
+  ) {
+    super(enumUtil, doiLevelService, domainOfInfluenceService, permissionService);
     this.resultAlgorithms = enumUtil.getArrayWithDescriptions<VoteResultAlgorithm>(VoteResultAlgorithm, 'VOTE.RESULT_ALGORITHM.TYPES.');
   }
 

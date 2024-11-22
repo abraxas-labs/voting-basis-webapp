@@ -42,7 +42,8 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnDestr
   public sexTypes: EnumItemDescription<SexType>[] = [];
   public parties: DomainOfInfluencePartyDropdownData[] = [];
   public selectedPartyId?: string;
-  public isCommunalDoiType: boolean;
+  public isCandidateLocalityRequired: boolean = false;
+  public isCandidateOriginRequired: boolean = false;
 
   public hasChanges: boolean = false;
   public originalCandidate: ProportionalElectionCandidate;
@@ -68,7 +69,8 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnDestr
     );
     this.initPartiesDropdownData(dialogData.parties, dialogData.listParty);
 
-    this.isCommunalDoiType = isCommunalDoiType(dialogData.doiType);
+    this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
+    this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
     this.originalCandidate = cloneDeep(this.data);
 
     this.dialogRef.disableClose = true;
@@ -94,10 +96,10 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnDestr
       !!this.data.firstName &&
       !!this.data.lastName &&
       this.isDateOfBirthValid() &&
-      (this.isCommunalDoiType || !!this.data.locality) &&
+      (!this.isCandidateLocalityRequired || !!this.data.locality) &&
       !!this.selectedPartyId &&
       this.data.sex !== undefined &&
-      (this.isCommunalDoiType || !!this.data.origin)
+      (!this.isCandidateOriginRequired || !!this.data.origin)
     );
   }
 
@@ -203,6 +205,8 @@ export interface ProportionalElectionCandidateEditDialogData {
   parties: DomainOfInfluenceParty[];
   doiType: DomainOfInfluenceType;
   listParty?: DomainOfInfluenceParty;
+  candidateLocalityRequired: boolean;
+  candidateOriginRequired: boolean;
 }
 
 export interface ProportionalElectionCandidateEditDialogResult {

@@ -12,7 +12,7 @@ import { Component, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/c
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import 'moment/locale/de';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { CursorService, CursorType } from './core/cursor.service';
 import { LanguageService } from './core/language.service';
 import { Title } from '@angular/platform-browser';
@@ -24,7 +24,7 @@ import { Title } from '@angular/platform-browser';
 export class AppComponent implements OnInit, OnDestroy {
   public authenticated = false;
   public hasTenant = false;
-  public loading = false;
+  public loading = true;
   public theme?: string;
   public customLogo?: string;
   public appTitle: string = '';
@@ -71,6 +71,21 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const logoSubscription = themeService.logo$.subscribe(logo => (this.customLogo = logo));
     this.subscriptions.push(logoSubscription);
+
+    const authSubscription = this.auth.authenticationChanged.pipe(filter(isAuthenticated => isAuthenticated)).subscribe(async () => {
+      this.authenticated = true;
+
+      try {
+        // getActiveTenant is called to initialize the tenant cache, otherwise the authorization endpoint would be called multiple times
+        await this.authorization.getActiveTenant();
+        this.hasTenant = true;
+      } catch (e) {
+        this.hasTenant = false;
+      } finally {
+        this.loading = false;
+      }
+    });
+    this.subscriptions.push(authSubscription);
   }
 
   public async switchTenant(): Promise<void> {
@@ -89,25 +104,6 @@ export class AppComponent implements OnInit, OnDestroy {
   public async ngOnInit(): Promise<void> {
     moment.locale(this.languageService.currentLanguage);
     this.translations.setDefaultLang(this.languageService.currentLanguage);
-    this.authenticated = false;
-    this.hasTenant = false;
-    this.loading = true;
-
-    if (!(await this.auth.authenticate())) {
-      this.loading = false;
-      return;
-    }
-
-    this.authenticated = true;
-
-    try {
-      await this.authorization.getActiveTenant();
-      this.hasTenant = true;
-    } catch (e) {
-      this.hasTenant = false;
-    } finally {
-      this.loading = false;
-    }
   }
 
   public ngOnDestroy(): void {

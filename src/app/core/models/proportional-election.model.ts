@@ -35,14 +35,9 @@ export type ProportionalElection = Omit<
 export { ProportionalElectionMandateAlgorithmProto as ProportionalElectionMandateAlgorithm };
 export { ProportionalElectionReviewProcedureProto as ProportionalElectionReviewProcedure };
 export { ProportionalElectionListProto };
-export type ProportionalElectionList = Omit<
-  ProportionalElectionListProto.AsObject,
-  'shortDescriptionMap' | 'descriptionMap' | 'listUnionDescriptionMap' | 'subListUnionDescriptionMap' | 'party'
-> & {
+export type ProportionalElectionList = Omit<ProportionalElectionListProto.AsObject, 'shortDescriptionMap' | 'descriptionMap' | 'party'> & {
   shortDescription: Map<string, string>;
   description: Map<string, string>;
-  listUnionDescription: Map<string, string>;
-  subListUnionDescription: Map<string, string>;
   orderNumberAndDescription: string;
   party?: DomainOfInfluenceParty;
 };
@@ -122,8 +117,8 @@ export function newProportionalElectionList(position: number, proportionalElecti
     blankRowCount: 0,
     candidateCountOk: false,
     countOfCandidates: 0,
-    listUnionDescription: new Map<string, string>(),
-    subListUnionDescription: new Map<string, string>(),
+    listUnionDescription: '',
+    subListUnionDescription: '',
     orderNumberAndDescription: '',
   };
 }

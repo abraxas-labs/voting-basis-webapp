@@ -12,6 +12,8 @@ import { DomainOfInfluenceService } from '../../../core/domain-of-influence.serv
 import { DomainOfInfluenceCantonDefaults } from '../../../core/models/canton-settings.model';
 import { DomainOfInfluence, DomainOfInfluenceLevel, DomainOfInfluenceType } from '../../../core/models/domain-of-influence.model';
 import { groupBy } from '../../../core/utils/array.utils';
+import { PermissionService } from '../../../core/permission.service';
+import { Permissions } from '../../../core/models/permissions.model';
 
 @Directive()
 export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfInfluenceId: string }> implements OnInit {
@@ -37,11 +39,13 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
 
   private selectedDomainOfInfluenceTypeValue?: DomainOfInfluenceType;
   private domainOfInfluenceTree?: DomainOfInfluenceTree;
+  private hasAdminPermissions = false;
 
   protected constructor(
     protected readonly enumUtil: EnumUtil,
     private readonly doiLevelService: DomainOfInfluenceLevelService,
     protected readonly domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   public get selectedDomainOfInfluence(): DomainOfInfluence | undefined {
@@ -75,6 +79,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
 
   public async ngOnInit(): Promise<void> {
     try {
+      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ActionsTenantSameCanton);
       await this.initDomainOfInfluenceData();
     } finally {
       this.loading = false;
@@ -102,6 +107,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
 
     this.domainOfInfluences = await this.domainOfInfluenceService.filterOnlyManagedByCurrentTenantAndNotVirtualTopLevel(
       this.domainOfInfluenceTree.getSelfAndChildrenAsFlatList(contestDomainOfInfluenceNode),
+      this.hasAdminPermissions,
     );
 
     this.selectedDomainOfInfluence = this.domainOfInfluenceTree.findById(this.data.domainOfInfluenceId);

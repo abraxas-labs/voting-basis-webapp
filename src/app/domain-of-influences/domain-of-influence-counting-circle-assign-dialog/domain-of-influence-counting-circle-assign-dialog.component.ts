@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
+import { FilterDirective, SortDirective, PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -24,9 +24,16 @@ import { cloneDeep, isEqual } from 'lodash';
   styleUrls: ['./domain-of-influence-counting-circle-assign-dialog.component.scss'],
 })
 export class DomainOfInfluenceCountingCircleAssignDialogComponent implements AfterViewInit, OnInit, OnDestroy {
-  public readonly columns = ['select', 'name', 'bfs', 'authority'];
-  public readonly columnsSelected = ['name', 'actions'];
-  public readonly columnsInherited = ['name'];
+  public readonly selectColumn = 'select';
+  public readonly nameColumn = 'name';
+  public readonly bfsColumn = 'bfs';
+  public readonly authorityColumn = 'authority';
+  public readonly nameColumnSelected = 'name';
+  public readonly actionsColumnSelected = 'actions';
+  public readonly nameColumnInherited = 'name';
+  public readonly columns = [this.selectColumn, this.nameColumn, this.bfsColumn, this.authorityColumn];
+  public readonly columnsSelected = [this.nameColumnSelected, this.actionsColumnSelected];
+  public readonly columnsInherited = [this.nameColumnInherited];
 
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
@@ -38,6 +45,12 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
   }
 
   @ViewChild('paginator') public paginator!: PaginatorComponent;
+
+  @ViewChild(FilterDirective, { static: true })
+  public filter!: FilterDirective;
+
+  @ViewChild(SortDirective, { static: true })
+  public sort!: SortDirective;
 
   public data: DomainOfInfluence;
   public saving: boolean = false;
@@ -85,14 +98,33 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
       Permissions.DomainOfInfluenceHierarchy.UpdateSameCanton,
       Permissions.DomainOfInfluenceHierarchy.UpdateAll,
     );
+
+    const dataAccessor = (data: DomainOfInfluenceCountingCircle, filterId: string) => {
+      if (filterId === this.authorityColumn) {
+        return data.responsibleAuthority?.name ?? '';
+      }
+
+      return (data as Record<string, any>)[filterId];
+    };
+
+    this.dataSource.filterDataAccessor = dataAccessor;
+    this.dataSource.sortingDataAccessor = dataAccessor;
   }
 
   public ngAfterViewInit(): void {
+    this.dataSource.filter = this.filter;
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 
   public async save(): Promise<void> {
     if (!this.canEdit || !this.data.countingCircles) {
+      return;
+    }
+
+    const confirmTitle = 'DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN';
+    const confirmMessage = 'DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN_CONFIRM_MESSAGE';
+    if (!(await this.dialogService.confirm(confirmTitle, confirmMessage, 'APP.YES'))) {
       return;
     }
 

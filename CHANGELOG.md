@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.20.1`)
+# ✨ Changelog (`v3.27.4`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,131 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.20.1
-Previous version ---- v3.6.0
+This version -------- v3.27.4
+Previous version ---- v3.20.1
 Initial version ----- v1.23.0
-Total commits ------- 44
+Total commits ------- 22
 ```
+
+## [v3.27.4] - 2024-10-31
+
+### :arrows_counterclockwise: Changed
+
+- disable enforce result entry for votes after testing phase ended
+
+## [v3.27.3] - 2024-10-30
+
+### 🔄 Changed
+
+- contest detail union description and election group number column
+
+## [v3.27.2] - 2024-10-28
+
+### 🔄 Changed
+
+- remove admin tenant all permissions
+
+## [v3.27.1] - 2024-10-25
+
+### 🔄 Changed
+
+- proportional election list created twice
+
+## [v3.27.0] - 2024-10-24
+
+### 🆕 Added
+
+- add political business summaries
+
+## [v3.26.0] - 2024-10-18
+
+### 🆕 Added
+
+- add STISTAT municipality flag to domain of influence
+
+## [v3.25.2] - 2024-10-16
+
+### 🔄 Changed
+
+- add loading spinner for political business editing
+
+## [v3.25.1] - 2024-10-16
+
+### 🔄 Changed
+
+- adjust date format that the BC can handle it
+
+## [v3.25.0] - 2024-10-15
+
+### 🆕 Added
+
+- add filtering and sorting to counting circle assignment table
+
+## [v3.24.1] - 2024-10-15
+
+### 🆕 Added
+
+- add confirm dialog before assigning counting circles to a domain of influence
+
+## [v3.24.0] - 2024-10-15
+
+### 🔄 Changed
+
+- allow candicate locality and origin to be optional
+
+## [v3.23.0] - 2024-10-15
+
+### 🆕 Added
+
+- superior authority domain of influence
+
+## [v3.22.2] - 2024-10-11
+
+### 🔄 Changed
+
+- change list union descriptions
+
+## [v3.22.1] - 2024-10-07
+
+### 🔄 Changed
+
+- rename political business and political business union tenant permissions
+
+## [v3.22.0] - 2024-10-07
+
+### 🔒 Security
+
+- enable modifications for all political business and political business unions as admin and canton admin
+
+## [v3.21.3] - 2024-10-03
+
+### ❌ Removed
+
+- remove zh feature flag
+
+## [v3.21.2] - 2024-10-03
+
+### 🔄 Changed
+
+- fix logout after new tab is opened
+
+## [v3.21.1] - 2024-09-27
+
+### 🔄 Changed
+
+- preselect canton for new counting circle
+
+## [v3.21.0] - 2024-09-25
+
+### 🔄 Changed
+
+- foreigner and minor voters
+
+## [v3.20.2] - 2024-09-23
+
+### 🔄 Changed
+
+- disable new political business button menu
 
 ## [v3.20.1] - 2024-09-11
 
@@ -177,13 +297,9 @@ patch ci-cd template version, align with new defaults
 
 - index.html set default language to german and disable google translation
 
-## [v3.10.1] - 2024-07-11
-
 ### :arrows_counterclockwise: Changed
 
 - update dependencies and use esbuild
-
-## [v3.10.0] - 2024-07-04
 
 ### 🔄 Changed
 
@@ -193,116 +309,78 @@ patch ci-cd template version, align with new defaults
 
 - create secondary election in context menu
 
-## [v3.9.2] - 2024-07-03
-
 ### 🔄 Changed
 
 - fix contest is created twice in the contest list
-
-## [v3.9.1] - 2024-07-03
 
 ### 🔄 Changed
 
 - add and edit contest updates
 
-## [v3.9.0] - 2024-06-27
-
 ### 🆕 Added
 
 - add internal plausibilisation canton settings
-
-## [v3.8.1] - 2024-06-26
 
 ### 🔄 Changed
 
 - create contest updates values correctly
 
-## [v3.8.0] - 2024-06-25
-
 ### 🆕 Added
 
 - add create contest on highest hierarchical level canton settings
-
-## [v3.7.1] - 2024-06-25
 
 ### 🔄 Changed
 
 - unsaved changes dialog in political business edit
 
-## [v3.7.0] - 2024-06-21
-
 ### 🆕 Added
 
 - add political business finalize canton settings
-
-## [v3.6.6] - 2024-06-19
 
 ### 🔄 Changed
 
 - move truncate long table header to voting lib
 
-## [v3.6.5] - 2024-06-12
-
 ### 🔄 Changed
 
 - adjust counting circle detail layout
-
-## [v3.6.4] - 2024-06-06
 
 ### :arrows_counterclockwise: Changed
 
 - update voting lib to fix outdated access tokens on server streaming retries
 
-## [v3.6.3] - 2024-06-05
-
 ### :arrows_counterclockwise: Changed
 
 - allow to clear voting card color
-
-## [v3.6.2] - 2024-06-04
 
 ### 🔄 Changed
 
 - keep navigation activated state after navigation cancel
 
-## [v3.6.1] - 2024-06-04
-
 ### 🔄 Changed
 
 - stick button bar to the bottom
-
-## [v3.6.0] - 2024-05-29
 
 ### 🆕 Added
 
 - add publish results enabled canton setting
 
-## [v3.5.4] - 2024-05-27
-
 ### 🔄 Changed
 
 - change plausibilisiert state color
 
-## [v3.5.3] - 2024-05-27
-
 ### 🔄 Changed
 
 - app loading spinner
-
-## [v3.5.2] - 2024-05-22
 
 ### 🔄 Changed
 
 - more space between dropdown and label
 - checkbox text is now inline
 
-## [v3.5.1] - 2024-05-22
-
 ### 🔄 Changed
 
 - angular update UI optimizations
-
-## [v3.5.0] - 2024-05-22
 
 ### 🆕 Added
 
@@ -710,6 +788,137 @@ Also allow users to view politicial business in readonly mode when testing phase
 also removed count of candidates check
 
 use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
+
+## [v3.10.1] - 2024-07-11
+
+### :arrows_counterclockwise: Changed
+
+- update dependencies and use esbuild
+
+## [v3.10.0] - 2024-07-04
+
+### 🔄 Changed
+
+- change enable title
+
+### 🆕 Added
+
+- create secondary election in context menu
+
+## [v3.9.2] - 2024-07-03
+
+### 🔄 Changed
+
+- fix contest is created twice in the contest list
+
+## [v3.9.1] - 2024-07-03
+
+### 🔄 Changed
+
+- add and edit contest updates
+
+## [v3.9.0] - 2024-06-27
+
+### 🆕 Added
+
+- add internal plausibilisation canton settings
+
+## [v3.8.1] - 2024-06-26
+
+### 🔄 Changed
+
+- create contest updates values correctly
+
+## [v3.8.0] - 2024-06-25
+
+### 🆕 Added
+
+- add create contest on highest hierarchical level canton settings
+
+## [v3.7.1] - 2024-06-25
+
+### 🔄 Changed
+
+- unsaved changes dialog in political business edit
+
+## [v3.7.0] - 2024-06-21
+
+### 🆕 Added
+
+- add political business finalize canton settings
+
+## [v3.6.6] - 2024-06-19
+
+### 🔄 Changed
+
+- move truncate long table header to voting lib
+
+## [v3.6.5] - 2024-06-12
+
+### 🔄 Changed
+
+- adjust counting circle detail layout
+
+## [v3.6.4] - 2024-06-06
+
+### :arrows_counterclockwise: Changed
+
+- update voting lib to fix outdated access tokens on server streaming retries
+
+## [v3.6.3] - 2024-06-05
+
+### :arrows_counterclockwise: Changed
+
+- allow to clear voting card color
+
+## [v3.6.2] - 2024-06-04
+
+### 🔄 Changed
+
+- keep navigation activated state after navigation cancel
+
+## [v3.6.1] - 2024-06-04
+
+### 🔄 Changed
+
+- stick button bar to the bottom
+
+## [v3.6.0] - 2024-05-29
+
+### 🆕 Added
+
+- add publish results enabled canton setting
+
+## [v3.5.4] - 2024-05-27
+
+### 🔄 Changed
+
+- change plausibilisiert state color
+
+## [v3.5.3] - 2024-05-27
+
+### 🔄 Changed
+
+- app loading spinner
+
+## [v3.5.2] - 2024-05-22
+
+### 🔄 Changed
+
+- more space between dropdown and label
+- checkbox text is now inline
+
+## [v3.5.1] - 2024-05-22
+
+### 🔄 Changed
+
+- angular update UI optimizations
+
+## [v3.5.0] - 2024-05-22
+
+### 🆕 Added
+
+- add ballot question type
 
 ## [v3.4.0] - 2024-05-21
 

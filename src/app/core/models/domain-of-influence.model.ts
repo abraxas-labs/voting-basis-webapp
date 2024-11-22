@@ -46,11 +46,17 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     viewCountingCirclePartialResults: false,
     votingCardColor: VotingCardColor.VOTING_CARD_COLOR_UNSPECIFIED,
     electoralRegistrationEnabled: false,
+    hasForeignerVoters: false,
+    hasMinorVoters: false,
+    stistatMunicipality: false,
   } as DomainOfInfluence;
 }
 
 export interface DomainOfInfluence
-  extends Omit<DomainOfInfluenceProto.AsObject, 'info' | 'childrenList' | 'plausibilisationConfiguration' | 'partiesList'> {
+  extends Omit<
+    DomainOfInfluenceProto.AsObject,
+    'info' | 'childrenList' | 'plausibilisationConfiguration' | 'partiesList' | 'superiorAuthorityDomainOfInfluence'
+  > {
   createdOn?: Date;
   modifiedOn?: Date;
   deletedOn?: Date;
@@ -58,6 +64,7 @@ export interface DomainOfInfluence
   childrenList?: DomainOfInfluence[];
   plausibilisationConfiguration?: PlausibilisationConfiguration;
   parties: DomainOfInfluenceParty[];
+  superiorAuthorityDomainOfInfluence?: DomainOfInfluence;
 }
 
 export interface DomainOfInfluenceLevel {

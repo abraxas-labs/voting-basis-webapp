@@ -15,6 +15,7 @@ import { ProportionalElection, ProportionalElectionMandateAlgorithm } from '../.
 import { ProportionalElectionPartyMappingService } from '../../../core/proportional-election-party-mapping.service';
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
 import { ImportPoliticalBusinessEditComponent } from '../import-political-business-edit/import-political-business-edit.component';
+import { PermissionService } from '../../../core/permission.service';
 
 @Component({
   selector: 'app-import-proportional-election-edit',
@@ -32,9 +33,10 @@ export class ImportProportionalElectionEditComponent extends ImportPoliticalBusi
     enumUtil: EnumUtil,
     doiLevelService: DomainOfInfluenceLevelService,
     domainOfInfluenceService: DomainOfInfluenceService,
+    permissionService: PermissionService,
     private readonly proportionalElectionPartyMappingService: ProportionalElectionPartyMappingService,
   ) {
-    super(enumUtil, doiLevelService, domainOfInfluenceService);
+    super(enumUtil, doiLevelService, domainOfInfluenceService, permissionService);
   }
 
   @Input()

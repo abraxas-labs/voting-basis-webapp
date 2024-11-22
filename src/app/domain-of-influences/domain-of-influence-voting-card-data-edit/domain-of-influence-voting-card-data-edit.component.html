@@ -1,4 +1,12 @@
 <div class="mr-3 my-2" *ngIf="!!domainOfInfluence.returnAddress && !!domainOfInfluence.printData && !!domainOfInfluence.swissPostData">
+  <bc-checkbox
+    [disabled]="disabled"
+    [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.STISTAT_MUNICIPALITY' | translate"
+    [checked]="domainOfInfluence.stistatMunicipality"
+    (checkedChange)="domainOfInfluence.stistatMunicipality = $event; contentChanged.emit()"
+    class="full-width"
+  ></bc-checkbox>
+
   <app-domain-of-influence-logo-edit [disabled]="disabled"
                                      [domainOfInfluence]="domainOfInfluence"
                                      (logoChanged)="logoChanged.emit($event)"></app-domain-of-influence-logo-edit>

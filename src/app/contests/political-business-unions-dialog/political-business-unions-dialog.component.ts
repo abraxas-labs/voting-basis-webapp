@@ -19,7 +19,7 @@ import {
   PoliticalBusinessUnion,
   PoliticalBusinessUnionType,
 } from '../../core/models/political-business-union.model';
-import { PoliticalBusiness } from '../../core/models/political-business.model';
+import { PoliticalBusiness, PoliticalBusinessType } from '../../core/models/political-business.model';
 import { ProportionalElectionUnionService } from '../../core/proportional-election-union.service';
 import { ProportionalElectionService } from '../../core/proportional-election.service';
 import { sortPoliticalBusinessUnions } from '../../core/utils/political-business-union.utils';
@@ -34,6 +34,8 @@ import {
   PoliticalBusinessUnionEntriesEditDialogResult,
 } from '../political-business-union-entries-edit-dialog/political-business-union-entries-edit-dialog.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PermissionService } from '../../core/permission.service';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-political-business-unions-dialog',
@@ -49,6 +51,7 @@ export class PoliticalBusinessUnionsDialogComponent implements OnInit {
   public cantonDefaults: DomainOfInfluenceCantonDefaults;
   public politicalBusinessUnions: PoliticalBusinessUnion[] = [];
   public domainOfInfluences: DomainOfInfluence[] = [];
+  public hasAdminPermissions = false;
 
   public selectedPoliticalBusinessUnion?: PoliticalBusinessUnion;
 
@@ -69,6 +72,7 @@ export class PoliticalBusinessUnionsDialogComponent implements OnInit {
     private readonly i18n: TranslateService,
     private readonly dialogRef: MatDialogRef<PoliticalBusinessUnionsDialogData>,
     private readonly auth: AuthorizationService,
+    private readonly permissionService: PermissionService,
     @Inject(MAT_DIALOG_DATA) dialogData: PoliticalBusinessUnionsDialogData,
   ) {
     this.contest = dialogData.contest;
@@ -116,10 +120,26 @@ export class PoliticalBusinessUnionsDialogComponent implements OnInit {
       return;
     }
 
+    const selectableProportionalElections = this.hasAdminPermissions
+      ? this.contest.politicalBusinesses.filter(
+          pb =>
+            pb.politicalBusinessType === PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION &&
+            pb.domainOfInfluence.secureConnectId === this.selectedPoliticalBusinessUnion?.secureConnectId,
+        )
+      : this.selectableProportionalElections;
+
+    const selectableMajorityElections = this.hasAdminPermissions
+      ? this.contest.politicalBusinesses.filter(
+          pb =>
+            pb.politicalBusinessType === PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION &&
+            pb.domainOfInfluence.secureConnectId === this.selectedPoliticalBusinessUnion?.secureConnectId,
+        )
+      : this.selectableProportionalElections;
+
     const selectablePoliticalBusinesses =
       this.selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_PROPORTIONAL_ELECTION
-        ? this.selectableProportionalElections
-        : this.selectableMajorityElections;
+        ? selectableProportionalElections
+        : selectableMajorityElections;
 
     // selectedPoliticalBusiness are set by the detail tab
     const dialogData: PoliticalBusinessUnionEntriesEditDialogData = {
@@ -162,6 +182,8 @@ export class PoliticalBusinessUnionsDialogComponent implements OnInit {
 
   private async loadData(): Promise<void> {
     try {
+      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusinessUnion.ActionsTenantSameCanton);
+
       this.selectableProportionalElections = this.proportionalElectionService.mapToPoliticalBusinesses(
         await this.proportionalElectionService.list(this.contest.id),
       );

@@ -16,7 +16,6 @@ import { isDistinct } from '../../core/utils/array.utils';
 import { Permissions } from '../../core/models/permissions.model';
 import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
-import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 
 @Component({
   selector: 'app-domain-of-influence-edit-dialog',
@@ -54,6 +53,8 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public originalSecureConnectId?: string;
   public readonly backdropClickSubscription: Subscription;
   public showInternalPlausibilisation: boolean = false;
+  public hasOtherSuperiorAuthorityDomainOfInfluence: boolean = false;
+  public availableSuperiorAuthorityDomainOfInfluences: DomainOfInfluence[] = [];
 
   constructor(
     private readonly dialogRef: MatDialogRef<DomainOfInfluenceEditDialogData>,
@@ -69,7 +70,17 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
     this.data.parentId = dialogData.parent?.id || '';
     this.parentType = dialogData.parent?.type;
     this.readonly = dialogData.readonly;
+    this.availableSuperiorAuthorityDomainOfInfluences = dialogData.availableSuperiorAuthorityDomainOfInfluences;
+
+    // Set superior authority before cloning, so that hasChanges won't show a false positive when saving unchanged.
+    if (this.data.superiorAuthorityDomainOfInfluence) {
+      this.data.superiorAuthorityDomainOfInfluence =
+        this.availableSuperiorAuthorityDomainOfInfluences.find(doi => doi.id == this.data.superiorAuthorityDomainOfInfluence?.id) ||
+        this.data.superiorAuthorityDomainOfInfluence;
+    }
+
     this.originalDomainOfInfluence = cloneDeep(this.data);
+    this.hasOtherSuperiorAuthorityDomainOfInfluence = !!this.data.superiorAuthorityDomainOfInfluence;
 
     this.dialogRef.disableClose = true;
     this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
@@ -89,6 +100,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
       !!this.selectedTenant.id &&
       (!!this.data.parentId || !!this.data.canton) &&
       this.data.exportConfigurationsList.every(e => !!e.description && !!e.eaiMessageType && !!e.provider) &&
+      (!this.hasOtherSuperiorAuthorityDomainOfInfluence || !!this.data.superiorAuthorityDomainOfInfluence) &&
       (!this.data.responsibleForVotingCards ||
         (!!this.data.printData &&
           !!this.data.printData.shippingAway &&
@@ -204,6 +216,14 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
       this.logoChanged;
   }
 
+  public updateHasOtherSuperiorAuthorityDomainOfInfluence(checked: boolean) {
+    this.hasOtherSuperiorAuthorityDomainOfInfluence = checked;
+
+    if (!checked) {
+      this.data.superiorAuthorityDomainOfInfluence = undefined;
+    }
+  }
+
   private async leaveDialogOpen(): Promise<boolean> {
     return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
@@ -298,6 +318,7 @@ export interface DomainOfInfluenceEditDialogData {
   domainOfInfluence: DomainOfInfluence;
   parent?: DomainOfInfluence;
   readonly: boolean;
+  availableSuperiorAuthorityDomainOfInfluences: DomainOfInfluence[];
 }
 
 export interface DomainOfInfluenceEditDialogResult {

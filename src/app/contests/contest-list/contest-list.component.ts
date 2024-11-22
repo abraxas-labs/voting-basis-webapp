@@ -11,6 +11,7 @@ import { PoliticalAssembly } from '../../core/models/political-assembly.model';
 import { LanguageService } from '../../core/language.service';
 import { TranslateService } from '../../core/translate.service';
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
+import moment from 'moment';
 
 @Component({
   selector: 'app-contest-list',
@@ -44,7 +45,14 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input()
   public set contests(contests: ContestSummary[]) {
-    const contestListTypes = contests.map(x => this.mapContestSummaryToContestListType(x));
+    const contestListTypes = contests
+      .map(x => this.mapContestSummaryToContestListType(x))
+      // VOTING-4595 date format workaround, remove as soon as proper handling within BC is available.
+      // VOTING-4891 is the follow-up ticket.
+      .map(x => {
+        x.date = moment(x.date).format('YYYY-MM-DD') as any as Date;
+        return x;
+      });
     this.dataSource.data = [...this.dataSource.data.filter(x => x.isPoliticalAssembly), ...contestListTypes];
   }
 

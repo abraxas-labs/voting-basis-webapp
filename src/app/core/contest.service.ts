@@ -16,6 +16,7 @@ import {
   ListContestPastRequest,
   ListContestSummariesRequest,
   ListFuturePreconfiguredDatesRequest,
+  ListPoliticalBusinessSummariesRequest,
   PastUnlockContestRequest,
   UpdateContestRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/contest_requests_pb';
@@ -39,8 +40,14 @@ import {
   PreconfiguredContestDate,
   PreconfiguredContestDateProto,
 } from './models/contest.model';
-import { PoliticalBusiness, PoliticalBusinessProto } from './models/political-business.model';
+import {
+  PoliticalBusiness,
+  PoliticalBusinessProto,
+  PoliticalBusinessSummary,
+  PoliticalBusinessSummaryProto,
+} from './models/political-business.model';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
+import { PoliticalBusinessUnion, PoliticalBusinessUnionProto } from './models/political-business-union.model';
 
 @Injectable({
   providedIn: 'root',
@@ -173,6 +180,17 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
     ).pipe(retryForeverWithBackoff());
   }
 
+  public listPoliticalBusinessSummaries(contestId: string): Promise<PoliticalBusinessSummary[]> {
+    const req = new ListPoliticalBusinessSummariesRequest();
+    req.setContestId(contestId);
+
+    return this.request(
+      c => c.listPoliticalBusinessSummaries,
+      req,
+      r => this.mapToPoliticalBusinessSummaries(r.getPoliticalBusinessSummariesList()),
+    );
+  }
+
   private mapToContestSimple(data: ContestProto): ContestSimple {
     return {
       id: data.getId(),
@@ -283,7 +301,7 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
     if (!!politicalBusinessUnionMessage) {
       return {
         politicalBusinessUnion: {
-          data: politicalBusinessUnionMessage.getData()!.toObject()!,
+          data: this.mapToPoliticalBusinessUnion(politicalBusinessUnionMessage.getData()!),
           newEntityState: politicalBusinessUnionMessage.getNewEntityState(),
         },
       };
@@ -303,6 +321,25 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
         data: electionGroupMessage!.getData()!.toObject()!,
         newEntityState: electionGroupMessage!.getNewEntityState(),
       },
+    };
+  }
+
+  private mapToPoliticalBusinessSummaries(data: PoliticalBusinessSummaryProto[]): PoliticalBusinessSummary[] {
+    return data.map(x => this.mapToPoliticalBusinessSummary(x));
+  }
+
+  private mapToPoliticalBusinessSummary(data: PoliticalBusinessSummaryProto): PoliticalBusinessSummary {
+    return {
+      ...data.toObject(),
+      shortDescription: toJsMap(data.getShortDescriptionMap()),
+      domainOfInfluence: DomainOfInfluenceService.mapToDomainOfInfluence(data.getDomainOfInfluence()!),
+    };
+  }
+
+  public mapToPoliticalBusinessUnion(data: PoliticalBusinessUnionProto): PoliticalBusinessUnion {
+    return {
+      ...data.toObject(),
+      politicalBusinessIds: data.getPoliticalBusinessIdsList(),
     };
   }
 }

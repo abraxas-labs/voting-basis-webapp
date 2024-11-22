@@ -11,6 +11,7 @@ import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-le
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { Vote, VoteResultAlgorithm } from '../../core/models/vote.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
+import { PermissionService } from '../../core/permission.service';
 
 @Component({
   selector: 'app-vote-general-informations',
@@ -24,8 +25,9 @@ export class VoteGeneralInformationsComponent extends PoliticalBusinessGeneralIn
     enumUtil: EnumUtil,
     contestService: ContestService,
     doiLevelService: DomainOfInfluenceLevelService,
+    permissionService: PermissionService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, {} as Vote);
+    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, permissionService, {} as Vote);
     this.resultAlgorithms = this.enumUtil.getArrayWithDescriptions<VoteResultAlgorithm>(
       VoteResultAlgorithm,
       'VOTE.RESULT_ALGORITHM.TYPES.',

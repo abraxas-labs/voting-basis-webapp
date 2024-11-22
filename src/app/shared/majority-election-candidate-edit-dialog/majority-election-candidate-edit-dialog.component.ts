@@ -36,7 +36,8 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
   public isNew: boolean = false;
   public saving: boolean = false;
   public testingPhaseEnded: boolean;
-  public isCommunalDoiType: boolean;
+  public isCandidateLocalityRequired: boolean;
+  public isCandidateOriginRequired: boolean;
 
   public hasChanges: boolean = false;
   public originalCandidate: MajorityElectionCandidate;
@@ -53,8 +54,8 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
     this.data = dialogData.candidate;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
     this.isNew = !this.data.id;
-    this.isCommunalDoiType = isCommunalDoiType(dialogData.doiType);
-
+    this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
+    this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
     this.originalCandidate = cloneDeep(this.data);
 
     this.dialogRef.disableClose = true;
@@ -72,10 +73,10 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
       !!this.data.firstName &&
       !!this.data.lastName &&
       isValidDateOfBirth(this.data.dateOfBirth) &&
-      (this.isCommunalDoiType || !!this.data.locality) &&
+      (!this.isCandidateLocalityRequired || !!this.data.locality) &&
       LanguageService.allLanguagesPresent(this.data.party) &&
       this.data.sex !== undefined &&
-      (this.isCommunalDoiType || !!this.data.origin)
+      (!this.isCandidateOriginRequired || !!this.data.origin)
     );
   }
 
@@ -132,6 +133,8 @@ export interface MajorityElectionCandidateEditDialogData {
   candidate: MajorityElectionCandidate;
   testingPhaseEnded: boolean;
   doiType: DomainOfInfluenceType;
+  candidateLocalityRequired: boolean;
+  candidateOriginRequired: boolean;
 }
 
 export interface MajorityElectionCandidateEditDialogResult {

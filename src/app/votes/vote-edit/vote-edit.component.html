@@ -60,10 +60,13 @@
       <div class="stepper-footer">
         <bc-button (buttonClick)="back()" [label]="'APP.BACK' | translate"></bc-button>
 
-        <bc-button variant="primary"
-                   [disabled]="!step3.canSave"
-                   [label]="'APP.FINISH' | translate"
-                   (buttonClick)="submitErfassungInformations()"></bc-button>
+        <vo-lib-inline-spinner position="left"
+                               [loading]="stepLoading">
+          <bc-button variant="primary"
+                     [label]="'APP.FINISH' | translate"
+                     [disabled]="!step3.canSave || stepLoading"
+                     (buttonClick)="submitErfassungInformations()"></bc-button>
+        </vo-lib-inline-spinner>
       </div>
     </bc-simple-step>
   </bc-simple-stepper>

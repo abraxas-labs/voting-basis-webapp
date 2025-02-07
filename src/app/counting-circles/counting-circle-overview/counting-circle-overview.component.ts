@@ -14,7 +14,7 @@ import { PermissionService } from '../../core/permission.service';
 import { HistorizationFilter, newHistorizationFilter } from '../../shared/historization-filter-bar/historization-filter-bar.component';
 import { Permissions } from '../../core/models/permissions.model';
 import { CountingCircleState } from '@abraxas/voting-basis-service-proto/grpc/shared/counting_circle_pb';
-import { FilterDirective, SortDirective, TableDataSource } from '@abraxas/base-components';
+import { FilterDirective, PaginatorComponent, SortDirective, TableDataSource } from '@abraxas/base-components';
 import { Subscription } from 'rxjs';
 import { EntityState } from '../../core/models/message.model';
 
@@ -41,6 +41,9 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, O
     this.stateColumn,
     this.actionsColumn,
   ];
+
+  @ViewChild('paginator')
+  public paginator!: PaginatorComponent;
 
   @ViewChild(SortDirective, { static: true })
   public sort!: SortDirective;
@@ -85,18 +88,9 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, O
     this.dataSource.sortingDataAccessor = dataAccessor;
 
     try {
-      this.canDelete = await this.permissionService.hasAnyPermission(
-        Permissions.CountingCircle.DeleteSameCanton,
-        Permissions.CountingCircle.DeleteAll,
-      );
-      this.canCreate = await this.permissionService.hasAnyPermission(
-        Permissions.CountingCircle.CreateSameCanton,
-        Permissions.CountingCircle.CreateAll,
-      );
-      this.canMerge = await this.permissionService.hasAnyPermission(
-        Permissions.CountingCircle.MergeSameCanton,
-        Permissions.CountingCircle.MergeAll,
-      );
+      this.canDelete = await this.permissionService.hasPermission(Permissions.CountingCircle.DeleteSameCanton);
+      this.canCreate = await this.permissionService.hasPermission(Permissions.CountingCircle.CreateSameCanton);
+      this.canMerge = await this.permissionService.hasPermission(Permissions.CountingCircle.MergeSameCanton);
       this.dataSource.data = await this.countingCircleService.list();
       this.startChangesListener();
     } finally {
@@ -107,6 +101,7 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, O
   public ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.filter = this.filter;
+    this.dataSource.paginator = this.paginator;
   }
 
   public ngOnDestroy(): void {

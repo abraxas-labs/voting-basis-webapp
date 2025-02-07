@@ -6,51 +6,84 @@
       <bc-table filter sort [sortActive]="[{ id: nameColumn, direction: 'asc' }]" selection class="w-full" [dataSource]="dataSource">
         <ng-container [columnDef]="selectColumn">
           <bc-header-cell *headerCellDef>
-            <bc-checkbox class="ml-2 mb-0" (checkedChange)="toggleAllRows($event); contentChanged()"
+            <bc-checkbox
+              class="ml-2 mb-0"
+              (checkedChange)="toggleAllRows($event); contentChanged()"
               [checked]="selection.hasValue() && isAllSelected"
-              [indeterminate]="selection.hasValue() && !isAllSelected">
+              [indeterminate]="selection.hasValue() && !isAllSelected"
+            >
             </bc-checkbox>
           </bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
-            <bc-checkbox class="ml-2" (checkedChange)="toggleRow(element, $event); contentChanged()"
-              [checked]="selection.isSelected(element)">
+            <bc-checkbox
+              class="ml-2"
+              (checkedChange)="toggleRow(element, $event); contentChanged()"
+              [checked]="selection.isSelected(element)"
+            >
             </bc-checkbox>
           </bc-data-cell>
         </ng-container>
 
         <ng-container [columnDef]="nameColumn">
-          <bc-header-cell filter sort *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
+          <bc-header-cell filter sort *headerCellDef>
+            <span truncateWithTooltip tooltip>
+              {{ 'COUNTING_CIRCLE.NAME' | translate }}
+            </span>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.name"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container [columnDef]="bfsColumn">
-          <bc-header-cell filter sort *headerCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.bfs }}</bc-data-cell>
+          <bc-header-cell filter sort *headerCellDef>
+            <span truncateWithTooltip tooltip>
+              {{ 'COUNTING_CIRCLE.BFS' | translate }}
+            </span>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.bfs"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container [columnDef]="authorityColumn">
-          <bc-header-cell filter sort *headerCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.responsibleAuthority.name }}</bc-data-cell>
+          <bc-header-cell filter sort *headerCellDef>
+            <span truncateWithTooltip tooltip>
+              {{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}
+            </span>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.responsibleAuthority.name"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-        <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
-          selectionRow [selectionRowValue]="row" (click)="selection.toggle(row); updateIsAllSelected(); contentChanged()"></bc-data-row>
+        <bc-data-row
+          *dataRowDef="let row; columns: columns; let i = index"
+          selectionToggle
+          [selectionToggleValue]="row"
+          selectionRow
+          [selectionRowValue]="row"
+          (click)="selection.toggle(row); updateIsAllSelected(); contentChanged()"
+        ></bc-data-row>
       </bc-table>
-      <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
+      <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 15]"></bc-paginator>
     </div>
-    <bc-divider class="ml-4" orientation="vertical"></bc-divider>
+    <bc-divider class="ml-3" orientation="vertical"></bc-divider>
     <div right>
       <h2 translate class="mb-0">DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN_SELECTED_OVERVIEW</h2>
       <bc-table class="w-full" [dataSource]="selection.selected">
-
         <ng-container [columnDef]="nameColumnSelected">
-          <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
+          <bc-header-cell *headerCellDef>
+            <app-truncated-value [value]="'COUNTING_CIRCLE.NAME' | translate"></app-truncated-value>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.name"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container [columnDef]="actionsColumnSelected">
-          <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+          <bc-header-cell *headerCellDef></bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
             <bc-icon class="clickable" (click)="selection.deselect(element); contentChanged()" icon="remove"></bc-icon>
           </bc-data-cell>
@@ -59,23 +92,33 @@
         <bc-header-row *headerRowDef="let row; columns: columnsSelected"></bc-header-row>
         <bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></bc-data-row>
       </bc-table>
-      <ng-container *ngIf="inheritedCountingCircles.length">
+      <ng-container *ngIf="inheritedCountingCirclesDatasource.data.length">
         <h2 translate class="mb-0 mt-3">DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.INHERITED_OVERVIEW</h2>
-        <bc-table class="w-full" [dataSource]="inheritedCountingCircles">
-
+        <bc-table class="w-full" [dataSource]="inheritedCountingCirclesDatasource">
           <ng-container [columnDef]="nameColumnInherited">
-            <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
+            <bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'COUNTING_CIRCLE.NAME' | translate"></app-truncated-value>
+            </bc-header-cell>
+            <bc-data-cell *dataCellDef="let element">
+              <app-truncated-value [value]="element.name"></app-truncated-value>
+            </bc-data-cell>
           </ng-container>
 
           <bc-header-row *headerRowDef="let row; columns: columnsInherited"></bc-header-row>
           <bc-data-row *dataRowDef="let row; columns: columnsInherited; let i = index"></bc-data-row>
         </bc-table>
+        <bc-paginator #inheritedPaginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 15]"></bc-paginator>
       </ng-container>
     </div>
   </div>
 
-  <vo-lib-button-bar footer (save)="save()" [saving]="saving" [sticky]="true" [saveLabel]="'ACTIONS.ASSIGN' | translate"
-    (cancel)="closeWithUnsavedChangesCheck()">
+  <vo-lib-button-bar
+    footer
+    (save)="save()"
+    [saving]="saving"
+    [sticky]="true"
+    [saveLabel]="'ACTIONS.ASSIGN' | translate"
+    (cancel)="closeWithUnsavedChangesCheck()"
+  >
   </vo-lib-button-bar>
 </vo-lib-dialog>

@@ -20,7 +20,7 @@ export class ComparisonCountOfVotersCountingCircleAssignDialogComponent implemen
   public readonly translationPrefix: string = 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.PLAUSIBILISATION_CONFIGURATION.';
   public readonly dataSource = new TableDataSource<ComparisonCountOfVotersCountingCircleTableItem>();
   public readonly categoryItems: EnumItemDescription<ComparisonCountOfVotersCategory>[] = [];
-  public readonly disabled: boolean;
+  public readonly readonly: boolean;
   public readonly columns = ['name', 'category'];
 
   @ViewChild('paginator') public paginator!: PaginatorComponent;
@@ -33,7 +33,7 @@ export class ComparisonCountOfVotersCountingCircleAssignDialogComponent implemen
     @Inject(MAT_DIALOG_DATA) dialogData: ComparisonCountOfVotersCountingCircleAssignDialogData,
   ) {
     this.domainOfInfluence = dialogData.domainOfInfluence;
-    this.disabled = dialogData.disabled;
+    this.readonly = dialogData.readonly;
 
     const ccCategoryEntries =
       dialogData.domainOfInfluence.plausibilisationConfiguration?.comparisonCountOfVotersCountingCircleEntriesList ?? [];
@@ -53,7 +53,7 @@ export class ComparisonCountOfVotersCountingCircleAssignDialogComponent implemen
   }
 
   public apply(): void {
-    if (!this.disabled && !!this.domainOfInfluence.plausibilisationConfiguration) {
+    if (!this.readonly && !!this.domainOfInfluence.plausibilisationConfiguration) {
       this.domainOfInfluence.plausibilisationConfiguration.comparisonCountOfVotersCountingCircleEntriesList = this.dataSource.data
         .filter(x => !!x.category)
         .map(x => ({ countingCircleId: x.id, category: x.category! }));
@@ -69,7 +69,7 @@ export class ComparisonCountOfVotersCountingCircleAssignDialogComponent implemen
 
 export interface ComparisonCountOfVotersCountingCircleAssignDialogData {
   domainOfInfluence: DomainOfInfluence;
-  disabled: boolean;
+  readonly: boolean;
 }
 
 interface ComparisonCountOfVotersCountingCircleTableItem extends DomainOfInfluenceCountingCircle {

@@ -49,6 +49,9 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     hasForeignerVoters: false,
     hasMinorVoters: false,
     stistatMunicipality: false,
+    publishResultsDisabled: false,
+    votingCardFlatRateDisabled: false,
+    hideLowerDomainOfInfluencesInReports: false,
   } as DomainOfInfluence;
 }
 

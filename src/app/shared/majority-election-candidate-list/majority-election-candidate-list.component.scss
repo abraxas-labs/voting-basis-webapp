@@ -1,16 +1,7 @@
 @use '@abraxas/voting-lib/style/color' as *;
 
-.cell-container {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.flex {
-  display: flex;
-}
-
 .bc-column-actions {
-  width: 3rem;
+  width: 4rem;
 }
 
 .cdk-drag-preview {

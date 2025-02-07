@@ -1,42 +1,46 @@
-<ng-container *ngFor="let config of (configurations || []); let index = index">
+<ng-container *ngFor="let config of configurations || []; let index = index">
   <bc-text
     [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.DESCRIPTION' | translate"
     [required]="true"
-    [disabled]="disabled"
-    [(value)]="config.description"></bc-text>
+    [readonly]="readonly"
+    [(value)]="config.description"
+    [subscriptSizing]="'dynamic'"
+  ></bc-text>
   <bc-text
     [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.EAI_MESSAGE_TYPE' | translate"
     [required]="true"
-    [disabled]="disabled"
-    [(value)]="config.eaiMessageType"></bc-text>
-  <bc-dropdown [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDER' | translate"
-               [items]="providers"
-               displayExpr="description"
-               valueExpr="value"
-               [required]="true"
-               [disabled]="disabled"
-               [(value)]="config.provider"></bc-dropdown>
+    [readonly]="readonly"
+    [(value)]="config.eaiMessageType"
+    [subscriptSizing]="'dynamic'"
+  ></bc-text>
+  <bc-dropdown
+    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDER' | translate"
+    [items]="providers"
+    displayExpr="description"
+    valueExpr="value"
+    [required]="true"
+    [readonly]="readonly"
+    [(value)]="config.provider"
+    [subscriptSizing]="'dynamic'"
+  ></bc-dropdown>
   <bc-button
-    *ngIf="!disabled; else empty"
+    *ngIf="!readonly; else empty"
     variant="tertiary"
     icon="plus"
     class="pt-3"
     [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ASSIGN_OPEN' | translate"
-    (buttonClick)="assign(config)"></bc-button>
-  <bc-icon
-    *ngIf="!disabled; else empty"
-    icon="trash"
-    iconColor="error"
-    class="pt-2 clickable"
-    (click)="remove(index)"></bc-icon>
+    (buttonClick)="assign(config)"
+  ></bc-button>
+  <bc-icon *ngIf="!readonly; else empty" icon="trash" iconColor="error" class="pt-2 clickable" (click)="remove(index)"></bc-icon>
 </ng-container>
-<p class="no-data" *ngIf="disabled">{{'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.NO_DATA' | translate}}</p>
+<p class="no-data" *ngIf="readonly">{{ 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.NO_DATA' | translate }}</p>
 <bc-button
-  *ngIf="!disabled"
+  *ngIf="!readonly"
   variant="tertiary"
   icon="plus"
   [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ADD' | translate"
-  (buttonClick)="add()"></bc-button>
+  (buttonClick)="add()"
+></bc-button>
 
 <ng-template #empty>
   <div></div>

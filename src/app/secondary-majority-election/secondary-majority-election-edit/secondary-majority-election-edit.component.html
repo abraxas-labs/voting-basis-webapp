@@ -28,7 +28,11 @@
                                                   [locked]="locked"
                                                   [loadCandidates]="!newlyCreated"
                                                   #step2
-                                                  [secondaryMajorityElection]="data">
+                                                  [secondaryMajorityElection]="data"
+                                                  [candidateLocalityRequired]="contestDomainOfInfluenceDefaults.candidateLocalityRequired"
+                                                  [candidateOriginRequired]="contestDomainOfInfluenceDefaults.candidateOriginRequired"
+                                                  [domainOfInfluenceType]="domainOfInfluence?.type"
+                                                  [partyShortDescriptions]="partyShortDescriptions">
       </app-secondary-majority-election-candidates>
 
       <div class="stepper-footer">

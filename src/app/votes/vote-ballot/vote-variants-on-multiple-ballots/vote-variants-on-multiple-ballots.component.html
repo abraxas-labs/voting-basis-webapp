@@ -5,7 +5,7 @@
   </ng-container>
 
   <bc-button
-    *ngIf="!locked && canAddBallot()"
+    *ngIf="!locked && canAddBallot() && !readonly"
     variant="tertiary"
     icon="plus"
     class="block"
@@ -18,7 +18,7 @@
   <bc-dropdown
     [items]="getPossibleTieBreakQuestionCount()"
     [label]="'VOTE.TIE_BREAK_QUESTION_COUNT.TITLE' | translate"
-    [disabled]="testingPhaseEnded"
+    [readonly]="testingPhaseEnded || readonly"
     displayExpr="description"
     valueExpr="value"
     [required]="true"
@@ -35,7 +35,7 @@
     <h2 *ngIf="vote.ballots.length > 1">
       <span>{{ 'VOTE.BALLOT.TITLE' | translate }} {{ ballot.position }}</span>
       <bc-icon
-        *ngIf="!locked && canRemove"
+        *ngIf="!locked && canRemove && !readonly"
         icon="trash"
         iconColor="error"
         class="ml-2 clickable"
@@ -49,7 +49,7 @@
         <bc-dropdown
           [items]="getPossibleSubTypes(ballot)"
           [label]="'VOTE.BALLOT_SUB_TYPE.TITLE' | translate"
-          [disabled]="testingPhaseEnded"
+          [readonly]="testingPhaseEnded || readonly"
           displayExpr="description"
           valueExpr="value"
           [required]="true"
@@ -63,7 +63,7 @@
           [label]="'VOTE.MAIN_QUESTION_ID' | translate"
           [required]="true"
           [value]="ballot?.id ? ballot.id + '_1' : ''"
-          [disabled]="true"
+          [readonly]="true"
           [subscriptSizing]="'dynamic'"
         >
         </bc-text>
@@ -71,7 +71,7 @@
 
       <app-translated-formfield
         [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
-        [disabled]="locked"
+        [readonly]="locked || readonly"
         [maxlength]="300"
         [value]="ballot.shortDescription"
         (valueChange)="ballot.shortDescription = $event; contentChanged.emit()"
@@ -79,7 +79,7 @@
       ></app-translated-formfield>
       <app-translated-textarea
         [label]="'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate"
-        [disabled]="locked"
+        [readonly]="locked || readonly"
         [maxlength]="700"
         class="full-width"
         [value]="ballot.officialDescription"
@@ -90,7 +90,7 @@
       <app-translated-textarea
         *ngIf="eVoting"
         [label]="'VOTE.QUESTION.TITLE_STANDARD' | translate"
-        [disabled]="locked"
+        [readonly]="locked || readonly"
         [maxlength]="700"
         [value]="ballot.ballotQuestions[0].question"
         (valueChange)="ballot.ballotQuestions[0].question = $event; contentChanged.emit()"

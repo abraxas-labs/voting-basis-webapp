@@ -73,28 +73,10 @@ body {
   @extend .mt-4;
 }
 
-.mat-mdc-form-field-wrapper {
-  padding-bottom: 0;
-}
-
 .snackbar {
   margin-top: 5rem !important;
 }
 
 vo-lib-dialog {
   margin: 1.5rem;
-}
-
-bc-radio-button-group .mat-mdc-radio-button ~ .mat-mdc-radio-button:not(.inline) {
-  margin-top: 0 !important;
-}
-
-.truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-bc-switch .error-msg {
-  margin-top: 0;
 }

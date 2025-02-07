@@ -45,7 +45,8 @@
 
   <bc-checkbox [label]="'COUNTING_CIRCLE.E_VOTING' | translate"
                [checked]="showEVotingActiveFrom"
-               (checkedChange)="updateShowEVotingActiveFrom($event)"></bc-checkbox>
+               (checkedChange)="updateShowEVotingActiveFrom($event)"
+               [subscriptSizing]="'dynamic'"></bc-checkbox>
 
   <bc-date *ngIf="showEVotingActiveFrom"
            [label]="'COUNTING_CIRCLE.E_VOTING_ACTIVE_FROM' | translate"
@@ -55,6 +56,6 @@
            [subscriptSizing]="'dynamic'"></bc-date>
 
   <app-authority-address-edit [authority]="merger.newCountingCircle.responsibleAuthority"
-                              [disabled]="false">
+                              [readonly]="false">
   </app-authority-address-edit>
 </div>

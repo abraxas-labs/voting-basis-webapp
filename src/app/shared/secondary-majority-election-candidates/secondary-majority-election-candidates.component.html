@@ -18,19 +18,25 @@
                                         [testingPhaseEnded]="testingPhaseEnded"
                                         [locked]="locked"
                                         [reordering]="reordering"
+                                        [readonly]="readonly"
                                         (candidatesReordered)="reorderCandidates($event)"
                                         (edit)="editCandidate($event)"
                                         (delete)="deleteCandidate($event)"
                                         class="mb-2">
   </app-majority-election-candidate-list>
 
-  <app-majority-election-ballot-group-overview *ngIf="showBallotGroups && majorityElection && currentSecondaryMajorityElection"
-                                               [testingPhaseEnded]="testingPhaseEnded"
-                                               [locked]="locked"
-                                               [loadBallotGroupsInitially]="true"
-                                               [majorityElection]="majorityElection"
-                                               [secondaryMajorityElections]="secondaryMajorityElections"
-                                               [forSecondaryElection]="currentSecondaryMajorityElection">
+  <app-majority-election-ballot-group-overview
+    *ngIf="showBallotGroups
+      && majorityElection
+      && currentSecondaryMajorityElection
+      && !currentSecondaryMajorityElection.isOnSeparateBallot"
+    [testingPhaseEnded]="testingPhaseEnded"
+    [locked]="locked"
+    [readonly]="readonly"
+    [loadBallotGroupsInitially]="true"
+    [majorityElection]="majorityElection"
+    [secondaryMajorityElections]="secondaryMajorityElections"
+    [forSecondaryElection]="currentSecondaryMajorityElection">
   </app-majority-election-ballot-group-overview>
 
 </ng-template>

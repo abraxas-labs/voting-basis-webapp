@@ -1,10 +1,10 @@
 <bc-spinner class="block" *ngIf="loading; else candidateOverview"></bc-spinner>
 <ng-template #candidateOverview>
-  <div class="flex">
+  <div class="buttons">
     <bc-button
       variant="tertiary"
       icon="plus"
-      [disabled]="expandedCandidates.length >= maxCandidateCount || testingPhaseEnded"
+      [disabled]="expandedCandidates.length >= maxCandidateCount || testingPhaseEnded || readonly"
       [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate"
       (buttonClick)="createCandidate()"
     ></bc-button>
@@ -14,14 +14,14 @@
       <bc-button
         *ngIf="selectedCandidate && selectedCandidate.accumulated"
         variant="tertiary"
-        [disabled]="testingPhaseEnded"
+        [disabled]="testingPhaseEnded || readonly"
         [label]="'PROPORTIONAL_ELECTION.CANDIDATE.REMOVE_ACCUMULATION' | translate"
         (buttonClick)="removeAccumulation(selectedCandidate!)"
       ></bc-button>
       <bc-button
         *ngIf="!selectedCandidate?.accumulated"
         variant="tertiary"
-        [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded"
+        [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded || readonly"
         [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ACCUMULATE' | translate"
         (buttonClick)="accumulate(selectedCandidate!)"
       ></bc-button>
@@ -34,106 +34,107 @@
     [dataSource]="expandedCandidates"
     cdkDropList
     [cdkDropListData]="expandedCandidates"
-    [cdkDropListDisabled]="testingPhaseEnded"
+    [cdkDropListDisabled]="testingPhaseEnded || readonly"
     (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)"
   >
     <ng-container columnDef="position">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.POSITION' | translate }}</div>
+        <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.POSITION' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.position }}</div>
+        <app-truncated-value [value]="element.position"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="number">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</div>
+        <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.NUMBER_SHORT' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.number }}</div>
+        <app-truncated-value [value]="element.number"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="lastName">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.LAST_NAME' | translate }}</div>
+        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.LAST_NAME' | translate }}
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.lastName }}</div>
+        <app-truncated-value [value]="element.lastName"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="firstName">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</div>
+        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.FIRST_NAME' | translate }}
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.firstName }}</div>
+        <app-truncated-value [value]="element.firstName"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="dateOfBirth">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate }}</div>
+        <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.dateOfBirth | date }}</div>
+        <app-truncated-value [value]="element.dateOfBirth | date"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="sex">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.SEX' | translate }}</div>
+        <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.SEX' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ 'SEX_TYPE.' + element.sex | translate }}</div>
+        <app-truncated-value [value]="'SEX_TYPE.' + element.sex | translate"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="title">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.TITLE' | translate }}</div>
+        <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.TITLE' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.title }}</div>
+        <app-truncated-value [value]="element.title"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="incumbent">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate }}</div>
+        <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.title }}</div>
+        <bc-icon *ngIf="element.incumbent" icon="checkmark"></bc-icon>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="zipCode">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate }}</div>
+        <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.zipCode }}</div>
+        <app-truncated-value [value]="element.zipCode"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="locality">
       <bc-header-cell *headerCellDef>
-        <div class="truncate">{{ 'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate }}</div>
+        <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.locality }}</div>
+        <app-truncated-value [value]="element.locality"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="actions">
-      <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+      <bc-header-cell *headerCellDef></bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div *ngIf="!locked" class="actions">
+        <div *ngIf="!locked && !readonly" class="flex">
           <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
           <bc-icon
-            *ngIf="!testingPhaseEnded"
+            *ngIf="!testingPhaseEnded && !readonly"
+            class="ml-2"
             (click)="deleteCandidate(element); $event.stopPropagation()"
             icon="trash"
             iconColor="error"
@@ -152,7 +153,7 @@
       [selectionRowValue]="row"
       (click)="rowSelection.toggle(); selectCandidate(row)"
       cdkDrag
-      [cdkDragDisabled]="testingPhaseEnded"
+      [cdkDragDisabled]="testingPhaseEnded || readonly"
       [cdkDragData]="row"
     ></bc-data-row>
   </bc-table>

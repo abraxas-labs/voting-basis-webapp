@@ -8,13 +8,13 @@
         <bc-button
           variant="tertiary"
           icon="plus"
-          [disabled]="testingPhaseEnded"
+          [disabled]="testingPhaseEnded || readonly"
           [label]="'PROPORTIONAL_ELECTION.LIST.NEW' | translate"
           (buttonClick)="createList()"
         ></bc-button>
 
         <bc-button
-          [disabled]="testingPhaseEnded"
+          [disabled]="testingPhaseEnded || readonly"
           variant="tertiary"
           icon="download"
           [label]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
@@ -26,7 +26,7 @@
           variant="tertiary"
           (buttonClick)="manageListUnions()"
           [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate"
-          [disabled]="testingPhaseEnded"
+          [disabled]="testingPhaseEnded || readonly"
         ></bc-button>
       </div>
 
@@ -36,33 +36,39 @@
         [dataSource]="lists"
         cdkDropList
         [cdkDropListData]="lists"
-        [cdkDropListDisabled]="testingPhaseEnded"
+        [cdkDropListDisabled]="testingPhaseEnded || readonly"
         (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)"
       >
         <ng-container columnDef="orderNumber">
           <bc-header-cell *headerCellDef>
-            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate }}</div>
+            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate"></app-truncated-value>
           </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.orderNumber }}</bc-data-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.orderNumber"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container columnDef="shortDescription">
           <bc-header-cell *headerCellDef [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
-            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate }}</div>
+            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate"></app-truncated-value>
           </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.shortDescription | getTranslation }}</bc-data-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container columnDef="blankRowCount">
           <bc-header-cell *headerCellDef>
-            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate }}</div>
+            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate"></app-truncated-value>
           </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.blankRowCount }}</bc-data-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.blankRowCount"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container columnDef="listUnionDescription">
           <bc-header-cell *headerCellDef>
-            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate }}</div>
+            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate"></app-truncated-value>
           </bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
             <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: { $implicit: element.listUnionDescription }"></ng-container>
@@ -71,7 +77,7 @@
 
         <ng-container columnDef="subListUnionDescription">
           <bc-header-cell *headerCellDef>
-            <div class="truncate">{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate }}</div>
+            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate"></app-truncated-value>
           </bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
             <ng-container
@@ -81,12 +87,13 @@
         </ng-container>
 
         <ng-container columnDef="actions">
-          <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+          <bc-header-cell *headerCellDef></bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
-            <div *ngIf="!locked" class="actions">
+            <div *ngIf="!locked && !readonly" class="flex">
               <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
               <bc-icon
-                *ngIf="!testingPhaseEnded"
+                *ngIf="!testingPhaseEnded && !readonly"
+                class="ml-2"
                 (click)="deleteList(element); $event.stopPropagation()"
                 icon="trash"
                 iconColor="error"
@@ -127,6 +134,7 @@
         [domainOfInfluenceId]="proportionalElection.domainOfInfluenceId"
         [testingPhaseEnded]="testingPhaseEnded"
         [locked]="locked"
+        [readonly]="readonly"
         [candidateLocalityRequired]="candidateLocalityRequired"
         [candidateOriginRequired]="candidateOriginRequired"
         (candidateCreated)="candidateCreated(selectedList, $event)"

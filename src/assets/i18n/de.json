@@ -151,16 +151,19 @@
     "SHORT_NAME": "Kurzbezeichnung",
     "TYPE": "Geschäftsebene",
     "CANTON": "Kanton",
-    "AUTHORITY": "zuständige Behörde",
-    "HAS_OTHER_SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE": "Anderer Wahlkreis als Oberbehörde",
+    "AUTHORITY": "zuständige Behörde (Mandant)",
+    "HAS_OTHER_SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE": "Andere Oberbehörde des Wahlkreises",
     "SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE": "Oberbehörde (Wahlkreis)",
+    "HIDE_LOWER_DOMAIN_OF_INFLUENCES_IN_REPORTS": "Tiefste Ebene im Protokoll",
     "BFS": "BFS-Nummer",
+    "BFS_SHORT": "BFS-Nr.",
     "CODE": "Code",
     "SORT_NUMBER": "Sortierungsnummer",
     "NAME_FOR_PROTOCOL": "Bezeichnung für Protokoll",
     "NO_DOMAIN_OF_INFLUENCE_SELECTED": "Kein Wahlkreis ausgewählt",
     "VIRTUAL_TOP_LEVEL": "Virtueller Wahlkreis (oberste Ebene)",
     "VIEW_COUNTING_CIRCLE_PARTIAL_RESULTS": "Teilergebnisse von untergeordneten Auszählungskreisen anzeigen",
+    "PUBLISH_RESULTS": "Kommunale Ergebnisse publizieren (eCH-0252)",
     "COUNTING_CIRCLE": {
       "ASSIGN": "Auszählungskreise zuordnen",
       "ASSIGN_SELECTED": "Ausgewählte Auszählungskreise",
@@ -206,6 +209,7 @@
       "RESPONSIBLE_FOR_VOTING_CARDS": "Wahlkreis generiert Stimmrechtsausweise",
       "ELECTORAL_REGISTRATION_ENABLED": "Wahlkreis verwendet Stimmregister",
       "STISTAT_MUNICIPALITY": "STISTAT-Gemeinde",
+      "VOTING_CARD_FLAT_RATE_OWNER": "Übernimmt Pauschalkosten für Korporation",
       "VOTING_CARD_COLOR": "Farbe des Stimmrechtsausweis",
       "VOTING_CARD_COLORS": {
         "1": "Blau",
@@ -420,18 +424,24 @@
     "OWN_POLITICAL_BUSINESS": "Durch meine Behörde verwaltet",
     "OWNER": "Zuständige Behörde",
     "CONFIRM_DELETE": "Sind Sie sicher, dass das Geschäft gelöscht werden soll?",
-    "POLITICAL_BUSINESS_UNION_DESCRIPTION": "GV",
-    "ELECTION_GROUP_NUMBER": "WG",
+    "POLITICAL_BUSINESS_UNION_DESCRIPTION": {
+      "SHORT": "GV",
+      "LONG": "Geschäftsverbindung"
+    },
+    "ELECTION_GROUP_NUMBER": {
+      "SHORT": "WG",
+      "LONG": "Wahlgruppe"
+    },
     "TYPE": {
       "TITLE": "Geschäftstyp",
       "1": "Abstimmung",
+      "1_SUB_TYPE": {
+        "0": "Abstimmung (SGS)",
+        "1": "Abstimmung (SGV)"
+      },
       "2": "Majorzwahl",
       "3": "Proporzwahl",
       "4": "Majorzwahl"
-    },
-    "VOTE_SUB_TYPE": {
-      "0": "SGS",
-      "1": "SGV"
     },
     "SWISS_ABROAD_VOTING_RIGHT": {
       "TITLE": "Auslandschweizer",
@@ -671,9 +681,9 @@
       "NUMBER": "Kandidaten/innen-Nummer",
       "NUMBER_SHORT": "Kand-Nr.",
       "FIRST_NAME": "Amtlicher Vorname",
-      "LAST_NAME": "Amtlicher Name",
+      "LAST_NAME": "Amtlicher Nachname",
       "POLITICAL_FIRST_NAME": "Politischer Vorname",
-      "POLITICAL_LAST_NAME": "Politischer Name",
+      "POLITICAL_LAST_NAME": "Politischer Nachname",
       "DATE_OF_BIRTH": "Geburtsdatum",
       "DATE_OF_BIRTH_YEAR": "Geburtsjahr",
       "SEX": "Geschlecht",
@@ -762,9 +772,9 @@
       "NUMBER": "Kandidaten/innen-Nummer",
       "NUMBER_SHORT": "Kand-Nr.",
       "FIRST_NAME": "Amtlicher Vorname",
-      "LAST_NAME": "Amtlicher Name",
+      "LAST_NAME": "Amtlicher Nachname",
       "POLITICAL_FIRST_NAME": "Politischer Vorname",
-      "POLITICAL_LAST_NAME": "Politischer Name",
+      "POLITICAL_LAST_NAME": "Politischer Nachname",
       "DATE_OF_BIRTH": "Geburtsdatum",
       "DATE_OF_BIRTH_YEAR": "Geburtsjahr",
       "SEX": "Geschlecht",
@@ -817,14 +827,12 @@
     "MAJORITY": {
       "NEW": "Nebenwahl hinzufügen (Majorzwahl)",
       "EDIT": "Nebenwahl bearbeiten (Majorzwahl)",
-      "ALLOWED_CANDIDATES": {
-        "TITLE": "Kandidierende",
-        "1": "Müssen in der Hauptwahl sein",
-        "2": "Können in der Hauptwahl sein",
-        "3": "Dürfen nicht in der Hauptwahl sein"
-      },
       "SELECT_CANDIDATE_FROM_PRIMARY": "Aus der Hauptwahl hinzufügen",
       "INDIVIDUAL_CANDIDATES": "Vereinzelte"
+    },
+    "CONFIRM_NEW_NON_REFERENCED_CANDIDATE": {
+      "TITLE": "Sind Sie sicher?",
+      "MESSAGE": "Kandidat/innen dürfen nur hinzugefügt werden, wenn die Kandidat/in dem Organ bereits angehört."
     }
   },
   "STEPPER": {
@@ -906,14 +914,16 @@
       },
       "INVALID_VOTES": "Ungültige Stimmen",
       "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden",
-      "CANDIDATE_LOCALITY_AND_ORIGIN_REQUIRED": "Heimat- / Wohnort Pflicht (bei Geschäftsebene eidg./kant./bez.) - Gilt auch für Proporzwahlen"
+      "CANDIDATE_LOCALITY_AND_ORIGIN_REQUIRED": "Heimat- / Wohnort Pflicht (bei Geschäftsebene eidg./kant./bez.) - Gilt auch für Proporzwahlen",
+      "SECONDARY_MAJORITY_ELECTION_ON_SEPARATE_BALLOT": "Nebenwahlen auf getrennten Wahlzetteln"
     },
     "GENERAL": "Allgemein",
-    "PUBLISH_RESULTS": "Status Publiziert",
+    "MANUAL_PUBLISH_RESULTS": "Status publizieren manuell (eCH-0252)",
     "PUBLISH_RESULTS_BEFORE_AUDITED_TENTATIVELY": "Publikation in Status \"übermittelt\" und \"zur Korrektur\" möglich",
     "END_RESULT_FINALIZE": "Schlussergebnis setzen",
     "CREATE_CONTEST_ON_HIGHEST_HIERARCHICAL_LEVEL": "Urnengangseröffnung immer auf höchster Hierarchieebene",
     "INTERNAL_PLAUSIBILISATION": "Interne Plausibilisierungen",
+    "DOMAIN_OF_INFLUENCE_PUBLISH_RESULTS_OPTION": "Publikation kommunaler Ergebnisse via Wahlkreise steuern (eCH-0252)",
     "SWISS_ABROAD_VOTING_RIGHT": {
       "TITLE": "Auslandschweizerinnen und Auslandschweizer",
       "DOMAIN_OF_INFLUENCE_TYPES": "Stimmrecht auf folgenden Geschäftsebenen"
@@ -1087,13 +1097,5 @@
       "PoliticalAssemblyUpdated": "Versammlung editiert",
       "PoliticalAssemblyDeleted": "Versammlung gelöscht"
     }
-  },
-  "PAGINATOR": {
-    "ITEMS_PER_PAGE": "Einträge pro Seite",
-    "NEXT_PAGE": "Nächste Seite",
-    "PREVIOUS_PAGE": "Vorherige Seite",
-    "FIRST_PAGE": "Erste Seite",
-    "LAST_PAGE": "Letzte Seite",
-    "OF_LABEL": "von"
   }
 }

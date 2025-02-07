@@ -7,7 +7,7 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
@@ -19,6 +19,8 @@ import { MajorityElectionGeneralInformationsComponent } from '../majority-electi
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
+import { PermissionService } from '../../core/permission.service';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-majority-election-edit',
@@ -48,6 +50,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
   public locked: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public hasChanges: boolean = false;
+  public canEdit: boolean = false;
 
   private persistedData: MajorityElection = newMajorityElection();
 
@@ -62,6 +65,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
     private readonly contestService: ContestService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly dialogService: DialogService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -76,6 +80,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
       const { testingPhaseEnded, locked, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked = locked;
+      this.canEdit = await this.permissionService.hasPermission(Permissions.MajorityElection.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
     } finally {
       this.initialLoading = false;
@@ -96,7 +101,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
     this.stepLoading = true;
 
     try {
-      if (this.hasChanges) {
+      if (this.hasChanges && this.canEdit) {
         if (this.isNew) {
           this.data.id = await this.majorityElectionService.create(this.data);
         } else {

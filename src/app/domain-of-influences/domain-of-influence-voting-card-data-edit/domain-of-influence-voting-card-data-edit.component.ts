@@ -21,7 +21,6 @@ import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared
 @Component({
   selector: 'app-domain-of-influence-voting-card-data-edit',
   templateUrl: './domain-of-influence-voting-card-data-edit.component.html',
-  styleUrls: ['./domain-of-influence-voting-card-data-edit.component.scss'],
 })
 export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
   public shippingAwayItems: EnumItemDescription<VotingCardShippingFranking>[] = [];
@@ -106,9 +105,6 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
       .getArrayWithDescriptions<VotingCardColor>(VotingCardColor, 'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_COLORS.')
       .filter(c => c.value !== VotingCardColor.VOTING_CARD_COLOR_UNSPECIFIED);
 
-    this.canEditEverything = await this.permissionService.hasAnyPermission(
-      Permissions.DomainOfInfluence.UpdateSameCanton,
-      Permissions.DomainOfInfluence.UpdateAll,
-    );
+    this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateSameCanton);
   }
 }

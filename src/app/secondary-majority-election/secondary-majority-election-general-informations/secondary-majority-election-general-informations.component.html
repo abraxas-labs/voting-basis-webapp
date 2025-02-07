@@ -1,18 +1,18 @@
 <div class="form" *ngIf="data">
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
-           [disabled]="locked"
+           [readonly]="locked"
            [required]="true"
            [(value)]="data.politicalBusinessNumber"></bc-text>
 
   <app-translated-formfield [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
-                [disabled]="locked"
+                [readonly]="locked"
                 [maxlength]="100"
                 [(value)]="data.shortDescription"
                 [singleLanguageInput]="true"></app-translated-formfield>
 
   <div class="form-group">
     <app-translated-textarea [label]="'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate"
-                             [disabled]="locked"
+                             [readonly]="locked"
                              [maxlength]="500"
                              class="full-width"
                              [(value)]="data.officialDescription"
@@ -20,20 +20,10 @@
   </div>
 
   <bc-number [label]="'MAJORITY_ELECTION.NUMBER_OF_MANDATES' | translate"
-             [disabled]="testingPhaseEnded"
+             [readonly]="testingPhaseEnded"
              [required]="true"
              [value]="data.numberOfMandates"
              (valueChange)="data.numberOfMandates = +$event"></bc-number>
-
-  <bc-dropdown class="full-width"
-               [items]="allowedCandidates"
-               [disabled]="testingPhaseEnded"
-               displayExpr="description"
-               valueExpr="value"
-               [clearable]="false"
-               [required]="true"
-               [(value)]="data.allowedCandidates"
-               [label]="'SECONDARY_ELECTION.MAJORITY.ALLOWED_CANDIDATES.TITLE' | translate"></bc-dropdown>
 
   <bc-checkbox [checked]="!data.individualCandidatesDisabled"
                (checkedChange)="data.individualCandidatesDisabled = !$event;"

@@ -2,7 +2,7 @@
 
   <div class="dropdown-checkbox-container">
     <bc-dropdown [label]="'MAJORITY_ELECTION.RESULT_ENTRY.TITLE' | translate"
-                 [disabled]="testingPhaseEnded"
+                 [readonly]="testingPhaseEnded || readonly"
                  [items]="resultEntryChoices"
                  displayExpr="description"
                  valueExpr="value"
@@ -13,17 +13,18 @@
     <bc-checkbox [checked]="data.enforceResultEntryForCountingCircles"
                  (checkedChange)="data.enforceResultEntryForCountingCircles = $event; contentChanged.emit()"
                  [label]="'MAJORITY_ELECTION.ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES' | translate"
-                 [disabled]="locked"></bc-checkbox>
+                 [disabled]="locked || readonly"
+                 [subscriptSizing]="'dynamic'"></bc-checkbox>
   </div>
 
   <ng-container *ngIf="data.resultEntry === resultEntryType.MAJORITY_ELECTION_RESULT_ENTRY_DETAILED">
     <bc-number [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_SIZE' | translate"
-               [disabled]="testingPhaseEnded"
+               [readonly]="testingPhaseEnded || readonly"
                [value]="ballotBundleSize"
                (valueChange)="ballotBundleSize = $event; contentChanged.emit()"
                [subscriptSizing]="'dynamic'"></bc-number>
     <bc-number [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_SAMPLE_SIZE' | translate"
-               [disabled]="testingPhaseEnded"
+               [readonly]="testingPhaseEnded || readonly"
                [max]="data.ballotBundleSize"
                [value]="ballotBundleSampleSize"
                (valueChange)="ballotBundleSampleSize = $event; contentChanged.emit()"
@@ -32,63 +33,64 @@
     <div class="flex-grid">
       <bc-label class="full-width" [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
       <bc-label class="full-width" [label]="'MAJORITY_ELECTION.BALLOT_NUMBER_GENERATION.TITLE' | translate"></bc-label>
-      <bc-checkbox class="ml-2"
-                   [(checked)]="data.automaticBallotBundleNumberGeneration"
-                   [disabled]="testingPhaseEnded"
+      <bc-checkbox [(checked)]="data.automaticBallotBundleNumberGeneration"
+                   [disabled]="testingPhaseEnded || readonly"
                    [label]="'MAJORITY_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.AUTOMATIC' | translate"
-                   (checkedChange)="refreshBallotNumberGenerationChoices(); contentChanged.emit()"></bc-checkbox>
-      <bc-radio-button-group class="ml-2"
-                             orientation="vertical"
+                   (checkedChange)="refreshBallotNumberGenerationChoices(); contentChanged.emit()"
+                   [subscriptSizing]="'dynamic'"></bc-checkbox>
+      <bc-radio-button-group orientation="vertical"
                              [items]="ballotNumberGenerationChoices"
                              [value]="data.ballotNumberGeneration"
-                             (valueChange)="data.ballotNumberGeneration = $event; contentChanged.emit()">
+                             [disabled]="testingPhaseEnded || readonly"
+                             (valueChange)="data.ballotNumberGeneration = $event; contentChanged.emit()"
+                             [subscriptSizing]="'dynamic'">
       </bc-radio-button-group>
     </div>
 
     <div class="flex-grid">
       <bc-label class="full-width col-span-2" [label]="'MAJORITY_ELECTION.AUTOMATIC_EMPTY_VOTE_COUNTING.TITLE' | translate"></bc-label>
-      <bc-radio-button-group class="ml-2"
-                             orientation="vertical"
+      <bc-radio-button-group orientation="vertical"
                              [items]="automaticEmptyVoteCountingChoices"
                              [value]="data.automaticEmptyVoteCounting"
                              (valueChange)="data.automaticEmptyVoteCounting = $event; contentChanged.emit()"
-                             [disabled]="testingPhaseEnded">
+                             [disabled]="testingPhaseEnded || readonly"
+                             [subscriptSizing]="'dynamic'">
       </bc-radio-button-group>
-      <bc-checkbox class="ml-2"
-                   [checked]="data.enforceEmptyVoteCountingForCountingCircles"
+      <bc-checkbox [checked]="data.enforceEmptyVoteCountingForCountingCircles"
                    (checkedChange)="data.enforceEmptyVoteCountingForCountingCircles = $event; contentChanged.emit()"
                    [label]="'MAJORITY_ELECTION.ENFORCE_EMPTY_VOTE_COUNTING_FOR_COUNTING_CIRCLES' | translate"
-                   [disabled]="locked"></bc-checkbox>
+                   [disabled]="locked || readonly"
+                   [subscriptSizing]="'dynamic'"></bc-checkbox>
     </div>
 
     <div class="flex-grid">
       <bc-label class="full-width col-span-2" [label]="'MAJORITY_ELECTION.REVIEW_PROCEDURE.TITLE' | translate"></bc-label>
-      <bc-radio-button-group class="ml-2"
-                             [items]="reviewProcedureChoices"
+      <bc-radio-button-group [items]="reviewProcedureChoices"
                              orientation="vertical"
                              [value]="data.reviewProcedure"
                              (valueChange)="data.reviewProcedure = $event; contentChanged.emit()"
-                             [disabled]="testingPhaseEnded">
+                             [disabled]="testingPhaseEnded || readonly"
+                             [subscriptSizing]="'dynamic'">
       </bc-radio-button-group>
-      <bc-checkbox class="ml-2"
-                   [checked]="data.enforceReviewProcedureForCountingCircles"
+      <bc-checkbox [checked]="data.enforceReviewProcedureForCountingCircles"
                    (checkedChange)="data.enforceReviewProcedureForCountingCircles = $event; contentChanged.emit()"
                    [label]="'MAJORITY_ELECTION.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
-                   [disabled]="testingPhaseEnded"></bc-checkbox>
+                   [disabled]="testingPhaseEnded || readonly"
+                   [subscriptSizing]="'dynamic'"></bc-checkbox>
     </div>
 
     <div *ngIf="useCandidateCheckDigit" class="flex-grid">
       <bc-label class="full-width col-span-2" [label]="'MAJORITY_ELECTION.CANDIDATE_CHECK_DIGIT.TITLE' | translate"></bc-label>
-      <bc-checkbox class="ml-2"
-                   [checked]="data.candidateCheckDigit"
+      <bc-checkbox [checked]="data.candidateCheckDigit"
                    (checkedChange)="data.candidateCheckDigit = $event; contentChanged.emit()"
-                   [disabled]="testingPhaseEnded"
-                   [label]="'MAJORITY_ELECTION.CANDIDATE_CHECK_DIGIT.USE' | translate"></bc-checkbox>
-      <bc-checkbox class="ml-2"
-                   [checked]="data.enforceCandidateCheckDigitForCountingCircles"
+                   [disabled]="testingPhaseEnded || readonly"
+                   [label]="'MAJORITY_ELECTION.CANDIDATE_CHECK_DIGIT.USE' | translate"
+                   [subscriptSizing]="'dynamic'"></bc-checkbox>
+      <bc-checkbox [checked]="data.enforceCandidateCheckDigitForCountingCircles"
                    (checkedChange)="data.enforceCandidateCheckDigitForCountingCircles = $event; contentChanged.emit()"
                    [label]="'MAJORITY_ELECTION.CANDIDATE_CHECK_DIGIT.ENFORCE_FOR_COUNTING_CIRCLES' | translate"
-                   [disabled]="testingPhaseEnded"></bc-checkbox>
+                   [disabled]="testingPhaseEnded || readonly"
+                   [subscriptSizing]="'dynamic'"></bc-checkbox>
     </div>
   </ng-container>
 </div>

@@ -1,5 +1,31 @@
 @use '@abraxas/voting-lib/style/table' as table;
 
+::ng-deep .bc-column-date {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-type {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-description {
+  @include table.truncate-long-sortable-table-header();
+
+  min-width: 13rem;
+}
+
+::ng-deep .bc-column-end-of-testing-phase {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-archive-per {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-state {
+  @include table.truncate-long-sortable-table-header();
+}
+
 ::ng-deep .bc-column-political-businesses {
   @include table.truncate-long-sortable-table-header();
 }
@@ -8,24 +34,16 @@
   @include table.truncate-long-sortable-table-header();
 }
 
-::ng-deep .bc-column-end-of-testing-phase {
-  @include table.truncate-long-sortable-table-header();
+.bc-column-actions {
+  width: 2rem;
 }
 
-.pcd {
+.italic {
   font-style: italic;
-}
-
-.description-header {
-  width: 13rem;
 }
 
 .political-businesses {
   white-space: pre-line;
-}
-
-.bc-column-actions {
-  width: 2%;
 }
 
 bc-paginator {

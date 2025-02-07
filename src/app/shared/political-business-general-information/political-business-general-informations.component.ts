@@ -7,7 +7,7 @@
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContestService } from '../../core/contest.service';
-import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-level.service';
+import { DomainOfInfluenceReportLevelService } from '../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { LanguageService } from '../../core/language.service';
@@ -30,6 +30,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
   public domainOfInfluenceLevels: DomainOfInfluenceLevel[] = [];
   public contest: Contest = {} as Contest;
   public hasAdminPermissions: boolean = false;
+  public readonly: boolean = false;
 
   @Input()
   public data: T;
@@ -46,7 +47,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
     protected readonly enumUtil: EnumUtil,
     protected readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly contestService: ContestService,
-    private readonly doiLevelService: DomainOfInfluenceLevelService,
+    private readonly doiReportLevelService: DomainOfInfluenceReportLevelService,
     private readonly permissionService: PermissionService,
     initialData: T,
   ) {
@@ -62,7 +63,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
     this.data.domainOfInfluenceId = v?.id ?? '';
 
     const politicalBusinessDomainOfInfluenceNode = this.domainOfInfluenceTree?.findNodeById(this.data.domainOfInfluenceId);
-    this.domainOfInfluenceLevels = this.doiLevelService.buildDomainOfInfluenceLevels(politicalBusinessDomainOfInfluenceNode);
+    this.domainOfInfluenceLevels = this.doiReportLevelService.buildDomainOfInfluenceReportLevels(politicalBusinessDomainOfInfluenceNode);
   }
 
   public get selectedDomainOfInfluenceType(): DomainOfInfluenceType | undefined {
@@ -83,19 +84,21 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
 
   public get isValid(): boolean {
     return (
-      !!this.data &&
-      !!this.data.politicalBusinessNumber &&
-      LanguageService.allLanguagesPresent(this.data.officialDescription) &&
-      LanguageService.allLanguagesPresent(this.data.shortDescription) &&
-      !!this.data.domainOfInfluenceId &&
-      !!this.data.contestId
+      this.readonly ||
+      (!!this.data &&
+        !!this.data.politicalBusinessNumber &&
+        LanguageService.allLanguagesPresent(this.data.officialDescription) &&
+        LanguageService.allLanguagesPresent(this.data.shortDescription) &&
+        !!this.data.domainOfInfluenceId &&
+        !!this.data.contestId)
     );
   }
 
   public async ngOnInit(): Promise<void> {
     try {
       this.contest = await this.contestService.get(this.data.contestId);
-      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ActionsTenantSameCanton);
+      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ReadActionsTenantSameCanton);
+      this.readonly = !(await this.permissionService.hasPermission(Permissions.PoliticalBusiness.WriteActionsSameTenant));
       await this.initDomainOfInfluenceData();
     } finally {
       this.loading = false;

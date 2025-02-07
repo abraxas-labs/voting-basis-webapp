@@ -124,6 +124,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       superiorAuthorityDomainOfInfluence: !!doi.getSuperiorAuthorityDomainOfInfluence()
         ? this.mapToDomainOfInfluence(doi.getSuperiorAuthorityDomainOfInfluence()!)
         : undefined,
+      publishResultsDisabled: doi.getPublishResultsDisabled(),
+      votingCardFlatRateDisabled: doi.getVotingCardFlatRateDisabled(),
+      hideLowerDomainOfInfluencesInReports: doi.getHideLowerDomainOfInfluencesInReports(),
     };
   }
 
@@ -174,7 +177,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     hasAdminPermissions: boolean,
   ): Promise<DomainOfInfluence[]> {
     const { id: tenantId } = await this.auth.getActiveTenant();
-    return dois.filter(({ secureConnectId, virtualTopLevel }) => (secureConnectId === tenantId || hasAdminPermissions) && !virtualTopLevel);
+    return dois
+      .filter(({ secureConnectId, virtualTopLevel }) => (secureConnectId === tenantId || hasAdminPermissions) && !virtualTopLevel)
+      .sort((a, b) => a.name.localeCompare(b.name));
   }
 
   public get(id: string): Promise<DomainOfInfluence> {
@@ -351,11 +356,15 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setPartiesList(this.filterOnlyUpdateablePartiesAndMapToProto(data));
     result.setVirtualTopLevel(data.virtualTopLevel);
     result.setViewCountingCirclePartialResults(data.viewCountingCirclePartialResults);
+    result.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
     result.setVotingCardColor(data.votingCardColor);
     result.setHasForeignerVoters(data.hasForeignerVoters);
     result.setHasMinorVoters(data.hasMinorVoters);
     result.setSuperiorAuthorityDomainOfInfluenceId(data.superiorAuthorityDomainOfInfluence?.id ?? '');
     result.setStistatMunicipality(data.stistatMunicipality);
+    result.setPublishResultsDisabled(data.publishResultsDisabled);
+    result.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
+    result.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
     return result;
   }
 
@@ -398,6 +407,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setHasMinorVoters(data.hasMinorVoters);
       adminRequest.setSuperiorAuthorityDomainOfInfluenceId(data.superiorAuthorityDomainOfInfluence?.id ?? '');
       adminRequest.setStistatMunicipality(data.stistatMunicipality);
+      adminRequest.setPublishResultsDisabled(data.publishResultsDisabled);
+      adminRequest.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
+      adminRequest.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
       this.mapToDomainOfInfluenceElectionAdminOrAdminRequest(data, adminRequest);
       result.setAdminRequest(adminRequest);
     } else {

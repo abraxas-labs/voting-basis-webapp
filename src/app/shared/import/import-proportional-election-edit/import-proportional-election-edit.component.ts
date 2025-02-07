@@ -4,11 +4,10 @@
  * For license information see LICENSE file.
  */
 
-import { DomainOfInfluenceParty } from '@abraxas/voting-basis-service-proto/grpc/models/domain_of_influence_party_pb';
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, Input } from '@angular/core';
 import { ProportionalElectionImport } from 'src/app/core/models/import.model';
-import { DomainOfInfluenceLevelService } from '../../../core/domain-of-influence-level.service';
+import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { PartyMappingContainer } from '../../../core/models/domain-of-influence-party.model';
 import { ProportionalElection, ProportionalElectionMandateAlgorithm } from '../../../core/models/proportional-election.model';
@@ -31,12 +30,12 @@ export class ImportProportionalElectionEditComponent extends ImportPoliticalBusi
 
   constructor(
     enumUtil: EnumUtil,
-    doiLevelService: DomainOfInfluenceLevelService,
+    doiReportLevelService: DomainOfInfluenceReportLevelService,
     domainOfInfluenceService: DomainOfInfluenceService,
     permissionService: PermissionService,
     private readonly proportionalElectionPartyMappingService: ProportionalElectionPartyMappingService,
   ) {
-    super(enumUtil, doiLevelService, domainOfInfluenceService, permissionService);
+    super(enumUtil, doiReportLevelService, domainOfInfluenceService, permissionService);
   }
 
   @Input()

@@ -5,7 +5,7 @@
        class="grid-container voter-participations mb-2">
     <bc-dropdown [label]="translationPrefix + 'COMPARISON_VOTER_PARTICIPATION_CONFIGURATION.MAIN_LEVEL' | translate"
                  [items]="domainOfInfluenceTypeItems"
-                 [disabled]="disabled"
+                 [readonly]="readonly"
                  [required]="true"
                  displayExpr="description"
                  valueExpr="value"
@@ -15,7 +15,7 @@
 
     <bc-dropdown [label]="translationPrefix + 'COMPARISON_VOTER_PARTICIPATION_CONFIGURATION.COMPARISON_LEVEL' | translate"
                  [items]="domainOfInfluenceTypeItems"
-                 [disabled]="disabled"
+                 [readonly]="readonly"
                  [required]="true"
                  displayExpr="description"
                  valueExpr="value"
@@ -25,18 +25,18 @@
 
     <bc-number [label]="translationPrefix + 'THRESHOLD' | translate"
                [min]="0"
-               [disabled]="disabled"
+               [readonly]="readonly"
                [value]="item.thresholdPercent"
                (valueChange)="item.thresholdPercent = $event; contentChanged.emit()"
                [subscriptSizing]="'dynamic'"></bc-number>
-    <bc-icon *ngIf="!disabled"
+    <bc-icon *ngIf="!readonly"
              class="pt-3 clickable"
              icon="trash"
              iconColor="error"
              (click)="removeVoterParticipationConfiguration(item); contentChanged.emit()"></bc-icon>
   </div>
 
-  <bc-button *ngIf="!disabled"
+  <bc-button *ngIf="!readonly"
              variant="tertiary"
              icon="plus"
              [label]="translationPrefix + 'COMPARISON_VOTER_PARTICIPATION_CONFIGURATION.ADD' | translate"
@@ -47,7 +47,7 @@
     <div *ngFor="let item of plausiConfig.comparisonCountOfVotersConfigurationsList">
       <bc-number [label]="translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.CATEGORIES.' + item.category | translate"
                  [min]="0"
-                 [disabled]="disabled"
+                 [readonly]="readonly"
                  [value]="item.thresholdPercent"
                  (valueChange)="item.thresholdPercent = $event; contentChanged.emit()"
                  [subscriptSizing]="'dynamic'"></bc-number>
@@ -57,7 +57,7 @@
       </div>
     </div>
   </div>
-  <bc-button *ngIf="!disabled && domainOfInfluence.countingCircles && domainOfInfluence.countingCircles.length > 0"
+  <bc-button *ngIf="!readonly && domainOfInfluence.countingCircles && domainOfInfluence.countingCircles.length > 0"
              variant="tertiary"
              icon="plus"
              [label]="translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.ASSIGN' | translate"
@@ -68,7 +68,7 @@
     <bc-number *ngFor="let item of plausiConfig.comparisonVotingChannelConfigurationsList"
                [label]="'VOTING_CHANNELS.' + item.votingChannel | translate"
                [min]="0"
-               [disabled]="disabled"
+               [readonly]="readonly"
                [value]="item.thresholdPercent"
                (valueChange)="item.thresholdPercent = $event; contentChanged.emit()"
                [subscriptSizing]="'dynamic'"></bc-number>
@@ -76,7 +76,7 @@
 
   <bc-number [label]="translationPrefix + 'COMPARISON_VALID_VOTING_CARDS_WITH_ACCOUNTED_BALLOTS_THRESHOLD_PERCENT.TITLE' | translate"
              [min]="0"
-             [disabled]="disabled"
+             [readonly]="readonly"
              [value]="plausiConfig.comparisonValidVotingCardsWithAccountedBallotsThresholdPercent"
              (valueChange)="plausiConfig.comparisonValidVotingCardsWithAccountedBallotsThresholdPercent = $event; contentChanged.emit()"
              class="mt-3"

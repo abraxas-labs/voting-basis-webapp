@@ -7,7 +7,7 @@
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component } from '@angular/core';
 import { ContestService } from '../../core/contest.service';
-import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-level.service';
+import { DomainOfInfluenceReportLevelService } from '../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { Vote, VoteResultAlgorithm } from '../../core/models/vote.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
@@ -24,10 +24,10 @@ export class VoteGeneralInformationsComponent extends PoliticalBusinessGeneralIn
     domainOfInfluenceService: DomainOfInfluenceService,
     enumUtil: EnumUtil,
     contestService: ContestService,
-    doiLevelService: DomainOfInfluenceLevelService,
+    doiReportLevelService: DomainOfInfluenceReportLevelService,
     permissionService: PermissionService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, permissionService, {} as Vote);
+    super(enumUtil, domainOfInfluenceService, contestService, doiReportLevelService, permissionService, {} as Vote);
     this.resultAlgorithms = this.enumUtil.getArrayWithDescriptions<VoteResultAlgorithm>(
       VoteResultAlgorithm,
       'VOTE.RESULT_ALGORITHM.TYPES.',

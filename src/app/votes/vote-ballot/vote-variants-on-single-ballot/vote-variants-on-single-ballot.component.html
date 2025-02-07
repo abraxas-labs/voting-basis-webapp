@@ -29,6 +29,7 @@
           [value]="ballotQuestion.type"
           (valueChange)="ballotQuestion.type = $event; tryPrefillQuestions(); contentChanged.emit()"
           [required]="true"
+          [readonly]="locked || readonly"
           [subscriptSizing]="'dynamic'"
         >
         </bc-dropdown>
@@ -36,7 +37,7 @@
           *ngIf="domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH"
           class="ml-4"
           [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
-          [disabled]="testingPhaseEnded"
+          [readonly]="testingPhaseEnded || readonly"
           [value]="ballotQuestion.federalIdentification"
           (valueChange)="ballotQuestion.federalIdentification = $event; contentChanged.emit()"
           [max]="federalIdentificationMaxValue"
@@ -48,12 +49,12 @@
           [label]="'VOTE.MAIN_QUESTION_ID' | translate"
           [required]="true"
           [value]="ballot?.id ? ballot.id + '_' + ballotQuestion.number : ''"
-          [disabled]="true"
+          [readonly]="true"
           [subscriptSizing]="'dynamic'"
         >
         </bc-text>
         <bc-icon
-          *ngIf="ballotQuestion.number > 2 && !testingPhaseEnded"
+          *ngIf="ballotQuestion.number > 2 && !testingPhaseEnded && !readonly"
           class="clickable ml-1 remove-button"
           icon="trash"
           iconColor="error"
@@ -63,7 +64,7 @@
 
       <app-translated-textarea
         *ngIf="eVoting"
-        [disabled]="locked"
+        [readonly]="locked || readonly"
         [maxlength]="700"
         [value]="ballotQuestion.question"
         (valueChange)="ballotQuestion.question = $event; contentChanged.emit()"
@@ -74,7 +75,7 @@
   </ng-container>
 
   <bc-button
-    *ngIf="ballot.ballotQuestions.length < maxVariantBallotQuestions && !testingPhaseEnded"
+    *ngIf="ballot.ballotQuestions.length < maxVariantBallotQuestions && !testingPhaseEnded && !readonly"
     [label]="'VOTE.QUESTION.ADD' | translate"
     variant="tertiary"
     icon="plus"
@@ -85,9 +86,10 @@
   <h3 translate class="my-2">VOTE.TIE_BREAK_QUESTION.TITLE</h3>
   <bc-checkbox
     [(checked)]="ballot.hasTieBreakQuestions"
-    [disabled]="testingPhaseEnded"
+    [disabled]="testingPhaseEnded || readonly"
     [label]="'VOTE.TIE_BREAK_QUESTION.HAS_TIE_BREAK_QUESTIONS' | translate"
     (checkedChange)="updateTieBreakQuestions(ballot); tryPrefillQuestions(); contentChanged.emit()"
+    [subscriptSizing]="'dynamic'"
   ></bc-checkbox>
 
   <ng-container *ngFor="let ballotTieBreakQuestion of ballot.tieBreakQuestions">
@@ -107,6 +109,7 @@
           valueExpr="value"
           [value]="0"
           [required]="true"
+          [readonly]="locked || readonly"
           [subscriptSizing]="'dynamic'"
         >
         </bc-dropdown>
@@ -114,7 +117,7 @@
           *ngIf="domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH"
           class="ml-4"
           [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
-          [disabled]="testingPhaseEnded"
+          [readonly]="testingPhaseEnded || readonly"
           [value]="ballotTieBreakQuestion.federalIdentification"
           (valueChange)="ballotTieBreakQuestion.federalIdentification = $event; contentChanged.emit()"
           [max]="federalIdentificationMaxValue"
@@ -126,14 +129,14 @@
           [label]="'VOTE.MAIN_QUESTION_ID' | translate"
           [required]="true"
           [value]="ballot?.id ? ballot.id + '_' + ballotTieBreakQuestion.number + '_t' : ''"
-          [disabled]="true"
+          [readonly]="true"
           [subscriptSizing]="'dynamic'"
         >
         </bc-text>
       </div>
       <app-translated-textarea
         *ngIf="eVoting"
-        [disabled]="locked"
+        [readonly]="locked || readonly"
         [maxlength]="700"
         [value]="ballotTieBreakQuestion.question"
         (valueChange)="ballotTieBreakQuestion.question = $event; contentChanged.emit()"

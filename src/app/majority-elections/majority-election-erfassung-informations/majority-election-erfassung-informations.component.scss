@@ -8,14 +8,6 @@
   }
 }
 
-bc-checkbox {
-  margin-left: -10px;
-}
-
-bc-radio-button-group {
-  margin-left: -10px;
-}
-
 .flex-grid {
   display: grid;
   grid-template-columns: 16rem 1fr;
@@ -24,4 +16,8 @@ bc-radio-button-group {
   .col-span-2 {
     grid-column: span 2 / span 2;
   }
+}
+
+bc-checkbox {
+  margin-left: 0.25rem !important;
 }

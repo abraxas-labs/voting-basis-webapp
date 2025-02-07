@@ -18,6 +18,8 @@ import { VoteGeneralInformationsComponent } from '../vote-general-informations/v
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
+import { PermissionService } from '../../core/permission.service';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-vote-edit',
@@ -45,6 +47,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
   public isVariantsBallot: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public hasChanges: boolean = false;
+  public canEdit: boolean = false;
 
   private persistedData: Vote = {} as Vote;
 
@@ -59,6 +62,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
     private readonly contestService: ContestService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly dialogService: DialogService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -75,6 +79,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked = locked;
       this.eVoting = eVoting;
+      this.canEdit = await this.permissionService.hasPermission(Permissions.Vote.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
     } finally {
       this.initialLoading = false;
@@ -95,7 +100,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
     this.stepLoading = true;
 
     try {
-      if (this.hasChanges) {
+      if (this.hasChanges && this.canEdit) {
         if (this.isNew) {
           this.data.id = await this.voteService.create(this.data);
         } else {

@@ -115,10 +115,7 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
   }
 
   public async ngOnInit(): Promise<void> {
-    this.canEditEverything = await this.permissionService.hasAnyPermission(
-      Permissions.CountingCircle.UpdateSameCanton,
-      Permissions.CountingCircle.UpdateAll,
-    );
+    this.canEditEverything = await this.permissionService.hasPermission(Permissions.CountingCircle.UpdateSameCanton);
     const tenant = await this.auth.getActiveTenant();
     this.tenantId = tenant.id;
 

@@ -7,7 +7,7 @@
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, OnInit } from '@angular/core';
 import { ContestService } from '../../core/contest.service';
-import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-level.service';
+import { DomainOfInfluenceReportLevelService } from '../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { MajorityElection, MajorityElectionMandateAlgorithm, newMajorityElection } from '../../core/models/majority-election.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
@@ -16,7 +16,6 @@ import { PermissionService } from '../../core/permission.service';
 @Component({
   selector: 'app-majority-election-general-informations',
   templateUrl: './majority-election-general-informations.component.html',
-  styleUrls: ['./majority-election-general-informations.component.scss'],
 })
 export class MajorityElectionGeneralInformationsComponent
   extends PoliticalBusinessGeneralInformationsComponent<MajorityElection>
@@ -28,10 +27,10 @@ export class MajorityElectionGeneralInformationsComponent
     domainOfInfluenceService: DomainOfInfluenceService,
     enumUtil: EnumUtil,
     contestService: ContestService,
-    doiLevelService: DomainOfInfluenceLevelService,
+    doiReportLevelService: DomainOfInfluenceReportLevelService,
     permissionService: PermissionService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, permissionService, newMajorityElection());
+    super(enumUtil, domainOfInfluenceService, contestService, doiReportLevelService, permissionService, newMajorityElection());
   }
 
   public get canSave(): boolean {

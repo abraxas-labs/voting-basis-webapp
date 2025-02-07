@@ -4,7 +4,7 @@
   <div content class="form mr-3">
     <bc-text [label]="'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate"
              [required]="true"
-             [disabled]="testingPhaseEnded"
+             [readonly]="testingPhaseEnded"
              [maxlength]="6"
              [value]="list.orderNumber"
              (valueChange)="list.orderNumber = $event; contentChanged()"
@@ -24,7 +24,7 @@
 
     <bc-number [label]="'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate"
                [required]="true"
-               [disabled]="testingPhaseEnded"
+               [readonly]="testingPhaseEnded"
                [max]="numberOfMandates"
                [min]="0"
                [value]="list.blankRowCount"
@@ -37,7 +37,7 @@
                  [clearable]="false"
                  displayExpr="shortDescriptionTranslated"
                  valueExpr="id"
-                 [disabled]="testingPhaseEnded"
+                 [readonly]="testingPhaseEnded"
                  [value]="selectedPartyId"
                  (valueChange)="selectedPartyId = $event; contentChanged()"
                  subscriptSizing="dynamic"></bc-dropdown>

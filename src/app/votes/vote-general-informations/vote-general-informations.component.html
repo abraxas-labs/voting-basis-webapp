@@ -1,13 +1,13 @@
 <div class="form" *ngIf="contest && data">
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
-           [disabled]="contest.locked"
+           [readonly]="contest.locked || readonly"
            [required]="true"
            [value]="data.politicalBusinessNumber"
            (valueChange)="data.politicalBusinessNumber = $event; contentChanged.emit()"
            [subscriptSizing]="'dynamic'"></bc-text>
 
   <app-translated-formfield [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
-                            [disabled]="contest.locked"
+                            [readonly]="contest.locked || readonly"
                             [maxlength]="100"
                             [value]="data.shortDescription"
                             (valueChange)="data.shortDescription = $event; contentChanged.emit()"
@@ -15,7 +15,7 @@
 
   <div class="form-group">
     <app-translated-textarea [label]="'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate"
-                             [disabled]="contest.locked"
+                             [readonly]="contest.locked || readonly"
                              [maxlength]="500"
                              class="full-width"
                              [value]="data.officialDescription"
@@ -24,7 +24,7 @@
   </div>
 
   <bc-text [label]="'POLITICAL_BUSINESS.INTERNAL_DESCRIPTION' | translate"
-           [disabled]="contest.locked"
+           [readonly]="contest.locked || readonly"
            [value]="data.internalDescription"
            (valueChange)="data.internalDescription = $event; contentChanged.emit()"
            [subscriptSizing]="'dynamic'"></bc-text>
@@ -32,7 +32,7 @@
                *ngIf="domainOfInfluenceTypeItems.length > 1"
                [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
                [items]="domainOfInfluenceTypeItems"
-               [disabled]="contest.testingPhaseEnded"
+               [readonly]="contest.testingPhaseEnded || readonly"
                [clearable]="false"
                [required]="true"
                displayExpr="description"
@@ -44,7 +44,7 @@
   <bc-dropdown class="full-width"
                *ngIf="selectedDomainOfInfluenceType"
                [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
-               [disabled]="contest.testingPhaseEnded"
+               [readonly]="contest.testingPhaseEnded || readonly"
                displayExpr="name"
                [required]="true"
                [value]="selectedDomainOfInfluence"
@@ -54,7 +54,7 @@
 
   <bc-dropdown class="full-width"
                [items]="domainOfInfluenceLevels"
-               [disabled]="contest.locked"
+               [readonly]="contest.locked || readonly"
                displayExpr="desc"
                valueExpr="level"
                [required]="true"
@@ -66,7 +66,7 @@
   <bc-dropdown class="full-width"
                [label]="'VOTE.RESULT_ALGORITHM.TITLE' | translate"
                [items]="resultAlgorithms"
-               [disabled]="contest.testingPhaseEnded"
+               [readonly]="contest.testingPhaseEnded || readonly"
                displayExpr="description"
                valueExpr="value"
                [required]="true"

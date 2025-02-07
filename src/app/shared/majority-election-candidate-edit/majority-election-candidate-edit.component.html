@@ -1,8 +1,9 @@
 <div class="form mr-3" *ngIf="candidate">
+  <!-- number may be edited even if this is a candidate reference -->
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.NUMBER' | translate"
     [required]="true"
-    [disabled]="testingPhaseEnded || isCandidateReference"
+    [readonly]="testingPhaseEnded && !!candidate.id"
     [value]="candidate.number"
     (valueChange)="candidate.number = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
@@ -12,7 +13,7 @@
     [label]="'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate"
     [required]="true"
     [maxlength]="100"
-    [disabled]="isCandidateReference"
+    [readonly]="isCandidateReference"
     [value]="candidate.firstName"
     (valueChange)="candidate.firstName = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
@@ -22,7 +23,7 @@
     [label]="'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate"
     [required]="true"
     [maxlength]="100"
-    [disabled]="isCandidateReference"
+    [readonly]="isCandidateReference"
     [value]="candidate.lastName"
     (valueChange)="candidate.lastName = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
@@ -31,7 +32,7 @@
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.POLITICAL_FIRST_NAME' | translate"
     [maxlength]="100"
-    [disabled]="isCandidateReference"
+    [readonly]="isCandidateReference"
     [placeholder]="candidate.firstName"
     [value]="candidate.politicalFirstName"
     (valueChange)="candidate.politicalFirstName = $event; contentChanged.emit()"
@@ -41,7 +42,7 @@
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.POLITICAL_LAST_NAME' | translate"
     [maxlength]="100"
-    [disabled]="isCandidateReference"
+    [readonly]="isCandidateReference"
     [placeholder]="candidate.lastName"
     [value]="candidate.politicalLastName"
     (valueChange)="candidate.politicalLastName = $event; contentChanged.emit()"
@@ -50,8 +51,8 @@
 
   <bc-date
     [label]="'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate"
-    [required]="true"
-    [disabled]="isCandidateReference"
+    [required]="!testingPhaseEnded"
+    [readonly]="isCandidateReference"
     [error]="candidate.dateOfBirth !== undefined && !isDateOfBirthValid()"
     [value]="candidate.dateOfBirth | date: 'yyyy-MM-dd'"
     (valueChange)="dateOfBirth = $event; contentChanged.emit()"
@@ -60,8 +61,8 @@
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH_YEAR' | translate"
-    [disabled]="true"
-    [required]="true"
+    [readonly]="true"
+    [required]="!testingPhaseEnded"
     [value]="'' + (candidate.dateOfBirth?.getFullYear() || '')"
     subscriptSizing="dynamic"
   ></bc-text>
@@ -70,11 +71,11 @@
     class="full-width"
     [label]="'SEX_TYPE.TITLE' | translate"
     [items]="sexTypes"
-    [clearable]="false"
-    [disabled]="isCandidateReference"
+    [clearable]="testingPhaseEnded"
+    [readonly]="isCandidateReference"
     displayExpr="description"
     valueExpr="value"
-    [required]="true"
+    [required]="!testingPhaseEnded"
     [value]="candidate.sex"
     (valueChange)="candidate.sex = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
@@ -84,7 +85,7 @@
     [label]="'MAJORITY_ELECTION.CANDIDATE.OCCUPATION' | translate"
     [optional]="true"
     [maxlength]="250"
-    [disabled]="isCandidateReference"
+    [readonly]="isCandidateReference"
     [singleLanguageInput]="true"
     [value]="candidate.occupation"
     (valueChange)="candidate.occupation = $event; contentChanged.emit()"
@@ -93,7 +94,7 @@
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.TITLE' | translate"
     [maxlength]="50"
-    [disabled]="isCandidateReference"
+    [readonly]="isCandidateReference"
     [value]="candidate.title"
     (valueChange)="candidate.title = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
@@ -103,31 +104,33 @@
     [label]="'MAJORITY_ELECTION.CANDIDATE.OCCUPATION_TITLE' | translate"
     [optional]="true"
     [maxlength]="250"
-    [disabled]="isCandidateReference"
+    [readonly]="isCandidateReference"
     [singleLanguageInput]="true"
     [value]="candidate.occupationTitle"
     (valueChange)="candidate.occupationTitle = $event; contentChanged.emit()"
   ></app-translated-formfield>
 
-  <app-translated-formfield
+  <bc-autocomplete
     [label]="'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate"
-    [maxlength]="12"
-    [disabled]="isCandidateReference"
-    [singleLanguageInput]="true"
-    [value]="candidate.party"
-    (valueChange)="candidate.party = $event; contentChanged.emit()"
-  ></app-translated-formfield>
+    [readonly]="isCandidateReference"
+    [required]="!testingPhaseEnded"
+    [value]="candidate.party.get(currentLanguage)"
+    (filterValueChange)="setParty($event)"
+    [items]="partyShortDescriptions"
+    subscriptSizing="dynamic"
+  ></bc-autocomplete>
 
   <!-- incumbent may be edited even if this is a candidate reference -->
   <bc-checkbox
     [checked]="candidate.incumbent"
     (checkedChange)="candidate.incumbent = $event; contentChanged.emit()"
     [label]="'MAJORITY_ELECTION.CANDIDATE.INCUMBENT' | translate"
+    [subscriptSizing]="'dynamic'"
   ></bc-checkbox>
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.ZIP_CODE' | translate"
-    [disabled]="isCandidateReference"
+    [readonly]="isCandidateReference"
     [value]="candidate.zipCode"
     (valueChange)="candidate.zipCode = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
@@ -135,8 +138,8 @@
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate"
-    [required]="isCandidateLocalityRequired"
-    [disabled]="isCandidateReference"
+    [required]="isCandidateLocalityRequired && !testingPhaseEnded"
+    [readonly]="isCandidateReference"
     [value]="candidate.locality"
     (valueChange)="candidate.locality = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
@@ -144,8 +147,8 @@
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.ORIGIN' | translate"
-    [required]="isCandidateOriginRequired"
-    [disabled]="isCandidateReference"
+    [required]="isCandidateOriginRequired && !testingPhaseEnded"
+    [readonly]="isCandidateReference"
     [value]="candidate.origin"
     (valueChange)="candidate.origin = $event; contentChanged.emit()"
     subscriptSizing="dynamic"

@@ -1,78 +1,121 @@
-<bc-table class="w-full mb-2" [dataSource]="candidates" cdkDropList [cdkDropListData]="candidates"
-  [cdkDropListDisabled]="testingPhaseEnded"
-  (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)">
+<bc-table
+  class="w-full mb-2"
+  [dataSource]="candidates"
+  cdkDropList
+  [cdkDropListData]="candidates"
+  [cdkDropListDisabled]="testingPhaseEnded || readonly"
+  (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)"
+>
   <ng-container columnDef="position">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.POSITION' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.position }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.POSITION' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.position"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="number">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.number }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.number"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="lastName">
     <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.lastName }}</bc-data-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.lastName"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="firstName">
     <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.firstName }}</bc-data-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.firstName"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="dateOfBirth">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.dateOfBirth | date }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.dateOfBirth | date"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="sex">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.SEX' | translate }}</bc-header-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.SEX' | translate"></app-truncated-value>
+    </bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <div class="cell-container">
-        <ng-container *ngIf="element.sex !== undefined">{{'SEX_TYPE.' + element.sex | translate}}</ng-container>
-      </div>
+      <app-truncated-value *ngIf="!!element.sex" [value]="'SEX_TYPE.' + element.sex | translate"></app-truncated-value>
     </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="title">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.TITLE' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.title }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.TITLE' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.title"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="party">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.party | getTranslation }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.party | getTranslation"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="incumbent">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.INCUMBENT' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element"><bc-icon *ngIf="element.incumbent"
-        icon="checkmark"></bc-icon></bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.INCUMBENT' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <bc-icon *ngIf="element.incumbent" icon="checkmark"></bc-icon>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="zipCode">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.ZIP_CODE' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.zipCode }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.ZIP_CODE' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.zipCode"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="locality">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.locality }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.locality"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="actions">
-    <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+    <bc-header-cell *headerCellDef></bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <div *ngIf="!locked && element.id" class="flex">
+      <div *ngIf="!locked && element.id && !readonly" class="flex">
         <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
-        <bc-icon *ngIf="!testingPhaseEnded" class="clickable ml-2" (click)="delete.emit(element)" icon="trash"
-          iconColor="error"></bc-icon>
+        <bc-icon *ngIf="!testingPhaseEnded" class="clickable ml-2" (click)="delete.emit(element)" icon="trash" iconColor="error"></bc-icon>
       </div>
     </bc-data-cell>
   </ng-container>
 
   <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-  <bc-data-row *dataRowDef="let row; columns: columns; let i = index" cdkDrag [cdkDragDisabled]="testingPhaseEnded"
-    [cdkDragData]="row"></bc-data-row>
+  <bc-data-row
+    *dataRowDef="let row; columns: columns; let i = index"
+    cdkDrag
+    [cdkDragDisabled]="testingPhaseEnded || readonly"
+    [cdkDragData]="row"
+  ></bc-data-row>
 </bc-table>

@@ -3,52 +3,87 @@
     <bc-table selection class="w-full" [dataSource]="dataSource">
       <ng-container columnDef="select">
         <bc-header-cell *headerCellDef>
-          <bc-checkbox class="ml-2 mb-0" (checkedChange)="toggleAllRows($event); contentChanged.emit()"
-            [checked]="selection.hasValue() && isAllSelected" [indeterminate]="selection.hasValue() && !isAllSelected">
+          <bc-checkbox
+            class="ml-2 mb-0"
+            (checkedChange)="toggleAllRows($event); contentChanged.emit()"
+            [checked]="selection.hasValue() && isAllSelected"
+            [indeterminate]="selection.hasValue() && !isAllSelected"
+          >
           </bc-checkbox>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <bc-checkbox class="ml-2" (checkedChange)="toggleRowWithValue(element, $event); contentChanged.emit()"
-            [checked]="selection.isSelected(element)">
+          <bc-checkbox
+            class="ml-2"
+            (checkedChange)="toggleRowWithValue(element, $event); contentChanged.emit()"
+            [checked]="selection.isSelected(element)"
+          >
           </bc-checkbox>
         </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="number">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.number }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate"></app-truncated-value>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.number"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="lastName">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.lastName }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          {{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.lastName"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="firstName">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.firstName }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          {{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.firstName"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="dateOfBirth">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.dateOfBirth | date }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate"></app-truncated-value>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.dateOfBirth | date"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="sex">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.SEX' | translate }}</bc-header-cell>
+        <bc-header-cell *headerCellDef>
+          <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.SEX' | translate"></app-truncated-value>
+        </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <div class="cell-container">{{'SEX_TYPE.' + element.sex | translate}}</div>
+          <app-truncated-value *ngIf="!!element.sex" [value]="'SEX_TYPE.' + element.sex | translate"></app-truncated-value>
         </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="party">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.party | getTranslation }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate"></app-truncated-value>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.party | getTranslation"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-      <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
-        selectionRow [selectionRowValue]="row" (click)="toggleRow(row); contentChanged.emit()"></bc-data-row>
+      <bc-data-row
+        *dataRowDef="let row; columns: columns; let i = index"
+        selectionToggle
+        [selectionToggleValue]="row"
+        selectionRow
+        [selectionRowValue]="row"
+        (click)="toggleRow(row); contentChanged.emit()"
+      ></bc-data-row>
     </bc-table>
     <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
   </div>
@@ -58,22 +93,34 @@
 
     <bc-table class="w-full" [dataSource]="selection.selected">
       <ng-container columnDef="number">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.number }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate"></app-truncated-value>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.number"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="lastName">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.lastName }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          {{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.lastName"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="firstName">
-        <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.firstName }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          {{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.firstName"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="actions">
-        <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+        <bc-header-cell *headerCellDef></bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
           <bc-icon class="clickable" (click)="toggleRowWithValue(element, false); contentChanged.emit()" icon="remove"></bc-icon>
         </bc-data-cell>
@@ -83,10 +130,13 @@
       <bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></bc-data-row>
     </bc-table>
 
-    <bc-number *ngIf="entry && !entry.election.individualCandidatesDisabled"
-      [label]="'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate" [min]="0"
+    <bc-number
+      *ngIf="entry && !entry.election.individualCandidatesDisabled"
+      [label]="'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate"
+      [min]="0"
       [max]="entry.election.numberOfMandates - entry.entry.blankRowCount"
       [ngModel]="entry.entry.individualCandidatesVoteCount"
-      (ngModelChange)="entry.entry.individualCandidatesVoteCount = $event; contentChanged.emit()"></bc-number>
+      (ngModelChange)="entry.entry.individualCandidatesVoteCount = $event; contentChanged.emit()"
+    ></bc-number>
   </div>
 </div>

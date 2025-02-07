@@ -5,54 +5,77 @@
       <bc-spinner class="block" *ngIf="loading; else politicalBusinessUnionOverview"></bc-spinner>
       <ng-template #politicalBusinessUnionOverview>
         <div class="buttons">
-          <bc-button *ngIf="cantonDefaults.enabledPoliticalBusinessUnionTypesList.length > 0" variant="tertiary"
-            icon="plus" [label]="'POLITICAL_BUSINESS_UNION.ADD' | translate" [disabled]="disabled"
-            (buttonClick)="createPoliticalBusinessUnion()"></bc-button>
+          <bc-button
+            *ngIf="cantonDefaults.enabledPoliticalBusinessUnionTypesList.length > 0"
+            variant="tertiary"
+            icon="plus"
+            [label]="'POLITICAL_BUSINESS_UNION.ADD' | translate"
+            [disabled]="disabled"
+            (buttonClick)="createPoliticalBusinessUnion()"
+          ></bc-button>
 
           <bc-button
             *ngIf="selectedPoliticalBusinessUnion && (selectedPoliticalBusinessUnion.secureConnectId === tenantId || hasAdminPermissions)"
-            variant="tertiary" [disabled]="disabled" [label]="'POLITICAL_BUSINESS_UNION.ASSIGN' | translate"
-            (buttonClick)="updateAssignedPoliticalBusinesses()"></bc-button>
+            variant="tertiary"
+            [disabled]="disabled"
+            [label]="'POLITICAL_BUSINESS_UNION.ASSIGN' | translate"
+            (buttonClick)="updateAssignedPoliticalBusinesses()"
+          ></bc-button>
         </div>
 
         <bc-table selection class="w-full" [dataSource]="politicalBusinessUnions">
           <ng-container columnDef="description">
-            <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS_UNION.DESCRIPTION' | translate }}</bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">{{ element.description }}</bc-data-cell>
+            <bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'POLITICAL_BUSINESS_UNION.DESCRIPTION' | translate"></app-truncated-value>
+            </bc-header-cell>
+            <bc-data-cell *dataCellDef="let element">
+              <app-truncated-value [value]="element.description"></app-truncated-value>
+            </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="type">
-            <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS_UNION.TYPE' | translate }}</bc-header-cell>
+            <bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'POLITICAL_BUSINESS_UNION.TYPE' | translate"></app-truncated-value>
+            </bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <span>{{ 'POLITICAL_BUSINESS_UNION.TYPES.' + element.type | translate }}</span>
+              <app-truncated-value [value]="'POLITICAL_BUSINESS_UNION.TYPES.' + element.type | translate"></app-truncated-value>
             </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="owner">
             <bc-header-cell *headerCellDef></bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <span *ngIf="element.secureConnectId === tenantId"
-                translate>POLITICAL_BUSINESS_UNION.OWN_POLITICAL_BUSINESS_UNION</span>
+              <app-truncated-value
+                *ngIf="element.secureConnectId === tenantId"
+                [value]="'POLITICAL_BUSINESS_UNION.OWN_POLITICAL_BUSINESS_UNION' | translate"
+              ></app-truncated-value>
             </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="actions">
-            <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+            <bc-header-cell *headerCellDef></bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
               <div *ngIf="element.secureConnectId === tenantId || hasAdminPermissions" class="flex">
-                <span *ngIf="element.secureConnectId === tenantId"
-                  translate>POLITICAL_BUSINESS_UNION.OWN_POLITICAL_BUSINESS_UNION</span>
                 <bc-icon (click)="editPoliticalBusinessUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
-                <bc-icon (click)="deletePoliticalBusinessUnion(element); $event.stopPropagation()" icon="trash"
-                  iconColor="error"></bc-icon>
+                <bc-icon
+                  class="ml-2"
+                  (click)="deletePoliticalBusinessUnion(element); $event.stopPropagation()"
+                  icon="trash"
+                  iconColor="error"
+                ></bc-icon>
               </div>
             </bc-data-cell>
           </ng-container>
 
           <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-          <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle
-            [selectionToggleValue]="row" selectionRow [selectionRowValue]="row"
-            (click)="selectPoliticalBusinessUnion(row)"></bc-data-row>
+          <bc-data-row
+            *dataRowDef="let row; columns: columns; let i = index"
+            selectionToggle
+            [selectionToggleValue]="row"
+            selectionRow
+            [selectionRowValue]="row"
+            (click)="selectPoliticalBusinessUnion(row)"
+          ></bc-data-row>
         </bc-table>
       </ng-template>
     </div>
@@ -62,12 +85,12 @@
         <h2 translate>POLITICAL_BUSINESS_UNION.DETAIL.TITLE</h2>
 
         <ng-container
-          *ngIf="selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_PROPORTIONAL_ELECTION">
+          *ngIf="selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_PROPORTIONAL_ELECTION"
+        >
           <app-proportional-election-union-detail [politicalBusinessUnion]="selectedPoliticalBusinessUnion">
           </app-proportional-election-union-detail>
         </ng-container>
-        <ng-container
-          *ngIf="selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_MAJORITY_ELECTION">
+        <ng-container *ngIf="selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_MAJORITY_ELECTION">
           <app-majority-election-union-detail [politicalBusinessUnion]="selectedPoliticalBusinessUnion">
           </app-majority-election-union-detail>
         </ng-container>
@@ -76,7 +99,6 @@
   </div>
 
   <div footer class="mr-3">
-    <vo-lib-button-bar [sticky]="false" [saveLabel]="'APP.FINISH' | translate" (cancel)="close()"
-      (save)="close()"></vo-lib-button-bar>
+    <vo-lib-button-bar [sticky]="false" [saveLabel]="'APP.FINISH' | translate" (cancel)="close()" (save)="close()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

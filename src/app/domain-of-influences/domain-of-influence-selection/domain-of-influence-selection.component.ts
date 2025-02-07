@@ -8,6 +8,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, View
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { Subject } from 'rxjs';
 import { AutocompleteComponent } from '@abraxas/base-components';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-domain-of-influence-selection',
@@ -15,9 +16,10 @@ import { AutocompleteComponent } from '@abraxas/base-components';
 })
 export class DomainOfInfluenceSelectionComponent {
   private domainOfInfluencesValue: DomainOfInfluence[] = [];
+  private domainOfInfluenceSelectionItems: DomainOfInfluenceSelectionItem[] = [];
 
   @Input()
-  public disabled: boolean = false;
+  public readonly: boolean = false;
 
   public get domainOfInfluences(): DomainOfInfluence[] {
     return this.domainOfInfluencesValue;
@@ -26,6 +28,7 @@ export class DomainOfInfluenceSelectionComponent {
   @Input()
   public set domainOfInfluences(v: DomainOfInfluence[]) {
     this.domainOfInfluencesValue = v;
+    this.domainOfInfluenceSelectionItems = v.map(doi => this.mapToSeletionItem(doi)!);
     this.setFilteredDomainOfInfluencesAndEnsureSelected();
   }
 
@@ -35,22 +38,29 @@ export class DomainOfInfluenceSelectionComponent {
   @ViewChild(AutocompleteComponent)
   public autocompleteComponent!: AutocompleteComponent;
 
-  public selectedDomainOfInfluenceValue: DomainOfInfluence | undefined;
   public domainOfInfluencesTypeahead: Subject<string> = new Subject<string>();
-  public filteredDomainOfInfluences: DomainOfInfluence[] = [];
+  public filteredDomainOfInfluenceSelectionItems: DomainOfInfluenceSelectionItem[] = [];
+  public selectedDomainOfInfluenceSelectionItem: DomainOfInfluenceSelectionItem | undefined;
 
-  constructor(private readonly ref: ChangeDetectorRef) {}
+  constructor(
+    private readonly ref: ChangeDetectorRef,
+    private readonly i18n: TranslateService,
+  ) {}
 
   @Input()
   public set selectedDomainOfInfluence(v: DomainOfInfluence | undefined) {
-    this.selectedDomainOfInfluenceValue = v;
-    this.setFilteredDomainOfInfluencesAndEnsureSelected(this.filteredDomainOfInfluences);
+    this.selectedDomainOfInfluenceSelectionItem = this.mapToSeletionItem(v);
+    this.setFilteredDomainOfInfluencesAndEnsureSelected(this.filteredDomainOfInfluenceSelectionItems);
   }
 
-  public setSelectedDomainOfInfluence(v: string): void {
-    this.selectedDomainOfInfluenceValue = this.domainOfInfluences.find(t => t.name === v) || this.selectedDomainOfInfluenceValue;
+  public setSelectedDomainOfInfluenceSelectionItem(v: string): void {
+    this.selectedDomainOfInfluenceSelectionItem =
+      this.domainOfInfluenceSelectionItems.find(t => t.label === v) || this.selectedDomainOfInfluenceSelectionItem;
     this.ref.detectChanges();
-    this.selectedDomainOfInfluenceChange.emit(this.selectedDomainOfInfluenceValue);
+
+    this.selectedDomainOfInfluenceChange.emit(
+      this.domainOfInfluences.find(doi => doi.id == this.selectedDomainOfInfluenceSelectionItem?.id),
+    );
   }
 
   public searchDomainOfInfluences(searchValue: string): void {
@@ -58,28 +68,52 @@ export class DomainOfInfluenceSelectionComponent {
       this.setFilteredDomainOfInfluencesAndEnsureSelected();
 
       // workaround to open autocomplete options after search
-      this.autocompleteComponent.filteredItems = this.filteredDomainOfInfluences;
+      this.autocompleteComponent.filteredItems = this.filteredDomainOfInfluenceSelectionItems;
       this.ref.detectChanges();
       return;
     }
 
-    const filteredDomainOfInfluences = this.domainOfInfluences.filter(doi => doi.name.toLowerCase().includes(searchValue.toLowerCase()));
+    const filteredDomainOfInfluenceIds = this.domainOfInfluences
+      .filter(doi => doi.name.toLowerCase().includes(searchValue.toLowerCase()))
+      .map(doi => doi.id);
 
-    this.setFilteredDomainOfInfluencesAndEnsureSelected(filteredDomainOfInfluences);
+    const filteredDomainOfInfluenceSelectionItems = this.domainOfInfluenceSelectionItems.filter(doi =>
+      filteredDomainOfInfluenceIds.includes(doi.id),
+    );
+    this.setFilteredDomainOfInfluencesAndEnsureSelected(filteredDomainOfInfluenceSelectionItems);
 
     // workaround to open autocomplete options after search
-    this.autocompleteComponent.filteredItems = this.filteredDomainOfInfluences;
+    this.autocompleteComponent.filteredItems = this.filteredDomainOfInfluenceSelectionItems;
     this.ref.detectChanges();
   }
 
-  private setFilteredDomainOfInfluencesAndEnsureSelected(filteredDomainOfInfluences: DomainOfInfluence[] = []): void {
+  private setFilteredDomainOfInfluencesAndEnsureSelected(filteredDomainOfInfluences: DomainOfInfluenceSelectionItem[] = []): void {
     const selected =
-      this.domainOfInfluences.find(t => t.id === this.selectedDomainOfInfluenceValue?.id) || this.selectedDomainOfInfluenceValue;
+      this.domainOfInfluenceSelectionItems.find(t => t.id === this.selectedDomainOfInfluenceSelectionItem?.id) ||
+      this.selectedDomainOfInfluenceSelectionItem;
 
     if (selected) {
-      this.filteredDomainOfInfluences = [...new Set([...filteredDomainOfInfluences, selected])];
+      this.filteredDomainOfInfluenceSelectionItems = [...new Set([...filteredDomainOfInfluences, selected])];
     } else {
-      this.filteredDomainOfInfluences = filteredDomainOfInfluences;
+      this.filteredDomainOfInfluenceSelectionItems = filteredDomainOfInfluences;
     }
   }
+
+  private mapToSeletionItem(doi?: DomainOfInfluence): DomainOfInfluenceSelectionItem | undefined {
+    if (!doi) {
+      return undefined;
+    }
+
+    const bfs = !!doi.bfs ? `, ${this.i18n.instant('DOMAIN_OF_INFLUENCE.BFS_SHORT')} ${doi.bfs}` : '';
+
+    return {
+      id: doi.id,
+      label: `${doi.name} (${this.i18n.instant('DOMAIN_OF_INFLUENCE.SHORT_TYPES.' + doi.type)}${bfs})`,
+    };
+  }
+}
+
+interface DomainOfInfluenceSelectionItem {
+  id: string;
+  label: string;
 }

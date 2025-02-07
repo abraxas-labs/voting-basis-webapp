@@ -33,7 +33,7 @@ export class PlausibilisationConfigurationComponent {
   public countingCirclesByCategory: Partial<Record<any, ComparisonCountOfVotersCountingCircle[]>> = {};
 
   @Input()
-  public disabled: boolean = false;
+  public readonly: boolean = false;
 
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
@@ -91,7 +91,7 @@ export class PlausibilisationConfigurationComponent {
   public async openAssignCountOfVoterCountingCirclesDialog(): Promise<void> {
     const data: ComparisonCountOfVotersCountingCircleAssignDialogData = {
       domainOfInfluence: this.domainOfInfluence,
-      disabled: this.disabled,
+      readonly: this.readonly,
     };
 
     await this.dialogService.openForResult(ComparisonCountOfVotersCountingCircleAssignDialogComponent, data);

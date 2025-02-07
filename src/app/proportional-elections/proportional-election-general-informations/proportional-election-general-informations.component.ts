@@ -7,7 +7,7 @@
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, Input, OnInit } from '@angular/core';
 import { ContestService } from '../../core/contest.service';
-import { DomainOfInfluenceLevelService } from '../../core/domain-of-influence-level.service';
+import { DomainOfInfluenceReportLevelService } from '../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import {
   newProportionalElection,
@@ -34,10 +34,10 @@ export class ProportionalElectionGeneralInformationsComponent
     domainOfInfluenceService: DomainOfInfluenceService,
     enumUtil: EnumUtil,
     contestService: ContestService,
-    doiLevelService: DomainOfInfluenceLevelService,
+    doiReportLevelService: DomainOfInfluenceReportLevelService,
     permissionService: PermissionService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiLevelService, permissionService, newProportionalElection());
+    super(enumUtil, domainOfInfluenceService, contestService, doiReportLevelService, permissionService, newProportionalElection());
   }
 
   public get canSave(): boolean {

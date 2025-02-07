@@ -16,7 +16,7 @@ export class AuthorityAddressEditComponent {
   public authority!: Authority;
 
   @Input()
-  public disabled: boolean = true;
+  public readonly: boolean = true;
 
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();

@@ -32,6 +32,9 @@ export class VoteVariantsOnSingleBallotComponent implements OnInit {
   public locked: boolean = false;
 
   @Input()
+  public readonly: boolean = false;
+
+  @Input()
   public domainOfInfluenceType?: DomainOfInfluenceType;
 
   @Output()

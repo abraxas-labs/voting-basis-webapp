@@ -12,11 +12,6 @@
   grid-template-columns: 1fr 4rem 1fr;
 }
 
-.flex {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .overflow-tree {
   display: flex;
   flex-direction: column;
@@ -34,4 +29,8 @@
   flex-direction: column;
   height: 48rem;
   overflow: auto;
+}
+
+bc-paginator {
+  overflow: hidden;
 }

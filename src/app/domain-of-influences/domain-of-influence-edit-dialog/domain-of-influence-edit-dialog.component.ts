@@ -16,6 +16,8 @@ import { isDistinct } from '../../core/utils/array.utils';
 import { Permissions } from '../../core/models/permissions.model';
 import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
+import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
+import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 
 @Component({
   selector: 'app-domain-of-influence-edit-dialog',
@@ -55,6 +57,8 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public showInternalPlausibilisation: boolean = false;
   public hasOtherSuperiorAuthorityDomainOfInfluence: boolean = false;
   public availableSuperiorAuthorityDomainOfInfluences: DomainOfInfluence[] = [];
+  public domainOfInfluencePublishResultsOptionEnabled: boolean = false;
+  public showPublishResults: boolean = false;
 
   constructor(
     private readonly dialogRef: MatDialogRef<DomainOfInfluenceEditDialogData>,
@@ -141,10 +145,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
 
   public async ngOnInit(): Promise<void> {
     this.isNew = !this.data.id;
-    this.canEditEverything = await this.permissionService.hasAnyPermission(
-      Permissions.DomainOfInfluence.UpdateSameCanton,
-      Permissions.DomainOfInfluence.UpdateAll,
-    );
+    this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateSameCanton);
     this.initDomainOfInfluenceTypes();
     this.initDomainOfInfluenceCantons();
 
@@ -153,13 +154,30 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
       this.originalSecureConnectId = this.data.secureConnectId;
     }
 
+    if (!!this.data.parentId) {
+      this.data.virtualTopLevel = false;
+    }
+
     await this.loadCantonDefaults();
     this.resetInternalPlausibilisation();
+    this.refreshShowPublishResults();
+  }
+
+  public updateDomainOfInfluenceType(type: DomainOfInfluenceType): void {
+    this.data.type = type;
+    this.refreshShowPublishResults();
   }
 
   public async save(): Promise<void> {
     if (!this.data || !this.canSave || !this.selectedTenant) {
       return;
+    }
+
+    if (
+      this.data.type < this.knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU ||
+      !this.domainOfInfluencePublishResultsOptionEnabled
+    ) {
+      this.data.publishResultsDisabled = false;
     }
 
     if (!this.canEditEverything) {
@@ -291,7 +309,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   private async loadCantonDefaults(): Promise<void> {
     if (this.data.id) {
       const cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(this.data.id);
-      this.showInternalPlausibilisation = !cantonDefaults.internalPlausibilisationDisabled;
+      this.setCantonDefaults(cantonDefaults);
     } else {
       const domainOfInfluences = await this.domainOfInfluenceService.listForCurrentTenant();
 
@@ -301,8 +319,13 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
 
       // take first domain of influence since all domain of influences of a tenant should be in the same canton
       const cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluences[0].id);
-      this.showInternalPlausibilisation = !cantonDefaults.internalPlausibilisationDisabled;
+      this.setCantonDefaults(cantonDefaults);
     }
+  }
+
+  private setCantonDefaults(cantonDefaults: DomainOfInfluenceCantonDefaults) {
+    this.showInternalPlausibilisation = !cantonDefaults.internalPlausibilisationDisabled;
+    this.domainOfInfluencePublishResultsOptionEnabled = cantonDefaults.domainOfInfluencePublishResultsOptionEnabled;
   }
 
   private resetInternalPlausibilisation(): void {
@@ -311,6 +334,10 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
     }
 
     this.data.plausibilisationConfiguration = undefined;
+  }
+
+  private refreshShowPublishResults(): void {
+    this.showPublishResults = this.domainOfInfluencePublishResultsOptionEnabled && isCommunalDoiType(this.data.type);
   }
 }
 

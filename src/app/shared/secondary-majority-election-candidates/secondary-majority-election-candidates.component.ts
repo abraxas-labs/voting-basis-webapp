@@ -21,11 +21,11 @@ import {
   SecondaryMajorityElectionCandidateEditDialogData,
   SecondaryMajorityElectionCandidateEditDialogResult,
 } from '../secondary-majority-election-candidate-edit-dialog/secondary-majority-election-candidate-edit-dialog.component';
+import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-secondary-majority-election-candidates',
   templateUrl: './secondary-majority-election-candidates.component.html',
-  styleUrls: ['./secondary-majority-election-candidates.component.scss'],
 })
 export class SecondaryMajorityElectionCandidatesComponent {
   @Input()
@@ -39,6 +39,21 @@ export class SecondaryMajorityElectionCandidatesComponent {
 
   @Input()
   public locked: boolean = false;
+
+  @Input()
+  public readonly: boolean = false;
+
+  @Input()
+  public candidateLocalityRequired: boolean = false;
+
+  @Input()
+  public candidateOriginRequired: boolean = false;
+
+  @Input()
+  public domainOfInfluenceType?: DomainOfInfluenceType;
+
+  @Input()
+  public partyShortDescriptions: string[] = [];
 
   @ViewChild(MajorityElectionBallotGroupOverviewComponent, { static: false })
   public ballotGroupOverview?: MajorityElectionBallotGroupOverviewComponent;
@@ -60,7 +75,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
   ) {}
 
   public get canSave(): boolean {
-    return this.ballotGroupOverview?.canSave ?? false;
+    return !this.ballotGroupOverview || this.ballotGroupOverview.canSave;
   }
 
   @Input()
@@ -74,27 +89,48 @@ export class SecondaryMajorityElectionCandidatesComponent {
   }
 
   public async createCandidate(): Promise<void> {
-    if (!this.currentSecondaryMajorityElection) {
+    if (!this.currentSecondaryMajorityElection || !this.domainOfInfluenceType) {
       return;
     }
 
     const dialogData: SecondaryMajorityElectionCandidateEditDialogData = {
       candidate: newSecondaryMajorityElectionCandidate(this.candidates.length + 1, this.currentSecondaryMajorityElection.id),
       secondaryMajorityElection: this.currentSecondaryMajorityElection,
-      testingPhaseEnded: false,
+      testingPhaseEnded: this.testingPhaseEnded,
+      doiType: this.domainOfInfluenceType,
+      candidateLocalityRequired: this.candidateLocalityRequired,
+      candidateOriginRequired: this.candidateOriginRequired,
+      partyShortDescriptions: this.partyShortDescriptions,
     };
     const result = await this.dialogService.openForResult(SecondaryMajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);
   }
 
   public async editCandidate(candidate: SecondaryMajorityElectionCandidate): Promise<void> {
+    if (!this.domainOfInfluenceType) {
+      return;
+    }
+
     const dialogData: SecondaryMajorityElectionCandidateEditDialogData = {
       candidate: { ...candidate },
       secondaryMajorityElection: this.currentSecondaryMajorityElection!,
       testingPhaseEnded: this.testingPhaseEnded,
+      doiType: this.domainOfInfluenceType,
+      candidateLocalityRequired: this.candidateLocalityRequired,
+      candidateOriginRequired: this.candidateOriginRequired,
+      partyShortDescriptions: this.partyShortDescriptions,
     };
     const result = await this.dialogService.openForResult(SecondaryMajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);
+  }
+
+  public primaryCandidateDeleted(id: string): void {
+    const candidateCount = this.candidates.length;
+    this.candidates = this.candidates.filter(c => c.referencedCandidateId !== id);
+    if (candidateCount === this.candidates.length) return;
+
+    this.refreshExpandedCandidates();
+    this.updateCandidatePositions();
   }
 
   public async deleteCandidate(candidate: SecondaryMajorityElectionCandidate): Promise<void> {

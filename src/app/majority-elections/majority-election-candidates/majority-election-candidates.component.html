@@ -7,13 +7,13 @@
     <bc-button variant="tertiary"
                icon="plus"
                [label]="'MAJORITY_ELECTION.CANDIDATE.NEW' | translate"
-               [disabled]="locked"
+               [disabled]="locked || readonly"
                (buttonClick)="createCandidate()"></bc-button>
     <bc-button *ngIf="currentMajorityElection"
                variant="tertiary"
                icon="download"
                [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES' | translate"
-               [disabled]="locked"
+               [disabled]="locked || readonly"
                (buttonClick)="importCandidates()"
                class="ml-2"></bc-button>
 
@@ -22,6 +22,7 @@
   <app-majority-election-candidate-list [candidates]="expandedCandidates"
                                         [testingPhaseEnded]="testingPhaseEnded"
                                         [locked]="locked"
+                                        [readonly]="readonly"
                                         [reordering]="reordering"
                                         (candidatesReordered)="reorderCandidates($event)"
                                         (edit)="editCandidate($event)"
@@ -31,12 +32,18 @@
 
   <app-secondary-majority-election-candidates *ngFor="let secondaryMajorityElection of secondaryElections"
                                               [testingPhaseEnded]="testingPhaseEnded"
-                                              [secondaryMajorityElection]="secondaryMajorityElection">
+                                              [readonly]="readonly"
+                                              [secondaryMajorityElection]="secondaryMajorityElection"
+                                              [candidateLocalityRequired]="candidateLocalityRequired"
+                                              [candidateOriginRequired]="candidateOriginRequired"
+                                              [domainOfInfluenceType]="currentDomainOfInfluence?.type"
+                                              [partyShortDescriptions]="partyShortDescriptions">
   </app-secondary-majority-election-candidates>
 
   <app-majority-election-ballot-group-overview *ngIf="currentMajorityElection"
                                                [testingPhaseEnded]="testingPhaseEnded"
                                                [locked]="locked"
+                                               [readonly]="readonly"
                                                [loadBallotGroupsInitially]="loadDependencies"
                                                [majorityElection]="currentMajorityElection"
                                                [secondaryMajorityElections]="secondaryElections">

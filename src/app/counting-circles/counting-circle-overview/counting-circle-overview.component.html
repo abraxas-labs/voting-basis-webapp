@@ -5,7 +5,7 @@
       (filterChange)="historizationFilterChange($event)"
     ></app-historization-filter-bar>
 
-    <div class="flex" *ngIf="!historizationFilter.date && (canCreate || canMerge)">
+    <div class="flex buttons" *ngIf="!historizationFilter.date && (canCreate || canMerge)">
       <bc-button
         variant="tertiary"
         *ngIf="canCreate"
@@ -18,36 +18,63 @@
         *ngIf="canMerge"
         (buttonClick)="openMergers()"
         [label]="'COUNTING_CIRCLE.MERGE.TITLE' | translate"
-        icon="group"
       ></bc-button>
     </div>
 
     <bc-table selection filter sort [sortActive]="[{ id: nameColumn, direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
       <ng-container [columnDef]="nameColumn">
-        <bc-header-cell filter filterType="text" sort *headerCellDef>{{ 'COUNTING_CIRCLE.NAME' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.name }}</bc-data-cell>
+        <bc-header-cell filter sort *headerCellDef>
+          <span truncateWithTooltip tooltip>
+            {{ 'COUNTING_CIRCLE.NAME' | translate }}
+          </span>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.name"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container [columnDef]="bfsColumn">
-        <bc-header-cell filter filterType="text" sort *headerCellDef>{{ 'COUNTING_CIRCLE.BFS' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.bfs }}</bc-data-cell>
+        <bc-header-cell filter sort *headerCellDef>
+          <span truncateWithTooltip tooltip>
+            {{ 'COUNTING_CIRCLE.BFS' | translate }}
+          </span>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.bfs"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container [columnDef]="codeColumn">
-        <bc-header-cell filter filterType="text" sort *headerCellDef>{{ 'COUNTING_CIRCLE.CODE' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.code }}</bc-data-cell>
+        <bc-header-cell filter sort *headerCellDef>
+          <span truncateWithTooltip tooltip>
+            {{ 'COUNTING_CIRCLE.CODE' | translate }}
+          </span>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.code"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container [columnDef]="authorityColumn">
-        <bc-header-cell filter filterType="text" sort *headerCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.responsibleAuthority.name }}</bc-data-cell>
+        <bc-header-cell filter sort *headerCellDef>
+          <span truncateWithTooltip tooltip>
+            {{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}
+          </span>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.responsibleAuthority.name"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container [columnDef]="modifiedOnColumn">
-        <bc-header-cell filter filterType="date-extended" sort *headerCellDef>{{
-          'COUNTING_CIRCLE.MODIFIED_ON' | translate
-        }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.modifiedOn | date: 'short' }}</bc-data-cell>
+        <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
+          <span truncateWithTooltip tooltip>
+            {{ 'COUNTING_CIRCLE.MODIFIED_ON' | translate }}
+          </span>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.modifiedOn | date: 'short'"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container [columnDef]="stateColumn">
@@ -59,13 +86,18 @@
           filterValueExpr="value"
           sort
           *headerCellDef
-          >{{ 'COUNTING_CIRCLE.STATE' | translate }}</bc-header-cell
         >
-        <bc-data-cell *dataCellDef="let element">{{ 'COUNTING_CIRCLE.STATES.' + element.state | translate }}</bc-data-cell>
+          <span truncateWithTooltip tooltip>
+            {{ 'COUNTING_CIRCLE.STATE' | translate }}
+          </span>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="'COUNTING_CIRCLE.STATES.' + element.state | translate"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container [columnDef]="actionsColumn">
-        <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+        <bc-header-cell *headerCellDef></bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
           <bc-icon
             *ngIf="!element.deletedOn && canDelete"
@@ -87,5 +119,7 @@
         (click)="show(row)"
       ></bc-data-row>
     </bc-table>
+
+    <bc-paginator #paginator showFirstLastButtons [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]"></bc-paginator>
   </div>
 </vo-lib-page>

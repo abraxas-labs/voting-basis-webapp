@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { MajorityElectionService } from '../../core/majority-election.service';
@@ -23,6 +23,8 @@ import {
   MajorityElectionCandidateEditDialogData,
   MajorityElectionCandidateEditDialogResult,
 } from '../../shared/majority-election-candidate-edit-dialog/majority-election-candidate-edit-dialog.component';
+import { SecondaryMajorityElectionCandidatesComponent } from '../../shared/secondary-majority-election-candidates/secondary-majority-election-candidates.component';
+import { LanguageService } from '../../core/language.service';
 
 @Component({
   selector: 'app-majority-election-candidates',
@@ -45,8 +47,14 @@ export class MajorityElectionCandidatesComponent {
   @Input()
   public candidateOriginRequired: boolean = false;
 
+  @Input()
+  public readonly: boolean = false;
+
   @ViewChild(MajorityElectionBallotGroupOverviewComponent, { static: false })
   public ballotGroupOverview?: MajorityElectionBallotGroupOverviewComponent;
+
+  @ViewChildren(SecondaryMajorityElectionCandidatesComponent)
+  public secondaryCandidatesComponents?: QueryList<SecondaryMajorityElectionCandidatesComponent>;
 
   public candidates: MajorityElectionCandidate[] = [];
   public expandedCandidates: MajorityElectionCandidate[] = [];
@@ -55,6 +63,7 @@ export class MajorityElectionCandidatesComponent {
   public currentMajorityElection?: MajorityElection;
   public secondaryElections: SecondaryMajorityElection[] = [];
   public currentDomainOfInfluence?: DomainOfInfluence;
+  public partyShortDescriptions: string[] = [];
 
   constructor(
     private readonly majorityElectionService: MajorityElectionService,
@@ -63,6 +72,7 @@ export class MajorityElectionCandidatesComponent {
     private readonly snackbarService: SnackbarService,
     private readonly i18n: TranslateService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly languageService: LanguageService,
   ) {}
 
   @Input()
@@ -83,10 +93,11 @@ export class MajorityElectionCandidatesComponent {
 
     const dialogData: MajorityElectionCandidateEditDialogData = {
       candidate: newMajorityElectionCandidate(this.candidates.length + 1, this.currentMajorityElection.id),
-      testingPhaseEnded: false,
+      testingPhaseEnded: this.testingPhaseEnded,
       doiType: this.currentDomainOfInfluence.type,
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
+      partyShortDescriptions: this.partyShortDescriptions,
     };
 
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);
@@ -104,6 +115,7 @@ export class MajorityElectionCandidatesComponent {
       doiType: this.currentDomainOfInfluence.type,
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
+      partyShortDescriptions: this.partyShortDescriptions,
     };
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);
@@ -117,6 +129,10 @@ export class MajorityElectionCandidatesComponent {
 
     await this.majorityElectionService.deleteCandidate(candidate.id);
     this.candidates = this.candidates.filter(c => c.id !== candidate.id);
+
+    // the backend fires delete events for referenced candidates automatically
+    this.secondaryCandidatesComponents?.forEach(c => c.primaryCandidateDeleted(candidate.id));
+
     this.refreshExpandedCandidates();
     this.updateCandidatePositions();
     this.snackbarService.success(this.i18n.instant('APP.DELETED'));
@@ -219,5 +235,8 @@ export class MajorityElectionCandidatesComponent {
 
   private async loadDomainOfInfluence(domainOfInfluenceId: string): Promise<void> {
     this.currentDomainOfInfluence = await this.domainOfInfluenceService.get(domainOfInfluenceId);
+    this.partyShortDescriptions = this.currentDomainOfInfluence.parties.map(
+      x => x.shortDescription.get(this.languageService.currentLanguage) ?? '',
+    );
   }
 }

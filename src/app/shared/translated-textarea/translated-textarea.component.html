@@ -1,25 +1,24 @@
-<bc-label *ngIf="label"
-          [label]="label"
-          [optional]="optional"
-          [optionalText]="'APP.OPTIONAL' | translate"></bc-label>
+<bc-label *ngIf="label" [label]="label" [optional]="optional" [optionalText]="'APP.OPTIONAL' | translate"></bc-label>
 
 <div class="textarea-container">
   <ng-container *ngIf="singleLanguageInput; else multiLanguageInput">
-    <ng-container *ngTemplateOutlet="formInput; context: {$implicit: currentLanguage}"></ng-container>
+    <ng-container *ngTemplateOutlet="formInput; context: { $implicit: currentLanguage }"></ng-container>
   </ng-container>
   <ng-template #multiLanguageInput>
     <ng-container *ngFor="let lang of languages">
       <bc-label [label]="lang"></bc-label>
-      <ng-container *ngTemplateOutlet="formInput; context: {$implicit: lang}"></ng-container>
+      <ng-container *ngTemplateOutlet="formInput; context: { $implicit: lang }"></ng-container>
     </ng-container>
   </ng-template>
 
   <ng-template #formInput let-language>
-    <bc-textarea [value]="translations.get(language)"
-                 (valueChange)="translationChanged(language, $event)"
-                 [placeholder]="placeholder"
-                 [disabled]="disabled"
-                 [maxlength]="maxlength"
-                 [subscriptSizing]="'dynamic'"></bc-textarea>
+    <bc-textarea
+      [value]="translations.get(language)"
+      (valueChange)="translationChanged(language, $event)"
+      [placeholder]="placeholder"
+      [readonly]="readonly"
+      [maxlength]="maxlength"
+      [subscriptSizing]="'dynamic'"
+    ></bc-textarea>
   </ng-template>
 </div>

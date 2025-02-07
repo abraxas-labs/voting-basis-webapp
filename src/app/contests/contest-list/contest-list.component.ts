@@ -35,6 +35,9 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
   public showType: boolean = false;
 
   @Input()
+  public showState: boolean = true;
+
+  @Input()
   public canCreate: boolean = false;
 
   @Input()
@@ -117,6 +120,9 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
     this.columns = ['date', 'type', 'description', 'endOfTestingPhase', 'state', 'archivePer', 'politicalBusinesses', 'owner', 'actions'];
     if (!this.showArchivePer) {
       this.columns.splice(5, 1);
+    }
+    if (!this.showState) {
+      this.columns.splice(4, 1);
     }
     if (!this.showEndOfTestingPhase) {
       this.columns.splice(3, 1);

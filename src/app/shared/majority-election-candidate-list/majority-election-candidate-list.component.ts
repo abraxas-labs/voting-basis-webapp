@@ -40,6 +40,9 @@ export class MajorityElectionCandidateListComponent {
   @Input()
   public reordering: boolean = false;
 
+  @Input()
+  public readonly: boolean = false;
+
   @Output()
   public edit: EventEmitter<MajorityElectionCandidate> = new EventEmitter<MajorityElectionCandidate>();
 
@@ -56,6 +59,7 @@ export class MajorityElectionCandidateListComponent {
 
     const removedCandidate = this.candidates.splice(previousIndex, 1)[0];
     this.candidates.splice(newIndex, 0, removedCandidate);
+    this.candidates = [...this.candidates];
     this.candidatesReordered.emit(this.candidates);
   }
 }

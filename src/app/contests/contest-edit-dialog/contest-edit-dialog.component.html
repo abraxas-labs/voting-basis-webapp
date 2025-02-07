@@ -3,8 +3,9 @@
 
   <div content class="form mr-3">
     <bc-dropdown *ngIf="domainOfInfluences.length !== 1"
+                 truncateWithTooltip tooltip
                  [items]="domainOfInfluences"
-                 [disabled]="!isNew"
+                 [readonly]="!isNew"
                  displayExpr="name"
                  valueExpr="id"
                  [required]="true"
@@ -15,7 +16,7 @@
 
     <ng-container *ngIf="isNew; else editDate">
       <bc-dropdown [label]="'CONTEST.PRECONFIGURED_DATE' | translate"
-                   [disabled]="customDateSelected || testingPhaseEnded"
+                   [readonly]="customDateSelected || testingPhaseEnded"
                    [items]="preconfiguredDates"
                    [value]="selectedPreconfiguredDate"
                    [required]="true"
@@ -25,9 +26,10 @@
       <bc-checkbox [checked]="customDateSelected"
                    (checkedChange)="customDateSelected = $event; contentChanged()"
                    [disabled]="testingPhaseEnded"
-                   [label]="'CONTEST.CHOOSE_CUSTOM_DATE' | translate"></bc-checkbox>
+                   [label]="'CONTEST.CHOOSE_CUSTOM_DATE' | translate"
+                   [subscriptSizing]="'dynamic'"></bc-checkbox>
       <bc-date [label]="'CONTEST.CUSTOM_DATE' | translate"
-               [disabled]="!customDateSelected || testingPhaseEnded"
+               [readonly]="!customDateSelected || testingPhaseEnded"
                [required]="customDateSelected"
                [value]="data.date | date"
                (valueChange)="updateDate($event); contentChanged()"
@@ -36,21 +38,21 @@
     <ng-template #editDate>
       <bc-date [label]="'CONTEST.CONTEST_DATE' | translate"
                     [required]="true"
-                    [disabled]="testingPhaseEnded"
+                    [readonly]="testingPhaseEnded"
                     [value]="data.date | date"
                     (valueChange)="updateDate($event); contentChanged()"
                     [subscriptSizing]="'dynamic'"></bc-date>
     </ng-template>
 
     <app-translated-formfield [label]="'CONTEST.DESCRIPTION' | translate"
-                              [disabled]="testingPhaseEnded"
+                              [readonly]="testingPhaseEnded"
                               [maxlength]="100"
                               [value]="data.description"
                               (valueChange)="data.description = $event; contentChanged()"
                               [singleLanguageInput]="true"></app-translated-formfield>
     <div class="flex">
       <bc-date [label]="'CONTEST.END_OF_TESTING_PHASE' | translate"
-               [disabled]="testingPhaseEnded"
+               [readonly]="testingPhaseEnded"
                [required]="true"
                [error]="
                     data.endOfTestingPhase !== undefined &&
@@ -64,7 +66,7 @@
                [subscriptSizing]="'dynamic'"></bc-date>
       <bc-time class="ml-2"
                [showEmptyLabel]="true"
-               [disabled]="testingPhaseEnded"
+               [readonly]="testingPhaseEnded"
                optionalText=""
                icon="clock-o"
                [value]="endOfTestingPhaseTimeValue"
@@ -77,7 +79,7 @@
     <bc-spinner class="block" size="1.5rem" *ngIf="pastContestsLoading; else pastContestsDropdown"></bc-spinner>
     <ng-template #pastContestsDropdown>
       <bc-dropdown *ngIf="pastContests.length > 0 && !this.cantonDefaults?.internalPlausibilisationDisabled"
-                   [disabled]="testingPhaseEnded"
+                   [readonly]="testingPhaseEnded"
                    [items]="pastContests"
                    displayExpr="dateString"
                    valueExpr="id"
@@ -91,12 +93,13 @@
     <bc-checkbox [checked]="data.eVoting"
                  [disabled]="testingPhaseEnded"
                  [label]="'CONTEST.E_VOTING' | translate"
-                 (checkedChange)="data.eVoting = $event; contentChanged()"></bc-checkbox>
+                 (checkedChange)="data.eVoting = $event; contentChanged()"
+                 [subscriptSizing]="'dynamic'"></bc-checkbox>
 
     <ng-container *ngIf="data.eVoting">
       <div class="flex">
         <bc-date [label]="'CONTEST.E_VOTING_FROM' | translate"
-                 [disabled]="testingPhaseEnded"
+                 [readonly]="testingPhaseEnded"
                  [required]="true"
                  [value]="data.eVotingFrom | date"
                  (valueChange)="eVotingFromString = $event; setTime(eVotingFromTimeValue, data.eVotingFrom); contentChanged()"
@@ -112,7 +115,7 @@
 
       <div class="flex">
         <bc-date [label]="'CONTEST.E_VOTING_TO' | translate"
-                 [disabled]="testingPhaseEnded"
+                 [readonly]="testingPhaseEnded"
                  [required]="true"
                  [value]="data.eVotingTo | date"
                  (valueChange)="eVotingToString = $event; setTime(eVotingToTimeValue, data.eVotingTo); contentChanged()"

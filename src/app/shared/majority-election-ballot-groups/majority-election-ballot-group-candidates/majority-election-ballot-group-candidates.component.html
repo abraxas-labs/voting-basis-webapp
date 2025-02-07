@@ -1,24 +1,40 @@
 <bc-table class="w-full mb-3" [dataSource]="selectedCandidates">
   <ng-container columnDef="number">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.number }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.NUMBER_SHORT' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.number"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="lastName">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.lastName }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      {{ 'MAJORITY_ELECTION.CANDIDATE.LAST_NAME' | translate }}
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.lastName"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="firstName">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.firstName }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      {{ 'MAJORITY_ELECTION.CANDIDATE.FIRST_NAME' | translate }}
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.firstName"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
   <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
 </bc-table>
 
-<p *ngIf="(majorityElection && !majorityElection.individualCandidatesDisabled)
-  || (secondaryMajorityElection && !secondaryMajorityElection.individualCandidatesDisabled)">
-  {{'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate}}: {{individualCandidatesVoteCount}}
+<p
+  *ngIf="
+    (majorityElection && !majorityElection.individualCandidatesDisabled) ||
+    (secondaryMajorityElection && !secondaryMajorityElection.individualCandidatesDisabled)
+  "
+>
+  {{ 'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate }}: {{ individualCandidatesVoteCount }}
 </p>

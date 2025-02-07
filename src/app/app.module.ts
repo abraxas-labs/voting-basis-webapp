@@ -9,7 +9,6 @@ import {
   AuthorizationModule,
   AuthStorageService,
   FORMFIELD_DEFAULT_OPTIONS,
-  PaginatorIntl,
   TenantModule,
   UserModule,
 } from '@abraxas/base-components';
@@ -27,7 +26,6 @@ import { AppComponent } from './app.component';
 import { TranslateService } from './core/translate.service';
 import { TranslationLoader } from './core/translation-loader';
 import { SharedModule } from './shared/shared.module';
-import { TranslatedPaginatorIntl } from './shared/translatedPaginatorIntl';
 
 registerLocaleData(localeDeCh);
 
@@ -69,10 +67,6 @@ registerLocaleData(localeDeCh);
     {
       provide: CoreTranslateService,
       useClass: TranslateService,
-    },
-    {
-      provide: PaginatorIntl,
-      useClass: TranslatedPaginatorIntl,
     },
     {
       provide: FORMFIELD_DEFAULT_OPTIONS,

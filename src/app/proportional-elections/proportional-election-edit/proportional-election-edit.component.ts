@@ -21,6 +21,8 @@ import { DomainOfInfluenceService } from '../../core/domain-of-influence.service
 import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
 import { ProportionalElectionUnionService } from '../../core/proportional-election-union.service';
 import { ProportionalElectionUnion } from '../../core/models/proportional-election-union.model';
+import { PermissionService } from '../../core/permission.service';
+import { Permissions } from '../../core/models/permissions.model';
 
 @Component({
   selector: 'app-proportional-election-edit',
@@ -47,6 +49,7 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
   public isNew: boolean = false;
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
+  public canEdit: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public hasChanges: boolean = false;
   public proportionalElectionUnions: ProportionalElectionUnion[] = [];
@@ -65,6 +68,7 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly proportionalElectionUnionService: ProportionalElectionUnionService,
     private readonly dialogService: DialogService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -79,6 +83,7 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
       const { testingPhaseEnded, locked, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked = locked;
+      this.canEdit = await this.permissionService.hasPermission(Permissions.ProportionalElection.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
 
       if (!this.isNew) {
@@ -103,7 +108,7 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
     this.stepLoading = true;
 
     try {
-      if (this.hasChanges) {
+      if (this.hasChanges && this.canEdit) {
         if (this.isNew) {
           this.data.id = await this.proportionalElectionService.create(this.data);
         } else {

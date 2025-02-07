@@ -13,10 +13,10 @@ import { flatMap } from './utils/array.utils';
 @Injectable({
   providedIn: 'root',
 })
-export class DomainOfInfluenceLevelService {
+export class DomainOfInfluenceReportLevelService {
   constructor(private readonly i18n: TranslateService) {}
 
-  public buildDomainOfInfluenceLevels(politicalDomainOfInfluenceNode?: TreeNode<DomainOfInfluence>): DomainOfInfluenceLevel[] {
+  public buildDomainOfInfluenceReportLevels(politicalDomainOfInfluenceNode?: TreeNode<DomainOfInfluence>): DomainOfInfluenceLevel[] {
     if (!politicalDomainOfInfluenceNode) {
       return [];
     }
@@ -30,7 +30,9 @@ export class DomainOfInfluenceLevelService {
         level: level++,
         desc: this.buildDomainOfInfluenceLevelDescription(level, currentNodes),
       });
-      currentNodes = flatMap(currentNodes.map(n => n.filteredChildNodes));
+
+      const children = currentNodes.filter(x => !x.data.hideLowerDomainOfInfluencesInReports).map(n => n.filteredChildNodes);
+      currentNodes = flatMap(children);
     }
 
     return domainOfInfluenceLevels;

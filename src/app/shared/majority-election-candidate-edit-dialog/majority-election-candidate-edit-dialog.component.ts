@@ -38,6 +38,7 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
   public testingPhaseEnded: boolean;
   public isCandidateLocalityRequired: boolean;
   public isCandidateOriginRequired: boolean;
+  public partyShortDescriptions: string[];
 
   public hasChanges: boolean = false;
   public originalCandidate: MajorityElectionCandidate;
@@ -56,6 +57,7 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
     this.isNew = !this.data.id;
     this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
     this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
+    this.partyShortDescriptions = dialogData.partyShortDescriptions;
     this.originalCandidate = cloneDeep(this.data);
 
     this.dialogRef.disableClose = true;
@@ -72,11 +74,11 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
       !!this.data.number &&
       !!this.data.firstName &&
       !!this.data.lastName &&
-      isValidDateOfBirth(this.data.dateOfBirth) &&
-      (!this.isCandidateLocalityRequired || !!this.data.locality) &&
-      LanguageService.allLanguagesPresent(this.data.party) &&
-      this.data.sex !== undefined &&
-      (!this.isCandidateOriginRequired || !!this.data.origin)
+      (this.testingPhaseEnded || isValidDateOfBirth(this.data.dateOfBirth)) &&
+      (this.testingPhaseEnded || !this.isCandidateLocalityRequired || !!this.data.locality) &&
+      (this.testingPhaseEnded || LanguageService.allLanguagesPresent(this.data.party)) &&
+      (this.testingPhaseEnded || this.data.sex !== undefined) &&
+      (this.testingPhaseEnded || !this.isCandidateOriginRequired || !!this.data.origin)
     );
   }
 
@@ -135,6 +137,7 @@ export interface MajorityElectionCandidateEditDialogData {
   doiType: DomainOfInfluenceType;
   candidateLocalityRequired: boolean;
   candidateOriginRequired: boolean;
+  partyShortDescriptions: string[];
 }
 
 export interface MajorityElectionCandidateEditDialogResult {

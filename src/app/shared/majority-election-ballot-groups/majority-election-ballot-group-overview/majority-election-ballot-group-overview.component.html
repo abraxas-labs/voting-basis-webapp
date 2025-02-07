@@ -9,7 +9,7 @@
           icon="plus"
           class="my-2"
           *ngIf="!forSecondaryElection"
-          [disabled]="locked"
+          [disabled]="locked || readonly"
           [label]="'MAJORITY_ELECTION.BALLOT_GROUP.NEW' | translate"
           (buttonClick)="create()"
         ></bc-button>
@@ -17,7 +17,7 @@
           variant="tertiary"
           class="my-2"
           *ngIf="!!forSecondaryElection"
-          [disabled]="!selectedBallotGroup || testingPhaseEnded"
+          [disabled]="!selectedBallotGroup || testingPhaseEnded || readonly"
           [label]="'MAJORITY_ELECTION.BALLOT_GROUP.FILL_BLANK_ROWS' | translate"
           (buttonClick)="fillBlankRows()"
         ></bc-button>
@@ -25,24 +25,36 @@
 
       <bc-table selection class="w-full" [dataSource]="ballotGroups">
         <ng-container columnDef="position">
-          <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.BALLOT_GROUP.POSITION' | translate }}</bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.position }}</bc-data-cell>
+          <bc-header-cell *headerCellDef>
+            <app-truncated-value [value]="'MAJORITY_ELECTION.BALLOT_GROUP.POSITION' | translate"></app-truncated-value>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.position"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container columnDef="shortDescription">
-          <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.BALLOT_GROUP.SHORT_DESCRIPTION' | translate }}</bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.shortDescription }}</bc-data-cell>
+          <bc-header-cell *headerCellDef>
+            <app-truncated-value [value]="'MAJORITY_ELECTION.BALLOT_GROUP.SHORT_DESCRIPTION' | translate"></app-truncated-value>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.shortDescription"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container columnDef="description">
-          <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate }}</bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">{{ element.description }}</bc-data-cell>
+          <bc-header-cell *headerCellDef>
+            <app-truncated-value [value]="'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate"></app-truncated-value>
+          </bc-header-cell>
+          <bc-data-cell *dataCellDef="let element">
+            <app-truncated-value [value]="element.description"></app-truncated-value>
+          </bc-data-cell>
         </ng-container>
 
         <ng-container columnDef="actions">
-          <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+          <bc-header-cell *headerCellDef></bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
-            <div *ngIf="!forSecondaryElection && !locked" class="flex">
+            <div *ngIf="!forSecondaryElection && !locked && !readonly" class="flex">
               <bc-icon
                 *ngIf="element | canEditBallotGroup: testingPhaseEnded"
                 class="clickable"
@@ -87,7 +99,7 @@
       [secondaryMajorityElections]="secondaryMajorityElections"
       [ballotGroup]="selectedBallotGroup"
       [forSecondaryElection]="forSecondaryElection"
-      [readonly]="!(selectedBallotGroup | canEditBallotGroup: testingPhaseEnded)"
+      [readonly]="!(selectedBallotGroup | canEditBallotGroup: testingPhaseEnded) || readonly"
       (candidatesAssigned)="updateCanSave()"
     ></app-majority-election-ballot-group-detail>
   </div>

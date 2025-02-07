@@ -20,7 +20,7 @@ export abstract class TranslatedFieldComponent {
   public valueChange: EventEmitter<Map<string, string>> = new EventEmitter<Map<string, string>>();
 
   @Input()
-  public disabled: boolean = false;
+  public readonly: boolean = false;
 
   @Input()
   public optional: boolean = false;
@@ -132,7 +132,7 @@ export abstract class TranslatedFieldComponent {
     }
 
     for (const lang of allLanguages) {
-      const value = this.emptyLanguages.has(lang) ? this.placeholder : this.translations.get(lang) ?? this.placeholder;
+      const value = this.emptyLanguages.has(lang) ? this.placeholder : (this.translations.get(lang) ?? this.placeholder);
       result.set(lang, value);
     }
 

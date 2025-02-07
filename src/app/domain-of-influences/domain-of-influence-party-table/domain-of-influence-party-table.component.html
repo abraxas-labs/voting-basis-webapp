@@ -1,21 +1,24 @@
 <bc-table *ngIf="parties.length > 0; else noData" class="w-full" [dataSource]="parties">
   <ng-container columnDef="name">
-    <bc-header-cell *headerCellDef>{{ 'DOMAIN_OF_INFLUENCE.PARTY.NAME' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.name | getTranslation }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'DOMAIN_OF_INFLUENCE.PARTY.NAME' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.name | getTranslation"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="shortDescription">
-    <bc-header-cell *headerCellDef>{{ 'DOMAIN_OF_INFLUENCE.PARTY.SHORT_DESCRIPTION' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.shortDescription | getTranslation }}</bc-data-cell>
-  </ng-container>
-
-  <ng-container columnDef="description">
-    <bc-header-cell *headerCellDef>{{ 'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.description }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'DOMAIN_OF_INFLUENCE.PARTY.SHORT_DESCRIPTION' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="actions">
-    <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+    <bc-header-cell *headerCellDef></bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
       <div *ngIf="!disabled && !element.inherited" class="flex">
         <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>

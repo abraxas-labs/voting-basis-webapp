@@ -77,13 +77,15 @@ export function newCantonSettings(): CantonSettings {
     proportionalElectionUseCandidateCheckDigit: false,
     countingCircleResultStateDescriptionsList: allCountingCircleResultStateDescriptions.map(x => ({ state: x, description: '' })),
     statePlausibilisedDisabled: false,
-    publishResultsEnabled: false,
+    manualPublishResultsEnabled: false,
     endResultFinalizeDisabled: false,
     createContestOnHighestHierarchicalLevelEnabled: false,
     internalPlausibilisationDisabled: false,
     publishResultsBeforeAuditedTentatively: false,
     candidateLocalityRequired: false,
     candidateOriginRequired: false,
+    domainOfInfluencePublishResultsOptionEnabled: false,
+    secondaryMajorityElectionOnSeparateBallot: false,
   };
 }
 

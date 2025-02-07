@@ -4,14 +4,6 @@
   color: $color-error;
 }
 
-bc-checkbox {
-  margin-left: -10px;
-}
-
-bc-radio-button-group {
-  margin-left: -10px;
-}
-
 .state-colorbox {
   border-radius: 4px;
   width: 1.7rem;
@@ -35,4 +27,9 @@ bc-radio-button-group {
     margin-left: 1rem;
     align-self: center;
   }
+}
+
+.title {
+  margin-top: 1rem !important;
+  margin-bottom: 0.25rem !important;
 }

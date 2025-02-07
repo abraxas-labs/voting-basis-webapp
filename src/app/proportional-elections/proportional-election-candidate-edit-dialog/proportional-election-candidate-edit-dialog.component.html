@@ -4,7 +4,7 @@
   <div content class="form mr-3">
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NUMBER' | translate"
              [required]="true"
-             [disabled]="testingPhaseEnded"
+             [readonly]="testingPhaseEnded"
              [value]="data.number"
              (valueChange)="data.number = $event; contentChanged()"
              subscriptSizing="dynamic"></bc-text>
@@ -83,7 +83,8 @@
 
     <bc-checkbox [checked]="data.incumbent"
                  (checkedChange)="data.incumbent = $event; contentChanged()"
-                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"></bc-checkbox>
+                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"
+                 [subscriptSizing]="'dynamic'"></bc-checkbox>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate"
              [value]="data.zipCode"
@@ -109,7 +110,7 @@
                  [required]="true"
                  displayExpr="shortDescriptionTranslated"
                  valueExpr="id"
-                 [disabled]="testingPhaseEnded"
+                 [readonly]="testingPhaseEnded"
                  [value]="selectedPartyId"
                  (valueChange)="selectedPartyId = $event; contentChanged()"
                  subscriptSizing="dynamic"></bc-dropdown>

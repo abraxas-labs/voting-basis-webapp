@@ -87,9 +87,13 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public domainOfInfluenceTypeList: EnumItemDescription<DomainOfInfluenceType>[] = [];
   public cantonDefaults?: DomainOfInfluenceCantonDefaults;
   public dataSource = new TableDataSource<PoliticalBusinessListType>();
-  public hasAdminPermissions = false;
+  public hasAdminReadPermissions = false;
+  public hasAdminWritePermissions = false;
+  public hasSameTenantReadPermissions = false;
+  public hasSameTenantWritePermissions = false;
   public politicalBusinessSummaries: PoliticalBusinessSummary[] = [];
   public columns = [...this.originalColumns];
+  public activeToggled: boolean = false;
 
   private readonly routeSubscription: Subscription;
   private detailsChangesSubscription?: Subscription;
@@ -134,7 +138,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public isSelectionDisabled = (row: PoliticalBusinessListType): boolean => {
-    return !this.hasAdminPermissions && row.ownerId !== this.tenantId;
+    return !this.hasAdminReadPermissions && row.ownerId !== this.tenantId;
   };
 
   public ngAfterViewInit(): void {
@@ -161,7 +165,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public async open(row: PoliticalBusinessListType): Promise<void> {
-    if (row.ownerId !== this.tenantId && !this.hasAdminPermissions) {
+    if (row.ownerId !== this.tenantId && !this.hasAdminReadPermissions) {
       return;
     }
 
@@ -208,6 +212,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public async activeStateChange(row: PoliticalBusinessListType, active: boolean): Promise<void> {
+    this.activeToggled = true;
     switch (row.type) {
       case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE:
         await this.voteService.updateActiveState(row.id, active);
@@ -223,7 +228,6 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         break;
     }
 
-    row.active = active;
     this.snackbarService.success(this.i18n.instant('APP.SAVED'));
   }
 
@@ -269,7 +273,12 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.updatePoliticalBusinessesList();
 
       this.cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(this.contest.domainOfInfluenceId);
-      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ActionsTenantSameCanton);
+      this.hasAdminReadPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ReadActionsTenantSameCanton);
+      this.hasAdminWritePermissions = await this.permissionService.hasPermission(
+        Permissions.PoliticalBusiness.WriteActionsTenantSameCanton,
+      );
+      this.hasSameTenantReadPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ReadActionsSameTenant);
+      this.hasSameTenantWritePermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.WriteActionsSameTenant);
       this.startChangesListener();
     } finally {
       this.loading = false;
@@ -286,6 +295,12 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.detailsChangesSubscription?.unsubscribe();
 
     this.detailsChangesSubscription = this.contestService.getDetailsChanges(this.contest.id).subscribe(e => {
+      // toggle the switch should not refresh the table
+      if (this.activeToggled) {
+        this.activeToggled = false;
+        return;
+      }
+
       if (!!e.politicalBusiness) {
         this.handlePoliticalBusinessMessage(e.politicalBusiness);
         return;

@@ -14,7 +14,7 @@ import { ContactPerson } from '../../core/models/contact-person.model';
 })
 export class ContactPersonEditComponent {
   @Input()
-  public disabled: boolean = false;
+  public readonly: boolean = false;
 
   @Input()
   public contactPerson!: ContactPerson;

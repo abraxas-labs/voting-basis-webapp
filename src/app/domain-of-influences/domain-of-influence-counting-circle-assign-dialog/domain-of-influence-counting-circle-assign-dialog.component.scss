@@ -1,5 +1,27 @@
+@use '@abraxas/voting-lib/style/table' as table;
+
+::ng-deep .bc-column-name {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-bfs {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-authority {
+  @include table.truncate-long-sortable-table-header();
+}
+
+div[left] {
+  padding-right: 1rem;
+  height: 41rem;
+  overflow-y: auto;
+}
+
 div[right] {
-  max-height: 20rem;
+  padding-right: 1rem;
+  height: 41rem;
+  overflow-y: auto;
 }
 
 .grid {
@@ -8,5 +30,9 @@ div[right] {
 }
 
 .bc-column-actions {
-  width: 5%;
+  width: 2rem;
+}
+
+.bc-column-select {
+  width: 4rem;
 }

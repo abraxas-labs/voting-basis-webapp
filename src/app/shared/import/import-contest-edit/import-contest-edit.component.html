@@ -10,28 +10,48 @@
   </ng-container>
 
   <ng-container columnDef="filename">
-    <bc-header-cell *headerCellDef>{{ 'IMPORT.FILENAME' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.fileName }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'IMPORT.FILENAME' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.fileName"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="date">
-    <bc-header-cell *headerCellDef>{{ 'CONTEST.CONTEST_DATE' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.contestDate | date }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'CONTEST.CONTEST_DATE' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.contestDate | date"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="description">
-    <bc-header-cell *headerCellDef>{{ 'CONTEST.DESCRIPTION' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.description | getTranslation }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'CONTEST.DESCRIPTION' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.description | getTranslation"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="eVotingFrom">
-    <bc-header-cell *headerCellDef>{{ 'CONTEST.E_VOTING_FROM' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.eVotingFrom | date:'short' }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'CONTEST.E_VOTING_FROM' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.eVotingFrom | date:'short'"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="eVotingTo">
-    <bc-header-cell *headerCellDef>{{ 'CONTEST.E_VOTING_FROM' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.eVotingTo | date:'short' }}</bc-data-cell>
+    <bc-header-cell *headerCellDef>
+      <app-truncated-value [value]="'CONTEST.E_VOTING_FROM' | translate"></app-truncated-value>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.eVotingTo | date:'short'"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>

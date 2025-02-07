@@ -10,7 +10,7 @@ import { ExportConfiguration } from '../../core/models/export.model';
 import {
   ExportConfigurationAssignDialogComponent,
   ExportConfigurationAssignDialogData,
-} from '../../domain-of-influences/export-configuration-assign-dialog/export-configuration-assign-dialog.component';
+} from '../export-configuration-assign-dialog/export-configuration-assign-dialog.component';
 import { ExportProvider } from '@abraxas/voting-basis-service-proto/grpc/shared/export_pb';
 
 @Component({
@@ -22,7 +22,7 @@ export class ExportConfigurationsComponent {
   public providers: EnumItemDescription<ExportProvider>[] = [];
 
   @Input()
-  public disabled: boolean = false;
+  public readonly: boolean = false;
 
   @Input()
   public configurations?: ExportConfiguration[];

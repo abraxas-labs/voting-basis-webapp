@@ -3,18 +3,30 @@
   <bc-table class="w-full" [dataSource]="dataSource">
 
     <ng-container columnDef="politicalBusinessNumber">
-      <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS.NUMBER' | translate }}</bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">{{ element.politicalBusinessNumber }}</bc-data-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'POLITICAL_BUSINESS.NUMBER' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.politicalBusinessNumber"></app-truncated-value>
+      </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="shortDescription">
-      <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}</bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">{{ element.shortDescription | getTranslation }}</bc-data-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
+      </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="domainOfInfluenceName">
-      <bc-header-cell *headerCellDef>{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}</bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">{{ element.domainOfInfluence.name }}</bc-data-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.domainOfInfluence.name"></app-truncated-value>
+      </bc-data-cell>
     </ng-container>
 
 

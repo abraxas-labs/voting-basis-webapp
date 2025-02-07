@@ -1,7 +1,8 @@
 <bc-expansion-panel [header]="data.politicalBusinessNumber + ': ' + (data.officialDescription | getTranslation)" [expanded]="true">
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
            [required]="true"
-           [(value)]="data.politicalBusinessNumber"></bc-text>
+           [(value)]="data.politicalBusinessNumber"
+           [subscriptSizing]="'dynamic'"></bc-text>
 
   <bc-dropdown class="full-width"
                *ngIf="domainOfInfluenceTypes.length > 1"
@@ -11,7 +12,8 @@
                displayExpr="description"
                valueExpr="value"
                [required]="true"
-               [(value)]="selectedDomainOfInfluenceType"></bc-dropdown>
+               [(value)]="selectedDomainOfInfluenceType"
+               [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <bc-dropdown class="full-width"
                *ngIf="selectedDomainOfInfluenceType"
@@ -19,7 +21,8 @@
                displayExpr="name"
                [required]="true"
                [(value)]="selectedDomainOfInfluence"
-               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
+               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
+               [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <bc-dropdown class="full-width"
                [items]="domainOfInfluenceLevels"
@@ -27,7 +30,8 @@
                valueExpr="level"
                [required]="true"
                [(value)]="data.reportDomainOfInfluenceLevel"
-               [label]="'POLITICAL_BUSINESS.REPORT_LEVEL' | translate"></bc-dropdown>
+               [label]="'POLITICAL_BUSINESS.REPORT_LEVEL' | translate"
+               [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <bc-dropdown class="full-width"
                [label]="'MAJORITY_ELECTION.MANDATE_ALGORITHM.TITLE' | translate"
@@ -35,11 +39,13 @@
                displayExpr="description"
                valueExpr="value"
                [required]="true"
-               [(value)]="data.mandateAlgorithm"></bc-dropdown>
+               [(value)]="data.mandateAlgorithm"
+               [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <bc-checkbox [checked]="!data.individualCandidatesDisabled"
                (checkedChange)="data.individualCandidatesDisabled = !$event"
-               [label]="'MAJORITY_ELECTION.INDIVIDUAL_CANDIDATES' | translate"></bc-checkbox>
+               [label]="'MAJORITY_ELECTION.INDIVIDUAL_CANDIDATES' | translate"
+               [subscriptSizing]="'dynamic'"></bc-checkbox>
 
   <div class="button-container">
     <bc-button variant="primary"

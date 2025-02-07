@@ -1,24 +1,22 @@
 <div class="electorates" *ngFor="let electorate of electorates; let index = index">
   <bc-text
     [label]="'COUNTING_CIRCLE.ELECTORATE.DOMAIN_OF_INFLUENCE_TYPES' | translate"
-    [disabled]="true"
+    [readonly]="true"
     [required]="true"
-    [value]="electorateLabelByIndex.get(index)"></bc-text>
+    [value]="electorateLabelByIndex.get(index)"
+    [subscriptSizing]="'dynamic'"
+  ></bc-text>
   <bc-button
     *ngIf="!disabled; else empty"
     variant="tertiary"
     icon="plus"
     [label]="'COUNTING_CIRCLE.ELECTORATE.ASSIGN_OPEN' | translate"
-    (buttonClick)="assign(electorate)"></bc-button>
-  <bc-icon
-    *ngIf="!disabled; else empty"
-    icon="trash"
-    iconColor="error"
-    class="clickable"
-    (click)="remove(index)"></bc-icon>
+    (buttonClick)="assign(electorate)"
+  ></bc-button>
+  <bc-icon *ngIf="!disabled; else empty" icon="trash" iconColor="error" class="clickable" (click)="remove(index)"></bc-icon>
 </div>
 
-<p *ngIf="electorates.length === 0" class="no-data my-2">{{'COUNTING_CIRCLE.ELECTORATE.NO_DATA' | translate}}</p>
+<p *ngIf="electorates.length === 0" class="no-data my-2">{{ 'COUNTING_CIRCLE.ELECTORATE.NO_DATA' | translate }}</p>
 
 <bc-button
   *ngIf="!disabled"
@@ -26,7 +24,8 @@
   variant="tertiary"
   icon="plus"
   [label]="'COUNTING_CIRCLE.ELECTORATE.ADD' | translate"
-  (buttonClick)="add()"></bc-button>
+  (buttonClick)="add()"
+></bc-button>
 
 <ng-template #empty>
   <div></div>

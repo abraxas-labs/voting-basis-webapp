@@ -18,7 +18,7 @@ import { TableDataSource } from '@abraxas/base-components';
 })
 export class CountingCircleElectorateAssignDialogComponent {
   public readonly columns = ['select', 'domainOfInfluenceType'];
-  public readonly columnsSelected = ['domainOfInfluenceType'];
+  public readonly columnsSelected = ['domainOfInfluenceType', 'actions'];
 
   public dataSource = new TableDataSource<DomainOfInfluenceType>();
   public selection = new SelectionModel<DomainOfInfluenceType>(true, []);

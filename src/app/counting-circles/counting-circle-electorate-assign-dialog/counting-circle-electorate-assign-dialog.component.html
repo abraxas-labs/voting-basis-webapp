@@ -7,49 +7,69 @@
         <bc-table selection class="w-full" [dataSource]="dataSource">
           <ng-container columnDef="select">
             <bc-header-cell *headerCellDef>
-              <bc-checkbox class="ml-2 mb-0" (checkedChange)="toggleAllRows($event)"
+              <bc-checkbox
+                class="ml-2 mb-0"
+                (checkedChange)="toggleAllRows($event)"
                 [checked]="selection.hasValue() && isAllSelected"
-                [indeterminate]="selection.hasValue() && !isAllSelected">
+                [indeterminate]="selection.hasValue() && !isAllSelected"
+              >
               </bc-checkbox>
             </bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <bc-checkbox class="ml-2" (checkedChange)="toggleRow(element, $event)"
-                [checked]="selection.isSelected(element)">
+              <bc-checkbox class="ml-2" (checkedChange)="toggleRow(element, $event)" [checked]="selection.isSelected(element)">
               </bc-checkbox>
             </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="domainOfInfluenceType">
-            <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE' | translate
-              }}</bc-header-cell>
-            <bc-data-cell *dataCellDef="let element"> <span>{{
-                'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE_PREFIX' | translate }} </span>
-              <span>{{ 'DOMAIN_OF_INFLUENCE_TYPES.' + element | translate }}</span></bc-data-cell>
+            <bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE' | translate"></app-truncated-value>
+            </bc-header-cell>
+            <bc-data-cell *dataCellDef="let element">
+              <app-truncated-value
+                [value]="
+                  ('COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE_PREFIX' | translate) +
+                  ' ' +
+                  ('DOMAIN_OF_INFLUENCE_TYPES.' + element | translate)
+                "
+              ></app-truncated-value>
+            </bc-data-cell>
           </ng-container>
 
-
           <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-          <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
-            selectionRow [selectionRowValue]="row" (click)="selection.toggle(row); updateIsAllSelected()"></bc-data-row>
-          </bc-table>
+          <bc-data-row
+            *dataRowDef="let row; columns: columns; let i = index"
+            selectionToggle
+            [selectionToggleValue]="row"
+            selectionRow
+            [selectionRowValue]="row"
+            (click)="selection.toggle(row); updateIsAllSelected()"
+          ></bc-data-row>
+        </bc-table>
       </div>
 
       <bc-divider class="ml-4" orientation="vertical"></bc-divider>
 
       <div>
-        <h2 translate class="mb-0">{{'COUNTING_CIRCLE.ELECTORATE.ASSIGN.SELECTED' | translate}}</h2>
+        <h2 translate class="mb-0">{{ 'COUNTING_CIRCLE.ELECTORATE.ASSIGN.SELECTED' | translate }}</h2>
         <bc-table class="w-full" [dataSource]="selection.selected">
-
           <ng-container columnDef="domainOfInfluenceType">
-            <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE' | translate
-              }}</bc-header-cell>
-            <bc-data-cell *dataCellDef="let element"> <span>{{
-                'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE_PREFIX' | translate }} </span>
-              <span>{{ 'DOMAIN_OF_INFLUENCE_TYPES.' + element | translate }}</span></bc-data-cell>
+            <bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE' | translate"></app-truncated-value>
+            </bc-header-cell>
+            <bc-data-cell *dataCellDef="let element">
+              <app-truncated-value
+                [value]="
+                  ('COUNTING_CIRCLE.ELECTORATE.ASSIGN.DOMAIN_OF_INFLUENCE_TYPE_PREFIX' | translate) +
+                  ' ' +
+                  ('DOMAIN_OF_INFLUENCE_TYPES.' + element | translate)
+                "
+              ></app-truncated-value>
+            </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="actions">
-            <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+            <bc-header-cell *headerCellDef></bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
               <bc-icon class="clickable" (click)="selection.deselect(element)" icon="remove"></bc-icon>
             </bc-data-cell>
@@ -62,7 +82,13 @@
     </div>
   </div>
 
-  <vo-lib-button-bar footer (save)="save()" [canSave]="selection.selected.length > 0" [sticky]="true"
-    [saveLabel]="'ACTIONS.ASSIGN' | translate" (cancel)="close()">
+  <vo-lib-button-bar
+    footer
+    (save)="save()"
+    [canSave]="selection.selected.length > 0"
+    [sticky]="true"
+    [saveLabel]="'ACTIONS.ASSIGN' | translate"
+    (cancel)="close()"
+  >
   </vo-lib-button-bar>
 </vo-lib-dialog>

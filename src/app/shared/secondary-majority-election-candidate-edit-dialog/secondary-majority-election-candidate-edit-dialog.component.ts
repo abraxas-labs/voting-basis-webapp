@@ -14,13 +14,14 @@ import { MajorityElectionCandidate, newMajorityElectionCandidate } from '../../c
 import {
   MajorityElectionCandidateReference,
   SecondaryMajorityElection,
-  SecondaryMajorityElectionAllowedCandidates,
   SecondaryMajorityElectionCandidate,
 } from '../../core/models/secondary-majority-election.model';
 import { SecondaryMajorityElectionService } from '../../core/secondary-majority-election.service';
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
 import { cloneDeep, isEqual } from 'lodash';
 import { Subscription } from 'rxjs';
+import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
+import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-secondary-majority-election-candidate-edit-dialog',
@@ -37,19 +38,21 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     await this.closeWithUnsavedChangesCheck();
   }
 
-  public allowedCandidateTypes: typeof SecondaryMajorityElectionAllowedCandidates = SecondaryMajorityElectionAllowedCandidates;
   public candidate: SecondaryMajorityElectionCandidate;
   public isNew: boolean = false;
   public testingPhaseEnded: boolean = false;
   public saving: boolean = false;
   public loading: boolean = false;
-  public selectCandidateFromPrimaryElection: boolean = false;
+  public selectCandidateFromPrimaryElection: boolean = true;
   public secondaryMajorityElection: SecondaryMajorityElection;
   public majorityElectionCandidates: (MajorityElectionCandidate & { displayName: string })[] = [];
   public selectedMajorityElectionCandidate: MajorityElectionCandidate & { displayName: string };
   public hasChanges: boolean = false;
-  public originalCandidate: MajorityElectionCandidate;
+  public originalCandidate: SecondaryMajorityElectionCandidate;
   public readonly backdropClickSubscription: Subscription;
+  public isCandidateLocalityRequired: boolean;
+  public isCandidateOriginRequired: boolean;
+  public partyShortDescriptions: string[];
 
   constructor(
     private readonly dialogRef: MatDialogRef<SecondaryMajorityElectionCandidateEditDialogData>,
@@ -64,15 +67,11 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     this.secondaryMajorityElection = dialogData.secondaryMajorityElection;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
     this.isNew = !this.candidate.id;
-
-    if (
-      this.secondaryMajorityElection.allowedCandidates ===
-        this.allowedCandidateTypes.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MUST_EXIST_IN_PRIMARY_ELECTION ||
-      this.candidate.isReferenced
-    ) {
-      this.selectCandidateFromPrimaryElection = true;
-    }
+    this.selectCandidateFromPrimaryElection = this.candidate.isReferenced;
     this.selectedMajorityElectionCandidate = { ...newMajorityElectionCandidate(-1, ''), displayName: '' };
+    this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
+    this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
+    this.partyShortDescriptions = dialogData.partyShortDescriptions;
     this.originalCandidate = cloneDeep(this.candidate);
 
     this.dialogRef.disableClose = true;
@@ -85,8 +84,7 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
 
   public get canSave(): boolean {
     if (
-      this.secondaryMajorityElection.allowedCandidates ===
-        this.allowedCandidateTypes.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MUST_NOT_EXIST_IN_PRIMARY_ELECTION &&
+      !this.selectCandidateFromPrimaryElection &&
       this.majorityElectionCandidates.some(
         c =>
           c.firstName === this.candidate.firstName &&
@@ -98,7 +96,7 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       return false;
     }
 
-    if (this.selectCandidateFromPrimaryElection && !!this.selectedMajorityElectionCandidate.id) {
+    if (this.selectCandidateFromPrimaryElection && !!this.selectedMajorityElectionCandidate.id && !!this.candidate.number) {
       return true;
     }
 
@@ -107,11 +105,11 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       !!this.candidate.number &&
       !!this.candidate.firstName &&
       !!this.candidate.lastName &&
-      isValidDateOfBirth(this.candidate.dateOfBirth) &&
-      !!this.candidate.locality &&
-      LanguageService.allLanguagesPresent(this.candidate.party) &&
-      this.candidate.sex !== undefined &&
-      !!this.candidate.origin
+      (this.testingPhaseEnded || isValidDateOfBirth(this.candidate.dateOfBirth)) &&
+      (this.testingPhaseEnded || !this.isCandidateLocalityRequired || !!this.candidate.locality) &&
+      (this.testingPhaseEnded || LanguageService.allLanguagesPresent(this.candidate.party)) &&
+      (this.testingPhaseEnded || this.candidate.sex !== undefined) &&
+      (this.testingPhaseEnded || !this.isCandidateOriginRequired || !!this.candidate.origin)
     );
   }
 
@@ -127,17 +125,10 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
 
       const referencedCandidateId = this.candidate.referencedCandidateId;
       if (!!referencedCandidateId) {
-        const referencedCandidate = this.majorityElectionCandidates.find(c => c.id === referencedCandidateId);
-        if (referencedCandidate) {
-          this.selectedMajorityElectionCandidate = referencedCandidate;
-        }
+        this.selectedMajorityElectionCandidate = this.majorityElectionCandidates.find(c => c.id === referencedCandidateId)!;
       }
 
-      if (
-        this.isNew &&
-        this.secondaryMajorityElection.allowedCandidates !==
-          this.allowedCandidateTypes.SECONDARY_MAJORITY_ELECTION_ALLOWED_CANDIDATES_MUST_NOT_EXIST_IN_PRIMARY_ELECTION
-      ) {
+      if (this.isNew) {
         // already referenced candidates cannot be chosen again, removing them here
         const existingCandidates = await this.secondaryMajorityElectionService.listCandidates(this.secondaryMajorityElection.id);
         this.majorityElectionCandidates = this.majorityElectionCandidates.filter(c =>
@@ -182,6 +173,15 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     this.dialogRef.close();
   }
 
+  public selectCandidate(candidate: MajorityElectionCandidate & { displayName: string }): void {
+    if (this.selectedMajorityElectionCandidate === candidate) {
+      return;
+    }
+
+    this.selectedMajorityElectionCandidate = candidate;
+    this.candidate = { ...candidate, id: this.candidate.id, isReferenced: true, referencedCandidateId: candidate.id, incumbent: false };
+  }
+
   private async saveCandidate(): Promise<void> {
     if (!this.candidate.politicalFirstName) {
       this.candidate.politicalFirstName = this.candidate.firstName;
@@ -202,8 +202,9 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       id: this.candidate.id,
       candidateId: this.selectedMajorityElectionCandidate.id,
       secondaryMajorityElectionId: this.secondaryMajorityElection.id,
-      incumbent: this.selectedMajorityElectionCandidate.incumbent,
+      incumbent: this.candidate.incumbent,
       position: this.candidate.position,
+      number: this.candidate.number,
     };
 
     if (this.isNew) {
@@ -230,6 +231,20 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     this.hasChanges = !isEqual(this.candidate, this.originalCandidate);
   }
 
+  public async updateFromPrimary(fromPrimary: boolean): Promise<void> {
+    if (fromPrimary) {
+      this.selectCandidateFromPrimaryElection = true;
+      return;
+    }
+
+    const ok = await this.dialogService.confirm(
+      'SECONDARY_ELECTION.CONFIRM_NEW_NON_REFERENCED_CANDIDATE.TITLE',
+      'SECONDARY_ELECTION.CONFIRM_NEW_NON_REFERENCED_CANDIDATE.MESSAGE',
+    );
+    this.selectCandidateFromPrimaryElection = !ok;
+    this.candidate = cloneDeep(this.originalCandidate);
+  }
+
   private async leaveDialogOpen(): Promise<boolean> {
     return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
@@ -239,6 +254,10 @@ export interface SecondaryMajorityElectionCandidateEditDialogData {
   candidate: SecondaryMajorityElectionCandidate;
   secondaryMajorityElection: SecondaryMajorityElection;
   testingPhaseEnded: boolean;
+  doiType: DomainOfInfluenceType;
+  candidateLocalityRequired: boolean;
+  candidateOriginRequired: boolean;
+  partyShortDescriptions: string[];
 }
 
 export interface SecondaryMajorityElectionCandidateEditDialogResult {

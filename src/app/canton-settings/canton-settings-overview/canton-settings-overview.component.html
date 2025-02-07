@@ -1,43 +1,51 @@
-<vo-lib-page [contentLoading]="loading"
-             header="CANTON_SETTINGS.TITLE">
+<vo-lib-page [contentLoading]="loading" header="CANTON_SETTINGS.TITLE">
   <div class="flex">
-    <bc-button *ngIf="canCreate"
-               variant="tertiary"
-               icon="plus"
-               [label]="'CANTON_SETTINGS.NEW' | translate"
-               (buttonClick)="createOrEdit()"></bc-button>
+    <bc-button
+      *ngIf="canCreate"
+      variant="tertiary"
+      icon="plus"
+      [label]="'CANTON_SETTINGS.NEW' | translate"
+      (buttonClick)="createOrEdit()"
+    ></bc-button>
   </div>
 
   <bc-table selection class="w-full" [dataSource]="cantonSettingsList">
-
     <ng-container columnDef="name">
-      <bc-header-cell *headerCellDef>{{ 'CANTON_SETTINGS.NAME' | translate }}</bc-header-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'CANTON_SETTINGS.NAME' | translate"></app-truncated-value>
+      </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        {{'CANTON_SETTINGS.CANTON.NAMES.' + element.canton | translate}}
+        <app-truncated-value [value]="'CANTON_SETTINGS.CANTON.NAMES.' + element.canton | translate"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="shortName">
-      <bc-header-cell *headerCellDef>{{ 'CANTON_SETTINGS.SHORT_NAME' | translate }}</bc-header-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'CANTON_SETTINGS.SHORT_NAME' | translate"></app-truncated-value>
+      </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        {{'CANTON_SETTINGS.CANTON.SHORT_NAMES.' + element.canton | translate}}
+        <app-truncated-value [value]="'CANTON_SETTINGS.CANTON.SHORT_NAMES.' + element.canton | translate"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="authority">
-      <bc-header-cell *headerCellDef>{{ 'CANTON_SETTINGS.AUTHORITY' | translate }}</bc-header-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'CANTON_SETTINGS.AUTHORITY' | translate"></app-truncated-value>
+      </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        {{ element.authorityName }}
+        <app-truncated-value [value]="element.authorityName"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
-    <bc-header-row *headerRowDef="let row; columns: ['name', 'shortName', 'authority']"></bc-header-row>
-    <bc-data-row *dataRowDef="let row; columns: ['name', 'shortName', 'authority']; let i = index" 
-    selectionToggle
-    [selectionToggleValue]="row"
-    selectionRow
-    [selectionRowValue]="row"
-    (click)="createOrEdit(row)">
-  </bc-data-row>
+    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+    <bc-data-row
+      *dataRowDef="let row; columns: columns; let i = index"
+      selectionToggle
+      [selectionToggleValue]="row"
+      selectionRow
+      [selectionRowValue]="row"
+      (click)="createOrEdit(row)"
+    >
+    </bc-data-row>
   </bc-table>
 </vo-lib-page>

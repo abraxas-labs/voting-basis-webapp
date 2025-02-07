@@ -44,7 +44,11 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
     await this.closeWithUnsavedChangesCheck();
   }
 
-  @ViewChild('paginator') public paginator!: PaginatorComponent;
+  @ViewChild('paginator')
+  public paginator!: PaginatorComponent;
+
+  @ViewChild('inheritedPaginator')
+  public inheritedPaginator!: PaginatorComponent;
 
   @ViewChild(FilterDirective, { static: true })
   public filter!: FilterDirective;
@@ -57,13 +61,15 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
   public canEdit: boolean = false;
 
   public dataSource = new TableDataSource<DomainOfInfluenceCountingCircle>();
-  public inheritedCountingCircles: DomainOfInfluenceCountingCircle[] = [];
+  public inheritedCountingCirclesDatasource = new TableDataSource<DomainOfInfluenceCountingCircle>();
   public selection: SelectionModel<DomainOfInfluenceCountingCircle>;
   public isAllSelected: boolean = false;
 
   public hasChanges: boolean = false;
   public originalSelectedCountingCircles: DomainOfInfluenceCountingCircle[];
   public readonly backdropClickSubscription: Subscription;
+
+  private readonly assignableCountingCircles: DomainOfInfluenceCountingCircle[];
 
   constructor(
     private readonly dialogRef: MatDialogRef<DomainOfInfluenceCountingCircleAssignDialogData>,
@@ -75,8 +81,8 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
     @Inject(MAT_DIALOG_DATA) dialogData: DomainOfInfluenceCountingCircleAssignDialogData,
   ) {
     this.data = dialogData.domainOfInfluence;
-    this.inheritedCountingCircles = this.data.countingCircles?.filter(cc => cc.inherited) ?? [];
-    this.dataSource.data = dialogData.countingCircles;
+    this.inheritedCountingCirclesDatasource.data = this.data.countingCircles?.filter(cc => cc.inherited) ?? [];
+    this.assignableCountingCircles = dialogData.countingCircles;
 
     const selectedCountingCircles = dialogData.countingCircles.filter(cc =>
       (this.data.countingCircles ?? []).some(dicc => dicc.id === cc.id),
@@ -94,10 +100,7 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
   }
 
   public async ngOnInit(): Promise<void> {
-    this.canEdit = await this.permissionService.hasAnyPermission(
-      Permissions.DomainOfInfluenceHierarchy.UpdateSameCanton,
-      Permissions.DomainOfInfluenceHierarchy.UpdateAll,
-    );
+    this.canEdit = await this.permissionService.hasPermission(Permissions.DomainOfInfluenceHierarchy.UpdateSameCanton);
 
     const dataAccessor = (data: DomainOfInfluenceCountingCircle, filterId: string) => {
       if (filterId === this.authorityColumn) {
@@ -115,6 +118,11 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
     this.dataSource.filter = this.filter;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+
+    // allocate data after setting the paginator, so that the table is not initialized with the entire data set
+    this.dataSource.data = this.assignableCountingCircles;
+
+    this.inheritedCountingCirclesDatasource.paginator = this.inheritedPaginator;
   }
 
   public async save(): Promise<void> {
@@ -138,7 +146,7 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
         newDomainOfInfluenceCountingCircles.map(x => x.id),
       );
 
-      this.data.countingCircles = [...newDomainOfInfluenceCountingCircles, ...this.inheritedCountingCircles];
+      this.data.countingCircles = [...newDomainOfInfluenceCountingCircles, ...this.inheritedCountingCirclesDatasource.data];
 
       this.data.countingCircles.sort((a, b) => (a.name < b.name ? -1 : 1));
 

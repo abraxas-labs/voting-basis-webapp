@@ -5,7 +5,7 @@
     <bc-dropdown
       *ngIf="domainOfInfluences.length !== 1"
       [items]="domainOfInfluences"
-      [disabled]="!isNew"
+      [readonly]="!isNew"
       displayExpr="name"
       valueExpr="id"
       [required]="true"
@@ -18,7 +18,7 @@
     <ng-container *ngIf="isNew; else editDate">
       <bc-dropdown
         [label]="'POLITICAL_ASSEMBLY.PRECONFIGURED_DATE' | translate"
-        [disabled]="customDateSelected"
+        [readonly]="customDateSelected"
         [items]="preconfiguredDates"
         [value]="selectedPreconfiguredDate"
         [required]="true"
@@ -30,10 +30,11 @@
         [checked]="customDateSelected"
         (checkedChange)="customDateSelected = $event; contentChanged()"
         [label]="'POLITICAL_ASSEMBLY.CHOOSE_CUSTOM_DATE' | translate"
+        [subscriptSizing]="'dynamic'"
       ></bc-checkbox>
       <bc-date
         [label]="'POLITICAL_ASSEMBLY.CUSTOM_DATE' | translate"
-        [disabled]="!customDateSelected"
+        [readonly]="!customDateSelected"
         [required]="customDateSelected"
         [value]="data.date | date"
         (valueChange)="updateDate($event); contentChanged()"

@@ -13,7 +13,8 @@
 
     <bc-checkbox [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.NO_LIST' | translate"
                  [checked]="noMainList"
-                 (checkedChange)="setNoMainList($event)"></bc-checkbox>
+                 (checkedChange)="setNoMainList($event)"
+                 [subscriptSizing]="'dynamic'"></bc-checkbox>
   </div>
   <vo-lib-button-bar footer
                      [saving]="saving"

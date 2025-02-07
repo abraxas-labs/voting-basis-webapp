@@ -28,6 +28,7 @@
                        [vote]="data"
                        [testingPhaseEnded]="testingPhaseEnded"
                        [locked]="locked"
+                       [readonly]="!canEdit"
                        [multipleVoteBallotsEnabled]="contestDomainOfInfluenceDefaults.multipleVoteBallotsEnabled"
                        [eVoting]="eVoting"
                        [domainOfInfluenceType]="step1?.selectedDomainOfInfluenceType"
@@ -54,6 +55,7 @@
                                        [locked]="locked"
                                        [isVariantsBallot]="isVariantsBallot"
                                        [data]="data"
+                                       [readonly]="!canEdit"
                                        (contentChanged)="contentChanged()">
       </app-vote-erfassung-informations>
 

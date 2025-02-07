@@ -1,36 +1,54 @@
-<vo-lib-page [contentLoading]="loading"
-             [showBackButton]="true"
-             header="COUNTING_CIRCLE.MERGE.DETAIL.TITLE">
+<vo-lib-page [contentLoading]="loading" [showBackButton]="true" header="COUNTING_CIRCLE.MERGE.DETAIL.TITLE">
   <div class="mb-3 flex">
-    <bc-button variant="tertiary"
-               [label]="'COUNTING_CIRCLE.MERGE.DETAIL.NEW' | translate"
-               [icon]="'plus'"
-               (buttonClick)="create()"></bc-button>
+    <bc-button
+      variant="tertiary"
+      [label]="'COUNTING_CIRCLE.MERGE.DETAIL.NEW' | translate"
+      [icon]="'plus'"
+      (buttonClick)="create()"
+    ></bc-button>
   </div>
 
   <bc-table *ngIf="mergers.length > 0; else noData" class="w-full" [dataSource]="mergers">
     <ng-container columnDef="name">
-      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.NAME' | translate }}</bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">{{ element.newCountingCircle.name }}</bc-data-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'COUNTING_CIRCLE.MERGE.DETAIL.NAME' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.newCountingCircle.name"></app-truncated-value>
+      </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="bfs">
-      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.BFS' | translate }}</bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">{{ element.newCountingCircle.bfs }}</bc-data-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'COUNTING_CIRCLE.MERGE.DETAIL.BFS' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.newCountingCircle.bfs"></app-truncated-value>
+      </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="code">
-      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.CODE' | translate }}</bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">{{ element.newCountingCircle.code }}</bc-data-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'COUNTING_CIRCLE.MERGE.DETAIL.CODE' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.newCountingCircle.code"></app-truncated-value>
+      </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="activeFrom">
-      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.ACTIVE_FROM' | translate }}</bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">{{ element.activeFrom | date }}</bc-data-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'COUNTING_CIRCLE.MERGE.DETAIL.ACTIVE_FROM' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.activeFrom | date"></app-truncated-value>
+      </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="mergedCountingCircles">
-      <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.MERGE.DETAIL.MERGED_COUNTING_CIRCLES' | translate }}</bc-header-cell>
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'COUNTING_CIRCLE.MERGE.DETAIL.MERGED_COUNTING_CIRCLES' | translate"></app-truncated-value>
+      </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
         <div class="py-2">
           <div *ngFor="let cc of element.mergedCountingCircles">
@@ -41,7 +59,7 @@
     </ng-container>
 
     <ng-container columnDef="actions">
-      <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+      <bc-header-cell *headerCellDef></bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
         <div class="flex">
           <bc-icon *ngIf="!element.merged" class="clickable" (click)="edit(element)" icon="edit"></bc-icon>
@@ -51,7 +69,7 @@
     </ng-container>
 
     <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-    <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>  
+    <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
   </bc-table>
 </vo-lib-page>
 

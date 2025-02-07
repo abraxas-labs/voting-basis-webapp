@@ -4,15 +4,15 @@
  * For license information see LICENSE file.
  */
 
-import { AuthorizationService, Tenant } from '@abraxas/base-components';
+import { AuthorizationService, PaginatorComponent, TableDataSource, Tenant } from '@abraxas/base-components';
 import { DialogService, EnumUtil, SnackbarService, TreeNode } from '@abraxas/voting-lib';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
 import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
-import { DomainOfInfluence, newDomainOfInfluence } from '../../core/models/domain-of-influence.model';
+import { DomainOfInfluence, DomainOfInfluenceType, newDomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { PermissionService } from '../../core/permission.service';
 import { HistorizationFilter, newHistorizationFilter } from '../../shared/historization-filter-bar/historization-filter-bar.component';
 import {
@@ -35,11 +35,16 @@ import { flatMap } from '../../core/utils/array.utils';
 })
 export class DomainOfInfluenceOverviewComponent implements OnInit {
   public readonly columns = ['name', 'bfs', 'authority'];
+
+  @ViewChild('paginator')
+  public paginator!: PaginatorComponent;
+
   public tree: DomainOfInfluenceTree | undefined;
   public domainOfInfluences: DomainOfInfluence[] = [];
 
   public canCreate: boolean = false;
   public canEditEverything: boolean = false;
+  public canEditSameTenant: boolean = false;
   public canDelete: boolean = false;
   public canAssignCountingCircles: boolean = false;
   public loading: boolean = true;
@@ -49,7 +54,7 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
 
   public selectedNode?: TreeNode<DomainOfInfluence>;
 
-  public selectedDomainOfInfluenceCountingCircles: DomainOfInfluenceCountingCircle[] = [];
+  public dataSource = new TableDataSource<DomainOfInfluenceCountingCircle>();
 
   public selectedDomainOfInfluenceValue?: DomainOfInfluence;
   private tenant?: Tenant;
@@ -63,6 +68,7 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
     private readonly dialogService: DialogService,
     private readonly auth: AuthorizationService,
     private readonly enumUtil: EnumUtil,
+    private readonly cd: ChangeDetectorRef,
   ) {}
 
   public get selectedDomainOfInfluence(): DomainOfInfluence | undefined {
@@ -71,27 +77,15 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
 
   public set selectedDomainOfInfluence(v: DomainOfInfluence | undefined) {
     this.selectedDomainOfInfluenceValue = v;
-    this.selectedDomainOfInfluenceCountingCircles = v?.countingCircles ?? [];
   }
 
   public async ngOnInit(): Promise<void> {
     try {
-      this.canCreate = await this.permissionService.hasAnyPermission(
-        Permissions.DomainOfInfluence.CreateSameCanton,
-        Permissions.DomainOfInfluence.CreateAll,
-      );
-      this.canAssignCountingCircles = await this.permissionService.hasAnyPermission(
-        Permissions.DomainOfInfluenceHierarchy.UpdateSameCanton,
-        Permissions.DomainOfInfluenceHierarchy.UpdateAll,
-      );
-      this.canEditEverything = await this.permissionService.hasAnyPermission(
-        Permissions.DomainOfInfluence.UpdateSameCanton,
-        Permissions.DomainOfInfluence.UpdateAll,
-      );
-      this.canDelete = await this.permissionService.hasAnyPermission(
-        Permissions.DomainOfInfluence.DeleteSameCanton,
-        Permissions.DomainOfInfluence.DeleteAll,
-      );
+      this.canCreate = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.CreateSameCanton);
+      this.canAssignCountingCircles = await this.permissionService.hasPermission(Permissions.DomainOfInfluenceHierarchy.UpdateSameCanton);
+      this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateSameCanton);
+      this.canEditSameTenant = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateSameTenant);
+      this.canDelete = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.DeleteSameCanton);
       this.tenant = await this.auth.getActiveTenant();
       await this.loadTree();
     } finally {
@@ -108,7 +102,7 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
     }
 
     const editable = !this.historizationFilter.date && !node.data.deletedOn;
-    node.showEditButton = editable && (this.canEditEverything || node.data.secureConnectId === this.tenant?.id);
+    node.showEditButton = editable && (this.canEditEverything || (node.data.secureConnectId === this.tenant?.id && this.canEditSameTenant));
     node.showInfoButton = editable && !node.showEditButton;
     node.showDeleteButton = editable && this.canDelete;
 
@@ -132,6 +126,7 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
       this.selectedDomainOfInfluence = node.data;
     } finally {
       this.loadingDetail = false;
+      this.updateAssignedCountingCirclesTable();
     }
   }
 
@@ -154,7 +149,9 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
       },
       parent: node.parentNode?.data,
       readonly,
-      availableSuperiorAuthorityDomainOfInfluences: this.domainOfInfluences.filter(doi => doi.id !== node.data.id),
+      availableSuperiorAuthorityDomainOfInfluences: this.domainOfInfluences.filter(
+        doi => doi.id !== node.data.id && doi.type <= DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_MU,
+      ),
     };
 
     const result = await this.dialogService.openForResult(DomainOfInfluenceEditDialogComponent, data);
@@ -198,7 +195,9 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
       domainOfInfluence,
       parent: this.selectedDomainOfInfluence,
       readonly: false,
-      availableSuperiorAuthorityDomainOfInfluences: this.domainOfInfluences,
+      availableSuperiorAuthorityDomainOfInfluences: this.domainOfInfluences.filter(
+        doi => doi.type <= DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_MU,
+      ),
     };
 
     const result = await this.dialogService.openForResult(DomainOfInfluenceEditDialogComponent, data);
@@ -268,9 +267,17 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
         : await this.domainOfInfluenceService.listTreeSnapshot(this.historizationFilter.includeDeleted, this.historizationFilter.date);
 
       this.tree = new DomainOfInfluenceTree(tree, this.enumUtil);
-      this.domainOfInfluences = flatMap(this.tree.nodes.map(n => this.tree!.getSelfAndChildrenAsFlatList(n)));
+      this.domainOfInfluences = flatMap(this.tree.nodes.map(n => this.tree!.getSelfAndChildrenAsFlatList(n))).sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
     } finally {
       this.loading = false;
     }
+  }
+
+  private updateAssignedCountingCirclesTable(): void {
+    this.cd.detectChanges();
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.data = this.selectedDomainOfInfluence?.countingCircles ?? [];
   }
 }

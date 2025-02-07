@@ -54,6 +54,9 @@ export class ProportionalElectionCandidatesComponent {
   public locked: boolean = false;
 
   @Input()
+  public readonly: boolean = false;
+
+  @Input()
   public candidateLocalityRequired: boolean = false;
 
   @Input()

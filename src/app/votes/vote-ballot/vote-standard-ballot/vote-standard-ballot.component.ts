@@ -26,6 +26,9 @@ export class VoteStandardBallotComponent {
   public testingPhaseEnded: boolean = false;
 
   @Input()
+  public readonly: boolean = false;
+
+  @Input()
   public domainOfInfluenceType?: DomainOfInfluenceType;
 
   @Output()

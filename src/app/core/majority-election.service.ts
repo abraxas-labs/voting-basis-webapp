@@ -49,7 +49,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       politicalFirstName: data.getPoliticalFirstName(),
       politicalLastName: data.getPoliticalLastName(),
       incumbent: data.getIncumbent(),
-      dateOfBirth: data.getDateOfBirth()!.toDate(),
+      dateOfBirth: data.getDateOfBirth()?.toDate(),
       locality: data.getLocality(),
       number: data.getNumber(),
       occupation: toJsMap(data.getOccupationMap()),

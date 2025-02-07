@@ -28,6 +28,9 @@ export class VoteBallotComponent {
   public locked: boolean = false;
 
   @Input()
+  public readonly: boolean = false;
+
+  @Input()
   public eVoting?: boolean;
 
   @Input()

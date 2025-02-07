@@ -6,7 +6,7 @@
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Component, Input } from '@angular/core';
-import { DomainOfInfluenceLevelService } from '../../../core/domain-of-influence-level.service';
+import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { MajorityElectionService } from '../../../core/majority-election.service';
 import { MajorityElectionImport } from '../../../core/models/import.model';
@@ -25,11 +25,11 @@ export class ImportMajorityElectionEditComponent extends ImportPoliticalBusiness
 
   constructor(
     enumUtil: EnumUtil,
-    doiLevelService: DomainOfInfluenceLevelService,
+    doiReportLevelService: DomainOfInfluenceReportLevelService,
     domainOfInfluenceService: DomainOfInfluenceService,
     permissionService: PermissionService,
   ) {
-    super(enumUtil, doiLevelService, domainOfInfluenceService, permissionService);
+    super(enumUtil, doiReportLevelService, domainOfInfluenceService, permissionService);
     this.mandateAlgorithms = enumUtil.getArrayWithDescriptions<MajorityElectionMandateAlgorithm>(
       MajorityElectionMandateAlgorithm,
       'MAJORITY_ELECTION.MANDATE_ALGORITHM.TYPES.',

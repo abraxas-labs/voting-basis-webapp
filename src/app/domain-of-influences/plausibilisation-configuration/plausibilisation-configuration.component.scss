@@ -1,6 +1,6 @@
 .grid-container {
   display: grid;
-  gap: 0.25rem 0.25rem;
+  gap: 0.25rem;
 
   &.voter-participations {
     grid-template-columns: repeat(3, 1fr) max-content;

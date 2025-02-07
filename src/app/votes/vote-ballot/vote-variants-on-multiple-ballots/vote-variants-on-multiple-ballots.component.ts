@@ -27,6 +27,9 @@ export class VoteVariantsOnMultipleBallotsComponent {
   @Input()
   public locked: boolean = false;
 
+  @Input()
+  public readonly: boolean = false;
+
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 

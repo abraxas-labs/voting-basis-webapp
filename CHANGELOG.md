@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.27.4`)
+# ✨ Changelog (`v3.35.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,188 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.27.4
-Previous version ---- v3.20.1
+This version -------- v3.35.0
+Previous version ---- v3.27.4
 Initial version ----- v1.23.0
-Total commits ------- 22
+Total commits ------- 35
 ```
+
+## [v3.35.0] - 2025-02-06
+
+### :new: Added
+
+- added hide lower domain of influences in reports flag
+
+## [v3.34.3] - 2025-01-21
+
+### 🔄 Changed
+
+- update base components
+
+## [v3.34.2] - 2025-01-16
+
+### 🔄 Changed
+
+- sort domain of influences in dropdowns
+
+## [v3.34.1] - 2025-01-16
+
+### 🔄 Changed
+
+- save electoral registration enabled when creating domain of influence
+
+## [v3.34.0] - 2025-01-15
+
+### 🔄 Changed
+
+- change majority election candidate party field to autocomplete
+
+## [v3.33.0] - 2025-01-10
+
+### :arrows_counterclockwise: Changed
+
+- restrict admin permissions
+
+## [v3.32.2] - 2025-01-10
+
+### 🔄 Changed
+
+- assign counting circles dialog fix paging
+
+## [v3.32.1] - 2025-01-10
+
+### 🆕 Added
+
+- add paging to cc assign dialog
+
+## [v3.32.0] - 2025-01-07
+
+### 🆕 Added
+
+- add robots meta tag to instruct crawlers to not index content
+- add X-Robots-Tag response header to instruct crawlers to not index content
+
+## [v3.31.6] - 2025-01-07
+
+### 🔄 Changed
+
+- add paging for assigned cc in doi overview
+
+## [v3.31.5] - 2025-01-07
+
+### 🔄 Changed
+
+- update dependencies
+
+## [v3.31.4] - 2025-01-06
+
+### 🔄 Changed
+
+- toggle political business active switch should not jump back
+
+## [v3.31.3] - 2024-12-19
+
+### 🔄 Changed
+
+- fixed height for assign counting circle pop up
+
+## [v3.31.2] - 2024-12-19
+
+### 🔄 Changed
+
+- fix reordering of candidates and incumbent of referenced secondary candidates
+
+## [v3.31.1] - 2024-12-13
+
+### 🆕 Added
+
+- add paginator for all contests tables in overview
+
+## [v3.31.0] - 2024-12-11
+
+### 🆕 Added
+
+- domain of influence voting card flat rate owner
+
+## [v3.30.2] - 2024-12-11
+
+### 🔄 Changed
+
+- change disabled form fields to readonly
+
+## [v3.30.1] - 2024-12-11
+
+### 🔄 Changed
+
+- majority election candidate optional values in active contest
+
+## [v3.30.0] - 2024-12-03
+
+### 🆕 Added
+
+- show roles in header tenant switch
+
+## [v3.29.1] - 2024-11-29
+
+### 🔄 Changed
+
+- move resolve contest import from grpc to rest
+
+## [v3.29.0] - 2024-11-28
+
+### :new: Added
+
+- support read only roles
+
+## [v3.28.0] - 2024-11-27
+
+### ❌ Removed
+
+- remove secondary majority election allowed candidates
+
+### 🔄 Changed
+
+- change candidate lastname labels
+
+### 🔄 Changed
+
+- update dependencies
+
+### 🔄 Changed
+
+- optimize domain of influence edit dialog
+
+### 🆕 Added
+
+- feat(VOTING-4526): allow overwriting the candidate number of referenced majority candidates
+
+### 🔄 Changed
+
+- tooltips and add truncate with tooltips directive
+
+### 🔄 Changed
+
+- hide responsible for voting cards for non admins if not activated
+
+### 🔄 Changed
+
+- archived contest list without archive per and state column
+
+### ❌ Removed
+
+- remove unnecessary space for checkboxes and radio buttons
+
+### 🆕 Added
+
+- publish results option on domain of influence
+
+### 🆕 Added
+
+- add tooltip for truncated table headers and cell values
+
+### 🔄 Changed
+
+- upgrade dependencies
 
 ## [v3.27.4] - 2024-10-31
 
@@ -104,74 +281,46 @@ Total commits ------- 22
 
 - enable modifications for all political business and political business unions as admin and canton admin
 
-## [v3.21.3] - 2024-10-03
-
 ### ❌ Removed
 
 - remove zh feature flag
-
-## [v3.21.2] - 2024-10-03
 
 ### 🔄 Changed
 
 - fix logout after new tab is opened
 
-## [v3.21.1] - 2024-09-27
-
 ### 🔄 Changed
 
 - preselect canton for new counting circle
-
-## [v3.21.0] - 2024-09-25
-
-### 🔄 Changed
-
-- foreigner and minor voters
-
-## [v3.20.2] - 2024-09-23
 
 ### 🔄 Changed
 
 - disable new political business button menu
 
-## [v3.20.1] - 2024-09-11
-
 ### 🔄 Changed
 
 - move federal identification to ballot question
-
-## [v3.20.0] - 2024-09-06
 
 ### 🆕 Added
 
 - add federal identification
 
-## [v3.19.4] - 2024-09-04
-
 ### 🔄 Changed
 
 - migrate from gcr to harbor
 
-## [v3.19.3] - 2024-09-04
-
 ### 🔄 Changed
 
 - reset internal plausibilisation
-
-## [v3.19.2] - 2024-09-04
 
 ### 🔄 Changed
 
 - adjust with from tableheader
 - includes voting-angular-library update to 5.1.2
 
-## [v3.19.1] - 2024-08-28
-
 ### :arrows_counterclockwise: Changed
 
 - improve warning when creating secondary election with existing ballot groups
-
-## [v3.19.0] - 2024-08-28
 
 ### 🆕 Added
 
@@ -181,117 +330,79 @@ Total commits ------- 22
 
 - proportional election list change listener
 
-## [v3.18.1] - 2024-08-28
-
 🔄 Changed
 
 update bug bounty template reference
 patch ci-cd template version, align with new defaults
 
-## [v3.18.0] - 2024-08-22
-
 ### 🆕 Added
 
 - add counting circle and proportional election list change listener
-
-## [v3.17.4] - 2024-08-21
 
 ### 🔄 Changed
 
 - enforce final results for standard ballot
 
-## [v3.17.3] - 2024-08-15
-
 ### 🔄 Changed
 
 - delete candidate throws if candidate is in a ballot group
-
-## [v3.17.2] - 2024-08-15
 
 ### :arrows_counterclockwise: Changed
 
 - show ballot question id and allow different count of tie break questions
 
-## [v3.17.1] - 2024-08-14
-
 ### 🔄 Changed
 
 - proportional election union main list optional
-
-## [v3.17.0] - 2024-08-14
 
 ### :arrows_counterclockwise: Changed
 
 - improve domain of influence search
 
-## [v3.16.1] - 2024-08-14
-
 ### 🔄 Changed
 
 - use current date as default on counting circle e-voting
-
-## [v3.16.0] - 2024-08-13
 
 ### 🆕 Added
 
 - add party to proportional election list
 
-## [v3.15.4] - 2024-08-12
-
 ### 🔄 Changed
 
 - deprecated sex type undefined
-
-## [v3.15.3] - 2024-08-07
 
 ### :arrows_counterclockwise: Changed
 
 - show political business sub types for votes
 
-## [v3.15.2] - 2024-08-06
-
 ### 🔄 Changed
 
 - creating counting circles with only valid cantons
-
-## [v3.15.1] - 2024-08-06
 
 ### :x: Removed
 
 - remove canton settings update same tenant permission
 
-## [v3.15.0] - 2024-07-31
-
 ### :arrows_counterclockwise: Changed
 
 - only display vote questions in e-voting contests
 
-## [v3.14.0] - 2024-07-29
-
 ### :new: Added
 
 - added variant questions on multiple ballots
-
-## [v3.13.0] - 2024-07-26
 
 ### 🔄 Changed
 
 - Make DOI short name optional
 - Increase max length of DOI/counting circle code to 20 from 12
 
-## [v3.12.0] - 2024-07-19
-
 ### 🆕 Added
 
 - canton settings with publish results before audited tentatively
 
-## [v3.11.0] - 2024-07-16
-
 ### 🔄 Changed
 
 - set counting circle e-voting at a specific date
-
-## [v3.10.2] - 2024-07-15
 
 ### 🔄 Changed
 
@@ -788,6 +899,199 @@ Also allow users to view politicial business in readonly mode when testing phase
 also removed count of candidates check
 
 use location.go for refreshing the route again. also set the mat-stepper indicator type to number again
+
+## [v3.21.3] - 2024-10-03
+
+### ❌ Removed
+
+- remove zh feature flag
+
+## [v3.21.2] - 2024-10-03
+
+### 🔄 Changed
+
+- fix logout after new tab is opened
+
+## [v3.21.1] - 2024-09-27
+
+### 🔄 Changed
+
+- preselect canton for new counting circle
+
+## [v3.21.0] - 2024-09-25
+
+### 🔄 Changed
+
+- foreigner and minor voters
+
+## [v3.20.2] - 2024-09-23
+
+### 🔄 Changed
+
+- disable new political business button menu
+
+## [v3.20.1] - 2024-09-11
+
+### 🔄 Changed
+
+- move federal identification to ballot question
+
+## [v3.20.0] - 2024-09-06
+
+### 🆕 Added
+
+- add federal identification
+
+## [v3.19.4] - 2024-09-04
+
+### 🔄 Changed
+
+- migrate from gcr to harbor
+
+## [v3.19.3] - 2024-09-04
+
+### 🔄 Changed
+
+- reset internal plausibilisation
+
+## [v3.19.2] - 2024-09-04
+
+### 🔄 Changed
+
+- adjust with from tableheader
+- includes voting-angular-library update to 5.1.2
+
+## [v3.19.1] - 2024-08-28
+
+### :arrows_counterclockwise: Changed
+
+- improve warning when creating secondary election with existing ballot groups
+
+## [v3.19.0] - 2024-08-28
+
+### 🆕 Added
+
+- optional individual candidates on majority elections
+
+### 🔄 Changed
+
+- proportional election list change listener
+
+## [v3.18.1] - 2024-08-28
+
+🔄 Changed
+
+update bug bounty template reference
+patch ci-cd template version, align with new defaults
+
+## [v3.18.0] - 2024-08-22
+
+### 🆕 Added
+
+- add counting circle and proportional election list change listener
+
+## [v3.17.4] - 2024-08-21
+
+### 🔄 Changed
+
+- enforce final results for standard ballot
+
+## [v3.17.3] - 2024-08-15
+
+### 🔄 Changed
+
+- delete candidate throws if candidate is in a ballot group
+
+## [v3.17.2] - 2024-08-15
+
+### :arrows_counterclockwise: Changed
+
+- show ballot question id and allow different count of tie break questions
+
+## [v3.17.1] - 2024-08-14
+
+### 🔄 Changed
+
+- proportional election union main list optional
+
+## [v3.17.0] - 2024-08-14
+
+### :arrows_counterclockwise: Changed
+
+- improve domain of influence search
+
+## [v3.16.1] - 2024-08-14
+
+### 🔄 Changed
+
+- use current date as default on counting circle e-voting
+
+## [v3.16.0] - 2024-08-13
+
+### 🆕 Added
+
+- add party to proportional election list
+
+## [v3.15.4] - 2024-08-12
+
+### 🔄 Changed
+
+- deprecated sex type undefined
+
+## [v3.15.3] - 2024-08-07
+
+### :arrows_counterclockwise: Changed
+
+- show political business sub types for votes
+
+## [v3.15.2] - 2024-08-06
+
+### 🔄 Changed
+
+- creating counting circles with only valid cantons
+
+## [v3.15.1] - 2024-08-06
+
+### :x: Removed
+
+- remove canton settings update same tenant permission
+
+## [v3.15.0] - 2024-07-31
+
+### :arrows_counterclockwise: Changed
+
+- only display vote questions in e-voting contests
+
+## [v3.14.0] - 2024-07-29
+
+### :new: Added
+
+- added variant questions on multiple ballots
+
+## [v3.13.0] - 2024-07-26
+
+### 🔄 Changed
+
+- Make DOI short name optional
+- Increase max length of DOI/counting circle code to 20 from 12
+
+## [v3.12.0] - 2024-07-19
+
+### 🆕 Added
+
+- canton settings with publish results before audited tentatively
+
+## [v3.11.0] - 2024-07-16
+
+### 🔄 Changed
+
+- set counting circle e-voting at a specific date
+
+## [v3.10.2] - 2024-07-15
+
+### 🔄 Changed
+
+- index.html set default language to german and disable google translation
 
 ## [v3.10.1] - 2024-07-11
 

@@ -1,35 +1,57 @@
 <bc-table selection filter sort [sortActive]="[{ id: 'date', direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
   <ng-container columnDef="date">
-    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>{{ 'CONTEST.DATE' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.date | date }}</bc-data-cell>
+    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
+      <span truncateWithTooltip tooltip>
+        {{ 'CONTEST.DATE' | translate }}
+      </span>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.date | date"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="type">
-    <bc-header-cell filter filterType="text" sort *headerCellDef>{{ 'CONTEST.TYPE.TITLE' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.type }}</bc-data-cell>
+    <bc-header-cell filter sort *headerCellDef>
+      <span truncateWithTooltip tooltip>
+        {{ 'CONTEST.TYPE.TITLE' | translate }}
+      </span>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.type"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="description">
-    <bc-header-cell filter filterType="text" sort *headerCellDef class="description-header">
-      {{ 'CONTEST.DESCRIPTION_HEADER' | translate }}
+    <bc-header-cell filter sort *headerCellDef>
+      <span truncateWithTooltip tooltip>
+        {{ 'CONTEST.DESCRIPTION_HEADER' | translate }}
+      </span>
     </bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <span [class.pcd]="element.isPreconfiguredDate">
-        {{ element.description }}
-      </span>
+      <app-truncated-value [class.italic]="element.isPreconfiguredDate" [value]="element.description"></app-truncated-value>
     </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="endOfTestingPhase">
     <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
-      <span>{{ 'CONTEST.END_OF_TESTING_PHASE' | translate }}</span>
+      <span truncateWithTooltip tooltip>
+        {{ 'CONTEST.END_OF_TESTING_PHASE' | translate }}
+      </span>
     </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.endOfTestingPhase | date: 'short' }}</bc-data-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.endOfTestingPhase | date: 'short'"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="archivePer">
-    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>{{ 'CONTEST.ARCHIVE.TITLE_PER' | translate }}</bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.archivePer | date: 'short' }}</bc-data-cell>
+    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
+      <span truncateWithTooltip tooltip>
+        {{ 'CONTEST.ARCHIVE.TITLE_PER' | translate }}
+      </span>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.archivePer | date: 'short'"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="state">
@@ -41,14 +63,21 @@
       filterValueExpr="value"
       sort
       *headerCellDef
-      >{{ 'CONTEST.STATE' | translate }}</bc-header-cell
     >
-    <bc-data-cell *dataCellDef="let element">{{ 'CONTEST.STATES.' + (!!element.state ? element.state : 0) | translate }}</bc-data-cell>
+      <span truncateWithTooltip tooltip>
+        {{ 'CONTEST.STATE' | translate }}
+      </span>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="'CONTEST.STATES.' + (!!element.state ? element.state : 0) | translate"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="politicalBusinesses">
-    <bc-header-cell sort filter filterType="text" *headerCellDef>
-      <span>{{ 'CONTEST.POLITICAL_BUSINESSES' | translate }}</span>
+    <bc-header-cell filter sort *headerCellDef>
+      <span truncateWithTooltip tooltip>
+        {{ 'CONTEST.POLITICAL_BUSINESSES' | translate }}
+      </span>
     </bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
       <span class="political-businesses">{{ element.politicalBusinesses }}</span>
@@ -56,13 +85,18 @@
   </ng-container>
 
   <ng-container columnDef="owner">
-    <bc-header-cell filter filterType="text" sort *headerCellDef>
-      <span>{{ 'CONTEST.OWNER' | translate }}</span></bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">{{ element.owner }}</bc-data-cell>
+    <bc-header-cell filter sort *headerCellDef>
+      <span truncateWithTooltip tooltip>
+        {{ 'CONTEST.OWNER' | translate }}
+      </span>
+    </bc-header-cell>
+    <bc-data-cell *dataCellDef="let element">
+      <app-truncated-value [value]="element.owner"></app-truncated-value>
+    </bc-data-cell>
   </ng-container>
 
   <ng-container columnDef="actions">
-    <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+    <bc-header-cell *headerCellDef></bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
       <vo-lib-action-menu *ngIf="canCreate || !element.isPreconfiguredDate">
         <vo-lib-action-menu-item

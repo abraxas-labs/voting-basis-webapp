@@ -20,6 +20,10 @@ export { MajorityElectionImport };
 export { VoteImport };
 export { ProportionalElectionListImport };
 
+export interface ResolveImportFileRequest {
+  importType: ImportType;
+}
+
 export interface ImportFileContent {
   fileName: string;
   importType: ImportType;

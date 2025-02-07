@@ -1,11 +1,6 @@
 @use '@abraxas/voting-lib/style/color' as *;
 
-.cell-container {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.flex {
+.buttons {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -18,11 +13,6 @@
 
 .error {
   color: $color-error;
-}
-
-.actions {
-  display: flex;
-  justify-content: space-between;
 }
 
 .bc-column-position {
@@ -66,7 +56,7 @@
 }
 
 .bc-column-actions {
-  width: 8%;
+  width: 4rem;
 }
 
 .cdk-drag-preview {

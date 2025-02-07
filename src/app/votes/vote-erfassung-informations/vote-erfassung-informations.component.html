@@ -2,26 +2,29 @@
 
   <div class="dropdown-checkbox-container">
     <bc-dropdown [label]="'VOTE.RESULT_ENTRY.TITLE' | translate"
-                 [disabled]="testingPhaseEnded || !isVariantsBallot"
+                 [readonly]="testingPhaseEnded || !isVariantsBallot || readonly"
                  [items]="resultEntryChoices"
                  displayExpr="description"
                  valueExpr="value"
                  [required]="true"
                  [value]="data.resultEntry"
-                 (valueChange)="data.resultEntry = $event; contentChanged.emit()"></bc-dropdown>
+                 (valueChange)="data.resultEntry = $event; contentChanged.emit()"
+                 [subscriptSizing]="'dynamic'"></bc-dropdown>
     <bc-checkbox [checked]="data.enforceResultEntryForCountingCircles"
                  (checkedChange)="data.enforceResultEntryForCountingCircles = $event; contentChanged.emit()"
                  class="mb-1"
                  [label]="'VOTE.ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES' | translate"
-                 [disabled]="testingPhaseEnded || !isVariantsBallot"></bc-checkbox>
+                 [disabled]="testingPhaseEnded || !isVariantsBallot || readonly"
+                 [subscriptSizing]="'dynamic'"></bc-checkbox>
   </div>
 
   <ng-container *ngIf="data.resultEntry === resultEntryType.VOTE_RESULT_ENTRY_DETAILED">
     <bc-number [label]="'VOTE.BALLOT_BUNDLE_SAMPLE_SIZE_PERCENT' | translate"
-               [disabled]="testingPhaseEnded"
+               [readonly]="testingPhaseEnded || readonly"
                [max]="100"
                [value]="ballotBundleSampleSizePercent"
-               (valueChange)="ballotBundleSampleSizePercent = $event; contentChanged.emit()"></bc-number>
+               (valueChange)="ballotBundleSampleSizePercent = $event; contentChanged.emit()"
+               [subscriptSizing]="'dynamic'"></bc-number>
     <div class="ballot-numbers">
       <div>
         <bc-label class="full-width" [label]="'VOTE.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
@@ -30,25 +33,26 @@
                                orientation="vertical"
                                [value]="data.automaticBallotBundleNumberGeneration"
                                (valueChange)="data.automaticBallotBundleNumberGeneration = $event; contentChanged.emit()"
-                               [disabled]="testingPhaseEnded">
+                               [disabled]="testingPhaseEnded || readonly"
+                               [subscriptSizing]="'dynamic'">
         </bc-radio-button-group>
       </div>
     </div>
 
     <div class="flex-grid">
       <bc-label class="full-width col-span-2" [label]="'VOTE.REVIEW_PROCEDURE.TITLE' | translate"></bc-label>
-      <bc-radio-button-group class="ml-2"
-                             [items]="reviewProcedureChoices"
+      <bc-radio-button-group [items]="reviewProcedureChoices"
                              orientation="vertical"
                              [value]="data.reviewProcedure"
                              (valueChange)="data.reviewProcedure = $event; contentChanged.emit()"
-                             [disabled]="testingPhaseEnded">
+                             [disabled]="testingPhaseEnded || readonly"
+                             [subscriptSizing]="'dynamic'">
       </bc-radio-button-group>
-      <bc-checkbox class="ml-2"
-                   [checked]="data.enforceReviewProcedureForCountingCircles"
+      <bc-checkbox [checked]="data.enforceReviewProcedureForCountingCircles"
                    (checkedChange)="data.enforceReviewProcedureForCountingCircles = $event; contentChanged.emit()"
                    [label]="'VOTE.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
-                   [disabled]="testingPhaseEnded"></bc-checkbox>
+                   [disabled]="testingPhaseEnded || readonly"
+                   [subscriptSizing]="'dynamic'"></bc-checkbox>
     </div>
   </ng-container>
 </div>

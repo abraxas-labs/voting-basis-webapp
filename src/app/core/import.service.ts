@@ -10,21 +10,33 @@ import {
   ImportMajorityElectionCandidatesRequest,
   ImportPoliticalBusinessesRequest,
   ImportProportionalElectionListsAndCandidatesRequest,
-  ResolveImportFileRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/import_requests_pb';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ContestImport, ImportFileContent, ImportType, ProportionalElectionListImport } from './models/import.model';
+import {
+  ContestImport,
+  ImportFileContent,
+  ImportType,
+  ProportionalElectionListImport,
+  ResolveImportFileRequest,
+} from './models/import.model';
 import { MajorityElectionCandidateProto } from './models/majority-election.model';
 import { ProportionalElectionListUnionProto } from './models/proportional-election.model';
+import { MultipartFormDataHttpService } from './http/multipart-form-data-http.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ImportService extends GrpcService<ImportServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  private readonly restApiUrl: string = '';
+
+  constructor(
+    grpcBackend: GrpcBackendService,
+    private readonly http: MultipartFormDataHttpService,
+  ) {
     super(ImportServicePromiseClient, environment, grpcBackend);
+    this.restApiUrl = `${environment.restApiEndpoint}/imports`;
   }
 
   public async resolveImportFiles(importType: ImportType, files: FileList): Promise<ImportFileContent[]> {
@@ -39,21 +51,12 @@ export class ImportService extends GrpcService<ImportServicePromiseClient> {
     return resolvedFiles;
   }
 
-  public async resolveImportFile(importType: ImportType, file: File): Promise<ImportFileContent> {
-    const req = new ResolveImportFileRequest();
-    req.setImportType(importType);
-    const fileContent = await file.text();
-    req.setFileContent(fileContent);
-
-    const response = await this.request(
-      c => c.resolveImportFile,
-      req,
-      r => r,
-    );
+  private async resolveImportFile(importType: ImportType, file: File): Promise<ImportFileContent> {
+    const response = await this.http.postWithArrayBufferResponse<ResolveImportFileRequest>(this.restApiUrl, { importType }, file);
     return {
       importType,
       fileName: file.name,
-      contest: response,
+      contest: ContestImport.deserializeBinary(response),
     };
   }
 

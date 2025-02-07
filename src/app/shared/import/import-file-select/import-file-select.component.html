@@ -33,21 +33,25 @@
 
     <bc-table class="w-full" [dataSource]="dataSource">
       <ng-container columnDef="filename">
-        <bc-header-cell *headerCellDef>{{ 'IMPORT.FILENAME' | translate }}</bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">{{ element.fileName }}</bc-data-cell>
+        <bc-header-cell *headerCellDef>
+          <app-truncated-value [value]="'IMPORT.FILENAME' | translate"></app-truncated-value>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.fileName"></app-truncated-value>
+        </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="type">
-        <bc-header-cell *headerCellDef>{{ 'IMPORT.E_CH_STANDARD' | translate }}</bc-header-cell>
+        <bc-header-cell *headerCellDef>
+          <app-truncated-value [value]="'IMPORT.E_CH_STANDARD' | translate"></app-truncated-value>
+        </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <div class="truncate mr-4">
-            {{ 'IMPORT.TYPES.' + element.importType | translate }}
-          </div>
+          <app-truncated-value [value]="'IMPORT.TYPES.' + element.importType | translate"></app-truncated-value>
         </bc-data-cell>
       </ng-container>
 
       <ng-container columnDef="actions">
-        <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+        <bc-header-cell *headerCellDef></bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
           <bc-icon class="clickable" (click)="removeFile(element)" icon="trash" iconColor="error"></bc-icon>
         </bc-data-cell>

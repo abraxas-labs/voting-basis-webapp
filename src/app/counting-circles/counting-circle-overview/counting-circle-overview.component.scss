@@ -1,8 +1,39 @@
-.flex {
-  display: flex;
-  justify-content: flex-end;
+@use '@abraxas/voting-lib/style/table' as table;
+
+::ng-deep .bc-column-name {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-bfs {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-code {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-authority {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-modified-on {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-state {
+  @include table.truncate-long-sortable-table-header();
 }
 
 .bc-column-actions {
-  width: 3%;
+  width: 2rem;
+}
+
+bc-paginator {
+  overflow: hidden;
+}
+
+.buttons {
+  // workaround so that all counting circles fit on the page and no scrollbar is displayed
+  margin-top: -1.5rem;
+  margin-bottom: -0.5rem;
 }

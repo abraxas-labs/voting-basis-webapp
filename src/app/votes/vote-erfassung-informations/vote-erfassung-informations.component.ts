@@ -26,6 +26,9 @@ export class VoteErfassungInformationsComponent {
   public locked: boolean = false;
 
   @Input()
+  public readonly: boolean = false;
+
+  @Input()
   public isVariantsBallot: boolean = false;
 
   @Output()

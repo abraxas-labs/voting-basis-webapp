@@ -7,6 +7,7 @@
 import {
   AppHeaderBarIamModule,
   AppHeaderBarModule,
+  AutocompleteModule,
   ButtonModule,
   CheckboxModule,
   DateModule,
@@ -30,6 +31,7 @@ import {
   TextModule,
   TimeModule,
   TooltipModule,
+  TruncateWithTooltipModule,
 } from '@abraxas/base-components';
 import { VotingLibModule } from '@abraxas/voting-lib';
 import { CommonModule } from '@angular/common';
@@ -77,6 +79,7 @@ import { TranslatedTextareaComponent } from './translated-textarea/translated-te
 import { ImportProportionalElectionPartyMappingComponent } from './import/import-proportional-election-party-mapping/import-proportional-election-party-mapping.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatMenuModule } from '@angular/material/menu';
+import { TruncatedValueComponent } from './truncated-value/truncated-value.component';
 
 const components = [
   ContactPersonEditComponent,
@@ -110,6 +113,7 @@ const components = [
   MajorityElectionCandidateEditDialogComponent,
   MajorityElectionBallotGroupAssignCandidatesEntryComponent,
   ImportProportionalElectionPartyMappingComponent,
+  TruncatedValueComponent,
 ];
 
 const pipes = [GetTranslationPipe, SafeHtmlPipe, MajorityElectionBallotGroupBlankRowsPipe, CanEditBallotGroupPipe];
@@ -152,6 +156,8 @@ const modules = [
   DialogModule,
   MatMenuModule,
   SwitchModule,
+  TruncateWithTooltipModule,
+  AutocompleteModule,
 ];
 
 @NgModule({

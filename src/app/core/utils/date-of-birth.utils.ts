@@ -12,5 +12,5 @@ export function isValidDateOfBirth(dateOfBirth?: Date): boolean {
   }
 
   const dateOfBirthYear = dateOfBirth.getFullYear();
-  return dateOfBirthYear > minDateOfBirthYear && dateOfBirthYear <= new Date().getFullYear();
+  return dateOfBirthYear >= minDateOfBirthYear && dateOfBirthYear <= new Date().getFullYear();
 }

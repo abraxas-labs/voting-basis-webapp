@@ -40,6 +40,9 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
   @Input()
   public locked: boolean = false;
 
+  @Input()
+  public readonly: boolean = false;
+
   // indicates that this component should mainly focus on this secondary election
   @Input()
   public forSecondaryElection?: SecondaryMajorityElection;
@@ -56,6 +59,10 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
   public ballotGroupsWithMissingSecondaryElectionDescription?: string;
 
   public selectedBallotGroup?: MajorityElectionBallotGroup;
+
+  private get secondaryMajorityElectionsOnSameBallot(): SecondaryMajorityElection[] {
+    return this.secondaryMajorityElections.filter(x => !x.isOnSeparateBallot);
+  }
 
   constructor(
     private readonly ballotGroupService: MajorityElectionBallotGroupService,
@@ -78,7 +85,7 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
     const data: MajorityElectionBallotGroupEditDialogData = {
       ballotGroup: newMajorityElectionBallotGroup(this.majorityElection.id, this.ballotGroups.length + 1),
       majorityElection: this.majorityElection,
-      secondaryElections: this.secondaryMajorityElections,
+      secondaryElections: this.secondaryMajorityElectionsOnSameBallot,
     };
 
     const result = await this.dialogService.openForResult<
@@ -92,7 +99,7 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
     const data: MajorityElectionBallotGroupEditDialogData = {
       ballotGroup: { ...ballotGroup },
       majorityElection: this.majorityElection,
-      secondaryElections: this.secondaryMajorityElections,
+      secondaryElections: this.secondaryMajorityElectionsOnSameBallot,
     };
 
     const result = await this.dialogService.openForResult<
@@ -171,7 +178,7 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
   }
 
   private refreshBallotGroupsWithMissingSecondaryElections(): void {
-    const expectedBallotEntryCount = this.secondaryMajorityElections.length + 1;
+    const expectedBallotEntryCount = this.secondaryMajorityElectionsOnSameBallot.length + 1;
     this.ballotGroupsWithMissingSecondaryElection = this.ballotGroups.filter(bg => bg.entries.length !== expectedBallotEntryCount);
 
     if (this.ballotGroupsWithMissingSecondaryElection.length > 0) {

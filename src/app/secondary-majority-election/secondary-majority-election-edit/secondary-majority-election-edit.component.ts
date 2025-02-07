@@ -12,9 +12,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
 import { ContestService } from '../../core/contest.service';
-import { MajorityElectionService } from '../../core/majority-election.service';
 import { newSecondaryMajorityElection, SecondaryMajorityElection } from '../../core/models/secondary-majority-election.model';
 import { SecondaryMajorityElectionService } from '../../core/secondary-majority-election.service';
+import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
+import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
+import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
+import { MajorityElectionService } from '../../core/majority-election.service';
+import { LanguageService } from '../../core/language.service';
 
 @Component({
   selector: 'app-secondary-majority-election-edit',
@@ -32,6 +36,9 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
   public testingPhaseEnded: boolean = false;
   public eVoting: boolean = false;
   public locked: boolean = false;
+  public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
+  public domainOfInfluence?: DomainOfInfluence;
+  public partyShortDescriptions: string[] = [];
   private persistedData: SecondaryMajorityElection = newSecondaryMajorityElection();
 
   constructor(
@@ -41,9 +48,11 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
     private readonly i18n: TranslateService,
     private readonly snackbarService: SnackbarService,
     private readonly location: Location,
-    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
     private readonly majorityElectionService: MajorityElectionService,
+    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
     private readonly contestService: ContestService,
+    private readonly doiService: DomainOfInfluenceService,
+    private readonly languageService: LanguageService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -62,6 +71,16 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked = locked;
       this.eVoting = eVoting;
+
+      const primaryMajorityElection = await this.majorityElectionService.get(this.persistedData.primaryMajorityElectionId);
+      this.contestDomainOfInfluenceDefaults = await this.doiService.getCantonDefaults(primaryMajorityElection.domainOfInfluenceId);
+      this.domainOfInfluence = await this.doiService.get(primaryMajorityElection.domainOfInfluenceId);
+      this.partyShortDescriptions = this.domainOfInfluence.parties.map(
+        x => x.shortDescription.get(this.languageService.currentLanguage) ?? '',
+      );
+      if (this.isNew) {
+        this.persistedData.isOnSeparateBallot = this.contestDomainOfInfluenceDefaults.secondaryMajorityElectionOnSeparateBallot;
+      }
 
       this.data = cloneDeep(this.persistedData);
     } finally {

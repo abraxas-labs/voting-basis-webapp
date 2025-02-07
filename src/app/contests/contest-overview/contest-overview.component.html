@@ -29,6 +29,7 @@
     [canEdit]="canEdit"
     [canDelete]="canDelete"
     [politicalAssemblies]="politicalAssemblies"
+    [showPaginator]="true"
   >
   </app-contest-list>
 
@@ -45,6 +46,7 @@
     [canEdit]="canEdit"
     [canDelete]="canDelete"
     [showType]="false"
+    [showPaginator]="true"
   ></app-contest-list>
 
   <h2 translate>CONTEST.ARCHIVED_CONTESTS</h2>
@@ -52,12 +54,12 @@
     class="mb-4 block"
     (view)="view($event.id)"
     (export)="export($event.id)"
-    [showArchivePer]="true"
     [showPaginator]="true"
     [contests]="archivedContests"
     [canCreate]="canCreate"
     [canEdit]="canEdit"
     [canDelete]="canDelete"
     [showType]="false"
+    [showState]="false"
   ></app-contest-list>
 </vo-lib-page>

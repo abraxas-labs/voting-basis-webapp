@@ -31,6 +31,9 @@ export class ProportionalElectionErfassungInformationsComponent implements OnIni
   public locked: boolean = false;
 
   @Input()
+  public readonly: boolean = false;
+
+  @Input()
   public useCandidateCheckDigit: boolean = false;
 
   @Output()

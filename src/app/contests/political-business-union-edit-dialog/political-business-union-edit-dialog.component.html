@@ -9,7 +9,7 @@
     <bc-dropdown class="full-width"
                  [label]="'POLITICAL_BUSINESS_UNION.TYPE' | translate"
                  [items]="politicalBusinessUnionTypes"
-                 [disabled]="!isNew || politicalBusinessUnionTypes.length === 1"
+                 [readonly]="!isNew || politicalBusinessUnionTypes.length === 1"
                  [required]="true"
                  displayExpr="description"
                  valueExpr="value"

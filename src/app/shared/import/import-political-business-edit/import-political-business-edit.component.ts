@@ -6,7 +6,7 @@
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DomainOfInfluenceLevelService } from '../../../core/domain-of-influence-level.service';
+import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceTree } from '../../../core/domain-of-influence-tree';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { DomainOfInfluenceCantonDefaults } from '../../../core/models/canton-settings.model';
@@ -43,7 +43,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
 
   protected constructor(
     protected readonly enumUtil: EnumUtil,
-    private readonly doiLevelService: DomainOfInfluenceLevelService,
+    private readonly doiReportLevelService: DomainOfInfluenceReportLevelService,
     protected readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly permissionService: PermissionService,
   ) {}
@@ -57,7 +57,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
     this.data.domainOfInfluenceId = v?.id ?? '';
 
     const politicalBusinessDomainOfInfluenceNode = this.domainOfInfluenceTree?.findNodeById(this.data.domainOfInfluenceId);
-    this.domainOfInfluenceLevels = this.doiLevelService.buildDomainOfInfluenceLevels(politicalBusinessDomainOfInfluenceNode);
+    this.domainOfInfluenceLevels = this.doiReportLevelService.buildDomainOfInfluenceReportLevels(politicalBusinessDomainOfInfluenceNode);
     this.handleDomainOfInfluenceChange();
   }
 
@@ -79,7 +79,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
 
   public async ngOnInit(): Promise<void> {
     try {
-      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ActionsTenantSameCanton);
+      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.WriteActionsTenantSameCanton);
       await this.initDomainOfInfluenceData();
     } finally {
       this.loading = false;

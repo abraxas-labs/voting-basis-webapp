@@ -2,7 +2,7 @@
   <bc-number
     *ngIf="domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH"
     [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
-    [disabled]="testingPhaseEnded"
+    [readonly]="testingPhaseEnded || readonly"
     [value]="ballotQuestion.federalIdentification"
     (valueChange)="ballotQuestion.federalIdentification = $event; contentChanged.emit()"
     [max]="federalIdentificationMaxValue"
@@ -11,7 +11,7 @@
   <div class="form-group" *ngIf="eVoting">
     <bc-label [label]="'VOTE.QUESTION.TITLE_STANDARD' | translate: ballotQuestion"></bc-label>
     <app-translated-textarea
-      [disabled]="locked"
+      [readonly]="locked || readonly"
       [maxlength]="700"
       [value]="ballotQuestion.question"
       (valueChange)="ballotQuestion.question = $event; contentChanged.emit()"

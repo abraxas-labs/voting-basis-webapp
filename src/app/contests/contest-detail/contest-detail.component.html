@@ -6,10 +6,10 @@
 >
   <div class="flex">
     <bc-button
-      [matMenuTriggerFor]="contest.testingPhaseEnded ? null : menu"
+      [matMenuTriggerFor]="contest.testingPhaseEnded || !hasSameTenantWritePermissions ? null : menu"
       variant="tertiary"
       icon="plus"
-      [disabled]="contest.testingPhaseEnded"
+      [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions"
       [label]="'POLITICAL_BUSINESS.NEW' | translate"
     ></bc-button>
 
@@ -23,7 +23,7 @@
     </mat-menu>
 
     <bc-button
-      [disabled]="contest.testingPhaseEnded"
+      [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions"
       variant="tertiary"
       icon="download"
       (buttonClick)="importPoliticalBusinesses()"
@@ -37,7 +37,7 @@
       icon="building"
       (buttonClick)="managePoliticalBusinessUnions()"
       [label]="'CONTEST.POLITICAL_BUSINESS_UNION_MANAGE' | translate"
-      [disabled]="contest.testingPhaseEnded"
+      [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions"
     ></bc-button>
   </div>
 
@@ -47,7 +47,7 @@
     [sortMultiple]="true"
     [sortActive]="[
       { id: 'domainOfInfluenceType', direction: 'asc' },
-      { id: 'number', direction: 'asc' }
+      { id: 'number', direction: 'asc' },
     ]"
     filter
     class="w-full"
@@ -55,37 +55,45 @@
   >
     <ng-container columnDef="number">
       <bc-header-cell filter sort *headerCellDef class="small-filter-component">
-        <span>{{ 'POLITICAL_BUSINESS.NUMBER_SHORT' | translate }}</span>
+        <span [tooltip]="'POLITICAL_BUSINESS.NUMBER' | translate">
+          {{ 'POLITICAL_BUSINESS.NUMBER_SHORT' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.number }}</div>
+        <app-truncated-value [value]="element.number"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="politicalBusinessUnionDescription">
       <bc-header-cell filter sort *headerCellDef class="small-filter-component">
-        <span>{{ 'POLITICAL_BUSINESS.POLITICAL_BUSINESS_UNION_DESCRIPTION' | translate }}</span>
+        <span [tooltip]="'POLITICAL_BUSINESS.POLITICAL_BUSINESS_UNION_DESCRIPTION.LONG' | translate">
+          {{ 'POLITICAL_BUSINESS.POLITICAL_BUSINESS_UNION_DESCRIPTION.SHORT' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.politicalBusinessUnionDescription }}</div>
+        <app-truncated-value [value]="element.politicalBusinessUnionDescription"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="electionGroupNumber">
       <bc-header-cell filter sort *headerCellDef class="small-filter-component">
-        <span>{{ 'POLITICAL_BUSINESS.ELECTION_GROUP_NUMBER' | translate }}</span>
+        <span [tooltip]="'POLITICAL_BUSINESS.ELECTION_GROUP_NUMBER.LONG' | translate">
+          {{ 'POLITICAL_BUSINESS.ELECTION_GROUP_NUMBER.SHORT' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.electionGroupNumber }}</div>
+        <app-truncated-value [value]="element.electionGroupNumber"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="shortDescription">
       <bc-header-cell filter sort *headerCellDef>
-        <span>{{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}</span>
+        <span truncateWithTooltip tooltip>
+          {{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.shortDescription }}</div>
+        <app-truncated-value [value]="element.shortDescription"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
@@ -98,20 +106,24 @@
         filterValueExpr="value"
         sort
         *headerCellDef
-        >
-        <span>{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE_TYPE' | translate }}</span>
+      >
+        <span truncateWithTooltip tooltip>
+          {{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE_TYPE' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ 'DOMAIN_OF_INFLUENCE.TYPES.' + element.domainOfInfluenceType | translate }}</div>
+        <app-truncated-value [value]="'DOMAIN_OF_INFLUENCE.TYPES.' + element.domainOfInfluenceType | translate"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="domainOfInfluenceName">
       <bc-header-cell filter sort *headerCellDef>
-        <span>{{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}</span>
+        <span truncateWithTooltip tooltip>
+          {{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.domainOfInfluenceName }}</div>
+        <app-truncated-value [value]="element.domainOfInfluenceName"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
@@ -124,29 +136,37 @@
         filterValueExpr="value"
         sort
         *headerCellDef
-        >
-        <span>{{ 'POLITICAL_BUSINESS.TYPE.TITLE' | translate }}</span>
+      >
+        <span truncateWithTooltip tooltip>
+          {{ 'POLITICAL_BUSINESS.TYPE.TITLE' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">
-          {{ 'POLITICAL_BUSINESS.TYPE.' + element.type | translate }}
-          <span *ngIf="element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_VOTE">
-            ({{ 'POLITICAL_BUSINESS.VOTE_SUB_TYPE.' + element.subType | translate }})
-          </span>
-        </div>
+        <app-truncated-value
+          [value]="
+            (element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_VOTE
+              ? 'POLITICAL_BUSINESS.TYPE.1_SUB_TYPE.' + element.subType
+              : 'POLITICAL_BUSINESS.TYPE.' + element.type
+            ) | translate
+          "
+        ></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="active">
       <bc-header-cell filter filterType="bool" sort *headerCellDef>
-        <span>{{ 'POLITICAL_BUSINESS.ENABLE_TITLE' | translate }}</span>
+        <span truncateWithTooltip tooltip>
+          {{ 'POLITICAL_BUSINESS.ENABLE_TITLE' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
         <bc-switch
           class="ml-2"
-          [checked]="element.active"
+          [(checked)]="element.active"
           (checkedChange)="activeStateChange(element, $event)"
-          [disabled]="(element.ownerId !== tenantId && !hasAdminPermissions) || contest.testingPhaseEnded"
+          [disabled]="(element.ownerId !== tenantId && !hasAdminWritePermissions)
+            || !hasSameTenantWritePermissions || contest.testingPhaseEnded"
+          [subscriptSizing]="'dynamic'"
         >
         </bc-switch>
       </bc-data-cell>
@@ -154,17 +174,19 @@
 
     <ng-container columnDef="owner">
       <bc-header-cell filter sort *headerCellDef>
-        <span>{{ 'POLITICAL_BUSINESS.OWNER' | translate }}</span>
+        <span truncateWithTooltip tooltip>
+          {{ 'POLITICAL_BUSINESS.OWNER' | translate }}
+        </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div class="truncate">{{ element.owner }}</div>
+        <app-truncated-value [value]="element.owner"></app-truncated-value>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="actions">
-      <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+      <bc-header-cell *headerCellDef></bc-header-cell>
       <bc-data-cell *dataCellDef="let element; let i = index">
-        <vo-lib-action-menu *ngIf="element.ownerId === tenantId || hasAdminPermissions">
+        <vo-lib-action-menu *ngIf="(element.ownerId === tenantId && hasSameTenantReadPermissions) || hasAdminReadPermissions">
           <vo-lib-action-menu-item
             icon="edit"
             text="ACTIONS.EDIT"
@@ -177,7 +199,8 @@
           <vo-lib-action-menu-item
             icon="trash"
             text="ACTIONS.DELETE"
-            *ngIf="!contest.testingPhaseEnded"
+            *ngIf="!contest.testingPhaseEnded && hasSameTenantWritePermissions
+              && (element.ownerId === tenantId || hasAdminWritePermissions)"
             (click)="delete(element)"
           ></vo-lib-action-menu-item>
           <vo-lib-action-menu-item
@@ -189,7 +212,8 @@
           <vo-lib-action-menu-item
             icon="plus"
             text="POLITICAL_BUSINESS.ADD_SECONDARY_ELECTION"
-            *ngIf="element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION"
+            *ngIf="element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION
+              && (hasAdminWritePermissions || (element.ownerId === tenantId && hasSameTenantWritePermissions))"
             (click)="createSecondaryElection(element.id)"
           ></vo-lib-action-menu-item>
         </vo-lib-action-menu>

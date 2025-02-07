@@ -9,57 +9,76 @@
         <bc-table selection class="w-full" [dataSource]="dataSource">
           <ng-container columnDef="select">
             <bc-header-cell *headerCellDef>
-              <bc-checkbox class="ml-2 mb-0" (checkedChange)="toggleAllRows($event)"
+              <bc-checkbox
+                class="ml-2 mb-0"
+                (checkedChange)="toggleAllRows($event)"
                 [checked]="selection.hasValue() && isAllSelected"
-                [indeterminate]="selection.hasValue() && !isAllSelected">
+                [indeterminate]="selection.hasValue() && !isAllSelected"
+              >
               </bc-checkbox>
             </bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <bc-checkbox class="ml-2" (checkedChange)="toggleRow(element, $event)"
-                [checked]="selection.isSelected(element)">
+              <bc-checkbox class="ml-2" (checkedChange)="toggleRow(element, $event)" [checked]="selection.isSelected(element)">
               </bc-checkbox>
             </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="description">
-            <bc-header-cell *headerCellDef>{{ 'EXPORTS.DESCRIPTION' | translate }}</bc-header-cell>
+            <bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'EXPORTS.DESCRIPTION' | translate"></app-truncated-value>
+            </bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <span>{{ 'EXPORTS.ENTITY_TYPES.' + element.entityType | translate }}: </span>
-              <span>{{ element.description }}</span>
+              <app-truncated-value
+                [value]="('EXPORTS.ENTITY_TYPES.' + element.entityType | translate) + ': ' + element.description"
+              ></app-truncated-value>
             </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="format">
-            <bc-header-cell *headerCellDef>{{ 'EXPORTS.FILE_FORMAT' | translate }}</bc-header-cell>
+            <bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'EXPORTS.FILE_FORMAT' | translate"></app-truncated-value>
+            </bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <span>{{'EXPORTS.FILE_FORMATS.' + element.format | translate}}</span>
+              <app-truncated-value [value]="'EXPORTS.FILE_FORMATS.' + element.format | translate"></app-truncated-value>
             </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="authority">
-            <bc-header-cell *headerCellDef>{{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}</bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">{{ element.responsibleAuthority.name }}</bc-data-cell>
+            <bc-header-cell *headerCellDef
+              ><app-truncated-value [value]="'COUNTING_CIRCLE.AUTHORITY' | translate"></app-truncated-value>
+            </bc-header-cell>
+            <bc-data-cell *dataCellDef="let element">
+              <app-truncated-value [value]="element.responsibleAuthority.name"></app-truncated-value>
+            </bc-data-cell>
           </ng-container>
 
           <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-          <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle
-            [selectionToggleValue]="row" selectionRow [selectionRowValue]="row"
-            (click)="selection.toggle(row); updateIsAllSelected()"></bc-data-row>
+          <bc-data-row
+            *dataRowDef="let row; columns: columns; let i = index"
+            selectionToggle
+            [selectionToggleValue]="row"
+            selectionRow
+            [selectionRowValue]="row"
+            (click)="selection.toggle(row); updateIsAllSelected()"
+          ></bc-data-row>
         </bc-table>
         <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
       </div>
       <bc-divider class="ml-4" orientation="vertical"></bc-divider>
       <div>
-        <h2 translate class="mb-0">{{'EXPORTS.SELECTED' | translate}}</h2>
+        <h2 translate class="mb-0">{{ 'EXPORTS.SELECTED' | translate }}</h2>
         <bc-table class="w-full" [dataSource]="selection.selected">
-
           <ng-container columnDef="description">
-            <bc-header-cell *headerCellDef>{{ 'EXPORTS.DESCRIPTION' | translate }}</bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">{{ element.description }}</bc-data-cell>
+            <bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'EXPORTS.DESCRIPTION' | translate"></app-truncated-value>
+            </bc-header-cell>
+            <bc-data-cell *dataCellDef="let element">
+              <app-truncated-value [value]="element.description"></app-truncated-value>
+            </bc-data-cell>
           </ng-container>
 
           <ng-container columnDef="actions">
-            <bc-header-cell *headerCellDef class="actions-header"></bc-header-cell>
+            <bc-header-cell *headerCellDef></bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
               <bc-icon class="clickable" (click)="selection.deselect(element)" icon="remove"></bc-icon>
             </bc-data-cell>
@@ -72,7 +91,6 @@
     </div>
   </div>
 
-  <vo-lib-button-bar footer (save)="save()" [sticky]="true" [saveLabel]="'ACTIONS.ASSIGN' | translate"
-    (cancel)="close()">
+  <vo-lib-button-bar footer (save)="save()" [sticky]="true" [saveLabel]="'ACTIONS.ASSIGN' | translate" (cancel)="close()">
   </vo-lib-button-bar>
 </vo-lib-dialog>

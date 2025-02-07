@@ -82,13 +82,15 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
       this.filterEmptyCountingCircleResultStateDescriptions(data.countingCircleResultStateDescriptionsList),
     );
     result.setStatePlausibilisedDisabled(data.statePlausibilisedDisabled);
-    result.setPublishResultsEnabled(data.publishResultsEnabled);
+    result.setManualPublishResultsEnabled(data.manualPublishResultsEnabled);
     result.setPublishResultsBeforeAuditedTentatively(data.publishResultsBeforeAuditedTentatively);
     result.setEndResultFinalizeDisabled(data.endResultFinalizeDisabled);
     result.setCreateContestOnHighestHierarchicalLevelEnabled(data.createContestOnHighestHierarchicalLevelEnabled);
     result.setInternalPlausibilisationDisabled(data.internalPlausibilisationDisabled);
     result.setCandidateLocalityRequired(data.candidateLocalityRequired);
     result.setCandidateOriginRequired(data.candidateOriginRequired);
+    result.setSecondaryMajorityElectionOnSeparateBallot(data.secondaryMajorityElectionOnSeparateBallot);
+    result.setDomainOfInfluencePublishResultsOptionEnabled(data.domainOfInfluencePublishResultsOptionEnabled);
     return result;
   }
 
@@ -115,13 +117,15 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
       this.filterEmptyCountingCircleResultStateDescriptions(data.countingCircleResultStateDescriptionsList),
     );
     result.setStatePlausibilisedDisabled(data.statePlausibilisedDisabled);
-    result.setPublishResultsEnabled(data.publishResultsEnabled);
+    result.setManualPublishResultsEnabled(data.manualPublishResultsEnabled);
     result.setPublishResultsBeforeAuditedTentatively(data.publishResultsBeforeAuditedTentatively);
     result.setEndResultFinalizeDisabled(data.endResultFinalizeDisabled);
     result.setCreateContestOnHighestHierarchicalLevelEnabled(data.createContestOnHighestHierarchicalLevelEnabled);
     result.setInternalPlausibilisationDisabled(data.internalPlausibilisationDisabled);
     result.setCandidateLocalityRequired(data.candidateLocalityRequired);
     result.setCandidateOriginRequired(data.candidateOriginRequired);
+    result.setDomainOfInfluencePublishResultsOptionEnabled(data.domainOfInfluencePublishResultsOptionEnabled);
+    result.setSecondaryMajorityElectionOnSeparateBallot(data.secondaryMajorityElectionOnSeparateBallot);
     return result;
   }
 

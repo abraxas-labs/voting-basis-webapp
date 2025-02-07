@@ -175,7 +175,6 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     fillProtoMap(result.getOfficialDescriptionMap(), data.officialDescription);
     fillProtoMap(result.getShortDescriptionMap(), data.shortDescription);
     result.setNumberOfMandates(data.numberOfMandates);
-    result.setAllowedCandidates(data.allowedCandidates);
     result.setPrimaryMajorityElectionId(data.primaryMajorityElectionId);
     result.setActive(data.active);
     result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
@@ -189,7 +188,6 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     fillProtoMap(result.getOfficialDescriptionMap(), data.officialDescription);
     fillProtoMap(result.getShortDescriptionMap(), data.shortDescription);
     result.setNumberOfMandates(data.numberOfMandates);
-    result.setAllowedCandidates(data.allowedCandidates);
     result.setPrimaryMajorityElectionId(data.primaryMajorityElectionId);
     result.setActive(data.active);
     result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
@@ -253,6 +251,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setCandidateId(data.candidateId);
     result.setIncumbent(data.incumbent);
     result.setPosition(data.position);
+    result.setNumber(data.number);
     return result;
   }
 
@@ -265,6 +264,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setCandidateId(data.candidateId);
     result.setIncumbent(data.incumbent);
     result.setPosition(data.position);
+    result.setNumber(data.number);
     return result;
   }
 }

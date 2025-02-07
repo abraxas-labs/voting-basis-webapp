@@ -30,6 +30,7 @@
           #step2
           [testingPhaseEnded]="testingPhaseEnded"
           [locked]="locked"
+          [readonly]="!canEdit"
           [loadDependencies]="!newlyCreated"
           [candidateLocalityRequired]="contestDomainOfInfluenceDefaults.candidateLocalityRequired"
           [candidateOriginRequired]="contestDomainOfInfluenceDefaults.candidateOriginRequired"
@@ -56,6 +57,7 @@
         #step3
         [testingPhaseEnded]="testingPhaseEnded"
         [locked]="locked"
+        [readonly]="!canEdit"
         [data]="data"
         [useCandidateCheckDigit]="contestDomainOfInfluenceDefaults.majorityElectionUseCandidateCheckDigit"
         (contentChanged)="contentChanged()"

@@ -1,5 +1,43 @@
 @use '@abraxas/voting-lib/style/table' as table;
 
+::ng-deep .bc-column-number {
+  @include table.truncate-long-sortable-table-header();
+
+  width: 4.5rem;
+}
+
+::ng-deep .bc-column-political-business-union-description {
+  @include table.truncate-long-sortable-table-header();
+
+  width: 4.5rem;
+}
+
+::ng-deep .bc-column-election-group-number {
+  @include table.truncate-long-sortable-table-header();
+
+  width: 4.5rem;
+}
+
+::ng-deep .bc-column-domain-of-influence-type {
+  @include table.truncate-long-sortable-table-header();
+
+  width: 10rem;
+}
+
+::ng-deep .bc-column-short-description {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-domain-of-influence-name {
+  @include table.truncate-long-sortable-table-header();
+}
+
+::ng-deep .bc-column-type {
+  @include table.truncate-long-sortable-table-header();
+
+  width: 11rem;
+}
+
 ::ng-deep .bc-column-active {
   @include table.truncate-long-sortable-table-header();
 
@@ -10,36 +48,8 @@
   @include table.truncate-long-sortable-table-header();
 }
 
-::ng-deep .bc-column-number {
-  @include table.truncate-long-sortable-table-header();
-
-  width: 4.5rem;
-}
-
-::ng-deep .bc-column-short-description {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-domain-of-influence-type {
-  @include table.truncate-long-sortable-table-header();
-
-  width: 10rem;
-}
-
 .bc-column-actions {
-  width: 2%;
-}
-
-.bc-column-political-business-union-description {
-  width: 4.5rem;
-}
-
-.bc-column-election-group-number {
-  width: 4.5rem;
-}
-
-.bc-column-type {
-  width: 11rem;
+  width: 2rem;
 }
 
 bc-paginator {

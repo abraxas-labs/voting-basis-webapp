@@ -15,6 +15,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   selector: 'app-export-configuration-assign-dialog',
   templateUrl: './export-configuration-assign-dialog.component.html',
   styleUrls: ['./export-configuration-assign-dialog.component.scss'],
+  standalone: false,
 })
 export class ExportConfigurationAssignDialogComponent implements OnInit, AfterViewInit {
   public readonly columns = ['select', 'description', 'format'];

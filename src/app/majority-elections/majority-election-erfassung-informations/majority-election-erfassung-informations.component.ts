@@ -20,6 +20,7 @@ import {
   selector: 'app-majority-election-erfassung-informations',
   templateUrl: './majority-election-erfassung-informations.component.html',
   styleUrls: ['./majority-election-erfassung-informations.component.scss'],
+  standalone: false,
 })
 export class MajorityElectionErfassungInformationsComponent implements OnInit {
   @Input()

@@ -11,6 +11,7 @@ import { MajorityElectionCandidate } from '../../core/models/majority-election.m
   selector: 'app-majority-election-candidate-list',
   templateUrl: './majority-election-candidate-list.component.html',
   styleUrls: ['./majority-election-candidate-list.component.scss'],
+  standalone: false,
 })
 export class MajorityElectionCandidateListComponent {
   public readonly columns = [

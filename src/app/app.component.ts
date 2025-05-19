@@ -6,7 +6,7 @@
 
 import { AuthenticationService, AuthorizationService, SnackbarComponent } from '@abraxas/base-components';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { SnackbarService, ThemeService } from '@abraxas/voting-lib';
+import { SnackbarService, ThemeService, LanguageService } from '@abraxas/voting-lib';
 import { LocationStrategy } from '@angular/common';
 import { Component, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,12 +14,12 @@ import moment from 'moment';
 import 'moment/locale/de';
 import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { CursorService, CursorType } from './core/cursor.service';
-import { LanguageService } from './core/language.service';
 import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy {
   public authenticated = false;

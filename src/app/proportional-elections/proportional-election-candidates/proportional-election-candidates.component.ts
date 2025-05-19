@@ -31,6 +31,7 @@ export interface CandidateUpdated {
   selector: 'app-proportional-election-candidates',
   templateUrl: './proportional-election-candidates.component.html',
   styleUrls: ['./proportional-election-candidates.component.scss'],
+  standalone: false,
 })
 export class ProportionalElectionCandidatesComponent {
   public readonly columns = [
@@ -61,6 +62,9 @@ export class ProportionalElectionCandidatesComponent {
 
   @Input()
   public candidateOriginRequired: boolean = false;
+
+  @Input()
+  public hideOccupationTitle: boolean = false;
 
   @Input()
   public parties: DomainOfInfluenceParty[] = [];
@@ -119,6 +123,7 @@ export class ProportionalElectionCandidatesComponent {
       listParty: this.currentList.party,
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
+      hideOccupationTitle: this.hideOccupationTitle,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);
@@ -138,6 +143,7 @@ export class ProportionalElectionCandidatesComponent {
       doiType: this.currentDomainOfInfluence.type,
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
+      hideOccupationTitle: this.hideOccupationTitle,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);

@@ -16,6 +16,7 @@ import { groupBySingle } from '../../../core/utils/array.utils';
 @Component({
   selector: 'app-majority-election-ballot-group-candidates',
   templateUrl: './majority-election-ballot-group-candidates.component.html',
+  standalone: false,
 })
 export class MajorityElectionBallotGroupCandidatesComponent implements AfterContentInit {
   public readonly columns = ['number', 'lastName', 'firstName'];

@@ -1,3 +1,7 @@
+:host {
+  min-width: 80vw; // workaround for firefox
+}
+
 .party-mapping {
   min-width: 30rem;
 }

@@ -41,16 +41,24 @@
                (valueChange)="selectedDomainOfInfluenceType = $event; contentChanged.emit()"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
 
-  <bc-dropdown class="full-width"
-               *ngIf="selectedDomainOfInfluenceType"
-               [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
-               [readonly]="contest.testingPhaseEnded || readonly"
-               displayExpr="name"
-               [required]="true"
-               [value]="selectedDomainOfInfluence"
-               (valueChange)="selectedDomainOfInfluence = $event; contentChanged.emit()"
-               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  <div class="container">
+    <bc-dropdown class="full-width"
+                 *ngIf="selectedDomainOfInfluenceType"
+                 [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
+                 [readonly]="contest.testingPhaseEnded || readonly"
+                 displayExpr="name"
+                 [required]="true"
+                 [value]="selectedDomainOfInfluence"
+                 (valueChange)="selectedDomainOfInfluence = $event; contentChanged.emit()"
+                 [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
+                 [subscriptSizing]="'dynamic'"></bc-dropdown>
+    <bc-button *ngIf="!!selectedDomainOfInfluence"
+               class="nowrap"
+               variant="tertiary"
+               [label]="'POLITICAL_BUSINESS.COUNTING_CIRCLES' | translate"
+               (buttonClick)="openAssignedCountingCirclesDialog()"></bc-button>
+  </div>
+
 
   <bc-dropdown class="full-width"
                [items]="domainOfInfluenceLevels"

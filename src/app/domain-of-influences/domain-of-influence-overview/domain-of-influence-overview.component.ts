@@ -32,6 +32,7 @@ import { flatMap } from '../../core/utils/array.utils';
   selector: 'app-domain-of-influence-overview',
   templateUrl: './domain-of-influence-overview.component.html',
   styleUrls: ['./domain-of-influence-overview.component.scss'],
+  standalone: false,
 })
 export class DomainOfInfluenceOverviewComponent implements OnInit {
   public readonly columns = ['name', 'bfs', 'authority'];

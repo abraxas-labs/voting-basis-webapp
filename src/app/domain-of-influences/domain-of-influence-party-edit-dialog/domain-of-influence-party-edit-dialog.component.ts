@@ -5,13 +5,14 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { LanguageService } from '../../core/language.service';
 import { DomainOfInfluenceParty, newDomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { LanguageService } from '@abraxas/voting-lib';
 
 @Component({
   selector: 'app-domain-of-influence-party-edit-dialog',
   templateUrl: './domain-of-influence-party-edit-dialog.component.html',
+  standalone: false,
 })
 export class DomainOfInfluencePartyEditDialogComponent {
   public readonly isNew: boolean = false;

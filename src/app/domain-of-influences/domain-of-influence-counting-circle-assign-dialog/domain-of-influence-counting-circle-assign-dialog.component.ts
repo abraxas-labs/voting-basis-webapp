@@ -22,6 +22,7 @@ import { cloneDeep, isEqual } from 'lodash';
   selector: 'app-domain-of-influence-counting-circle-assign-dialog',
   templateUrl: './domain-of-influence-counting-circle-assign-dialog.component.html',
   styleUrls: ['./domain-of-influence-counting-circle-assign-dialog.component.scss'],
+  standalone: false,
 })
 export class DomainOfInfluenceCountingCircleAssignDialogComponent implements AfterViewInit, OnInit, OnDestroy {
   public readonly selectColumn = 'select';

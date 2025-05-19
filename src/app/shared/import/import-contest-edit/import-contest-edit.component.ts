@@ -19,6 +19,7 @@ import { TableDataSource } from '@abraxas/base-components';
   selector: 'app-import-contest-edit',
   templateUrl: './import-contest-edit.component.html',
   styleUrls: ['./import-contest-edit.component.scss'],
+  standalone: false,
 })
 export class ImportContestEditComponent implements OnInit {
   @Output()

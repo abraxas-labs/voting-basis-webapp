@@ -22,6 +22,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   selector: 'app-proportional-election-lists-and-candidates-import-dialog',
   templateUrl: './proportional-election-lists-and-candidates-import-dialog.component.html',
   styleUrls: ['./proportional-election-lists-and-candidates-import-dialog.component.scss'],
+  standalone: false,
 })
 export class ProportionalElectionListsAndCandidatesImportDialogComponent implements AfterContentChecked {
   public saving: boolean = false;

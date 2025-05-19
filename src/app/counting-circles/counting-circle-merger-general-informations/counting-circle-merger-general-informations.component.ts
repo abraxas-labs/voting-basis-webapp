@@ -11,6 +11,7 @@ import { CountingCirclesMerger } from '../../core/models/counting-circle.model';
 @Component({
   selector: 'app-counting-circle-merger-general-informations',
   templateUrl: './counting-circle-merger-general-informations.component.html',
+  standalone: false,
 })
 export class CountingCircleMergerGeneralInformationsComponent implements OnInit, AfterViewInit {
   @Input()
@@ -74,6 +75,7 @@ export class CountingCircleMergerGeneralInformationsComponent implements OnInit,
     this.merger.newCountingCircle.responsibleAuthority = countingCircle.responsibleAuthority;
     this.merger.newCountingCircle.nameForProtocol = countingCircle.nameForProtocol;
     this.merger.newCountingCircle.sortNumber = countingCircle.sortNumber;
+    this.merger.newCountingCircle.eCounting = countingCircle.eCounting;
     this.merger.newCountingCircle.eVotingActiveFrom = countingCircle.eVotingActiveFrom;
 
     this.showEVotingActiveFrom = !!countingCircle.eVotingActiveFrom;

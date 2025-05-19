@@ -10,6 +10,7 @@ import { Authority } from '../../core/models/counting-circle.model';
 @Component({
   selector: 'app-authority-address-edit',
   templateUrl: './authority-address-edit.component.html',
+  standalone: false,
 })
 export class AuthorityAddressEditComponent {
   @Input()

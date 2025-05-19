@@ -16,6 +16,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-political-business-union-edit-dialog',
   templateUrl: './political-business-union-edit-dialog.component.html',
+  standalone: false,
 })
 export class PoliticalBusinessUnionEditDialogComponent implements OnInit {
   public data: PoliticalBusinessUnion;

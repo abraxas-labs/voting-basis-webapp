@@ -21,6 +21,7 @@ import {
   selector: 'app-majority-election-ballot-group-overview',
   templateUrl: './majority-election-ballot-group-overview.component.html',
   styleUrls: ['./majority-election-ballot-group-overview.component.scss'],
+  standalone: false,
 })
 export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
   public readonly columns = ['position', 'shortDescription', 'description', 'actions'];
@@ -92,7 +93,7 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
       MajorityElectionBallotGroupEditDialogComponent,
       MajorityElectionBallotGroupEditDialogResult
     >(MajorityElectionBallotGroupEditDialogComponent, data);
-    this.handleCreateBallotGroup(result);
+    this.handleEditBallotGroup(result);
   }
 
   public async edit(ballotGroup: MajorityElectionBallotGroup): Promise<void> {
@@ -157,24 +158,22 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
       return;
     }
 
-    const existingBallotGroupIndex = this.ballotGroups.findIndex(bg => bg.id === result.ballotGroup.id);
-    this.ballotGroups.splice(existingBallotGroupIndex, 1, result.ballotGroup);
-
-    this.ballotGroups = [...this.ballotGroups];
-    this.refreshBallotGroupsWithMissingSecondaryElections();
-    this.updateCanSave();
-    this.selectedBallotGroup = undefined;
-  }
-
-  private handleCreateBallotGroup(result?: MajorityElectionBallotGroupEditDialogResult): void {
-    if (!result?.ballotGroup) {
-      return;
+    if (result.isNew) {
+      this.ballotGroups = [...this.ballotGroups, result.ballotGroup];
+    } else {
+      const existingBallotGroupIndex = this.ballotGroups.findIndex(bg => bg.id === result.ballotGroup.id);
+      this.ballotGroups.splice(existingBallotGroupIndex, 1, result.ballotGroup);
+      this.ballotGroups = [...this.ballotGroups];
     }
 
-    this.ballotGroups = [...this.ballotGroups, result.ballotGroup];
+    this.refreshBallotGroupsWithMissingSecondaryElections();
+
+    if (result.updatedBallotGroupCandidates) {
+      this.detail?.handleUpdatedBallotGroupCandidatesAssign(result.updatedBallotGroupCandidates);
+    }
+
+    this.selectedBallotGroup = undefined;
     this.updateCanSave();
-    this.selectedBallotGroup = result.ballotGroup;
-    this.detail?.assignCandidatesForNewBallotGroup(result.ballotGroup);
   }
 
   private refreshBallotGroupsWithMissingSecondaryElections(): void {

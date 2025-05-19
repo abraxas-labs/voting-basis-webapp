@@ -12,10 +12,13 @@ import { DomainOfInfluenceService } from '../../core/domain-of-influence.service
 import { Vote, VoteResultAlgorithm } from '../../core/models/vote.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
 import { PermissionService } from '../../core/permission.service';
+import { DialogService } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-vote-general-informations',
   templateUrl: './vote-general-informations.component.html',
+  styleUrls: ['./vote-general-informations.component.scss'],
+  standalone: false,
 })
 export class VoteGeneralInformationsComponent extends PoliticalBusinessGeneralInformationsComponent<Vote> {
   public resultAlgorithms: EnumItemDescription<VoteResultAlgorithm>[] = [];
@@ -26,8 +29,9 @@ export class VoteGeneralInformationsComponent extends PoliticalBusinessGeneralIn
     contestService: ContestService,
     doiReportLevelService: DomainOfInfluenceReportLevelService,
     permissionService: PermissionService,
+    dialogService: DialogService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiReportLevelService, permissionService, {} as Vote);
+    super(enumUtil, domainOfInfluenceService, contestService, doiReportLevelService, permissionService, dialogService, {} as Vote);
     this.resultAlgorithms = this.enumUtil.getArrayWithDescriptions<VoteResultAlgorithm>(
       VoteResultAlgorithm,
       'VOTE.RESULT_ALGORITHM.TYPES.',

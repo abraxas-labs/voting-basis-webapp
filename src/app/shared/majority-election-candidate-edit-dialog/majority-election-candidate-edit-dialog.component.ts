@@ -4,11 +4,10 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { Component, HostListener, Inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../core/language.service';
 import { MajorityElectionService } from '../../core/majority-election.service';
 import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { MajorityElectionCandidate } from '../../core/models/majority-election.model';
@@ -21,6 +20,7 @@ import { cloneDeep, isEqual } from 'lodash';
   selector: 'app-majority-election-candidate-edit-dialog',
   templateUrl: './majority-election-candidate-edit-dialog.component.html',
   styleUrls: ['./majority-election-candidate-edit-dialog.component.scss'],
+  standalone: false,
 })
 export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
   @HostListener('window:beforeunload')
@@ -38,6 +38,7 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
   public testingPhaseEnded: boolean;
   public isCandidateLocalityRequired: boolean;
   public isCandidateOriginRequired: boolean;
+  public hideOccupationTitle: boolean;
   public partyShortDescriptions: string[];
 
   public hasChanges: boolean = false;
@@ -57,6 +58,7 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
     this.isNew = !this.data.id;
     this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
     this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
+    this.hideOccupationTitle = dialogData.hideOccupationTitle;
     this.partyShortDescriptions = dialogData.partyShortDescriptions;
     this.originalCandidate = cloneDeep(this.data);
 
@@ -137,6 +139,7 @@ export interface MajorityElectionCandidateEditDialogData {
   doiType: DomainOfInfluenceType;
   candidateLocalityRequired: boolean;
   candidateOriginRequired: boolean;
+  hideOccupationTitle: boolean;
   partyShortDescriptions: string[];
 }
 

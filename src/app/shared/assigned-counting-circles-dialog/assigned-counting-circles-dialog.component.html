@@ -1,0 +1,24 @@
+<bc-dialog>
+  <div header>
+    <bc-icon-button mat-dialog-close variant="tertiary" icon="cancel"></bc-icon-button>
+    {{ 'POLITICAL_BUSINESS.ASSIGNED_COUNTING_CIRCLES' | translate }}
+  </div>
+  <div>
+    <bc-spinner *ngIf="loading"></bc-spinner>
+    <bc-table filter sort [sortActive]="[{ id: nameColumn, direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
+      <ng-container columnDef="name">
+        <bc-header-cell *headerCellDef filter sort>
+          <app-truncated-value [value]="'COUNTING_CIRCLE.NAME' | translate"></app-truncated-value>
+        </bc-header-cell>
+        <bc-data-cell *dataCellDef="let element">
+          <app-truncated-value [value]="element.name"></app-truncated-value>
+        </bc-data-cell>
+      </ng-container>
+
+      <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+      <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+    </bc-table>
+
+    <bc-paginator #paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15]"></bc-paginator>
+  </div>
+</bc-dialog>

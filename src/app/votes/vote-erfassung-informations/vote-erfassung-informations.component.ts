@@ -14,6 +14,7 @@ import { newVote, Vote, VoteResultEntry, VoteReviewProcedure } from '../../core/
   selector: 'app-vote-erfassung-informations',
   templateUrl: './vote-erfassung-informations.component.html',
   styleUrls: ['./vote-erfassung-informations.component.scss'],
+  standalone: false,
 })
 export class VoteErfassungInformationsComponent {
   @Input()

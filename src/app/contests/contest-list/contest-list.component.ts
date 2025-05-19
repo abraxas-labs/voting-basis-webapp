@@ -7,16 +7,17 @@
 import { AuthorizationService, FilterDirective, PaginatorComponent, SortDirective, TableDataSource } from '@abraxas/base-components';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { ContestState, ContestSummary } from '../../core/models/contest.model';
-import { PoliticalAssembly } from '../../core/models/political-assembly.model';
-import { LanguageService } from '../../core/language.service';
+import { ContestListType } from '../../core/models/contest-list.model';
+import { PoliticalAssembly, PoliticalAssemblyState } from '../../core/models/political-assembly.model';
 import { TranslateService } from '../../core/translate.service';
-import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
+import { EnumItemDescription, EnumUtil, LanguageService } from '@abraxas/voting-lib';
 import moment from 'moment';
 
 @Component({
   selector: 'app-contest-list',
   templateUrl: './contest-list.component.html',
   styleUrls: ['./contest-list.component.scss'],
+  standalone: false,
 })
 export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
   public columns: string[] = [];
@@ -61,7 +62,14 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input()
   public set politicalAssemblies(politicalAssemblies: PoliticalAssembly[]) {
-    const contestListTypes = politicalAssemblies.map(x => this.mapPoliticalAssemblyToListType(x));
+    const contestListTypes = politicalAssemblies
+      .map(x => this.mapPoliticalAssemblyToListType(x))
+      // VOTING-4595 date format workaround, remove as soon as proper handling within BC is available.
+      // VOTING-4891 is the follow-up ticket.
+      .map(x => {
+        x.date = moment(x.date).format('YYYY-MM-DD') as any as Date;
+        return x;
+      });
     this.dataSource.data = [...this.dataSource.data.filter(x => !x.isPoliticalAssembly), ...contestListTypes];
   }
 
@@ -78,7 +86,7 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
   public edit: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
 
   @Output()
-  public archive: EventEmitter<ContestSummary> = new EventEmitter<ContestSummary>();
+  public archive: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
 
   @Output()
   public pastUnlock: EventEmitter<ContestSummary> = new EventEmitter<ContestSummary>();
@@ -166,28 +174,26 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
       description: this.languageService.getTranslationForCurrentLang(politicalAssembly.description),
       isPoliticalAssembly: true,
       isPreconfiguredDate: false,
-      owner: politicalAssembly.domainOfInfluence.authorityName,
-      ownerId: politicalAssembly.domainOfInfluence.secureConnectId,
+      state: this.mapPoliticalAssemblyState(politicalAssembly.state),
+      archivePer: politicalAssembly.archivePer,
+      owner: politicalAssembly.domainOfInfluence?.authorityName ?? '',
+      ownerId: politicalAssembly.domainOfInfluence?.secureConnectId,
       politicalBusinesses: '', // The base components filter does not handle undefined very well, use empty string
-      locked: false,
+      locked: politicalAssembly.state !== PoliticalAssemblyState.POLITICAL_ASSEMBLY_STATE_ACTIVE,
+      politicalAssembly: politicalAssembly,
     };
   }
-}
 
-export type ContestListType = {
-  id: string;
-  date: Date;
-  type: string;
-  isPreconfiguredDate: boolean;
-  isPoliticalAssembly: boolean;
-  description: string;
-  endOfTestingPhase?: Date;
-  testingPhaseEnded?: boolean;
-  state?: ContestState;
-  archivePer?: Date;
-  politicalBusinesses: string;
-  locked: boolean;
-  owner: string;
-  ownerId?: string;
-  contest?: ContestSummary;
-};
+  private mapPoliticalAssemblyState(state: PoliticalAssemblyState): ContestState {
+    switch (state) {
+      case PoliticalAssemblyState.POLITICAL_ASSEMBLY_STATE_ACTIVE:
+        return ContestState.CONTEST_STATE_ACTIVE;
+      case PoliticalAssemblyState.POLITICAL_ASSEMBLY_STATE_PAST_LOCKED:
+        return ContestState.CONTEST_STATE_PAST_LOCKED;
+      case PoliticalAssemblyState.POLITICAL_ASSEMBLY_STATE_ARCHIVED:
+        return ContestState.CONTEST_STATE_ARCHIVED;
+      default:
+        return ContestState.CONTEST_STATE_UNSPECIFIED;
+    }
+  }
+}

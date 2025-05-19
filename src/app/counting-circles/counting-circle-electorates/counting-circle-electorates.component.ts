@@ -19,6 +19,7 @@ import { flatMap } from '../../core/utils/array.utils';
   selector: 'app-counting-circle-electorates',
   templateUrl: './counting-circle-electorates.component.html',
   styleUrls: ['./counting-circle-electorates.component.scss'],
+  standalone: false,
 })
 export class CountingCircleElectoratesComponent {
   private electoratesValue: CountingCircleElectorate[] = [];

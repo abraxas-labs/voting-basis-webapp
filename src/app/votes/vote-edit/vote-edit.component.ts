@@ -24,6 +24,7 @@ import { Permissions } from '../../core/models/permissions.model';
 @Component({
   selector: 'app-vote-edit',
   templateUrl: './vote-edit.component.html',
+  standalone: false,
 })
 export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
   @HostListener('window:beforeunload')

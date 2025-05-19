@@ -13,6 +13,7 @@ import { TranslateService } from '../../core/translate.service';
   selector: 'app-historization-filter-bar',
   templateUrl: './historization-filter-bar.component.html',
   styleUrls: ['./historization-filter-bar.component.scss'],
+  standalone: false,
 })
 export class HistorizationFilterBarComponent {
   public date?: Moment;

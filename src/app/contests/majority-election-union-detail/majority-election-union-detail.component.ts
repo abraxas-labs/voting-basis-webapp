@@ -10,6 +10,7 @@ import { PoliticalBusinessUnion } from '../../core/models/political-business-uni
 @Component({
   selector: 'app-majority-election-union-detail',
   templateUrl: './majority-election-union-detail.component.html',
+  standalone: false,
 })
 export class MajorityElectionUnionDetailComponent {
   @Input()

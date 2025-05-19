@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { DatePipe } from '@angular/common';
 import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -12,7 +12,6 @@ import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import { ContestService } from '../../core/contest.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
-import { LanguageService } from '../../core/language.service';
 import { Contest, ContestDateAvailability, newContest } from '../../core/models/contest.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { getDefaultTimeDate } from '../../core/utils/time.utils';
@@ -25,6 +24,7 @@ import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settin
   templateUrl: './contest-edit-dialog.component.html',
   styleUrls: ['./contest-edit-dialog.component.scss'],
   providers: [DatePipe],
+  standalone: false,
 })
 export class ContestEditDialogComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload')

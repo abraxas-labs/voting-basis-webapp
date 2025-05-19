@@ -215,6 +215,9 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setSecondaryMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);
     result.setOrigin(data.origin);
+    result.setStreet(data.street);
+    result.setHouseNumber(data.houseNumber);
+    result.setCountry(data.country);
     return result;
   }
 
@@ -240,6 +243,9 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setSecondaryMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);
     result.setOrigin(data.origin);
+    result.setStreet(data.street);
+    result.setHouseNumber(data.houseNumber);
+    result.setCountry(data.country);
     return result;
   }
 

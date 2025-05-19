@@ -12,9 +12,8 @@ import moment from 'moment';
 import { Subscription } from 'rxjs';
 import { ContestService } from '../../core/contest.service';
 import { ExportService } from '../../core/export.service';
-import { ContestMessage, ContestState, ContestSummary, PreconfiguredContestDate } from '../../core/models/contest.model';
+import { ContestState, ContestSummary, PreconfiguredContestDate } from '../../core/models/contest.model';
 import { ExportEntityType } from '../../core/models/export.model';
-import { EntityState } from '../../core/models/message.model';
 import { ContestImportDialogComponent } from '../../shared/import/contest-import-dialog/contest-import-dialog.component';
 import { ContestArchiveDialogComponent, ContestArchiveDialogData } from '../contest-archive-dialog/contest-archive-dialog.component';
 import {
@@ -28,21 +27,25 @@ import {
 } from '../contest-past-unlock-dialog/contest-past-unlock-dialog.component';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { AuthorizationService } from '@abraxas/base-components';
-import { PoliticalAssembly } from '../../core/models/political-assembly.model';
+import { PoliticalAssemblyState, PoliticalAssembly } from '../../core/models/political-assembly.model';
 import { PoliticalAssemblyService } from '../../core/political-assembly.service';
 import {
   PoliticalAssemblyEditDialogComponent,
   PoliticalAssemblyEditDialogData,
   PoliticalAssemblyEditDialogResult,
 } from '../political-assembly-edit-dialog/political-assembly-edit-dialog.component';
-import { ContestListType } from '../contest-list/contest-list.component';
+import { ContestListType } from '../../core/models/contest-list.model';
 import { Permissions } from '../../core/models/permissions.model';
 import { PermissionService } from '../../core/permission.service';
+import { EventLogService } from '../../core/event-log.service';
+import { EventType } from '../../core/models/event-log.model';
+import { PoliticalAssemblies } from '@abraxas/voting-basis-service-proto/grpc/models/political_assembly_pb';
 
 @Component({
   selector: 'app-contest-overview',
   templateUrl: './contest-overview.component.html',
   styleUrls: ['./contest-overview.component.scss'],
+  standalone: false,
 })
 export class ContestOverviewComponent implements OnInit, OnDestroy {
   public loading: boolean = true;
@@ -51,6 +54,8 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
   public archivedContests: ContestSummary[] = [];
   public canAddPoliticalAssembly: boolean = false;
   public politicalAssemblies: PoliticalAssembly[] = [];
+  public pastPoliticalAssemblies: PoliticalAssembly[] = [];
+  public archivedPoliticalAssemblies: PoliticalAssembly[] = [];
   public canCreate: boolean = false;
   public canEdit: boolean = false;
   public canDelete: boolean = false;
@@ -64,6 +69,7 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
     private readonly snackbarService: SnackbarService,
     private readonly dialogService: DialogService,
     private readonly contestService: ContestService,
+    private readonly eventLogService: EventLogService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
@@ -92,7 +98,13 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
       this.canAddPoliticalAssembly = domainOfInfluences.some(x => x.responsibleForVotingCards);
 
       if (this.canAddPoliticalAssembly) {
-        this.politicalAssemblies = await this.politicalAssemblyService.list();
+        this.politicalAssemblies = await this.politicalAssemblyService.list(PoliticalAssemblyState.POLITICAL_ASSEMBLY_STATE_ACTIVE);
+        this.pastPoliticalAssemblies = await this.politicalAssemblyService.list(
+          PoliticalAssemblyState.POLITICAL_ASSEMBLY_STATE_PAST_LOCKED,
+        );
+        this.archivedPoliticalAssemblies = await this.politicalAssemblyService.list(
+          PoliticalAssemblyState.POLITICAL_ASSEMBLY_STATE_ARCHIVED,
+        );
       }
     } finally {
       this.loading = false;
@@ -169,9 +181,9 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
     return this.exportService.downloadExportOrShowDialog(ExportEntityType.EXPORT_ENTITY_TYPE_CONTEST, id);
   }
 
-  public async archive(contest: ContestSummary): Promise<void> {
+  public async archive(listEntry: ContestListType): Promise<void> {
     const data: ContestArchiveDialogData = {
-      contest,
+      listEntry,
     };
 
     const result = await this.dialogService.openForResult(ContestArchiveDialogComponent, data);
@@ -179,8 +191,13 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.pastContests = this.pastContests.filter(x => x.id !== contest.id);
-    this.archivedContests = [contest, ...this.archivedContests];
+    if (listEntry.isPoliticalAssembly) {
+      this.pastPoliticalAssemblies = this.pastPoliticalAssemblies.filter(x => x.id !== listEntry.id);
+      this.archivedPoliticalAssemblies = [listEntry.politicalAssembly!, ...this.archivedPoliticalAssemblies];
+    } else {
+      this.pastContests = this.pastContests.filter(x => x.id !== listEntry.id);
+      this.archivedContests = [listEntry.contest!, ...this.archivedContests];
+    }
   }
 
   public pastUnlock(contest: ContestSummary): void {
@@ -207,7 +224,7 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
     if (!data) {
       return;
     }
-
+    data.politicalAssembly.state = PoliticalAssemblyState.POLITICAL_ASSEMBLY_STATE_ACTIVE;
     this.politicalAssemblies = [...this.politicalAssemblies, data.politicalAssembly];
   }
 
@@ -256,38 +273,43 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
 
   private startChangesListener(): void {
     this.overviewChangesSubscription?.unsubscribe();
-
-    this.overviewChangesSubscription = this.contestService.getOverviewChanges().subscribe(e => this.handleContestMessage(e.contest));
+    this.overviewChangesSubscription = this.eventLogService
+      .watch(['ContestCreated', 'ContestUpdated', 'ContestDeleted'])
+      .subscribe(e => this.handleContestEvent(e.type, e.aggregateId));
   }
 
-  private handleContestMessage(e: ContestMessage): void {
-    const contest = e.data;
-    if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
-      this.removeContestListTypeFromUi(contest.id, false);
-      return;
-    }
+  private async handleContestEvent(eventType: EventType, contestId: string): Promise<void> {
+    switch (eventType) {
+      case 'ContestCreated':
+        if (this.contests.find(x => x.id === contestId)) {
+          break;
+        }
 
-    const existingContestIdx = this.contests.map(c => c.id).indexOf(contest.id);
-    const contestOnSameDateIdx = this.contests.map(c => Number(c.date)).indexOf(+contest.date!);
-    const contestToReplaceIdx = existingContestIdx >= 0 ? existingContestIdx : contestOnSameDateIdx;
-
-    // only contests which are in progress or are in testing phase are live reloaded
-    // archivePer is only used in past or archived contests.
-    const contestSummary: ContestSummary = {
-      ...contest,
-      archivePer: undefined,
-      contestEntriesDetails: [],
-      isPreconfiguredDate: false,
-    };
-
-    if (contestToReplaceIdx >= 0) {
-      contestSummary.contestEntriesDetails = this.contests[contestToReplaceIdx].contestEntriesDetails ?? [];
-      this.contests[contestToReplaceIdx] = contestSummary;
-
-      // trigger angular change detection
-      this.contests = [...this.contests];
-    } else {
-      this.contests = [...this.contests, contestSummary];
+        this.contests = [
+          ...this.contests,
+          {
+            ...(await this.contestService.get(contestId)),
+            archivePer: undefined,
+            contestEntriesDetails: [],
+            isPreconfiguredDate: false,
+          },
+        ];
+        break;
+      case 'ContestUpdated':
+        const idx = this.contests.findIndex(d => d.id === contestId);
+        if (idx >= 0) {
+          this.contests[idx] = {
+            ...(await this.contestService.get(contestId)),
+            archivePer: undefined,
+            contestEntriesDetails: [],
+            isPreconfiguredDate: false,
+          };
+          this.contests = [...this.contests];
+        }
+        break;
+      case 'ContestDeleted':
+        this.contests = this.contests.filter(c => c.id !== contestId);
+        break;
     }
   }
 

@@ -8,12 +8,13 @@ import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MajorityElectionCandidate } from '../../../core/models/majority-election.model';
-import { BallotGroupUiEntry } from '../majority-election-ballot-group-assign-candidates-dialog/majority-election-ballot-group-assign-candidates-dialog.component';
+import { BallotGroupUiEntry } from '../majority-election-ballot-group-edit-dialog/majority-election-ballot-group-edit-dialog.component';
 
 @Component({
   selector: 'app-majority-election-ballot-group-assign-candidates-entry',
   templateUrl: './majority-election-ballot-group-assign-candidates-entry.component.html',
   styleUrls: ['./majority-election-ballot-group-assign-candidates-entry.component.scss'],
+  standalone: false,
 })
 export class MajorityElectionBallotGroupAssignCandidatesEntryComponent implements AfterViewInit {
   public readonly columns = ['select', 'number', 'lastName', 'firstName', 'dateOfBirth', 'sex', 'party'];
@@ -21,6 +22,9 @@ export class MajorityElectionBallotGroupAssignCandidatesEntryComponent implement
 
   @Input()
   public entry?: BallotGroupUiEntry;
+
+  @Input()
+  public showBlankRowCount: boolean = true;
 
   @Input()
   public set candidates(candidates: MajorityElectionCandidate[]) {

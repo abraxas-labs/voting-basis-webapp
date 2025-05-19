@@ -14,6 +14,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-contest-past-unlock-dialog',
   templateUrl: './contest-past-unlock-dialog.component.html',
+  standalone: false,
 })
 export class ContestPastUnlockDialogComponent {
   public saving: boolean = false;

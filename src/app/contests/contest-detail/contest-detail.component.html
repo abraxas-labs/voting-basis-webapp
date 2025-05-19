@@ -216,6 +216,11 @@
               && (hasAdminWritePermissions || (element.ownerId === tenantId && hasSameTenantWritePermissions))"
             (click)="createSecondaryElection(element.id)"
           ></vo-lib-action-menu-item>
+          <vo-lib-action-menu-item
+            icon="info-circle-o"
+            text="POLITICAL_BUSINESS.COUNTING_CIRCLES"
+            (click)="openAssignedCountingCircles(element)"
+          ></vo-lib-action-menu-item>
         </vo-lib-action-menu>
       </bc-data-cell>
     </ng-container>

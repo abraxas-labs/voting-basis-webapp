@@ -20,6 +20,7 @@ import { PermissionService } from '../../../core/permission.service';
   selector: 'app-import-proportional-election-edit',
   templateUrl: './import-proportional-election-edit.component.html',
   styleUrls: ['./import-proportional-election-edit.component.scss'],
+  standalone: false,
 })
 export class ImportProportionalElectionEditComponent extends ImportPoliticalBusinessEditComponent<ProportionalElection> {
   public loadingParties: boolean = false;

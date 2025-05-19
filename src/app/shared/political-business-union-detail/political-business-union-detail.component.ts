@@ -11,6 +11,7 @@ import { PoliticalBusinessUnion } from '../../core/models/political-business-uni
 @Component({
   selector: 'app-political-business-union-detail',
   templateUrl: './political-business-union-detail.component.html',
+  standalone: false,
 })
 export class PoliticalBusinessUnionDetailComponent {
   public candidates: ElectionCandidate[] = [];

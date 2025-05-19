@@ -1,18 +1,19 @@
 <div class="form" *ngIf="data">
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
-           [readonly]="locked"
+           [readonly]="locked || readonly"
            [required]="true"
-           [(value)]="data.politicalBusinessNumber"></bc-text>
+           [(value)]="data.politicalBusinessNumber"
+           [subscriptSizing]="'dynamic'"></bc-text>
 
   <app-translated-formfield [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
-                [readonly]="locked"
+                [readonly]="locked || readonly"
                 [maxlength]="100"
                 [(value)]="data.shortDescription"
                 [singleLanguageInput]="true"></app-translated-formfield>
 
   <div class="form-group">
     <app-translated-textarea [label]="'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate"
-                             [readonly]="locked"
+                             [readonly]="locked || readonly"
                              [maxlength]="500"
                              class="full-width"
                              [(value)]="data.officialDescription"
@@ -20,13 +21,15 @@
   </div>
 
   <bc-number [label]="'MAJORITY_ELECTION.NUMBER_OF_MANDATES' | translate"
-             [readonly]="testingPhaseEnded"
+             [readonly]="testingPhaseEnded || data.active || readonly"
              [required]="true"
              [value]="data.numberOfMandates"
-             (valueChange)="data.numberOfMandates = +$event"></bc-number>
+             (valueChange)="data.numberOfMandates = +$event"
+             [subscriptSizing]="'dynamic'"></bc-number>
 
   <bc-checkbox [checked]="!data.individualCandidatesDisabled"
                (checkedChange)="data.individualCandidatesDisabled = !$event;"
                [label]="'SECONDARY_ELECTION.MAJORITY.INDIVIDUAL_CANDIDATES' | translate"
-               [disabled]="testingPhaseEnded"></bc-checkbox>
+               [disabled]="testingPhaseEnded || readonly"
+               [subscriptSizing]="'dynamic'"></bc-checkbox>
 </div>

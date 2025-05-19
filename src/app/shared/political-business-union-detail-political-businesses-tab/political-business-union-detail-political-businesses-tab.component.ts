@@ -14,6 +14,7 @@ import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 @Component({
   selector: 'app-political-business-union-detail-political-businesses-tab',
   templateUrl: './political-business-union-detail-political-businesses-tab.component.html',
+  standalone: false,
 })
 export class PoliticalBusinessUnionDetailPoliticalBusinessesTabComponent implements AfterViewInit {
   public readonly columns = ['politicalBusinessNumber', 'shortDescription', 'domainOfInfluenceName'];

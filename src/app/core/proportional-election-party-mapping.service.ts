@@ -6,10 +6,10 @@
 
 import { DomainOfInfluenceParty as DomainOfInfluencePartyProto } from '@abraxas/voting-basis-service-proto/grpc/models/domain_of_influence_party_pb';
 import { Injectable } from '@angular/core';
-import { LanguageService } from './language.service';
 import { DomainOfInfluenceParty, PartyMapping, PartyMappingContainer, PartyWithMappings } from './models/domain-of-influence-party.model';
 import { ProportionalElectionListImport } from './models/import.model';
 import { ProportionalElectionCandidateProto } from './models/proportional-election.model';
+import { LanguageService } from '@abraxas/voting-lib';
 
 const unknownSourceParty = '<unknown>';
 

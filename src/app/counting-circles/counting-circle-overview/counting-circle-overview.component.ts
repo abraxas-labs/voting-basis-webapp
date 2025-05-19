@@ -9,19 +9,21 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
-import { CountingCircle, CountingCircleMessage } from '../../core/models/counting-circle.model';
+import { CountingCircle } from '../../core/models/counting-circle.model';
 import { PermissionService } from '../../core/permission.service';
 import { HistorizationFilter, newHistorizationFilter } from '../../shared/historization-filter-bar/historization-filter-bar.component';
 import { Permissions } from '../../core/models/permissions.model';
 import { CountingCircleState } from '@abraxas/voting-basis-service-proto/grpc/shared/counting_circle_pb';
 import { FilterDirective, PaginatorComponent, SortDirective, TableDataSource } from '@abraxas/base-components';
 import { Subscription } from 'rxjs';
-import { EntityState } from '../../core/models/message.model';
+import { EventLogService } from '../../core/event-log.service';
+import { EventType } from '../../core/models/event-log.model';
 
 @Component({
   selector: 'app-counting-circle-overview',
   templateUrl: './counting-circle-overview.component.html',
   styleUrls: ['./counting-circle-overview.component.scss'],
+  standalone: false,
 })
 export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
   public readonly nameColumn = 'name';
@@ -72,6 +74,7 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, O
     private readonly route: ActivatedRoute,
     private readonly dialogService: DialogService,
     private readonly enumUtil: EnumUtil,
+    private readonly eventLog: EventLogService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -148,29 +151,40 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, O
     if (this.historizationFilter.date) {
       this.columns.splice(-1, 1);
     }
+
+    this.startChangesListener();
   }
 
   private startChangesListener(): void {
     this.changesSubscription?.unsubscribe();
-
-    this.changesSubscription = this.countingCircleService.getChanges().subscribe(e => this.handleCountingCircleMessage(e.countingCircle));
-  }
-
-  private handleCountingCircleMessage(e: CountingCircleMessage): void {
-    const countingCircle = e.data;
-    if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
-      this.dataSource.data = this.dataSource.data.filter(c => c.id !== countingCircle.id);
+    if (this.historizationFilter.useHistorizationRequests) {
       return;
     }
 
-    const existingCountingCircleIndex = this.dataSource.data.map(x => x.id).indexOf(countingCircle.id);
-    if (existingCountingCircleIndex >= 0) {
-      this.dataSource.data[existingCountingCircleIndex] = countingCircle;
+    this.changesSubscription = this.eventLog
+      .watch(['CountingCircleCreated', 'CountingCircleUpdated', 'CountingCircleDeleted'])
+      .subscribe(e => this.handleCountingCircleEvent(e.type, e.aggregateId));
+  }
 
-      // trigger angular change detection
-      this.dataSource.data = [...this.dataSource.data];
-    } else {
-      this.dataSource.data = [...this.dataSource.data, countingCircle];
+  private async handleCountingCircleEvent(eventType: EventType, countingCircleId: string): Promise<void> {
+    switch (eventType) {
+      case 'CountingCircleCreated':
+        if (this.dataSource.data.find(x => x.id === countingCircleId)) {
+          break;
+        }
+
+        this.dataSource.data = [...this.dataSource.data, await this.countingCircleService.get(countingCircleId)];
+        break;
+      case 'CountingCircleUpdated':
+        const idx = this.dataSource.data.findIndex(d => d.id === countingCircleId);
+        if (idx >= 0) {
+          this.dataSource.data[idx] = await this.countingCircleService.get(countingCircleId);
+          this.dataSource.data = [...this.dataSource.data];
+        }
+        break;
+      case 'CountingCircleDeleted':
+        this.dataSource.data = this.dataSource.data.filter(c => c.id !== countingCircleId);
+        break;
     }
   }
 }

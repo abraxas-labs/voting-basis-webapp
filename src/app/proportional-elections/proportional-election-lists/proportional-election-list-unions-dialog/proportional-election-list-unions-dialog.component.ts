@@ -38,6 +38,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   selector: 'app-proportional-election-list-unions-dialog',
   templateUrl: './proportional-election-list-unions-dialog.component.html',
   styleUrls: ['./proportional-election-list-unions-dialog.component.scss'],
+  standalone: false,
 })
 export class ProportionalElectionListUnionsDialogComponent implements OnInit, AfterViewInit {
   public readonly columns = ['number', 'description', 'listEnumeration', 'subListUnionEnumeration', 'mainListNumber', 'actions'];

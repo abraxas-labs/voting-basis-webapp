@@ -17,6 +17,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   selector: 'app-proportional-election-list-union-entries-edit-dialog',
   templateUrl: './proportional-election-list-union-entries-edit-dialog.component.html',
   styleUrls: ['./proportional-election-list-union-entries-edit-dialog.component.scss'],
+  standalone: false,
 })
 export class ProportionalElectionListUnionEntriesEditDialogComponent implements AfterViewInit {
   public readonly columns = ['select', 'orderNumber', 'shortDescription'];

@@ -10,6 +10,7 @@ import { PoliticalBusinessUnion } from '../../core/models/political-business-uni
 @Component({
   selector: 'app-proportional-election-union-detail',
   templateUrl: './proportional-election-union-detail.component.html',
+  standalone: false,
 })
 export class ProportionalElectionUnionDetailComponent {
   @Input()

@@ -121,14 +121,17 @@
         >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
-          *ngIf="canEdit && element.state === contestStates.CONTEST_STATE_PAST_LOCKED && !element.isPoliticalAssembly"
-          (click)="archive.emit(element.contest)"
+          *ngIf="canEdit && element.state === contestStates.CONTEST_STATE_PAST_LOCKED && element.ownerId === tenantId"
+          (click)="archive.emit(element)"
           icon="archive"
           text="CONTEST.ARCHIVE.ACTION"
         >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
-          *ngIf="canEdit && element.state === contestStates.CONTEST_STATE_PAST_LOCKED && !element.isPoliticalAssembly"
+          *ngIf="canEdit 
+            && element.state === contestStates.CONTEST_STATE_PAST_LOCKED 
+            && !element.isPoliticalAssembly
+            && element.ownerId === tenantId"
           (click)="pastUnlock.emit(element.contest)"
           icon="unlock"
           text="CONTEST.PAST_UNLOCK.ACTION"

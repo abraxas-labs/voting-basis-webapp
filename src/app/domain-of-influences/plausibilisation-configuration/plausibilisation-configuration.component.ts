@@ -25,6 +25,7 @@ import {
   selector: 'app-plausibilisation-configuration',
   templateUrl: './plausibilisation-configuration.component.html',
   styleUrls: ['./plausibilisation-configuration.component.scss'],
+  standalone: false,
 })
 export class PlausibilisationConfigurationComponent {
   public readonly translationPrefix: string = 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.PLAUSIBILISATION_CONFIGURATION.';

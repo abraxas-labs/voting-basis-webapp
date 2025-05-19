@@ -4,11 +4,10 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../core/language.service';
 import { MajorityElectionService } from '../../core/majority-election.service';
 import { MajorityElectionCandidate, newMajorityElectionCandidate } from '../../core/models/majority-election.model';
 import {
@@ -27,6 +26,7 @@ import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.mod
   selector: 'app-secondary-majority-election-candidate-edit-dialog',
   templateUrl: './secondary-majority-election-candidate-edit-dialog.component.html',
   styleUrls: ['./secondary-majority-election-candidate-edit-dialog.component.scss'],
+  standalone: false,
 })
 export class SecondaryMajorityElectionCandidateEditDialogComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload')
@@ -52,6 +52,7 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
   public readonly backdropClickSubscription: Subscription;
   public isCandidateLocalityRequired: boolean;
   public isCandidateOriginRequired: boolean;
+  public hideOccupationTitle: boolean;
   public partyShortDescriptions: string[];
 
   constructor(
@@ -71,6 +72,7 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     this.selectedMajorityElectionCandidate = { ...newMajorityElectionCandidate(-1, ''), displayName: '' };
     this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
     this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
+    this.hideOccupationTitle = dialogData.hideOccupationTitle;
     this.partyShortDescriptions = dialogData.partyShortDescriptions;
     this.originalCandidate = cloneDeep(this.candidate);
 
@@ -179,7 +181,14 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     }
 
     this.selectedMajorityElectionCandidate = candidate;
-    this.candidate = { ...candidate, id: this.candidate.id, isReferenced: true, referencedCandidateId: candidate.id, incumbent: false };
+    this.candidate = {
+      ...candidate,
+      id: this.candidate.id,
+      isReferenced: true,
+      referencedCandidateId: candidate.id,
+      incumbent: false,
+      position: this.candidate.position,
+    };
   }
 
   private async saveCandidate(): Promise<void> {
@@ -189,6 +198,8 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     if (!this.candidate.politicalLastName) {
       this.candidate.politicalLastName = this.candidate.lastName;
     }
+
+    this.candidate.isReferenced = false;
 
     if (this.isNew) {
       this.candidate.id = await this.secondaryMajorityElectionService.createCandidate(this.candidate);
@@ -257,6 +268,7 @@ export interface SecondaryMajorityElectionCandidateEditDialogData {
   doiType: DomainOfInfluenceType;
   candidateLocalityRequired: boolean;
   candidateOriginRequired: boolean;
+  hideOccupationTitle: boolean;
   partyShortDescriptions: string[];
 }
 

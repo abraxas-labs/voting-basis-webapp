@@ -1,4 +1,4 @@
-<vo-lib-dialog>
+<vo-lib-dialog [formGroup]="form">
   <h1 header>{{!isNew ? ('DOMAIN_OF_INFLUENCE.EDIT' | translate) : ('DOMAIN_OF_INFLUENCE.NEW' | translate)}}</h1>
 
   <div content class="form mr-3 my-2">
@@ -11,13 +11,18 @@
              [readonly]="readonly || !canEditEverything"
              [value]="data.name"
              (valueChange)="data.name = $event; contentChanged()"
-             [subscriptSizing]="'dynamic'"></bc-text>
+             [formControl]="form.controls.name"
+             [showDefaultErrors]="true"
+             [subscriptSizing]="'dynamic'">
+    </bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.SHORT_NAME' | translate"
              [maxlength]="5"
              [readonly]="readonly || !canEditEverything"
              [value]="data.shortName"
              (valueChange)="data.shortName = $event; contentChanged()"
+             [formControl]="form.controls.shortName"
+             [showDefaultErrors]="true"
              [subscriptSizing]="'dynamic'"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.NAME_FOR_PROTOCOL' | translate"
@@ -25,6 +30,8 @@
              [readonly]="readonly || !canEditEverything"
              [value]="data.nameForProtocol"
              (valueChange)="data.nameForProtocol = $event; contentChanged()"
+             [formControl]="form.controls.nameForProtocol"
+             [showDefaultErrors]="true"
              [subscriptSizing]="'dynamic'"></bc-text>
 
     <bc-dropdown class="full-width"
@@ -43,6 +50,8 @@
              [required]="data.type === knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU"
              [value]="data.bfs"
              (valueChange)="data.bfs = $event; contentChanged()"
+             [formControl]="form.controls.bfs"
+             [showDefaultErrors]="true"
              [subscriptSizing]="'dynamic'"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.CODE' | translate"
@@ -50,6 +59,8 @@
              [readonly]="readonly || !canEditEverything"
              [value]="data.code"
              (valueChange)="data.code = $event; contentChanged()"
+             [formControl]="form.controls.code"
+             [showDefaultErrors]="true"
              [subscriptSizing]="'dynamic'"></bc-text>
 
     <bc-number [label]="'DOMAIN_OF_INFLUENCE.SORT_NUMBER' | translate"
@@ -59,6 +70,8 @@
                [readonly]="readonly || !canEditEverything"
                [value]="data.sortNumber"
                (valueChange)="data.sortNumber = $event; contentChanged()"
+               [formControl]="form.controls.sortNumber"
+               [showDefaultErrors]="true"
                [subscriptSizing]="'dynamic'"></bc-number>
 
     <vo-lib-tenant-selection label="DOMAIN_OF_INFLUENCE.AUTHORITY"
@@ -122,8 +135,8 @@
     <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
     <app-contact-person-edit class="form"
                              [readonly]="readonly"
-                             [contactPerson]="data.contactPerson!"
-                             (contentChanged)="contentChanged()"></app-contact-person-edit>
+                             [formGroup]="form.controls.contactPerson"
+                             (contentChanged)="updateContactPerson(); contentChanged()"></app-contact-person-edit>
 
     <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.PARTY.TITLE</h2>
     <app-domain-of-influence-parties [parties]="data.parties"
@@ -186,6 +199,40 @@
                                                      (logoChanged)="logoChanged = true; updatedLogo = $event; contentChanged()"
                                                      (contentChanged)="contentChanged()">
       </app-domain-of-influence-voting-card-data-edit>
+    </ng-container>
+
+    <ng-container *ngIf="canEditEverything">
+      <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.E_COLLECTING.TITLE</h2>
+      <bc-checkbox
+        [disabled]="readonly"
+        [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.E_COLLECTING_ENABLED' | translate"
+        [checked]="data.eCollectingEnabled"
+        (checkedChange)="data.eCollectingEnabled = $event; contentChanged()"
+        class="full-width"
+        [subscriptSizing]="'dynamic'"></bc-checkbox>
+      <ng-container *ngIf="data.eCollectingEnabled">
+        <bc-number  
+          [readonly]="readonly"
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.E_COLLECTING_MIN_SIGNATURE_COUNT' | translate"
+          [value]="data.eCollectingMinSignatureCount"
+          (valueChange)="data.eCollectingMinSignatureCount = $event; contentChanged()"
+          [formControl]="form.controls.eCollectingMinSignatureCount"
+          [showDefaultErrors]="true"
+          [error]="form.controls.eCollectingMinSignatureCount.invalid && form.controls.eCollectingMinSignatureCount.touched"
+          [subscriptSizing]="'dynamic'"></bc-number>
+        <bc-number  
+          [readonly]="readonly"
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.E_COLLECTING_MAX_ELECTRONIC_SIGNATURE_PERCENT' | translate"
+          [value]="data.eCollectingMaxElectronicSignaturePercent"
+          (valueChange)="data.eCollectingMaxElectronicSignaturePercent = $event; contentChanged()"
+          [formControl]="form.controls.eCollectingMaxElectronicSignaturePercent"
+          [showDefaultErrors]="true"
+          [error]="
+            form.controls.eCollectingMaxElectronicSignaturePercent.invalid && form.controls.eCollectingMaxElectronicSignaturePercent.touched
+          "
+          [subscriptSizing]="'dynamic'"
+        ></bc-number>
+      </ng-container>
     </ng-container>
   </div>
 

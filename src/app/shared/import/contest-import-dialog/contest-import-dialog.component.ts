@@ -16,6 +16,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   templateUrl: './contest-import-dialog.component.html',
+  styleUrls: ['./contest-import-dialog.component.scss'],
+  standalone: false,
 })
 export class ContestImportDialogComponent implements AfterContentChecked {
   public importFiles: ImportFileContent[] = [];

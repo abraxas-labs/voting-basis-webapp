@@ -10,9 +10,8 @@ import {
   CheckAvailabilityRequest,
   CreateContestRequest,
   DeleteContestRequest,
-  GetContestDetailsChangesRequest,
-  GetContestOverviewChangesRequest,
   GetContestRequest,
+  GetPoliticalBusinessSummaryRequest,
   ListContestPastRequest,
   ListContestSummariesRequest,
   ListFuturePreconfiguredDatesRequest,
@@ -20,18 +19,13 @@ import {
   PastUnlockContestRequest,
   UpdateContestRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/contest_requests_pb';
-import { GrpcBackendService, GrpcService, retryForeverWithBackoff, TimestampUtil } from '@abraxas/voting-lib';
+import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
 import {
   Contest,
   ContestDateAvailability,
-  ContestDetailsChangeMessage,
-  ContestDetailsChangeMessageProto,
-  ContestOverviewChangeMessage,
-  ContestOverviewChangeMessageProto,
   ContestProto,
   ContestSimple,
   ContestState,
@@ -45,9 +39,9 @@ import {
   PoliticalBusinessProto,
   PoliticalBusinessSummary,
   PoliticalBusinessSummaryProto,
+  PoliticalBusinessType,
 } from './models/political-business.model';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
-import { PoliticalBusinessUnion, PoliticalBusinessUnionProto } from './models/political-business-union.model';
 
 @Injectable({
   providedIn: 'root',
@@ -161,23 +155,16 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
     );
   }
 
-  public getOverviewChanges(): Observable<ContestOverviewChangeMessage> {
-    const req = new GetContestOverviewChangesRequest();
-    return this.requestServerStream(
-      c => c.getOverviewChanges,
-      req,
-      r => this.mapToContestOverviewChangeMessage(r),
-    ).pipe(retryForeverWithBackoff());
-  }
+  public getPoliticalBusinessSummary(type: PoliticalBusinessType, id: string): Promise<PoliticalBusinessSummary> {
+    const req = new GetPoliticalBusinessSummaryRequest();
+    req.setPoliticalBusinessId(id);
+    req.setPoliticalBusinessType(type);
 
-  public getDetailsChanges(id: string): Observable<ContestDetailsChangeMessage> {
-    const req = new GetContestDetailsChangesRequest();
-    req.setId(id);
-    return this.requestServerStream(
-      c => c.getDetailsChanges,
+    return this.request(
+      c => c.getPoliticalBusinessSummary,
       req,
-      r => this.mapToContestDetailsChangeMessage(r),
-    ).pipe(retryForeverWithBackoff());
+      r => this.mapToPoliticalBusinessSummary(r),
+    );
   }
 
   public listPoliticalBusinessSummaries(contestId: string): Promise<PoliticalBusinessSummary[]> {
@@ -283,47 +270,6 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
     return request;
   }
 
-  private mapToContestOverviewChangeMessage(data: ContestOverviewChangeMessageProto): ContestOverviewChangeMessage {
-    const contestMessage = data.getContest()!;
-    return {
-      contest: {
-        data: this.mapToContest(contestMessage.getData()!),
-        newEntityState: contestMessage.getNewEntityState(),
-      },
-    };
-  }
-
-  private mapToContestDetailsChangeMessage(data: ContestDetailsChangeMessageProto): ContestDetailsChangeMessage {
-    const politicalBusinessMessage = data.getPoliticalBusiness();
-    const politicalBusinessUnionMessage = data.getPoliticalBusinessUnion();
-    const electionGroupMessage = data.getElectionGroup();
-
-    if (!!politicalBusinessUnionMessage) {
-      return {
-        politicalBusinessUnion: {
-          data: this.mapToPoliticalBusinessUnion(politicalBusinessUnionMessage.getData()!),
-          newEntityState: politicalBusinessUnionMessage.getNewEntityState(),
-        },
-      };
-    }
-
-    if (!!politicalBusinessMessage) {
-      return {
-        politicalBusiness: {
-          data: ContestService.mapToPoliticalBusiness(politicalBusinessMessage.getData()!),
-          newEntityState: politicalBusinessMessage.getNewEntityState(),
-        },
-      };
-    }
-
-    return {
-      electionGroup: {
-        data: electionGroupMessage!.getData()!.toObject()!,
-        newEntityState: electionGroupMessage!.getNewEntityState(),
-      },
-    };
-  }
-
   private mapToPoliticalBusinessSummaries(data: PoliticalBusinessSummaryProto[]): PoliticalBusinessSummary[] {
     return data.map(x => this.mapToPoliticalBusinessSummary(x));
   }
@@ -332,14 +278,8 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
     return {
       ...data.toObject(),
       shortDescription: toJsMap(data.getShortDescriptionMap()),
+      officialDescription: toJsMap(data.getOfficialDescriptionMap()),
       domainOfInfluence: DomainOfInfluenceService.mapToDomainOfInfluence(data.getDomainOfInfluence()!),
-    };
-  }
-
-  public mapToPoliticalBusinessUnion(data: PoliticalBusinessUnionProto): PoliticalBusinessUnion {
-    return {
-      ...data.toObject(),
-      politicalBusinessIds: data.getPoliticalBusinessIdsList(),
     };
   }
 }

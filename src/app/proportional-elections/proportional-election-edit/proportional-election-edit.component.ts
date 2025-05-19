@@ -27,6 +27,7 @@ import { Permissions } from '../../core/models/permissions.model';
 @Component({
   selector: 'app-proportional-election-edit',
   templateUrl: './proportional-election-edit.component.html',
+  standalone: false,
 })
 export class ProportionalElectionEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
   @HostListener('window:beforeunload')

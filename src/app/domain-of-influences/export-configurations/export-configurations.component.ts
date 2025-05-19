@@ -17,6 +17,7 @@ import { ExportProvider } from '@abraxas/voting-basis-service-proto/grpc/shared/
   selector: 'app-export-configurations',
   templateUrl: './export-configurations.component.html',
   styleUrls: ['./export-configurations.component.scss'],
+  standalone: false,
 })
 export class ExportConfigurationsComponent {
   public providers: EnumItemDescription<ExportProvider>[] = [];

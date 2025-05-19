@@ -18,7 +18,12 @@ import {
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CantonSettings, CantonSettingsVotingCardChannel, CountingCircleResultStateDescription } from './models/canton-settings.model';
+import {
+  CantonSettings,
+  CantonSettingsVotingCardChannel,
+  CountingCircleResultStateDescription,
+  DomainOfInfluenceCantonDefaults,
+} from './models/canton-settings.model';
 
 @Injectable({
   providedIn: 'root',
@@ -59,6 +64,20 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     );
   }
 
+  public async getCantonDefaults(): Promise<DomainOfInfluenceCantonDefaults | undefined> {
+    var list = await this.list();
+
+    if (list.length === 0) {
+      throw new Error('No canton settings available to load canton defaults');
+    }
+
+    var cantonSettings = list[0];
+
+    return {
+      ...cantonSettings,
+    };
+  }
+
   private mapToUpdateCantonSettingsRequest(data: CantonSettings): UpdateCantonSettingsRequest {
     const result = new UpdateCantonSettingsRequest();
     result.setId(data.id);
@@ -91,6 +110,7 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setCandidateOriginRequired(data.candidateOriginRequired);
     result.setSecondaryMajorityElectionOnSeparateBallot(data.secondaryMajorityElectionOnSeparateBallot);
     result.setDomainOfInfluencePublishResultsOptionEnabled(data.domainOfInfluencePublishResultsOptionEnabled);
+    result.setHideOccupationTitle(data.hideOccupationTitle);
     return result;
   }
 
@@ -126,6 +146,7 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setCandidateOriginRequired(data.candidateOriginRequired);
     result.setDomainOfInfluencePublishResultsOptionEnabled(data.domainOfInfluencePublishResultsOptionEnabled);
     result.setSecondaryMajorityElectionOnSeparateBallot(data.secondaryMajorityElectionOnSeparateBallot);
+    result.setHideOccupationTitle(data.hideOccupationTitle);
     return result;
   }
 

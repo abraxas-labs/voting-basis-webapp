@@ -41,6 +41,7 @@ import { Permissions } from '../../core/models/permissions.model';
   selector: 'app-political-business-unions-dialog',
   templateUrl: './political-business-unions-dialog.component.html',
   styleUrls: ['./political-business-unions-dialog.component.scss'],
+  standalone: false,
 })
 export class PoliticalBusinessUnionsDialogComponent implements OnInit {
   public readonly columns = ['description', 'type', 'owner', 'actions'];

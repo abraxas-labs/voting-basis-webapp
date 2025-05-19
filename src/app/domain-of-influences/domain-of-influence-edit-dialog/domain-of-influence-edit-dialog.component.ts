@@ -5,7 +5,7 @@
  */
 
 import { Tenant } from '@abraxas/base-components';
-import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
+import { AsyncInputValidators, DialogService, EnumItemDescription, EnumUtil, InputValidators, SnackbarService } from '@abraxas/voting-lib';
 import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,11 +18,15 @@ import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
 import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
+import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { ContactPersonForm } from '../../shared/contact-person-edit/contact-person-edit.component';
+import { CantonSettingsService } from '../../core/canton-settings.service';
 
 @Component({
   selector: 'app-domain-of-influence-edit-dialog',
   templateUrl: './domain-of-influence-edit-dialog.component.html',
   styleUrls: ['./domain-of-influence-edit-dialog.component.scss'],
+  standalone: false,
 })
 export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public readonly knownDomainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
@@ -59,6 +63,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public availableSuperiorAuthorityDomainOfInfluences: DomainOfInfluence[] = [];
   public domainOfInfluencePublishResultsOptionEnabled: boolean = false;
   public showPublishResults: boolean = false;
+  public form!: FormGroup<Form>;
 
   constructor(
     private readonly dialogRef: MatDialogRef<DomainOfInfluenceEditDialogData>,
@@ -68,6 +73,8 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
     private readonly enumUtil: EnumUtil,
     private readonly snackbarService: SnackbarService,
     private readonly dialogService: DialogService,
+    private readonly formBuilder: NonNullableFormBuilder,
+    private readonly cantonSettingsService: CantonSettingsService,
     @Inject(MAT_DIALOG_DATA) dialogData: DomainOfInfluenceEditDialogData,
   ) {
     this.data = dialogData.domainOfInfluence;
@@ -88,6 +95,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
 
     this.dialogRef.disableClose = true;
     this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+    this.buildForm();
   }
 
   public ngOnDestroy(): void {
@@ -96,6 +104,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
 
   public get canSave(): boolean {
     return (
+      this.form.valid &&
       !!this.data &&
       !!this.data.name &&
       !!this.data.type &&
@@ -118,8 +127,10 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
           !!this.data.returnAddress.zipCode &&
           !!this.data.swissPostData &&
           !!this.data.swissPostData.invoiceReferenceNumber &&
+          !!this.data.swissPostData.frankingLicenceAwayNumber &&
           !!this.data.swissPostData.frankingLicenceReturnNumber)) &&
       !(!this.data.responsibleForVotingCards && this.data.electoralRegistrationEnabled) &&
+      !(!this.data.electoralRegistrationEnabled && this.data.electoralRegisterMultipleEnabled) &&
       (!this.showInternalPlausibilisation ||
         (!!this.data.plausibilisationConfiguration &&
           this.data.plausibilisationConfiguration.comparisonVoterParticipationConfigurationsList.every(
@@ -242,6 +253,11 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  // currently necessary since not all values are in the reactive form
+  public updateContactPerson(): void {
+    this.data.contactPerson = this.form.getRawValue().contactPerson;
+  }
+
   private async leaveDialogOpen(): Promise<boolean> {
     return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }
@@ -313,12 +329,17 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
     } else {
       const domainOfInfluences = await this.domainOfInfluenceService.listForCurrentTenant();
 
-      if (domainOfInfluences.length === 0) {
+      // take first domain of influence since all domain of influences of a tenant should be in the same canton.
+      // if no domain of influence exists, we take the first accessible canton settings as reference.
+      const cantonDefaults =
+        domainOfInfluences.length > 0
+          ? await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluences[0].id)
+          : await this.cantonSettingsService.getCantonDefaults();
+
+      if (!cantonDefaults) {
         return;
       }
 
-      // take first domain of influence since all domain of influences of a tenant should be in the same canton
-      const cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluences[0].id);
       this.setCantonDefaults(cantonDefaults);
     }
   }
@@ -339,6 +360,58 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   private refreshShowPublishResults(): void {
     this.showPublishResults = this.domainOfInfluencePublishResultsOptionEnabled && isCommunalDoiType(this.data.type);
   }
+
+  private buildForm(): void {
+    this.form = this.formBuilder.group<Form>({
+      name: this.formBuilder.control(this.data.name, {
+        validators: [Validators.required, Validators.minLength(1), Validators.maxLength(100)],
+        asyncValidators: [AsyncInputValidators.simpleSlText],
+      }),
+      shortName: this.formBuilder.control(this.data.shortName, {
+        validators: [Validators.minLength(1), Validators.maxLength(50)],
+        asyncValidators: [AsyncInputValidators.simpleSlText],
+      }),
+      nameForProtocol: this.formBuilder.control(this.data.nameForProtocol, {
+        validators: [Validators.maxLength(100)],
+        asyncValidators: [AsyncInputValidators.complexSlText],
+      }),
+      bfs: this.formBuilder.control(this.data.bfs, {
+        validators: [Validators.minLength(1), Validators.maxLength(8), InputValidators.alphaNumWhite],
+      }),
+      code: this.formBuilder.control(this.data.code, {
+        validators: [Validators.minLength(1), Validators.maxLength(20)],
+        asyncValidators: [AsyncInputValidators.simpleSlText],
+      }),
+      sortNumber: this.formBuilder.control(this.data.sortNumber, {
+        validators: [Validators.min(0), Validators.max(1000)],
+      }),
+      contactPerson: this.formBuilder.group({
+        familyName: this.formBuilder.control(this.data.contactPerson!.familyName, {
+          validators: [Validators.minLength(1), Validators.maxLength(50)],
+          asyncValidators: [AsyncInputValidators.complexSlText],
+        }),
+        firstName: this.formBuilder.control(this.data.contactPerson!.firstName, {
+          validators: [Validators.minLength(1), Validators.maxLength(50)],
+          asyncValidators: [AsyncInputValidators.complexSlText],
+        }),
+        phone: this.formBuilder.control(this.data.contactPerson!.phone, {
+          validators: [InputValidators.phone],
+        }),
+        mobilePhone: this.formBuilder.control(this.data.contactPerson!.mobilePhone, {
+          validators: [InputValidators.phone],
+        }),
+        email: this.formBuilder.control(this.data.contactPerson!.email, {
+          validators: [Validators.email],
+        }),
+      }),
+      eCollectingMinSignatureCount: this.formBuilder.control(this.data.eCollectingMinSignatureCount, {
+        validators: [Validators.min(0), Validators.max(100000)],
+      }),
+      eCollectingMaxElectronicSignaturePercent: this.formBuilder.control(this.data.eCollectingMaxElectronicSignaturePercent, {
+        validators: [Validators.min(0), Validators.max(100)],
+      }),
+    });
+  }
 }
 
 export interface DomainOfInfluenceEditDialogData {
@@ -350,4 +423,16 @@ export interface DomainOfInfluenceEditDialogData {
 
 export interface DomainOfInfluenceEditDialogResult {
   domainOfInfluence: DomainOfInfluence;
+}
+
+export interface Form {
+  name: FormControl<string>;
+  shortName: FormControl<string>;
+  nameForProtocol: FormControl<string>;
+  bfs: FormControl<string>;
+  code: FormControl<string>;
+  sortNumber: FormControl<number>;
+  contactPerson: FormGroup<ContactPersonForm>;
+  eCollectingMinSignatureCount: FormControl<number>;
+  eCollectingMaxElectronicSignaturePercent: FormControl<number>;
 }

@@ -15,6 +15,7 @@ import { ProportionalElectionUnionService } from '../../core/proportional-electi
   selector: 'app-political-business-union-detail-candidates-tab',
   templateUrl: './political-business-union-detail-candidates-tab.component.html',
   styleUrls: ['./political-business-union-detail-candidates-tab.component.scss'],
+  standalone: false,
 })
 export class PoliticalBusinessUnionDetailCandidatesTabComponent implements AfterViewInit {
   public readonly columns = ['number', 'lastName', 'firstName', 'dateOfBirth', 'sex', 'title', 'incumbent', 'zipCode', 'locality'];

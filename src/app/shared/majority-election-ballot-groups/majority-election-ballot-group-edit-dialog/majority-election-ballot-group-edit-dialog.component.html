@@ -1,32 +1,34 @@
 <vo-lib-dialog>
-  <h1 header>{{(isNew ? 'MAJORITY_ELECTION.BALLOT_GROUP.NEW' : 'MAJORITY_ELECTION.BALLOT_GROUP.EDIT') | translate }}</h1>
+  <h1 header>{{('MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.' + (isNew ? 'NEW' : 'EDIT' )) | translate }}</h1>
 
-  <div content class="form mr-3">
-    <bc-text [label]="'MAJORITY_ELECTION.BALLOT_GROUP.SHORT_DESCRIPTION' | translate"
-             [required]="true"
-             [value]="ballotGroup.shortDescription"
-             (valueChange)="ballotGroup.shortDescription = $event; contentChanged()"
-             [subscriptSizing]="'dynamic'"></bc-text>
+  <div content>
+    <bc-simple-stepper #stepper
+                       content
+                       labelPosition="bottom"
+                       (selectItem)="handleStepperIndexUpdate($event)"
+                       linear>
 
-    <div class="form-group">
-      <bc-label [label]="'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate"></bc-label>
-      <bc-textarea [required]="true"
-                   class="full-width"
-                   [value]="ballotGroup.description"
-                   (valueChange)="ballotGroup.description = $event; contentChanged()"
-                   [subscriptSizing]="'dynamic'"></bc-textarea>
-    </div>
+      <bc-simple-step [label]="'MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.STEP_1.LABEL' | translate">
+        <ng-container>
+          <app-majority-election-ballot-group-general-informations
+            [elections]="elections"
+            [ballotGroup]="ballotGroup"
+            (contentChange)="contentChanged()"
+          ></app-majority-election-ballot-group-general-informations>
+        </ng-container>
+      </bc-simple-step>
 
-    <div *ngFor="let election of elections">
-      <h2>{{election.shortDescription | getTranslation}}</h2>
-      <bc-number [label]="'MAJORITY_ELECTION.BALLOT_GROUP.BLANK_ROWS' | translate"
-                 [required]="true"
-                 [min]="0"
-                 [max]="election.numberOfMandates"
-                 [value]="ballotGroup | majorityElectionBallotGroupBlankRows:election.id"
-                 (valueChange)="setBlankRows(election.id, +$event); contentChanged()"
-                 [subscriptSizing]="'dynamic'"></bc-number>
-    </div>
+      <bc-simple-step [label]="'MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.STEP_2.LABEL' | translate" [disabled]="step === 1 && !canSave">
+        <ng-container>
+          <app-majority-election-ballot-group-assign-candidates
+            [ballotGroup]="ballotGroup"
+            [ballotGroupEntries]="ballotGroupEntries"
+            (contentChange)="contentChanged()"
+          ></app-majority-election-ballot-group-assign-candidates>
+        </ng-container>
+      </bc-simple-step>
+
+    </bc-simple-stepper>
   </div>
 
   <div footer class="mr-3">
@@ -34,6 +36,7 @@
                        [canSave]="canSave"
                        (save)="save()"
                        [saving]="saving"
+                       [saveLabel]="(step === 1 ? 'APP.NEXT' : 'ACTIONS.SAVE') | translate"
                        (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

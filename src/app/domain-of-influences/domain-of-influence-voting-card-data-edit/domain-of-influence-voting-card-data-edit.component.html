@@ -3,7 +3,15 @@
     [disabled]="disabled || !canEditEverything"
     [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.ELECTORAL_REGISTRATION_ENABLED' | translate"
     [checked]="domainOfInfluence.electoralRegistrationEnabled"
-    (checkedChange)="domainOfInfluence.electoralRegistrationEnabled = $event; contentChanged.emit()"
+    (checkedChange)="updateElectoralRegistrationEnabled($event); contentChanged.emit()"
+    class="full-width"
+    [subscriptSizing]="'dynamic'"></bc-checkbox>
+  <bc-checkbox
+    *ngIf="domainOfInfluence.electoralRegistrationEnabled"
+    [disabled]="disabled || !canEditEverything"
+    [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.ELECTORAL_REGISTER_MULTIPLE_ENABLED' | translate"
+    [checked]="domainOfInfluence.electoralRegisterMultipleEnabled"
+    (checkedChange)="domainOfInfluence.electoralRegisterMultipleEnabled = $event; contentChanged.emit()"
     class="full-width"
     [subscriptSizing]="'dynamic'"></bc-checkbox>
   <bc-checkbox
@@ -132,6 +140,13 @@
              [required]="true"
              [value]="domainOfInfluence.swissPostData.invoiceReferenceNumber"
              (valueChange)="domainOfInfluence.swissPostData.invoiceReferenceNumber = $event; contentChanged.emit()"
+             [subscriptSizing]="'dynamic'"></bc-text>
+
+    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.FRANKING_LICENCE_AWAY_NUMBER' | translate"
+             [readonly]="disabled || !canEditEverything"
+             [required]="true"
+             [value]="domainOfInfluence.swissPostData.frankingLicenceAwayNumber"
+             (valueChange)="domainOfInfluence.swissPostData.frankingLicenceAwayNumber = $event; contentChanged.emit()"
              [subscriptSizing]="'dynamic'"></bc-text>
 
     <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.FRANKING_LICENCE_RETURN_NUMBER' | translate"

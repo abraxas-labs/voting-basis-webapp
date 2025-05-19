@@ -40,6 +40,7 @@ const availableVotingCardChannels: CantonSettingsVotingCardChannel[] = [
   selector: 'app-canton-settings-edit-dialog',
   templateUrl: './canton-settings-edit-dialog.component.html',
   styleUrls: ['./canton-settings-edit-dialog.component.scss'],
+  standalone: false,
 })
 export class CantonSettingsEditDialogComponent implements OnInit, OnDestroy {
   public readonly states: typeof CountingCircleResultState = CountingCircleResultState;

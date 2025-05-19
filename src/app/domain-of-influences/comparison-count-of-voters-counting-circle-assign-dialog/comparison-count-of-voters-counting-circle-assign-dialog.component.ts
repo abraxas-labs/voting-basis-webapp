@@ -15,6 +15,7 @@ import { ComparisonCountOfVotersCategory } from '../../core/models/plausibilisat
 @Component({
   selector: 'app-comparison-count-of-voters-counting-circle-assign-dialog',
   templateUrl: './comparison-count-of-voters-counting-circle-assign-dialog.component.html',
+  standalone: false,
 })
 export class ComparisonCountOfVotersCountingCircleAssignDialogComponent implements AfterViewInit {
   public readonly translationPrefix: string = 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.PLAUSIBILISATION_CONFIGURATION.';

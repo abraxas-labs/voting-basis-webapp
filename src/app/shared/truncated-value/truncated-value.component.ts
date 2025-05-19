@@ -9,6 +9,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-truncated-value',
   templateUrl: './truncated-value.component.html',
+  standalone: false,
 })
 export class TruncatedValueComponent {
   @Input()

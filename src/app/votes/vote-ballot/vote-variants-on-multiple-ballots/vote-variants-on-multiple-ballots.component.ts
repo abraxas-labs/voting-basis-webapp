@@ -5,16 +5,16 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
+import { EnumItemDescription, EnumUtil, LanguageService } from '@abraxas/voting-lib';
 import { BallotQuestionType, BallotSubType, BallotType, VoteType } from '@abraxas/voting-basis-service-proto/grpc/shared/vote_pb';
 import { Ballot, newBallot, Vote } from '../../../core/models/vote.model';
-import { LanguageService } from '../../../core/language.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vote-variants-on-multiple-ballots',
   templateUrl: './vote-variants-on-multiple-ballots.component.html',
   styleUrl: './vote-variants-on-multiple-ballots.component.scss',
+  standalone: false,
 })
 export class VoteVariantsOnMultipleBallotsComponent {
   public readonly maxBallotQuestions: number = 3;

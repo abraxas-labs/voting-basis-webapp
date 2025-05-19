@@ -118,6 +118,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       viewCountingCirclePartialResults: doi.getViewCountingCirclePartialResults(),
       votingCardColor: doi.getVotingCardColor(),
       electoralRegistrationEnabled: doi.getElectoralRegistrationEnabled(),
+      electoralRegisterMultipleEnabled: doi.getElectoralRegisterMultipleEnabled(),
       stistatMunicipality: doi.getStistatMunicipality(),
       hasForeignerVoters: doi.getHasForeignerVoters(),
       hasMinorVoters: doi.getHasMinorVoters(),
@@ -127,6 +128,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       publishResultsDisabled: doi.getPublishResultsDisabled(),
       votingCardFlatRateDisabled: doi.getVotingCardFlatRateDisabled(),
       hideLowerDomainOfInfluencesInReports: doi.getHideLowerDomainOfInfluencesInReports(),
+      eCollectingEnabled: doi.getECollectingEnabled(),
+      eCollectingMinSignatureCount: doi.getECollectingMinSignatureCount(),
+      eCollectingMaxElectronicSignaturePercent: doi.getECollectingMaxElectronicSignaturePercent(),
     };
   }
 
@@ -357,6 +361,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setVirtualTopLevel(data.virtualTopLevel);
     result.setViewCountingCirclePartialResults(data.viewCountingCirclePartialResults);
     result.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
+    result.setElectoralRegisterMultipleEnabled(data.electoralRegisterMultipleEnabled);
     result.setVotingCardColor(data.votingCardColor);
     result.setHasForeignerVoters(data.hasForeignerVoters);
     result.setHasMinorVoters(data.hasMinorVoters);
@@ -365,6 +370,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setPublishResultsDisabled(data.publishResultsDisabled);
     result.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
     result.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
+    result.setECollectingEnabled(data.eCollectingEnabled);
+    result.setECollectingMinSignatureCount(data.eCollectingMinSignatureCount);
+    result.setECollectingMaxElectronicSignaturePercent(data.eCollectingMaxElectronicSignaturePercent);
     return result;
   }
 
@@ -403,6 +411,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setVirtualTopLevel(data.virtualTopLevel);
       adminRequest.setViewCountingCirclePartialResults(data.viewCountingCirclePartialResults);
       adminRequest.setElectoralRegistrationEnabled(data.electoralRegistrationEnabled);
+      adminRequest.setElectoralRegisterMultipleEnabled(data.electoralRegisterMultipleEnabled);
       adminRequest.setHasForeignerVoters(data.hasForeignerVoters);
       adminRequest.setHasMinorVoters(data.hasMinorVoters);
       adminRequest.setSuperiorAuthorityDomainOfInfluenceId(data.superiorAuthorityDomainOfInfluence?.id ?? '');
@@ -410,6 +419,9 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setPublishResultsDisabled(data.publishResultsDisabled);
       adminRequest.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
       adminRequest.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
+      adminRequest.setECollectingEnabled(data.eCollectingEnabled);
+      adminRequest.setECollectingMinSignatureCount(data.eCollectingMinSignatureCount);
+      adminRequest.setECollectingMaxElectronicSignaturePercent(data.eCollectingMaxElectronicSignaturePercent);
       this.mapToDomainOfInfluenceElectionAdminOrAdminRequest(data, adminRequest);
       result.setAdminRequest(adminRequest);
     } else {
@@ -471,6 +483,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
 
     const result = new DomainOfInfluenceVotingCardSwissPostDataProto();
     result.setInvoiceReferenceNumber(data.invoiceReferenceNumber);
+    result.setFrankingLicenceAwayNumber(data.frankingLicenceAwayNumber);
     result.setFrankingLicenceReturnNumber(data.frankingLicenceReturnNumber);
     return result;
   }

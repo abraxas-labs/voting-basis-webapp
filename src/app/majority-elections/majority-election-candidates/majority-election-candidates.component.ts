@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
@@ -24,12 +24,12 @@ import {
   MajorityElectionCandidateEditDialogResult,
 } from '../../shared/majority-election-candidate-edit-dialog/majority-election-candidate-edit-dialog.component';
 import { SecondaryMajorityElectionCandidatesComponent } from '../../shared/secondary-majority-election-candidates/secondary-majority-election-candidates.component';
-import { LanguageService } from '../../core/language.service';
 
 @Component({
   selector: 'app-majority-election-candidates',
   templateUrl: './majority-election-candidates.component.html',
   styleUrls: ['./majority-election-candidates.component.scss'],
+  standalone: false,
 })
 export class MajorityElectionCandidatesComponent {
   @Input()
@@ -46,6 +46,9 @@ export class MajorityElectionCandidatesComponent {
 
   @Input()
   public candidateOriginRequired: boolean = false;
+
+  @Input()
+  public hideOccupationTitle: boolean = false;
 
   @Input()
   public readonly: boolean = false;
@@ -98,6 +101,7 @@ export class MajorityElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       partyShortDescriptions: this.partyShortDescriptions,
+      hideOccupationTitle: this.hideOccupationTitle,
     };
 
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);
@@ -116,6 +120,7 @@ export class MajorityElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       partyShortDescriptions: this.partyShortDescriptions,
+      hideOccupationTitle: this.hideOccupationTitle,
     };
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);

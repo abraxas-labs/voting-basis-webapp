@@ -11,6 +11,7 @@ import { PartyMapping, PartyMappingContainer, PartyWithMappings } from '../../..
   selector: 'app-import-proportional-election-party-mapping',
   templateUrl: './import-proportional-election-party-mapping.component.html',
   styleUrls: ['./import-proportional-election-party-mapping.component.scss'],
+  standalone: false,
 })
 export class ImportProportionalElectionPartyMappingComponent {
   @Input()

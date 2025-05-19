@@ -117,7 +117,6 @@ export class MajorityElectionBallotGroupService extends GrpcService<MajorityElec
     const result = new MajorityElectionBallotGroupEntryProto();
     result.setId(data.id);
     result.setElectionId(data.electionId);
-    result.setBlankRowCount(data.blankRowCount);
     return result;
   }
 
@@ -144,6 +143,7 @@ export class MajorityElectionBallotGroupService extends GrpcService<MajorityElec
     result.setBallotGroupEntryId(data.ballotGroupEntryId);
     result.setCandidateIdsList(data.candidateIdsList);
     result.setIndividualCandidatesVoteCount(data.individualCandidatesVoteCount);
+    result.setBlankRowCount(data.blankRowCount);
     return result;
   }
 }

@@ -11,6 +11,7 @@
                                                               [data]="data"
                                                               [testingPhaseEnded]="testingPhaseEnded"
                                                               [locked]="locked"
+                                                              [readonly]="!canEdit"
                                                               [eVoting]="eVoting">
         </app-secondary-majority-election-general-informations>
         <div class="stepper-footer">
@@ -26,11 +27,13 @@
       <app-secondary-majority-election-candidates [showBallotGroups]="true"
                                                   [testingPhaseEnded]="testingPhaseEnded"
                                                   [locked]="locked"
+                                                  [readonly]="!canEdit"
                                                   [loadCandidates]="!newlyCreated"
                                                   #step2
                                                   [secondaryMajorityElection]="data"
                                                   [candidateLocalityRequired]="contestDomainOfInfluenceDefaults.candidateLocalityRequired"
                                                   [candidateOriginRequired]="contestDomainOfInfluenceDefaults.candidateOriginRequired"
+                                                  [hideOccupationTitle]="contestDomainOfInfluenceDefaults.hideOccupationTitle"
                                                   [domainOfInfluenceType]="domainOfInfluence?.type"
                                                   [partyShortDescriptions]="partyShortDescriptions">
       </app-secondary-majority-election-candidates>

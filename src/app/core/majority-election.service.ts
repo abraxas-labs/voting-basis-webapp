@@ -61,6 +61,9 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       majorityElectionId: data.getMajorityElectionId(),
       position: data.getPosition(),
       origin: data.getOrigin(),
+      street: data.getStreet(),
+      houseNumber: data.getHouseNumber(),
+      country: data.getCountry(),
     };
   }
 
@@ -249,6 +252,9 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);
     result.setOrigin(data.origin);
+    result.setStreet(data.street);
+    result.setHouseNumber(data.houseNumber);
+    result.setCountry(data.country);
     return result;
   }
 
@@ -272,6 +278,9 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setMajorityElectionId(data.majorityElectionId);
     result.setPosition(data.position);
     result.setOrigin(data.origin);
+    result.setStreet(data.street);
+    result.setHouseNumber(data.houseNumber);
+    result.setCountry(data.country);
     return result;
   }
 }

@@ -14,6 +14,7 @@ import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
   selector: 'app-domain-of-influence-logo-edit',
   templateUrl: './domain-of-influence-logo-edit.component.html',
   styleUrls: ['./domain-of-influence-logo-edit.component.scss'],
+  standalone: false,
 })
 export class DomainOfInfluenceLogoEditComponent implements OnDestroy {
   @Input()

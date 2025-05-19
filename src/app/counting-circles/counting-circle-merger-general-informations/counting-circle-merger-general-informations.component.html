@@ -43,6 +43,11 @@
   <vo-lib-tenant-selection label="COUNTING_CIRCLE.AUTHORITY"
                            [(selectedTenant)]="selectedResponsibleAuthority"></vo-lib-tenant-selection>
 
+  <bc-checkbox class="block"
+               [label]="'COUNTING_CIRCLE.E_COUNTING' | translate"
+               [(checked)]="merger.newCountingCircle.eCounting"
+               [subscriptSizing]="'dynamic'"></bc-checkbox>
+
   <bc-checkbox [label]="'COUNTING_CIRCLE.E_VOTING' | translate"
                [checked]="showEVotingActiveFrom"
                (checkedChange)="updateShowEVotingActiveFrom($event)"

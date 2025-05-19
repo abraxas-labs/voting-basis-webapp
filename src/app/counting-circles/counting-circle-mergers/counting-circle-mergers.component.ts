@@ -15,6 +15,7 @@ import { CountingCircleMergerDialogComponent } from '../counting-circle-merger-d
   selector: 'app-counting-circle-mergers',
   templateUrl: './counting-circle-mergers.component.html',
   styleUrls: ['./counting-circle-mergers.component.scss'],
+  standalone: false,
 })
 export class CountingCircleMergersComponent implements OnInit {
   public readonly columns = ['name', 'bfs', 'code', 'activeFrom', 'mergedCountingCircles', 'actions'];

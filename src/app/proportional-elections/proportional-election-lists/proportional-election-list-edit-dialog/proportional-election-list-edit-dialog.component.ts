@@ -4,11 +4,10 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { Component, HostListener, Inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../core/language.service';
 import { ProportionalElectionList, updateProportionalElectionListCandidateCountOk } from '../../../core/models/proportional-election.model';
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
 import { Subscription } from 'rxjs';
@@ -21,6 +20,7 @@ import { GetTranslationPipe } from '../../../shared/get-translation.pipe';
   templateUrl: './proportional-election-list-edit-dialog.component.html',
   styleUrls: ['./proportional-election-list-edit-dialog.component.scss'],
   providers: [GetTranslationPipe],
+  standalone: false,
 })
 export class ProportionalElectionListEditDialogComponent implements OnDestroy {
   @HostListener('window:beforeunload')

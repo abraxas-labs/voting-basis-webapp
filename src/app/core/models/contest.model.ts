@@ -6,20 +6,15 @@
 
 import {
   Contest as ContestProto,
-  ContestDetailsChangeMessage as ContestDetailsChangeMessageProto,
-  ContestOverviewChangeMessage as ContestOverviewChangeMessageProto,
   ContestSummary as ContestSummaryProto,
   ContestSummaryEntryDetails as ContestSummaryEntryDetailsProto,
   PreconfiguredContestDate as PreconfiguredContestDateProto,
 } from '@abraxas/voting-basis-service-proto/grpc/models/contest_pb';
 import { ContestDateAvailability, ContestState } from '@abraxas/voting-basis-service-proto/grpc/shared/contest_pb';
 import { DomainOfInfluence } from './domain-of-influence.model';
-import { ElectionGroupMessage } from './election-group.model';
-import { BaseEntityMessage } from './message.model';
-import { PoliticalBusinessUnion, PoliticalBusinessUnionMessage } from './political-business-union.model';
-import { PoliticalBusiness, PoliticalBusinessMessage } from './political-business.model';
+import { PoliticalBusinessUnion } from './political-business-union.model';
+import { PoliticalBusiness } from './political-business.model';
 
-export { ContestDetailsChangeMessageProto, ContestOverviewChangeMessageProto };
 export { ContestState };
 export { ContestProto };
 export type Contest = {
@@ -56,15 +51,7 @@ export type ContestSimple = {
   id: string;
   date: Date;
 };
-export type ContestMessage = BaseEntityMessage<Contest>;
-export interface ContestOverviewChangeMessage {
-  contest: ContestMessage;
-}
-export interface ContestDetailsChangeMessage {
-  politicalBusiness?: PoliticalBusinessMessage;
-  politicalBusinessUnion?: PoliticalBusinessUnionMessage;
-  electionGroup?: ElectionGroupMessage;
-}
+
 export function newContest(): Contest {
   return {
     date: new Date(),

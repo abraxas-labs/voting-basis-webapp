@@ -86,6 +86,7 @@ export function newCantonSettings(): CantonSettings {
     candidateOriginRequired: false,
     domainOfInfluencePublishResultsOptionEnabled: false,
     secondaryMajorityElectionOnSeparateBallot: false,
+    hideOccupationTitle: false,
   };
 }
 

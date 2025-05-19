@@ -4,19 +4,23 @@
  * For license information see LICENSE file.
  */
 
-import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
+import { EnumItemDescription, EnumUtil, LanguageService } from '@abraxas/voting-lib';
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContestService } from '../../core/contest.service';
 import { DomainOfInfluenceReportLevelService } from '../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
-import { LanguageService } from '../../core/language.service';
 import { Contest } from '../../core/models/contest.model';
 import { DomainOfInfluence, DomainOfInfluenceLevel, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { PoliticalBusinessBase } from '../../core/models/political-business.model';
 import { groupBy } from '../../core/utils/array.utils';
 import { PermissionService } from '../../core/permission.service';
 import { Permissions } from '../../core/models/permissions.model';
+import { DialogService } from '@abraxas/base-components';
+import {
+  AssignedCountingCirclesDialogComponent,
+  AssignedCountingCirclesDialogData,
+} from '../assigned-counting-circles-dialog/assigned-counting-circles-dialog.component';
 
 @Directive()
 export abstract class PoliticalBusinessGeneralInformationsComponent<T extends PoliticalBusinessBase> implements OnInit {
@@ -49,6 +53,7 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
     private readonly contestService: ContestService,
     private readonly doiReportLevelService: DomainOfInfluenceReportLevelService,
     private readonly permissionService: PermissionService,
+    private readonly dialogService: DialogService,
     initialData: T,
   ) {
     this.data = initialData;
@@ -103,6 +108,13 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
     } finally {
       this.loading = false;
     }
+  }
+
+  public openAssignedCountingCirclesDialog(): void {
+    const data: AssignedCountingCirclesDialogData = {
+      domainOfInfluenceId: this.data.domainOfInfluenceId,
+    };
+    this.dialogService.openRight(AssignedCountingCirclesDialogComponent, data);
   }
 
   private async initDomainOfInfluenceData(): Promise<void> {

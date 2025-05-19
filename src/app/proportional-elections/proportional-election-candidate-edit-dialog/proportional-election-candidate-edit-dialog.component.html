@@ -75,6 +75,7 @@
              subscriptSizing="dynamic"></bc-text>
 
     <app-translated-formfield [label]="'PROPORTIONAL_ELECTION.CANDIDATE.OCCUPATION_TITLE' | translate"
+                              *ngIf="!hideOccupationTitle"
                               [optional]="true"
                               [maxlength]="250"
                               [value]="data.occupationTitle"
@@ -85,6 +86,16 @@
                  (checkedChange)="data.incumbent = $event; contentChanged()"
                  [label]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"
                  [subscriptSizing]="'dynamic'"></bc-checkbox>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.STREET' | translate"
+             [value]="data.street"
+             (valueChange)="data.street = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
+
+    <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.HOUSE_NUMBER' | translate"
+             [value]="data.houseNumber"
+             (valueChange)="data.houseNumber = $event; contentChanged()"
+             subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate"
              [value]="data.zipCode"
@@ -102,6 +113,17 @@
              [value]="data.origin"
              (valueChange)="data.origin = $event; contentChanged()"
              subscriptSizing="dynamic"></bc-text>
+
+    <bc-dropdown class="full-width"
+                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE.COUNTRY' | translate"
+                 [items]="countries"
+                 [clearable]="false"
+                 [required]="true"
+                 displayExpr="description"
+                 valueExpr="isoId"
+                 [value]="data.country"
+                 (valueChange)="data.country = $event; contentChanged()"
+                 subscriptSizing="dynamic"></bc-dropdown>
 
     <bc-dropdown class="full-width"
                  [label]="'PROPORTIONAL_ELECTION.CANDIDATE.PARTY' | translate"

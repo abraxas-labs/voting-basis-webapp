@@ -122,6 +122,14 @@
                  [subscriptSizing]="'dynamic'">
     </bc-checkbox>
 
+    <bc-checkbox [checked]="!data.hideOccupationTitle"
+                 (checkedChange)="data.hideOccupationTitle = !$event; contentChanged()"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.SHOW_OCCUPATION_TITLE' | translate"
+                 class="full-width"
+                 [subscriptSizing]="'dynamic'">
+    </bc-checkbox>
+
     <h2 class="title" translate>CANTON_SETTINGS.GENERAL</h2>
 
     <bc-checkbox [checked]="data.manualPublishResultsEnabled"

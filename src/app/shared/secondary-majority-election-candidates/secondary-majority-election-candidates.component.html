@@ -9,7 +9,7 @@
   <div class="flex">
     <bc-button variant="tertiary"
                icon="plus"
-               [disabled]="locked"
+               [disabled]="locked || readonly"
                [label]="'MAJORITY_ELECTION.CANDIDATE.NEW' | translate"
                (buttonClick)="createCandidate()"></bc-button>
   </div>

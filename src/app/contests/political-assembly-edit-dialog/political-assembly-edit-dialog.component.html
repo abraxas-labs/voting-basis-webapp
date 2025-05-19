@@ -4,6 +4,7 @@
   <div content class="form mr-3">
     <bc-dropdown
       *ngIf="domainOfInfluences.length !== 1"
+      truncateWithTooltip tooltip
       [items]="domainOfInfluences"
       [readonly]="!isNew"
       displayExpr="name"

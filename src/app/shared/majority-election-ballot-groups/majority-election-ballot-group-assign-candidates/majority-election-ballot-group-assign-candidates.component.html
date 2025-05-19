@@ -1,0 +1,16 @@
+<div content class="mr-3">
+  <h2>{{ballotGroup.description}}</h2>
+
+  <div *ngFor="let entry of ballotGroupEntries; let last = last">
+    <h3>{{entry.election.shortDescription | getTranslation}}</h3>
+
+    <app-majority-election-ballot-group-assign-candidates-entry
+      [entry]="entry"
+      [candidates]="entry.candidates"
+      (contentChanged)="contentChanged()"
+      [showBlankRowCount]="ballotGroupEntries.length > 1 || entry.election.numberOfMandates > 1 || entry.election.primaryMajorityElectionId"
+    ></app-majority-election-ballot-group-assign-candidates-entry>
+
+    <hr *ngIf="!last" class="my-4" />
+  </div>
+</div>

@@ -131,10 +131,21 @@
     </bc-table>
 
     <bc-number
+      *ngIf="entry && showBlankRowCount"
+      [required]="true"
+      [label]="'MAJORITY_ELECTION.BALLOT_GROUP.BLANK_ROWS' | translate"
+      [min]="0"
+      [max]="entry.election.numberOfMandates"
+      [ngModel]="entry.entry.blankRowCount"
+      (ngModelChange)="entry.entry.blankRowCount = $event; contentChanged.emit()"
+    ></bc-number>
+
+    <bc-number
       *ngIf="entry && !entry.election.individualCandidatesDisabled"
+      [required]="true"
       [label]="'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate"
       [min]="0"
-      [max]="entry.election.numberOfMandates - entry.entry.blankRowCount"
+      [max]="entry.election.numberOfMandates"
       [ngModel]="entry.entry.individualCandidatesVoteCount"
       (ngModelChange)="entry.entry.individualCandidatesVoteCount = $event; contentChanged.emit()"
     ></bc-number>

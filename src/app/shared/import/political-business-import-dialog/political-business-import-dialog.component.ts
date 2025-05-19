@@ -18,6 +18,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   templateUrl: './political-business-import-dialog.component.html',
+  styleUrls: ['./political-business-import-dialog.component.scss'],
+  standalone: false,
 })
 export class PoliticalBusinessImportDialogComponent implements AfterContentChecked {
   public contestImport?: ContestImport;

@@ -6,14 +6,15 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BallotSubType, VoteType } from '@abraxas/voting-basis-service-proto/grpc/shared/vote_pb';
-import { Ballot, BallotQuestion, newBallot, Vote } from '../../../core/models/vote.model';
-import { LanguageService } from '../../../core/language.service';
+import { BallotQuestion, newBallot, Vote } from '../../../core/models/vote.model';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceType } from '../../../core/models/domain-of-influence.model';
+import { LanguageService } from '@abraxas/voting-lib';
 
 @Component({
   selector: 'app-vote-standard-ballot',
   templateUrl: './vote-standard-ballot.component.html',
+  standalone: false,
 })
 export class VoteStandardBallotComponent {
   public readonly domainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;

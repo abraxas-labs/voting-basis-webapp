@@ -16,6 +16,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-counting-circle-merger-dialog',
   templateUrl: './counting-circle-merger-dialog.component.html',
+  styleUrls: ['./counting-circle-merger-dialog.component.scss'],
+  standalone: false,
 })
 export class CountingCircleMergerDialogComponent implements OnInit, AfterContentChecked {
   public loading: boolean = true;

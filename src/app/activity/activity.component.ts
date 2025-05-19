@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
   selector: 'app-activity',
   templateUrl: './activity.component.html',
   styleUrls: ['./activity.component.scss'],
+  standalone: false,
 })
 export class ActivityComponent implements AfterViewInit, OnDestroy {
   public readonly dataSource = new ServerSidePaginationDataSource<EventLog>();

@@ -26,6 +26,7 @@ import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.mod
 @Component({
   selector: 'app-secondary-majority-election-candidates',
   templateUrl: './secondary-majority-election-candidates.component.html',
+  standalone: false,
 })
 export class SecondaryMajorityElectionCandidatesComponent {
   @Input()
@@ -48,6 +49,9 @@ export class SecondaryMajorityElectionCandidatesComponent {
 
   @Input()
   public candidateOriginRequired: boolean = false;
+
+  @Input()
+  public hideOccupationTitle: boolean = false;
 
   @Input()
   public domainOfInfluenceType?: DomainOfInfluenceType;
@@ -100,6 +104,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
       doiType: this.domainOfInfluenceType,
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
+      hideOccupationTitle: this.hideOccupationTitle,
       partyShortDescriptions: this.partyShortDescriptions,
     };
     const result = await this.dialogService.openForResult(SecondaryMajorityElectionCandidateEditDialogComponent, dialogData);
@@ -118,6 +123,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
       doiType: this.domainOfInfluenceType,
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
+      hideOccupationTitle: this.hideOccupationTitle,
       partyShortDescriptions: this.partyShortDescriptions,
     };
     const result = await this.dialogService.openForResult(SecondaryMajorityElectionCandidateEditDialogComponent, dialogData);
@@ -182,11 +188,15 @@ export class SecondaryMajorityElectionCandidatesComponent {
         this.secondaryMajorityElections = await this.secondaryMajorityElectionService.list(majorityElectionId);
       }
 
-      // if a majority election is newly created, we may not want to load the candidates
-      // since the creation-event hasn't been processed (there are no candidates anyway)
-      if (this.loadCandidates && secondaryMajorityElection.id) {
+      // if a election is newly created, and the creation-event hasn't been processed yet.
+      if (!this.secondaryMajorityElections.some(sme => sme.id === secondaryMajorityElection.id)) {
+        this.secondaryMajorityElections = [...this.secondaryMajorityElections, this.currentSecondaryMajorityElection];
+      }
+
+      if (this.loadCandidates) {
         this.candidates = await this.secondaryMajorityElectionService.listCandidates(secondaryMajorityElection.id);
       }
+
       this.refreshExpandedCandidates();
     } finally {
       this.loading = false;

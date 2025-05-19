@@ -16,10 +16,13 @@ import {
 } from '../../core/models/proportional-election.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
 import { PermissionService } from '../../core/permission.service';
+import { DialogService } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-proportional-election-general-informations',
   templateUrl: './proportional-election-general-informations.component.html',
+  styleUrls: ['./proportional-election-general-informations.component.scss'],
+  standalone: false,
 })
 export class ProportionalElectionGeneralInformationsComponent
   extends PoliticalBusinessGeneralInformationsComponent<ProportionalElection>
@@ -36,8 +39,17 @@ export class ProportionalElectionGeneralInformationsComponent
     contestService: ContestService,
     doiReportLevelService: DomainOfInfluenceReportLevelService,
     permissionService: PermissionService,
+    dialogService: DialogService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiReportLevelService, permissionService, newProportionalElection());
+    super(
+      enumUtil,
+      domainOfInfluenceService,
+      contestService,
+      doiReportLevelService,
+      permissionService,
+      dialogService,
+      newProportionalElection(),
+    );
   }
 
   public get canSave(): boolean {

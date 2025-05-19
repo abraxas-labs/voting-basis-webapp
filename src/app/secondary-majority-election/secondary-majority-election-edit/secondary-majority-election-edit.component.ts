@@ -5,7 +5,7 @@
  */
 
 import { SimpleStepperComponent } from '@abraxas/base-components';
-import { SnackbarService } from '@abraxas/voting-lib';
+import { LanguageService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
 import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,11 +18,13 @@ import { DomainOfInfluenceService } from '../../core/domain-of-influence.service
 import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settings.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { MajorityElectionService } from '../../core/majority-election.service';
-import { LanguageService } from '../../core/language.service';
+import { Permissions } from '../../core/models/permissions.model';
+import { PermissionService } from '../../core/permission.service';
 
 @Component({
   selector: 'app-secondary-majority-election-edit',
   templateUrl: './secondary-majority-election-edit.component.html',
+  standalone: false,
 })
 export class SecondaryMajorityElectionEditComponent implements OnInit, AfterContentChecked {
   @ViewChild(SimpleStepperComponent, { static: true })
@@ -40,6 +42,7 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
   public domainOfInfluence?: DomainOfInfluence;
   public partyShortDescriptions: string[] = [];
   private persistedData: SecondaryMajorityElection = newSecondaryMajorityElection();
+  public canEdit: boolean = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -53,6 +56,7 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
     private readonly contestService: ContestService,
     private readonly doiService: DomainOfInfluenceService,
     private readonly languageService: LanguageService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -70,6 +74,7 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
       const { testingPhaseEnded, locked, eVoting } = await this.contestService.get(contestId);
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked = locked;
+      this.canEdit = await this.permissionService.hasPermission(Permissions.SecondaryMajorityElection.Update);
       this.eVoting = eVoting;
 
       const primaryMajorityElection = await this.majorityElectionService.get(this.persistedData.primaryMajorityElectionId);

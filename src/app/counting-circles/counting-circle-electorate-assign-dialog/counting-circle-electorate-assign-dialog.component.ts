@@ -15,6 +15,7 @@ import { TableDataSource } from '@abraxas/base-components';
   selector: 'app-counting-circle-electorate-assign-dialog',
   templateUrl: './counting-circle-electorate-assign-dialog.component.html',
   styleUrls: ['./counting-circle-electorate-assign-dialog.component.scss'],
+  standalone: false,
 })
 export class CountingCircleElectorateAssignDialogComponent {
   public readonly columns = ['select', 'domainOfInfluenceType'];

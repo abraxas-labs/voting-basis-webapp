@@ -5,10 +5,11 @@
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { LanguageService } from '../core/language.service';
+import { LanguageService } from '@abraxas/voting-lib';
 
 @Pipe({
   name: 'getTranslation',
+  standalone: false,
 })
 export class GetTranslationPipe implements PipeTransform {
   constructor(private readonly languageService: LanguageService) {}

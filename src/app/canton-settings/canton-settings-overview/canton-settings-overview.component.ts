@@ -20,6 +20,7 @@ import { Permissions } from '../../core/models/permissions.model';
 @Component({
   selector: 'app-canton-settings-overview',
   templateUrl: './canton-settings-overview.component.html',
+  standalone: false,
 })
 export class CantonSettingsOverviewComponent implements OnInit {
   public readonly columns = ['name', 'shortName', 'authority'];

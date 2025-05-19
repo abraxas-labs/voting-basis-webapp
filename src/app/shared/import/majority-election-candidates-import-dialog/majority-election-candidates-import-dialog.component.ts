@@ -16,6 +16,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-majority-election-candidates-import-dialog',
   templateUrl: './majority-election-candidates-import-dialog.component.html',
+  styleUrls: ['./majority-election-candidates-import-dialog.component.scss'],
+  standalone: false,
 })
 export class MajorityElectionCandidatesImportDialogComponent {
   public saving: boolean = false;

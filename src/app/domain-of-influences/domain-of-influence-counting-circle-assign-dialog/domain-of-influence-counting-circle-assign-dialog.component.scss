@@ -12,6 +12,10 @@
   @include table.truncate-long-sortable-table-header();
 }
 
+:host {
+  min-width: 80vw; // workaround for firefox
+}
+
 div[left] {
   padding-right: 1rem;
   height: 41rem;

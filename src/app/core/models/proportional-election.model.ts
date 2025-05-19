@@ -11,17 +11,15 @@ import {
   ProportionalElectionListUnion as ProportionalElectionListUnionProto,
   ProportionalElectionListUnionEntries as ProportionalElectionListUnionEntriesProto,
   ProportionalElectionListUnionMainList as ProportionalElectionListUnionMainListProto,
-  ProportionalElectionListChangeMessage as ProportionalElectionListChangeMessageProto,
 } from '@abraxas/voting-basis-service-proto/grpc/models/proportional_election_pb';
 import {
   ProportionalElectionMandateAlgorithm as ProportionalElectionMandateAlgorithmProto,
   ProportionalElectionReviewProcedure as ProportionalElectionReviewProcedureProto,
 } from '@abraxas/voting-basis-service-proto/grpc/shared/proportional_election_pb';
-import { LanguageService } from '../language.service';
 import { BallotNumberGeneration } from './ballot-number-generation.model';
 import { DomainOfInfluenceParty, newDomainOfInfluenceParty } from './domain-of-influence-party.model';
 import { SexType } from './sex-type.model';
-import { BaseEntityMessage } from './message.model';
+import { LanguageService } from '@abraxas/voting-lib';
 
 export { ProportionalElectionProto };
 export type ProportionalElection = Omit<
@@ -46,12 +44,6 @@ export type ProportionalElectionListUnionEntries = ProportionalElectionListUnion
 export type ProportionalElectionListUnionMainList = ProportionalElectionListUnionMainListProto.AsObject;
 export { ProportionalElectionCandidateProto };
 
-export { ProportionalElectionListChangeMessageProto };
-export type ProportionalElectionListMessage = BaseEntityMessage<ProportionalElectionList>;
-export interface ProportionalElectionListChangeMessage {
-  list: ProportionalElectionListMessage;
-}
-
 export type ProportionalElectionCandidate = {
   id: string;
   proportionalElectionListId: string;
@@ -73,6 +65,9 @@ export type ProportionalElectionCandidate = {
   accumulatedPosition: number;
   party?: DomainOfInfluenceParty;
   origin: string;
+  street: string;
+  houseNumber: string;
+  country: string;
 };
 
 export type ProportionalElectionListUnion = {
@@ -161,6 +156,9 @@ export function newProportionalElectionCandidate(position: number, proportionalE
     accumulatedPosition: 0,
     party: newDomainOfInfluenceParty(),
     origin: '',
+    street: '',
+    houseNumber: '',
+    country: 'CH',
   };
 }
 

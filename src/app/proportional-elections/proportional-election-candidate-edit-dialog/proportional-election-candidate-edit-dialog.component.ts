@@ -5,7 +5,7 @@
  */
 
 import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { Component, HostListener, Inject, OnDestroy } from '@angular/core';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
@@ -18,14 +18,17 @@ import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 import { GetTranslationPipe } from '../../shared/get-translation.pipe';
 import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
+import { Country } from '../../core/models/country.model';
+import { CountryService } from '../../core/country.service';
 
 @Component({
   selector: 'app-proportional-election-candidate-edit-dialog',
   templateUrl: './proportional-election-candidate-edit-dialog.component.html',
   styleUrls: ['./proportional-election-candidate-edit-dialog.component.scss'],
   providers: [GetTranslationPipe],
+  standalone: false,
 })
-export class ProportionalElectionCandidateEditDialogComponent implements OnDestroy {
+export class ProportionalElectionCandidateEditDialogComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -44,6 +47,8 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnDestr
   public selectedPartyId?: string;
   public isCandidateLocalityRequired: boolean = false;
   public isCandidateOriginRequired: boolean = false;
+  public hideOccupationTitle: boolean = false;
+  public countries: Country[] = [];
 
   public hasChanges: boolean = false;
   public originalCandidate: ProportionalElectionCandidate;
@@ -57,6 +62,7 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnDestr
     private readonly proportionalElectionService: ProportionalElectionService,
     private readonly getTranslationPipe: GetTranslationPipe,
     private readonly dialogService: DialogService,
+    private readonly countryService: CountryService,
     @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionCandidateEditDialogData,
   ) {
     this.data = dialogData.candidate;
@@ -71,10 +77,15 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnDestr
 
     this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
     this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
+    this.hideOccupationTitle = dialogData.hideOccupationTitle;
     this.originalCandidate = cloneDeep(this.data);
 
     this.dialogRef.disableClose = true;
     this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
+  }
+
+  public async ngOnInit(): Promise<void> {
+    this.countries = await this.countryService.list();
   }
 
   public ngOnDestroy(): void {
@@ -207,6 +218,7 @@ export interface ProportionalElectionCandidateEditDialogData {
   listParty?: DomainOfInfluenceParty;
   candidateLocalityRequired: boolean;
   candidateOriginRequired: boolean;
+  hideOccupationTitle: boolean;
 }
 
 export interface ProportionalElectionCandidateEditDialogResult {

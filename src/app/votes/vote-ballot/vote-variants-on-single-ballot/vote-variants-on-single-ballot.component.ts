@@ -6,16 +6,16 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { EnumItemDescription } from '@abraxas/voting-lib';
+import { EnumItemDescription, LanguageService } from '@abraxas/voting-lib';
 import { BallotQuestionType, BallotSubType, BallotType, VoteType } from '@abraxas/voting-basis-service-proto/grpc/shared/vote_pb';
 import { Ballot, BallotQuestion, newBallot, Vote } from '../../../core/models/vote.model';
-import { LanguageService } from '../../../core/language.service';
 import { DomainOfInfluenceType } from '../../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-vote-variants-on-single-ballot',
   templateUrl: './vote-variants-on-single-ballot.component.html',
   styleUrl: './vote-variants-on-single-ballot.component.scss',
+  standalone: false,
 })
 export class VoteVariantsOnSingleBallotComponent implements OnInit {
   public readonly domainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;

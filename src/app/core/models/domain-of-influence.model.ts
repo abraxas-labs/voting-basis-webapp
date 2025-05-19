@@ -46,12 +46,16 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     viewCountingCirclePartialResults: false,
     votingCardColor: VotingCardColor.VOTING_CARD_COLOR_UNSPECIFIED,
     electoralRegistrationEnabled: false,
+    electoralRegisterMultipleEnabled: false,
     hasForeignerVoters: false,
     hasMinorVoters: false,
     stistatMunicipality: false,
     publishResultsDisabled: false,
     votingCardFlatRateDisabled: false,
     hideLowerDomainOfInfluencesInReports: false,
+    eCollectingEnabled: false,
+    eCollectingMinSignatureCount: 0,
+    eCollectingMaxElectronicSignaturePercent: 0,
   } as DomainOfInfluence;
 }
 

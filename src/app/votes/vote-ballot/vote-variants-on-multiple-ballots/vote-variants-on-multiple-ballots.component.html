@@ -72,7 +72,7 @@
       <app-translated-formfield
         [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
         [readonly]="locked || readonly"
-        [maxlength]="300"
+        [maxlength]="100"
         [value]="ballot.shortDescription"
         (valueChange)="ballot.shortDescription = $event; contentChanged.emit()"
         [singleLanguageInput]="true"
@@ -80,7 +80,7 @@
       <app-translated-textarea
         [label]="'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate"
         [readonly]="locked || readonly"
-        [maxlength]="700"
+        [maxlength]="255"
         class="full-width"
         [value]="ballot.officialDescription"
         (valueChange)="ballot.officialDescription = $event; contentChanged.emit()"

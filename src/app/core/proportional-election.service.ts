@@ -16,7 +16,7 @@ import {
   DeleteProportionalElectionListUnionRequest,
   DeleteProportionalElectionRequest,
   GetProportionalElectionCandidatesRequest,
-  GetProportionalElectionListChangesRequest,
+  GetProportionalElectionListRequest,
   GetProportionalElectionListsRequest,
   GetProportionalElectionListUnionsRequest,
   GetProportionalElectionRequest,
@@ -32,11 +32,10 @@ import {
   UpdateProportionalElectionListUnionRequest,
   UpdateProportionalElectionRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/proportional_election_requests_pb';
-import { GrpcBackendService, GrpcService, retryForeverWithBackoff, TimestampUtil } from '@abraxas/voting-lib';
+import { GrpcBackendService, GrpcService, LanguageService, TimestampUtil } from '@abraxas/voting-lib';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
-import { LanguageService } from './language.service';
 import { PoliticalBusiness, PoliticalBusinessType } from './models/political-business.model';
 import {
   ProportionalElection,
@@ -47,13 +46,10 @@ import {
   ProportionalElectionListUnion,
   ProportionalElectionListUnionProto,
   ProportionalElectionProto,
-  ProportionalElectionListChangeMessage,
-  ProportionalElectionListChangeMessageProto,
 } from './models/proportional-election.model';
 import { mapToEntityOrders } from './utils/entity-order.utils';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
 import { SexType } from '@abraxas/voting-basis-service-proto/grpc/shared/sex_pb';
-import { Observable } from 'rxjs/internal/Observable';
 import { createInt32Value } from './utils/proto.utils';
 
 @Injectable({
@@ -144,6 +140,14 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       c => c.updateList,
       this.mapToUpdateProportionalElectionListRequest(data),
       r => r,
+    );
+  }
+
+  public async getList(id: string): Promise<ProportionalElectionList> {
+    return await this.request(
+      c => c.getList,
+      new GetProportionalElectionListRequest().setId(id),
+      r => this.mapToProportionalElectionList(r),
     );
   }
 
@@ -265,15 +269,6 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     const req = new DeleteProportionalElectionCandidateRequest();
     req.setId(id);
     return this.requestEmptyResp(c => c.deleteCandidate, req);
-  }
-
-  public getListChanges(): Observable<ProportionalElectionListChangeMessage> {
-    const req = new GetProportionalElectionListChangesRequest();
-    return this.requestServerStream(
-      c => c.getListChanges,
-      req,
-      r => this.mapToProportionalElectionListChangeMessage(r),
-    ).pipe(retryForeverWithBackoff());
   }
 
   public mapToProportionalElectionListUnions(data: ProportionalElectionListUnionProto[]): ProportionalElectionListUnion[] {
@@ -436,6 +431,9 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       accumulatedPosition: data.getAccumulatedPosition(),
       party: DomainOfInfluenceService.mapToParty(data.getParty()),
       origin: data.getOrigin(),
+      street: data.getStreet(),
+      houseNumber: data.getHouseNumber(),
+      country: data.getCountry(),
     };
   }
 
@@ -460,6 +458,9 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setAccumulatedPosition(data.accumulatedPosition);
     result.setPartyId(data.party!.id);
     result.setOrigin(data.origin);
+    result.setStreet(data.street);
+    result.setHouseNumber(data.houseNumber);
+    result.setCountry(data.country);
     return result;
   }
 
@@ -485,18 +486,9 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setAccumulatedPosition(data.accumulatedPosition);
     result.setPartyId(data.party!.id);
     result.setOrigin(data.origin);
+    result.setStreet(data.street);
+    result.setHouseNumber(data.houseNumber);
+    result.setCountry(data.country);
     return result;
-  }
-
-  private mapToProportionalElectionListChangeMessage(
-    data: ProportionalElectionListChangeMessageProto,
-  ): ProportionalElectionListChangeMessage {
-    const proportionalElectionListMessage = data.getList()!;
-    return {
-      list: {
-        data: this.mapToProportionalElectionList(proportionalElectionListMessage.getData()!),
-        newEntityState: proportionalElectionListMessage.getNewEntityState(),
-      },
-    };
   }
 }

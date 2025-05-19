@@ -44,9 +44,10 @@
     [contests]="pastContests"
     [canCreate]="canCreate"
     [canEdit]="canEdit"
-    [canDelete]="canDelete"
-    [showType]="false"
+    [canDelete]="false"
+    [showType]="canAddPoliticalAssembly"
     [showPaginator]="true"
+    [politicalAssemblies]="pastPoliticalAssemblies"
   ></app-contest-list>
 
   <h2 translate>CONTEST.ARCHIVED_CONTESTS</h2>
@@ -58,8 +59,9 @@
     [contests]="archivedContests"
     [canCreate]="canCreate"
     [canEdit]="canEdit"
-    [canDelete]="canDelete"
-    [showType]="false"
+    [canDelete]="false"
+    [showType]="canAddPoliticalAssembly"
     [showState]="false"
+    [politicalAssemblies]="archivedPoliticalAssemblies"
   ></app-contest-list>
 </vo-lib-page>

@@ -18,6 +18,7 @@ import { PermissionService } from '../../../core/permission.service';
   selector: 'app-import-vote-edit',
   templateUrl: './import-vote-edit.component.html',
   styleUrls: ['./import-vote-edit.component.scss'],
+  standalone: false,
 })
 export class ImportVoteEditComponent extends ImportPoliticalBusinessEditComponent<Vote> {
   public resultAlgorithms: EnumItemDescription<VoteResultAlgorithm>[] = [];

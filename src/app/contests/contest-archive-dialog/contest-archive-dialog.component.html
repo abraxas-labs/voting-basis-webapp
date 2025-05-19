@@ -16,7 +16,7 @@
     <vo-lib-inline-spinner [loading]="saving">
       <bc-button [label]="'CONTEST.ARCHIVE.ACTION_PER' | translate"
                  (buttonClick)="save()"
-                 [disabled]="!archivePer || (archivePer | amIsBefore: now) || (archivePer | amIsBefore: contest.date)"
+                 [disabled]="!archivePer || (archivePer | amIsBefore: now) || (archivePer | amIsBefore: listEntry.date)"
                  variant="primary"></bc-button>
     </vo-lib-inline-spinner>
   </div>

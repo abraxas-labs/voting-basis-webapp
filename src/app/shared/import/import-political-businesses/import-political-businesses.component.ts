@@ -12,6 +12,7 @@ import { ImportPoliticalBusinessEditComponent } from '../import-political-busine
   selector: 'app-import-political-businesses',
   templateUrl: './import-political-businesses.component.html',
   styleUrls: ['./import-political-businesses.component.scss'],
+  standalone: false,
 })
 export class ImportPoliticalBusinessesComponent {
   public majorityElections: MajorityElectionImport[] = [];

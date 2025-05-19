@@ -14,6 +14,7 @@ import { CountingCircle } from '../../core/models/counting-circle.model';
   selector: 'app-counting-circle-merger-select',
   templateUrl: './counting-circle-merger-select.component.html',
   styleUrls: ['./counting-circle-merger-select.component.scss'],
+  standalone: false,
 })
 export class CountingCircleMergerSelectComponent implements OnDestroy, AfterViewInit {
   public readonly columns = ['select', 'name', 'bfs', 'authority'];

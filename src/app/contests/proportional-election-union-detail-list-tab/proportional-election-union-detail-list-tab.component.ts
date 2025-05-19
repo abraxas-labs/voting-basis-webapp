@@ -14,6 +14,7 @@ import { ProportionalElectionUnionService } from '../../core/proportional-electi
   selector: 'app-proportional-election-union-detail-list-tab',
   templateUrl: './proportional-election-union-detail-list-tab.component.html',
   styleUrls: ['./proportional-election-union-detail-list-tab.component.scss'],
+  standalone: false,
 })
 export class ProportionalElectionUnionDetailListTabComponent implements AfterViewInit {
   public readonly columns = ['orderNumber', 'shortDescription', 'politicalBusinessNumbers', 'listCount'];

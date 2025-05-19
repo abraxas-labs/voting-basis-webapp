@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { DatePipe } from '@angular/common';
 import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -12,7 +12,6 @@ import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import { ContestService } from '../../core/contest.service';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
-import { LanguageService } from '../../core/language.service';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { newPoliticalAssembly, PoliticalAssembly } from '../../core/models/political-assembly.model';
 import { PoliticalAssemblyService } from '../../core/political-assembly.service';
@@ -24,6 +23,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './political-assembly-edit-dialog.component.html',
   styleUrls: ['./political-assembly-edit-dialog.component.scss'],
   providers: [DatePipe],
+  standalone: false,
 })
 export class PoliticalAssemblyEditDialogComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload')
@@ -125,6 +125,7 @@ export class PoliticalAssemblyEditDialogComponent implements OnInit, OnDestroy {
     }
 
     this.data.domainOfInfluenceId = doiId;
+    this.data.domainOfInfluence = this.domainOfInfluences.find(x => x.id === doiId)!;
   }
 
   public async updateSelectedPreconfiguredDate(preconfiguredDate: DisplayPreconfiguredDate): Promise<void> {
@@ -207,6 +208,7 @@ export class PoliticalAssemblyEditDialogComponent implements OnInit, OnDestroy {
     // if the user has only one DomainOfInfluence, he doesn't need to choose it
     if (this.domainOfInfluences.length === 1) {
       this.data.domainOfInfluenceId = this.domainOfInfluences[0].id;
+      this.data.domainOfInfluence = this.domainOfInfluences[0];
     }
   }
 }

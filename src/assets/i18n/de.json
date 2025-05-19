@@ -50,7 +50,6 @@
     "DuplicatedBfsException": "Diese BFS-Nummber ist bereits vergeben.",
     "DuplicatedPoliticalBusinessNumberException": "Die Geschäftsnummer ist auf dieser Geschäftsebene bereits vergeben.",
     "NonUniqueCandidateNumberException": "Die Kandidaten/innen-Nummer ist bereits vergeben.",
-    "ContestWithExistingPoliticalBusinessesException": "Der Urnengang beinhaltet eingerichtete Geschäfte. Bitte löschen Sie zuerst die Geschäfte.",
     "CountingCircleInScheduledMergeException": "Der Auszählungskreis befindet sich in einer Fusion und ist nicht bearbeitbar.",
     "CountingCirclesInScheduledMergeException": "Einer der gewählten Auszählungskreise befindet sich in einer Fusion und ist nicht verwendbar.",
     "CountingCircleMergerAlreadyActiveException": "Fusion der Auszählungskreise wurde bereits aktiviert und kann nicht mehr bearbeitet werden.",
@@ -59,7 +58,10 @@
     "MajorityElectionWithExistingSecondaryElectionsException": "Eine Wahl mit Nebenwahlen kann nicht gelöscht werden. Bitte zuerst sämtliche Nebenwahlen löschen.",
     "MajorityElectionCandidateIsInBallotGroupException": "Diese Kandidat/in ist in einer Wahlzettelgruppe und kann nicht gelöscht werden. Bereinigen Sie zuerst die Wahlzettelgruppe.",
     "ProportionalElectionUnionMultipleMandateAlgorithmsException": "Es dürfen nur Proporzwahlen mit gleichem Berechnungsverfahren miteinander verbunden werden.",
-    "ProportionalElectionEditMandateAlgorithmInUnionException": "Die Sitzverteilung darf nur bei unverbundenen Proporzwahlen geändert werden."
+    "ProportionalElectionEditMandateAlgorithmInUnionException": "Die Sitzverteilung darf nur bei unverbundenen Proporzwahlen geändert werden.",
+    "MajorityElectionBallotGroupVoteCountException": "Bei einer Wahlzettel-Gruppe stimmt die Anzahl Kandidierende nicht mit der Anzahl leerer Zeilen überein.",
+    "SecondaryMajorityElectionCreateWithActiveElectionsAndBallotGroupsException": "Es darf nur eine Nebenwahl erstellt werden, wenn die Hauptwahl und deren Nebenwahlen nicht aktiv sind oder keine Wahlzettel-Gruppen existieren.",
+    "SecondaryMajorityElectionCandidateNotSelectedInPrimaryElectionException": "Wenn ein Kandidat aus der Hauptwahl in der Nebenwahl ausgewählt wird, muss er auch in der Hauptwahl ausgewählt sein."
   },
   "CONTACT_PERSON": {
     "PHONE": "Telefon",
@@ -78,6 +80,7 @@
     "CODE": "Code",
     "SORT_NUMBER": "Sortierungsnummer",
     "NAME_FOR_PROTOCOL": "Bezeichnung für Protokoll",
+    "E_COUNTING": "E-Counting",
     "E_VOTING": "E-Voting Auszählungskreis",
     "E_VOTING_ACTIVE_FROM": "ab",
     "AUTHORITY": "Behörde",
@@ -146,7 +149,7 @@
     "TITLE": "Wahlkreise",
     "NEW": "Wahlkreis erstellen",
     "EDIT": "Wahlkreis bearbeiten",
-    "CONFIRM_DELETE": "Sind Sie sicher, dass der Wahlkreis gelöscht werden soll?",
+    "CONFIRM_DELETE": "Sind Sie sicher, dass der Wahlkreis gelöscht werden soll? Alle untergeordneten Wahlkreise, zugehörige Urnengänge sowie Geschäfte in der Testphase werden ebenfalls gelöscht.",
     "NAME": "Bezeichnung",
     "SHORT_NAME": "Kurzbezeichnung",
     "TYPE": "Geschäftsebene",
@@ -208,14 +211,13 @@
       "TITLE": "Stimmunterlagen",
       "RESPONSIBLE_FOR_VOTING_CARDS": "Wahlkreis generiert Stimmrechtsausweise",
       "ELECTORAL_REGISTRATION_ENABLED": "Wahlkreis verwendet Stimmregister",
+      "ELECTORAL_REGISTER_MULTIPLE_ENABLED": "Mehrere Elektorate mit selbem Versand bedienen",
       "STISTAT_MUNICIPALITY": "STISTAT-Gemeinde",
       "VOTING_CARD_FLAT_RATE_OWNER": "Übernimmt Pauschalkosten für Korporation",
       "VOTING_CARD_COLOR": "Farbe des Stimmrechtsausweis",
       "VOTING_CARD_COLORS": {
         "1": "Blau",
-        "2": "Chamois",
         "3": "Gelb",
-        "4": "Gold",
         "5": "Grau",
         "6": "Rosa",
         "7": "Rot",
@@ -253,6 +255,7 @@
       },
       "VOTING_CARD_SWISS_POST_DATA": {
         "INVOICE_REFERENCE_NUMBER": "Rechnungsreferenz Post (9-stellig)",
+        "FRANKING_LICENCE_AWAY_NUMBER": "Frankierlizenznummer Post Hinweg (8-stellig)",
         "FRANKING_LICENCE_RETURN_NUMBER": "Frankierlizenznummer Post Rückweg (9-stellig)"
       },
       "PRINTING_CENTER": {
@@ -328,13 +331,19 @@
         "FOREIGNER": "Ausländer",
         "MINOR": "Minderjährige"
       }
+    },
+    "E_COLLECTING": {
+      "TITLE": "E-Collecting",
+      "E_COLLECTING_ENABLED": "Wahlkreis verwendet E-Collecting",
+      "E_COLLECTING_MIN_SIGNATURE_COUNT": "Nötige Anzahl Unterschriften",
+      "E_COLLECTING_MAX_ELECTRONIC_SIGNATURE_PERCENT": "Max. Schwellenwert für Unterschriften E-Collecting (in %)"
     }
   },
   "CONTEST": {
     "TITLE": "Urnengänge",
     "NEW": "Urnengang hinzufügen",
     "EDIT": "Urnengang bearbeiten",
-    "CONFIRM_DELETE": "Sind Sie sicher, dass der Urnengang gelöscht werden soll?",
+    "CONFIRM_DELETE": "Sind Sie sicher, dass der Urnengang gelöscht werden soll? Alle darin enthaltenen Geschäfte werden gelöscht.",
     "PAST_CONTESTS": "Vergangene Urnengänge",
     "ARCHIVED_CONTESTS": "Archivierte Urnengänge",
     "DATE": "Datum",
@@ -454,7 +463,9 @@
     "GENERAL_INFORMATION": "Allgemeine Angaben",
     "ENABLE_TITLE": "Erfassung",
     "RESULT_ENTRY_INFORMATION": "Erfassungsweise",
-    "FEDERAL_IDENTIFICATION": "Bundes-ID"
+    "FEDERAL_IDENTIFICATION": "Bundes-ID",
+    "COUNTING_CIRCLES": "Auszählungskreise anzeigen",
+    "ASSIGNED_COUNTING_CIRCLES": "Zugeordnete Auszählungskreise"
   },
   "POLITICAL_BUSINESS_UNION": {
     "TITLE": "Geschäftsverbindungen",
@@ -703,7 +714,10 @@
       "LESS_CANDIDATES_THAN_ALLOWED_SINGLE": "Sie müssen noch 1 Listenplatz vergeben.",
       "LESS_CANDIDATES_THAN_ALLOWED_PLURAL": "Sie müssen noch {{diff}} Listenplätze vergeben.",
       "PARTY": "Partei",
-      "ORIGIN": "Heimatort"
+      "ORIGIN": "Heimatort",
+      "STREET": "Strasse",
+      "HOUSE_NUMBER": "Hausnr.",
+      "COUNTRY": "Land"
     },
     "REVIEW_PROCEDURE": {
       "TITLE": "Erfassungsweise (Kontrolle)",
@@ -787,12 +801,14 @@
       "LOCALITY": "Wohnort",
       "INDIVIDUAL_PLACEHOLDER": "Vereinzelte",
       "INDIVIDUAL_COUNT": "Anzahl Vereinzelte",
-      "ORIGIN": "Heimatort"
+      "ORIGIN": "Heimatort",
+      "STREET": "Strasse",
+      "HOUSE_NUMBER": "Hausnr.",
+      "COUNTRY": "Land"
     },
     "BALLOT_GROUP": {
       "TITLE": "Wahlzettel-Gruppen",
       "NEW": "Wahlzettel-Gruppe hinzufügen",
-      "EDIT": "Wahlzettel-Gruppe bearbeiten",
       "CONFIRM_DELETE": "Wahlzettel-Gruppe wirklich löschen?",
       "POSITION": "Nr.",
       "SHORT_DESCRIPTION": "Kurzbezeichnung",
@@ -800,11 +816,20 @@
       "BLANK_ROWS": "Leere Zeilen",
       "BALLOT_GROUP_CANDIDATES": "Kandidierende der Wahlzettel-Gruppe",
       "NO_BALLOT_GROUP_SELECTED": "Keine Wahlzettel-Gruppe ausgewählt",
-      "ASSIGN_CANDIDATES": "Kandidierende zuordnen",
       "ASSIGNED_CANDIDATES": "Zugeordnete Kandidierende",
       "FILL_BLANK_ROWS": "Leere Zeilen Nebenwahl ergänzen",
       "BALLOT_GROUP_WITHOUT_ELECTION_WARNING": "Bitte ergänzen Sie die Anzahl leere Zeilen der Nebenwahl für folgende Wahlzettel-Gruppen: {{ballotGroups}}",
-      "WRONG_CANDIDATE_COUNT_WARNING": "Bei folgenden Wahlen stimmt die Anzahl Kandidierende nicht mit der Anzahl leerer Zeilen überein: {{elections}}"
+      "WRONG_CANDIDATE_COUNT_WARNING": "Bei folgenden Wahlen stimmt die Anzahl Kandidierende nicht mit der Anzahl leerer Zeilen überein: {{elections}}",
+      "EDIT_DIALOG": {
+        "NEW": "Wahlzettel-Gruppe hinzufügen",
+        "EDIT": "Wahlzettel-Gruppe bearbeiten",
+        "STEP_1": {
+          "LABEL": "Allgemeine Angaben"
+        },
+        "STEP_2": {
+          "LABEL": "Zuordnung von Kandidierenden"
+        }
+      }
     },
     "REVIEW_PROCEDURE": {
       "TITLE": "Erfassungsweise (Kontrolle)",
@@ -915,7 +940,8 @@
       "INVALID_VOTES": "Ungültige Stimmen",
       "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden",
       "CANDIDATE_LOCALITY_AND_ORIGIN_REQUIRED": "Heimat- / Wohnort Pflicht (bei Geschäftsebene eidg./kant./bez.) - Gilt auch für Proporzwahlen",
-      "SECONDARY_MAJORITY_ELECTION_ON_SEPARATE_BALLOT": "Nebenwahlen auf getrennten Wahlzetteln"
+      "SECONDARY_MAJORITY_ELECTION_ON_SEPARATE_BALLOT": "Nebenwahlen auf getrennten Wahlzetteln",
+      "SHOW_OCCUPATION_TITLE": "Feld 'Titel und Berufsbezeichnung' anzeigen - Gilt auch für Proporzwahlen"
     },
     "GENERAL": "Allgemein",
     "MANUAL_PUBLISH_RESULTS": "Status publizieren manuell (eCH-0252)",

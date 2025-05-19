@@ -12,10 +12,13 @@ import { DomainOfInfluenceService } from '../../core/domain-of-influence.service
 import { MajorityElection, MajorityElectionMandateAlgorithm, newMajorityElection } from '../../core/models/majority-election.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
 import { PermissionService } from '../../core/permission.service';
+import { DialogService } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-majority-election-general-informations',
   templateUrl: './majority-election-general-informations.component.html',
+  styleUrls: ['./majority-election-general-informations.component.scss'],
+  standalone: false,
 })
 export class MajorityElectionGeneralInformationsComponent
   extends PoliticalBusinessGeneralInformationsComponent<MajorityElection>
@@ -29,8 +32,17 @@ export class MajorityElectionGeneralInformationsComponent
     contestService: ContestService,
     doiReportLevelService: DomainOfInfluenceReportLevelService,
     permissionService: PermissionService,
+    dialogService: DialogService,
   ) {
-    super(enumUtil, domainOfInfluenceService, contestService, doiReportLevelService, permissionService, newMajorityElection());
+    super(
+      enumUtil,
+      domainOfInfluenceService,
+      contestService,
+      doiReportLevelService,
+      permissionService,
+      dialogService,
+      newMajorityElection(),
+    );
   }
 
   public get canSave(): boolean {

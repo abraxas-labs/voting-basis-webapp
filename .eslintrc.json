@@ -3,7 +3,7 @@
   "overrides": [
     {
       "files": ["*.ts"],
-      "plugins": ["license-header"],      
+      "plugins": ["license-header"],
       "parserOptions": {
         "project": [
           "tsconfig.*?.json"
@@ -16,6 +16,7 @@
       "rules": {
         "@angular-eslint/directive-selector": ["error", { "type": "attribute", "prefix": "app", "style": "camelCase" }],
         "@angular-eslint/component-selector": ["error", { "type": "element", "prefix": "app", "style": "kebab-case" }],
+        "@angular-eslint/prefer-standalone": "off",
         "license-header/header": ["error", "license-header.js"],
         "quotes": ["error", "single", { "allowTemplateLiterals": true }],
         "max-len": [

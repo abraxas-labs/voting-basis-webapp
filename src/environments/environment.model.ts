@@ -16,4 +16,5 @@ export interface Environment extends TenantConfig, UserConfig, AuthorizationConf
   authAllowedUrls?: string[];
   grpcApiEndpoint: string;
   restApiEndpoint: string;
+  includeDelegations: boolean;
 }

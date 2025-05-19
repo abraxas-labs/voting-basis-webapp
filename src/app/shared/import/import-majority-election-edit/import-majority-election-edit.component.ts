@@ -18,6 +18,7 @@ import { PermissionService } from '../../../core/permission.service';
   selector: 'app-import-majority-election-edit',
   templateUrl: './import-majority-election-edit.component.html',
   styleUrls: ['./import-majority-election-edit.component.scss'],
+  standalone: false,
 })
 export class ImportMajorityElectionEditComponent extends ImportPoliticalBusinessEditComponent<MajorityElection> {
   public mandateAlgorithms: EnumItemDescription<MajorityElectionMandateAlgorithm>[] = [];

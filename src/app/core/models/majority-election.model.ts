@@ -49,6 +49,9 @@ export type MajorityElectionCandidate = {
   locality: string;
   position: number;
   origin: string;
+  street: string;
+  houseNumber: string;
+  country: string;
 };
 
 export function newMajorityElection(): MajorityElection {
@@ -86,5 +89,8 @@ export function newMajorityElectionCandidate(position: number, majorityElectionI
     position,
     origin: '',
     sex: undefined,
+    street: '',
+    houseNumber: '',
+    country: 'CH',
   };
 }

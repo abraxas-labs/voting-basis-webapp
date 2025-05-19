@@ -5,8 +5,7 @@
  */
 
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { allLanguages } from '../../core/models/language.model';
-import { LanguageService } from '../../core/language.service';
+import { LanguageService, allLanguages } from '@abraxas/voting-lib';
 
 @Directive()
 export abstract class TranslatedFieldComponent {

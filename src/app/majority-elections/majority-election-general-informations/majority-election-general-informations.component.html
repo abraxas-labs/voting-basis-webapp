@@ -23,7 +23,7 @@
   </div>
 
   <bc-number [label]="'MAJORITY_ELECTION.NUMBER_OF_MANDATES' | translate"
-             [readonly]="contest.testingPhaseEnded || readonly"
+             [readonly]="contest.testingPhaseEnded || data.active || readonly"
              [required]="true"
              [value]="data.numberOfMandates"
              (valueChange)="data.numberOfMandates = +$event; contentChanged.emit()"
@@ -49,16 +49,24 @@
              [max]="federalIdentificationMaxValue"
              [subscriptSizing]="'dynamic'"></bc-number>
 
-  <bc-dropdown class="full-width"
-               *ngIf="selectedDomainOfInfluenceType"
-               [readonly]="contest.testingPhaseEnded || readonly"
-               [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
-               displayExpr="name"
-               [required]="true"
-               [value]="selectedDomainOfInfluence"
-               (valueChange)="selectedDomainOfInfluence = $event; contentChanged.emit()"
-               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  <div class="container">
+    <bc-dropdown class="full-width"
+                 *ngIf="selectedDomainOfInfluenceType"
+                 [readonly]="contest.testingPhaseEnded || readonly"
+                 [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
+                 displayExpr="name"
+                 [required]="true"
+                 [value]="selectedDomainOfInfluence"
+                 (valueChange)="selectedDomainOfInfluence = $event; contentChanged.emit()"
+                 [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
+                 [subscriptSizing]="'dynamic'"></bc-dropdown>
+    <bc-button *ngIf="!!selectedDomainOfInfluence"
+               class="nowrap"
+               variant="tertiary"
+               [label]="'POLITICAL_BUSINESS.COUNTING_CIRCLES' | translate"
+               (buttonClick)="openAssignedCountingCirclesDialog()"></bc-button>
+  </div>
+
 
   <bc-dropdown class="full-width"
                [items]="domainOfInfluenceLevels"

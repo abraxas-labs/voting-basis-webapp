@@ -15,6 +15,7 @@ import {
   DividerModule,
   DropdownModule,
   ExpansionPanelModule,
+  IconButtonModule,
   IconModule,
   LabelModule,
   NavigationModule,
@@ -36,7 +37,7 @@ import {
 import { VotingLibModule } from '@abraxas/voting-lib';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -57,8 +58,8 @@ import { ImportVoteEditComponent } from './import/import-vote-edit/import-vote-e
 import { MajorityElectionCandidatesImportDialogComponent } from './import/majority-election-candidates-import-dialog/majority-election-candidates-import-dialog.component';
 import { PoliticalBusinessImportDialogComponent } from './import/political-business-import-dialog/political-business-import-dialog.component';
 import { ProportionalElectionListsAndCandidatesImportDialogComponent } from './import/proportional-election-lists-and-candidates-import-dialog/proportional-election-lists-and-candidates-import-dialog.component';
-import { MajorityElectionBallotGroupBlankRowsPipe } from './majority-election-ballot-group-blank-rows.pipe';
-import { MajorityElectionBallotGroupAssignCandidatesDialogComponent } from './majority-election-ballot-groups/majority-election-ballot-group-assign-candidates-dialog/majority-election-ballot-group-assign-candidates-dialog.component';
+import { MajorityElectionBallotGroupAssignCandidatesComponent } from './majority-election-ballot-groups/majority-election-ballot-group-assign-candidates/majority-election-ballot-group-assign-candidates.component';
+import { MajorityElectionBallotGroupGeneralInformationsComponent } from './majority-election-ballot-groups/majority-election-ballot-group-general-informations/majority-election-ballot-group-general-informations.component';
 import { MajorityElectionBallotGroupAssignCandidatesEntryComponent } from './majority-election-ballot-groups/majority-election-ballot-group-assign-candidates-entry/majority-election-ballot-group-assign-candidates-entry.component';
 import { MajorityElectionBallotGroupCandidatesComponent } from './majority-election-ballot-groups/majority-election-ballot-group-candidates/majority-election-ballot-group-candidates.component';
 import { MajorityElectionBallotGroupDetailComponent } from './majority-election-ballot-groups/majority-election-ballot-group-detail/majority-election-ballot-group-detail.component';
@@ -80,6 +81,8 @@ import { ImportProportionalElectionPartyMappingComponent } from './import/import
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatMenuModule } from '@angular/material/menu';
 import { TruncatedValueComponent } from './truncated-value/truncated-value.component';
+import { AssignedCountingCirclesDialogComponent } from './assigned-counting-circles-dialog/assigned-counting-circles-dialog.component';
+import { MatDialogClose } from '@angular/material/dialog';
 
 const components = [
   ContactPersonEditComponent,
@@ -103,7 +106,8 @@ const components = [
   ExportDialogComponent,
   SecondaryMajorityElectionCandidatesComponent,
   SecondaryMajorityElectionCandidateEditDialogComponent,
-  MajorityElectionBallotGroupAssignCandidatesDialogComponent,
+  MajorityElectionBallotGroupAssignCandidatesComponent,
+  MajorityElectionBallotGroupGeneralInformationsComponent,
   MajorityElectionBallotGroupCandidatesComponent,
   MajorityElectionBallotGroupDetailComponent,
   MajorityElectionBallotGroupEditDialogComponent,
@@ -114,9 +118,10 @@ const components = [
   MajorityElectionBallotGroupAssignCandidatesEntryComponent,
   ImportProportionalElectionPartyMappingComponent,
   TruncatedValueComponent,
+  AssignedCountingCirclesDialogComponent,
 ];
 
-const pipes = [GetTranslationPipe, SafeHtmlPipe, MajorityElectionBallotGroupBlankRowsPipe, CanEditBallotGroupPipe];
+const pipes = [GetTranslationPipe, SafeHtmlPipe, CanEditBallotGroupPipe];
 
 const modules = [
   CommonModule,
@@ -158,6 +163,9 @@ const modules = [
   SwitchModule,
   TruncateWithTooltipModule,
   AutocompleteModule,
+  IconButtonModule,
+  MatDialogClose,
+  ReactiveFormsModule,
 ];
 
 @NgModule({

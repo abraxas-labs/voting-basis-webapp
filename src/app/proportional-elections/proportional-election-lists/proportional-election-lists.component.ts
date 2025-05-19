@@ -15,7 +15,6 @@ import {
   ProportionalElection,
   ProportionalElectionCandidate,
   ProportionalElectionList,
-  ProportionalElectionListMessage,
   ProportionalElectionMandateAlgorithm,
   updateProportionalElectionListCandidateCountOk,
 } from '../../core/models/proportional-election.model';
@@ -27,19 +26,20 @@ import {
 import {
   ProportionalElectionListEditDialogComponent,
   ProportionalElectionListEditDialogData,
-  ProportionalElectionListEditDialogResult,
 } from './proportional-election-list-edit-dialog/proportional-election-list-edit-dialog.component';
 import {
   ProportionalElectionListUnionsDialogComponent,
   ProportionalElectionListUnionsDialogData,
 } from './proportional-election-list-unions-dialog/proportional-election-list-unions-dialog.component';
 import { Subscription } from 'rxjs';
-import { EntityState } from '../../core/models/message.model';
+import { EventLogService } from '../../core/event-log.service';
+import { EventType } from '../../core/models/event-log.model';
 
 @Component({
   selector: 'app-proportional-election-lists',
   templateUrl: './proportional-election-lists.component.html',
   styleUrls: ['./proportional-election-lists.component.scss'],
+  standalone: false,
 })
 export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   public columns: string[] = [];
@@ -62,6 +62,9 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   @Input()
   public candidateOriginRequired: boolean = false;
 
+  @Input()
+  public hideOccupationTitle: boolean = false;
+
   public lists: ProportionalElectionList[] = [];
   public selectedList?: ProportionalElectionList;
   public loading: boolean = false;
@@ -74,6 +77,7 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly proportionalElectionService: ProportionalElectionService,
+    private readonly eventLog: EventLogService,
     private readonly dialogService: DialogService,
     private readonly snackbarService: SnackbarService,
     private readonly i18n: TranslateService,
@@ -124,7 +128,12 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
       parties: this.parties,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionListEditDialogComponent, dialogData);
-    this.handleEditList(result);
+    if (!result) {
+      return;
+    }
+
+    this.handleEditList(result.list);
+    this.selectedList = result.list;
   }
 
   public async moveList(previousIndex: number, newIndex: number): Promise<void> {
@@ -149,7 +158,7 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
 
     await this.proportionalElectionService.deleteList(list.id);
     this.snackbarService.success(this.i18n.instant('APP.DELETED'));
-    this.handleDeleteList(list);
+    this.handleDeleteList(list.id);
   }
 
   public selectList(row: ProportionalElectionList): void {
@@ -221,27 +230,26 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
     this.updateCanSave();
   }
 
-  private handleEditList(data?: ProportionalElectionListEditDialogResult): void {
-    if (!data) {
-      return;
-    }
-
-    const existingListIndex = this.lists.findIndex(l => l.id === data.list.id);
+  private handleEditList(list: ProportionalElectionList): void {
+    const existingListIndex = this.lists.findIndex(l => l.id === list.id);
     if (existingListIndex < 0) {
       return;
     }
 
-    this.lists[existingListIndex] = data.list;
+    this.lists[existingListIndex] = list;
 
     // trigger angular change detection
-    this.lists = this.lists.concat([]);
-    this.selectedList = data.list;
+    this.lists = [...this.lists];
     this.updateCanSave();
   }
 
-  private handleDeleteList(list: ProportionalElectionList): void {
-    this.lists = this.lists.filter(l => l.id !== list.id);
+  private handleDeleteList(id: string): void {
+    this.lists = this.lists.filter(l => l.id !== id);
     this.updateListPositions();
+    if (this.selectedList?.id === id) {
+      delete this.selectedList;
+    }
+
     this.updateCanSave();
   }
 
@@ -272,23 +280,32 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   private startChangesListener(): void {
     this.changesSubscription?.unsubscribe();
 
-    this.changesSubscription = this.proportionalElectionService
-      .getListChanges()
-      .subscribe(e => this.handleProportionalElectionListMessage(e.list));
+    this.changesSubscription = this.eventLog
+      .watch([
+        'ProportionalElectionListCreated',
+        'ProportionalElectionListUpdated',
+        'ProportionalElectionListAfterTestingPhaseUpdated',
+        'ProportionalElectionListDeleted',
+      ])
+      .subscribe(e => this.handleEvent(e.type, e.entityId));
   }
 
-  private handleProportionalElectionListMessage(e: ProportionalElectionListMessage): void {
-    if (e.newEntityState === EntityState.ENTITY_STATE_MODIFIED) {
-      // do not handle modified event since this is handled already correctly (with reload of the candidates) in the UI.
-      return;
-    }
+  private async handleEvent(type: EventType, listId: string): Promise<void> {
+    switch (type) {
+      case 'ProportionalElectionListCreated':
+        if (this.lists.find(l => l.id === listId)) {
+          break;
+        }
 
-    const list = e.data;
-    if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
-      this.handleDeleteList(list);
-      return;
+        this.handleCreateList(await this.proportionalElectionService.getList(listId));
+        break;
+      case 'ProportionalElectionListUpdated':
+      case 'ProportionalElectionListAfterTestingPhaseUpdated':
+        this.handleEditList(await this.proportionalElectionService.getList(listId));
+        break;
+      case 'ProportionalElectionListDeleted':
+        this.handleDeleteList(listId);
+        break;
     }
-
-    this.handleCreateList(list);
   }
 }

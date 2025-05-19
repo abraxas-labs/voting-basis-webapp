@@ -11,6 +11,7 @@ import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-pa
   selector: 'app-domain-of-influence-party-table',
   templateUrl: './domain-of-influence-party-table.component.html',
   styleUrls: ['./domain-of-influence-party-table.component.scss'],
+  standalone: false,
 })
 export class DomainOfInfluencePartyTableComponent {
   public readonly columns = ['name', 'shortDescription', 'actions'];

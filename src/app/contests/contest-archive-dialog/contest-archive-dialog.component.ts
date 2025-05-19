@@ -8,29 +8,33 @@ import { SnackbarService } from '@abraxas/voting-lib';
 import { Component, Inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ContestService } from '../../core/contest.service';
-import { ContestState, ContestSummary } from '../../core/models/contest.model';
+import { ContestListType } from '../../core/models/contest-list.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ContestState } from '../../core/models/contest.model';
+import { PoliticalAssemblyService } from '../../core/political-assembly.service';
 
 @Component({
   selector: 'app-contest-archive-dialog',
   templateUrl: './contest-archive-dialog.component.html',
   styleUrls: ['./contest-archive-dialog.component.scss'],
+  standalone: false,
 })
 export class ContestArchiveDialogComponent {
   public archivePer?: Date;
   public saving: boolean = false;
   public readonly now: Date = new Date();
-  public readonly contest: ContestSummary;
+  public readonly listEntry: ContestListType;
 
   constructor(
     private readonly dialogRef: MatDialogRef<ContestArchiveDialogData>,
     private readonly contestService: ContestService,
+    private readonly politicalAssemblyService: PoliticalAssemblyService,
     private readonly i18n: TranslateService,
     private readonly snackbarService: SnackbarService,
     @Inject(MAT_DIALOG_DATA) dialogData: ContestArchiveDialogData,
   ) {
-    this.contest = dialogData.contest;
-    this.archivePer = this.contest.archivePer;
+    this.listEntry = dialogData.listEntry;
+    this.archivePer = this.listEntry.archivePer;
   }
 
   public set archivePerString(value: string) {
@@ -44,15 +48,17 @@ export class ContestArchiveDialogComponent {
   public async save(): Promise<void> {
     try {
       this.saving = true;
-
-      await this.contestService.archive(this.contest.id, this.archivePer);
-
       const immediatelyArchived = !this.archivePer;
-      this.contest.archivePer = this.archivePer;
+
+      await (this.listEntry.politicalAssembly
+        ? this.politicalAssemblyService.archive(this.listEntry.id, this.archivePer)
+        : this.contestService.archive(this.listEntry.id, this.archivePer));
+
+      this.listEntry.archivePer = this.archivePer;
 
       if (immediatelyArchived) {
-        this.contest.state = ContestState.CONTEST_STATE_ARCHIVED;
-        this.contest.archivePer = new Date();
+        this.listEntry.state = ContestState.CONTEST_STATE_ARCHIVED;
+        this.listEntry.archivePer = new Date();
         this.snackbarService.success(this.i18n.instant('CONTEST.ARCHIVE.DONE'));
       } else {
         this.snackbarService.success(this.i18n.instant('CONTEST.ARCHIVE.DONE_PER'));
@@ -70,7 +76,7 @@ export class ContestArchiveDialogComponent {
 }
 
 export interface ContestArchiveDialogData {
-  contest: ContestSummary;
+  listEntry: ContestListType;
 }
 
 export interface ContestArchiveDialogResult {

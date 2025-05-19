@@ -12,6 +12,7 @@ import { filter, startWith, Subscription } from 'rxjs';
 @Component({
   selector: 'app-side-nav',
   templateUrl: './side-nav.component.html',
+  standalone: false,
 })
 export class SideNavComponent implements OnDestroy {
   public readonly contestNavIndex: number = 1;

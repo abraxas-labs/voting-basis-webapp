@@ -16,6 +16,7 @@ import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.mod
 @Component({
   selector: 'app-vote-ballot',
   templateUrl: './vote-ballot.component.html',
+  standalone: false,
 })
 export class VoteBallotComponent {
   public userVoteTypeDescriptions: EnumItemDescription<UserVoteType>[] = [];

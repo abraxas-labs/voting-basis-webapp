@@ -9,6 +9,7 @@ import { MajorityElectionBallotGroup } from '../core/models/majority-election-ba
 
 @Pipe({
   name: 'canEditBallotGroup',
+  standalone: false,
 })
 export class CanEditBallotGroupPipe implements PipeTransform {
   public transform(ballotGroup: MajorityElectionBallotGroup | undefined, testingPhaseEnded: boolean): boolean {

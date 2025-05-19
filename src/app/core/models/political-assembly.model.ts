@@ -6,7 +6,9 @@
 
 import { PoliticalAssembly as PoliticalAssemblyProto } from '@abraxas/voting-basis-service-proto/grpc/models/political_assembly_pb';
 import { DomainOfInfluence } from './domain-of-influence.model';
+import { PoliticalAssemblyState } from '@abraxas/voting-basis-service-proto/grpc/shared/political_assembly_pb';
 
+export { PoliticalAssemblyState };
 export { PoliticalAssemblyProto };
 export type PoliticalAssembly = {
   id: string;
@@ -14,6 +16,8 @@ export type PoliticalAssembly = {
   description: Map<string, string>;
   domainOfInfluenceId: string;
   domainOfInfluence: DomainOfInfluence;
+  state: PoliticalAssemblyState;
+  archivePer?: Date;
 };
 
 export function newPoliticalAssembly(): PoliticalAssembly {

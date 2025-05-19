@@ -25,6 +25,7 @@ import { Permissions } from '../../core/models/permissions.model';
 @Component({
   selector: 'app-majority-election-edit',
   templateUrl: './majority-election-edit.component.html',
+  standalone: false,
 })
 export class MajorityElectionEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
   @HostListener('window:beforeunload')

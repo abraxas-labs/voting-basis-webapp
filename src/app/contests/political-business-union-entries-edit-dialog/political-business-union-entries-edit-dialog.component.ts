@@ -19,6 +19,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-political-business-union-entries-edit-dialog',
   templateUrl: './political-business-union-entries-edit-dialog.component.html',
   styleUrls: ['./political-business-union-entries-edit-dialog.component.scss'],
+  standalone: false,
 })
 export class PoliticalBusinessUnionEntriesEditDialogComponent implements AfterViewInit {
   public readonly columns = ['select', 'politicalBusinessNumber', 'shortDescription'];

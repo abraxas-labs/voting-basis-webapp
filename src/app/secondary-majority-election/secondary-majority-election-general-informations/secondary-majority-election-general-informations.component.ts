@@ -5,13 +5,14 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { LanguageService } from '../../core/language.service';
 import { newSecondaryMajorityElection, SecondaryMajorityElection } from '../../core/models/secondary-majority-election.model';
+import { LanguageService } from '@abraxas/voting-lib';
 
 @Component({
   selector: 'app-secondary-majority-election-general-informations',
   templateUrl: './secondary-majority-election-general-informations.component.html',
   styleUrls: ['./secondary-majority-election-general-informations.component.scss'],
+  standalone: false,
 })
 export class SecondaryMajorityElectionGeneralInformationsComponent {
   public loading: boolean = true;
@@ -27,6 +28,9 @@ export class SecondaryMajorityElectionGeneralInformationsComponent {
 
   @Input()
   public eVoting: boolean = false;
+
+  @Input()
+  public readonly: boolean = false;
 
   public get canSave(): boolean {
     return (

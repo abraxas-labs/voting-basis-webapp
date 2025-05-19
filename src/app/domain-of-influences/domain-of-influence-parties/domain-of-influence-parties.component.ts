@@ -16,6 +16,7 @@ import {
 @Component({
   selector: 'app-domain-of-influence-parties',
   templateUrl: './domain-of-influence-parties.component.html',
+  standalone: false,
 })
 export class DomainOfInfluencePartiesComponent {
   @Input()

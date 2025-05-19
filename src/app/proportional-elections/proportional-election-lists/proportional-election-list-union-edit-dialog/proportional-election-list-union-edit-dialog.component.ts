@@ -4,10 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { SnackbarService } from '@abraxas/voting-lib';
+import { SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { Component, Inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../core/language.service';
 import { ProportionalElectionListUnion } from '../../../core/models/proportional-election.model';
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -15,6 +14,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-proportional-election-list-union-edit-dialog',
   templateUrl: './proportional-election-list-union-edit-dialog.component.html',
+  standalone: false,
 })
 export class ProportionalElectionListUnionEditDialogComponent {
   public data: ProportionalElectionListUnion;

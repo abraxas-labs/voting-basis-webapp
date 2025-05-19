@@ -1,31 +1,36 @@
-<div class="full-width form-field">
-  <bc-text [label]="'CONTACT_PERSON.FAMILY_NAME' | translate"
+<ng-container *ngIf="formGroup" [formGroup]="formGroup">
+  <div class="full-width form-field">
+    <bc-text [label]="'CONTACT_PERSON.FAMILY_NAME' | translate"
+             [readonly]="readonly"
+             (valueChange)="contentChanged.emit()"
+             [formControlName]="'familyName'"
+             [showDefaultErrors]="true"
+             [subscriptSizing]="'dynamic'"></bc-text>
+    <bc-text class="ml-2"
+             [label]="'CONTACT_PERSON.FIRST_NAME' | translate"
+             [readonly]="readonly"
+             (valueChange)="contentChanged.emit()"
+             [formControl]="formGroup.controls.firstName"
+             [showDefaultErrors]="true"
+             [subscriptSizing]="'dynamic'"></bc-text>
+  </div>
+  <bc-text [label]="'CONTACT_PERSON.PHONE' | translate"
            [readonly]="readonly"
-           [value]="contactPerson.familyName"
-           (valueChange)="contactPerson.familyName = $event; contentChanged.emit()"
+           (valueChange)="contentChanged.emit()"
+           [formControl]="formGroup.controls.phone"
+           [showDefaultErrors]="true"
            [subscriptSizing]="'dynamic'"></bc-text>
-  <bc-text class="ml-2"
-           [label]="'CONTACT_PERSON.FIRST_NAME' | translate"
+  <bc-text [label]="'CONTACT_PERSON.MOBILE_PHONE' | translate"
            [readonly]="readonly"
-           [value]="contactPerson.firstName"
-           (valueChange)="contactPerson.firstName = $event; contentChanged.emit()"
+           (valueChange)="contentChanged.emit()"
+           [formControl]="formGroup.controls.mobilePhone"
+           [showDefaultErrors]="true"
            [subscriptSizing]="'dynamic'"></bc-text>
-</div>
-<bc-text [label]="'CONTACT_PERSON.PHONE' | translate"
-         type="phone"
-         [readonly]="readonly"
-         [value]="contactPerson.phone"
-         (valueChange)="contactPerson.phone = $event; contentChanged.emit()"
-         [subscriptSizing]="'dynamic'"></bc-text>
-<bc-text [label]="'CONTACT_PERSON.MOBILE_PHONE' | translate"
-         type="phone"
-         [readonly]="readonly"
-         [value]="contactPerson.mobilePhone"
-         (valueChange)="contactPerson.mobilePhone = $event; contentChanged.emit()"
-         [subscriptSizing]="'dynamic'"></bc-text>
-<bc-text [label]="'CONTACT_PERSON.EMAIL' | translate"
-         type="email"
-         [readonly]="readonly"
-         [value]="contactPerson.email"
-         (valueChange)="contactPerson.email = $event; contentChanged.emit()"
-         [subscriptSizing]="'dynamic'"></bc-text>
+  <bc-text [label]="'CONTACT_PERSON.EMAIL' | translate"
+           type="email"
+           [readonly]="readonly"
+           (valueChange)="contentChanged.emit()"
+           [formControl]="formGroup.controls.email"
+           [showDefaultErrors]="true"
+           [subscriptSizing]="'dynamic'"></bc-text>
+</ng-container>

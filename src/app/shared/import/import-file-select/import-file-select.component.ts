@@ -14,6 +14,7 @@ import { TableDataSource } from '@abraxas/base-components';
   selector: 'app-import-file-select',
   templateUrl: './import-file-select.component.html',
   styleUrls: ['./import-file-select.component.scss'],
+  standalone: false,
 })
 export class ImportFileSelectComponent {
   public readonly columns = ['filename', 'type', 'actions'];

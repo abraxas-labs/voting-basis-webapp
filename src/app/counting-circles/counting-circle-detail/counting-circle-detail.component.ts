@@ -5,7 +5,7 @@
  */
 
 import { AuthorizationService, Tenant } from '@abraxas/base-components';
-import { EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
+import { AsyncInputValidators, EnumItemDescription, EnumUtil, InputValidators, SnackbarService } from '@abraxas/voting-lib';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,11 +19,14 @@ import { Permissions } from '../../core/models/permissions.model';
 import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
 import { cloneDeep, isEqual } from 'lodash';
 import { distinct } from '../../core/utils/array.utils';
+import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { ContactPersonForm } from '../../shared/contact-person-edit/contact-person-edit.component';
 
 @Component({
   selector: 'app-counting-circle-detail',
   templateUrl: './counting-circle-detail.component.html',
   styleUrls: ['./counting-circle-detail.component.scss'],
+  standalone: false,
 })
 export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsavedChanges {
   private eVotingActiveFromString: string = '';
@@ -50,6 +53,7 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
   public hasChanges: boolean = false;
   public showEVotingActiveFrom: boolean = false;
   public cantons: EnumItemDescription<DomainOfInfluenceCanton>[];
+  public form?: FormGroup<Form>;
 
   private readonly routeSubscription: Subscription;
 
@@ -62,9 +66,13 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
+    private readonly formBuilder: NonNullableFormBuilder,
     enumUtil: EnumUtil,
   ) {
-    this.routeSubscription = route.params.subscribe(({ countingCircleId }) => this.load(countingCircleId));
+    this.routeSubscription = route.params.subscribe(async ({ countingCircleId }) => {
+      await this.load(countingCircleId);
+      this.buildForm();
+    });
     this.cantons = enumUtil.getArrayWithDescriptions<DomainOfInfluenceCanton>(DomainOfInfluenceCanton, 'DOMAIN_OF_INFLUENCE_CANTONS.');
   }
 
@@ -74,9 +82,9 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
 
   public get canSave(): boolean {
     return (
+      !!this.form &&
+      this.form.valid &&
       !!this.data &&
-      !!this.data.name &&
-      !!this.data.bfs &&
       !!this.selectedResponsibleAuthority &&
       !!this.selectedResponsibleAuthority.id &&
       !!this.data.canton &&
@@ -209,4 +217,89 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
       this.data.canton = canton;
     }
   }
+
+  private buildForm(): void {
+    if (!this.data) {
+      return;
+    }
+
+    this.form = this.formBuilder.group<Form>({
+      name: this.formBuilder.control(this.data.name, {
+        validators: [Validators.required, Validators.minLength(1), Validators.maxLength(100)],
+        asyncValidators: [AsyncInputValidators.simpleSlText],
+      }),
+      nameForProtocol: this.formBuilder.control(this.data.nameForProtocol, {
+        validators: [Validators.maxLength(100)],
+        asyncValidators: [AsyncInputValidators.complexSlText],
+      }),
+      bfs: this.formBuilder.control(this.data.bfs, {
+        validators: [Validators.minLength(1), Validators.maxLength(8), InputValidators.alphaNumWhite],
+      }),
+      code: this.formBuilder.control(this.data.code, {
+        validators: [Validators.minLength(1), Validators.maxLength(20)],
+        asyncValidators: [AsyncInputValidators.simpleSlText],
+      }),
+      sortNumber: this.formBuilder.control(this.data.sortNumber, {
+        validators: [Validators.min(0), Validators.max(1000)],
+      }),
+      contactPersonDuringEvent: this.formBuilder.group({
+        familyName: this.formBuilder.control(this.data.contactPersonDuringEvent!.familyName, {
+          validators: [Validators.minLength(1), Validators.maxLength(50)],
+          asyncValidators: [AsyncInputValidators.complexSlText],
+        }),
+        firstName: this.formBuilder.control(this.data.contactPersonDuringEvent!.firstName, {
+          validators: [Validators.minLength(1), Validators.maxLength(50)],
+          asyncValidators: [AsyncInputValidators.complexSlText],
+        }),
+        phone: this.formBuilder.control(this.data.contactPersonDuringEvent!.phone, {
+          validators: [InputValidators.phone],
+        }),
+        mobilePhone: this.formBuilder.control(this.data.contactPersonDuringEvent!.mobilePhone, {
+          validators: [InputValidators.phone],
+        }),
+        email: this.formBuilder.control(this.data.contactPersonDuringEvent!.email, {
+          validators: [Validators.email],
+        }),
+      }),
+      contactPersonAfterEvent: this.formBuilder.group({
+        familyName: this.formBuilder.control(this.data.contactPersonAfterEvent!.familyName, {
+          validators: [Validators.minLength(1), Validators.maxLength(50)],
+          asyncValidators: [AsyncInputValidators.complexSlText],
+        }),
+        firstName: this.formBuilder.control(this.data.contactPersonAfterEvent!.firstName, {
+          validators: [Validators.minLength(1), Validators.maxLength(50)],
+          asyncValidators: [AsyncInputValidators.complexSlText],
+        }),
+        phone: this.formBuilder.control(this.data.contactPersonAfterEvent!.phone, {
+          validators: [InputValidators.phone],
+        }),
+        mobilePhone: this.formBuilder.control(this.data.contactPersonAfterEvent!.mobilePhone, {
+          validators: [InputValidators.phone],
+        }),
+        email: this.formBuilder.control(this.data.contactPersonAfterEvent!.email, {
+          validators: [Validators.email],
+        }),
+      }),
+    });
+  }
+
+  // currently necessary since not all values are in the reactive form
+  public updateContactPerson(): void {
+    if (!this.data || !this.form) {
+      return;
+    }
+
+    this.data.contactPersonDuringEvent = this.form.getRawValue().contactPersonDuringEvent;
+    this.data.contactPersonAfterEvent = this.form.getRawValue().contactPersonAfterEvent;
+  }
+}
+
+export interface Form {
+  name: FormControl<string>;
+  bfs: FormControl<string>;
+  contactPersonDuringEvent: FormGroup<ContactPersonForm>;
+  contactPersonAfterEvent: FormGroup<ContactPersonForm>;
+  code: FormControl<string>;
+  sortNumber: FormControl<number>;
+  nameForProtocol: FormControl<string>;
 }

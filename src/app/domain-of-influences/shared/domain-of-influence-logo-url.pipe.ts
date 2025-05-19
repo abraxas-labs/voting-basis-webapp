@@ -9,6 +9,7 @@ import { DomainOfInfluenceService } from '../../core/domain-of-influence.service
 
 @Pipe({
   name: 'domainOfInfluenceLogoUrl',
+  standalone: false,
 })
 export class DomainOfInfluenceLogoUrlPipe implements PipeTransform {
   constructor(private readonly doiService: DomainOfInfluenceService) {}

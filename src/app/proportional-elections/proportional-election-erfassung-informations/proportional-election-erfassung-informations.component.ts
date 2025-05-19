@@ -19,6 +19,7 @@ import {
   selector: 'app-proportional-election-erfassung-informations',
   templateUrl: './proportional-election-erfassung-informations.component.html',
   styleUrls: ['./proportional-election-erfassung-informations.component.scss'],
+  standalone: false,
 })
 export class ProportionalElectionErfassungInformationsComponent implements OnInit {
   @Input()

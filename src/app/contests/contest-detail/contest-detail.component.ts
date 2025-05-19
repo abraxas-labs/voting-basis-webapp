@@ -4,8 +4,15 @@
  * For license information see LICENSE file.
  */
 
-import { AuthorizationService, FilterDirective, PaginatorComponent, SortDirective, TableDataSource } from '@abraxas/base-components';
-import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
+import {
+  AuthorizationService,
+  DialogService as BcDialogService,
+  FilterDirective,
+  PaginatorComponent,
+  SortDirective,
+  TableDataSource,
+} from '@abraxas/base-components';
+import { DialogService, EnumItemDescription, EnumUtil, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,18 +25,9 @@ import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settin
 import { Contest } from '../../core/models/contest.model';
 import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import { ExportEntityType } from '../../core/models/export.model';
-import { EntityState } from '../../core/models/message.model';
-import { PoliticalBusinessUnion, PoliticalBusinessUnionMessage } from '../../core/models/political-business-union.model';
-import {
-  PoliticalBusiness,
-  PoliticalBusinessMessage,
-  PoliticalBusinessSubType,
-  PoliticalBusinessSummary,
-  PoliticalBusinessType,
-} from '../../core/models/political-business.model';
+import { PoliticalBusiness, PoliticalBusinessSubType, PoliticalBusinessSummary } from '../../core/models/political-business.model';
 import { ProportionalElectionService } from '../../core/proportional-election.service';
 import { SecondaryMajorityElectionService } from '../../core/secondary-majority-election.service';
-import { sortPoliticalBusinessUnions } from '../../core/utils/political-business-union.utils';
 import { VoteService } from '../../core/vote.service';
 import {
   PoliticalBusinessImportDialogComponent,
@@ -39,10 +37,15 @@ import {
   PoliticalBusinessUnionsDialogComponent,
   PoliticalBusinessUnionsDialogData,
 } from '../political-business-unions-dialog/political-business-unions-dialog.component';
-import { LanguageService } from '../../core/language.service';
 import { PermissionService } from '../../core/permission.service';
 import { Permissions } from '../../core/models/permissions.model';
-import { ElectionGroup, ElectionGroupMessage } from '../../core/models/election-group.model';
+import {
+  AssignedCountingCirclesDialogComponent,
+  AssignedCountingCirclesDialogData,
+} from '../../shared/assigned-counting-circles-dialog/assigned-counting-circles-dialog.component';
+import { EventLogService } from '../../core/event-log.service';
+import { EventType } from '../../core/models/event-log.model';
+import { PoliticalBusinessType } from '@abraxas/voting-basis-service-proto/grpc/shared/political_business_pb';
 
 const POLITICAL_BUSINESS_TYPE_TO_EXPORT_ENTITY_TYPE: { [key in PoliticalBusinessType]?: ExportEntityType } = {
   [PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE]: ExportEntityType.EXPORT_ENTITY_TYPE_VOTE,
@@ -54,6 +57,7 @@ const POLITICAL_BUSINESS_TYPE_TO_EXPORT_ENTITY_TYPE: { [key in PoliticalBusiness
   selector: 'app-contest-detail',
   templateUrl: './contest-detail.component.html',
   styleUrls: ['./contest-detail.component.scss'],
+  standalone: false,
 })
 export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly originalColumns = [
@@ -103,6 +107,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     private readonly auth: AuthorizationService,
     private readonly dialogService: DialogService,
     private readonly contestService: ContestService,
+    private readonly eventLogService: EventLogService,
     private readonly domainOfInfluenceService: DomainOfInfluenceService,
     private readonly voteService: VoteService,
     private readonly proportionalElectionService: ProportionalElectionService,
@@ -115,6 +120,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     private readonly languageService: LanguageService,
     private readonly enumUtil: EnumUtil,
     private readonly permissionService: PermissionService,
+    private readonly bcDialogService: BcDialogService,
   ) {
     this.routeSubscription = route.params.subscribe(({ contestId }) => this.load(contestId));
   }
@@ -213,22 +219,28 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public async activeStateChange(row: PoliticalBusinessListType, active: boolean): Promise<void> {
     this.activeToggled = true;
-    switch (row.type) {
-      case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE:
-        await this.voteService.updateActiveState(row.id, active);
-        break;
-      case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION:
-        await this.proportionalElectionService.updateActiveState(row.id, active);
-        break;
-      case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION:
-        await this.majorityElectionService.updateActiveState(row.id, active);
-        break;
-      case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION:
-        await this.secondaryMajorityElectionService.updateActiveState(row.id, active);
-        break;
-    }
 
-    this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+    try {
+      switch (row.type) {
+        case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE:
+          await this.voteService.updateActiveState(row.id, active);
+          break;
+        case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION:
+          await this.proportionalElectionService.updateActiveState(row.id, active);
+          break;
+        case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION:
+          await this.majorityElectionService.updateActiveState(row.id, active);
+          break;
+        case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION:
+          await this.secondaryMajorityElectionService.updateActiveState(row.id, active);
+          break;
+      }
+
+      this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+    } catch (err) {
+      row.active = !row.active;
+      throw err;
+    }
   }
 
   public managePoliticalBusinessUnions(): void {
@@ -260,6 +272,13 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     return this.exportService.downloadExportOrShowDialog(entityType, politicalBusiness.id);
   }
 
+  public async openAssignedCountingCircles(politicalBusiness: PoliticalBusinessListType): Promise<void> {
+    const data: AssignedCountingCirclesDialogData = {
+      domainOfInfluenceId: politicalBusiness.domainOfInfluenceId,
+    };
+    this.bcDialogService.openRight(AssignedCountingCirclesDialogComponent, data);
+  }
+
   private async load(contestId?: string): Promise<void> {
     if (!contestId) {
       return;
@@ -279,7 +298,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       );
       this.hasSameTenantReadPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ReadActionsSameTenant);
       this.hasSameTenantWritePermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.WriteActionsSameTenant);
-      this.startChangesListener();
+      this.startChangesListenerIfNotStarted();
     } finally {
       this.loading = false;
     }
@@ -291,84 +310,199 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.updatePoliticalBusinessesList();
   }
 
-  private startChangesListener(): void {
-    this.detailsChangesSubscription?.unsubscribe();
-
-    this.detailsChangesSubscription = this.contestService.getDetailsChanges(this.contest.id).subscribe(e => {
-      // toggle the switch should not refresh the table
-      if (this.activeToggled) {
-        this.activeToggled = false;
-        return;
-      }
-
-      if (!!e.politicalBusiness) {
-        this.handlePoliticalBusinessMessage(e.politicalBusiness);
-        return;
-      }
-
-      if (!!e.politicalBusinessUnion) {
-        this.handlePoliticalBusinessUnionMessage(e.politicalBusinessUnion);
-        return;
-      }
-
-      this.handleElectionGroupMessage(e.electionGroup!);
-    });
-  }
-
-  private handlePoliticalBusinessMessage(e: PoliticalBusinessMessage): void {
-    const politicalBusiness = e.data;
-
-    if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
-      this.removePoliticalBusinessFromUi(politicalBusiness.id);
-      return;
+  private replacePoliticalBusinessInUi(business: PoliticalBusinessSummary & PoliticalBusiness): void {
+    const contestIdx = this.contest.politicalBusinesses.findIndex(pb => pb.id === business.id);
+    if (contestIdx !== -1) {
+      this.contest.politicalBusinesses[contestIdx] = business;
+      this.contest.politicalBusinesses = [...this.contest.politicalBusinesses];
     }
 
-    const politicalBusinessSummary = {
-      ...politicalBusiness,
-      politicalBusinessUnionDescription: '',
-      electionGroupNumber: '',
-      politicalBusinessUnionId: '',
-      electionGroupId: '',
-    };
-
-    const existingPbIdx = this.contest.politicalBusinesses.map(c => c.id).indexOf(politicalBusiness.id);
-    if (existingPbIdx >= 0) {
-      this.contest.politicalBusinesses[existingPbIdx] = politicalBusiness;
-      this.politicalBusinessSummaries[existingPbIdx] = politicalBusinessSummary;
-    } else {
-      this.contest.politicalBusinesses.push(politicalBusiness);
-      this.politicalBusinessSummaries.push(politicalBusinessSummary);
+    const summariesIdx = this.politicalBusinessSummaries.findIndex(pb => pb.id === business.id);
+    if (summariesIdx !== -1) {
+      this.politicalBusinessSummaries[summariesIdx] = business;
+      this.politicalBusinessSummaries = [...this.politicalBusinessSummaries];
     }
 
-    this.contest.politicalBusinesses = [...this.contest.politicalBusinesses];
     this.updatePoliticalBusinessesList();
   }
 
-  private handlePoliticalBusinessUnionMessage(e: PoliticalBusinessUnionMessage): void {
-    const politicalBusinessUnion = e.data;
-
-    if (e.newEntityState === EntityState.ENTITY_STATE_DELETED) {
-      this.contest.politicalBusinessUnions = this.contest.politicalBusinessUnions.filter(u => u.id !== politicalBusinessUnion.id);
-      this.patchPoliticalBusinessSummariesFromUnion(e.newEntityState, politicalBusinessUnion);
-      return;
-    }
-
-    const existingPbUnionIdx = this.contest.politicalBusinessUnions.map(c => c.id).indexOf(politicalBusinessUnion.id);
-    if (existingPbUnionIdx >= 0) {
-      this.contest.politicalBusinessUnions[existingPbUnionIdx] = politicalBusinessUnion;
-      this.patchPoliticalBusinessSummariesFromUnion(e.newEntityState, politicalBusinessUnion);
-      return;
-    } else {
-      this.contest.politicalBusinessUnions.push(politicalBusinessUnion);
-    }
-
-    sortPoliticalBusinessUnions(this.contest.politicalBusinessUnions);
-    this.contest.politicalBusinessUnions = [...this.contest.politicalBusinessUnions];
+  private addPoliticalBusiness(politicalBusiness: PoliticalBusinessSummary & PoliticalBusiness): void {
+    this.contest.politicalBusinesses = [...this.contest.politicalBusinesses, politicalBusiness];
+    this.politicalBusinessSummaries = [...this.politicalBusinessSummaries, politicalBusiness];
+    this.updatePoliticalBusinessesList();
   }
 
-  private handleElectionGroupMessage(e: ElectionGroupMessage): void {
-    const electionGroup = e.data;
-    this.patchPoliticalBusinessSummariesFromElectionGroup(e.newEntityState, electionGroup);
+  private startChangesListenerIfNotStarted(): void {
+    if (this.detailsChangesSubscription !== undefined) {
+      return;
+    }
+
+    this.detailsChangesSubscription = this.eventLogService
+      .watch(
+        [
+          'ContestDeleted',
+
+          'ElectionGroupCreated',
+          'ElectionGroupDeleted',
+
+          'VoteCreated',
+          'VoteUpdated',
+          'VoteActiveStateUpdated',
+          'VoteDeleted',
+          'BallotCreated',
+          'BallotUpdated',
+          'BallotAfterTestingPhaseUpdated',
+          'BallotDeleted',
+
+          'ProportionalElectionCreated',
+          'ProportionalElectionUpdated',
+          'ProportionalElectionActiveStateUpdated',
+          'ProportionalElectionAfterTestingPhaseUpdated',
+          'ProportionalElectionDeleted',
+          'ProportionalElectionUnionCreated',
+          'ProportionalElectionUnionUpdated',
+          'ProportionalElectionUnionEntriesUpdated',
+          'ProportionalElectionUnionDeleted',
+
+          'MajorityElectionCreated',
+          'MajorityElectionUpdated',
+          'MajorityElectionActiveStateUpdated',
+          'MajorityElectionDeleted',
+          'MajorityElectionAfterTestingPhaseUpdated',
+          'MajorityElectionUnionCreated',
+          'MajorityElectionUnionUpdated',
+          'MajorityElectionUnionEntriesUpdated',
+          'MajorityElectionUnionDeleted',
+
+          'SecondaryMajorityElectionCreated',
+          'SecondaryMajorityElectionUpdated',
+          'SecondaryMajorityElectionActiveStateUpdated',
+          'SecondaryMajorityElectionAfterTestingPhaseUpdated',
+          'SecondaryMajorityElectionDeleted',
+        ],
+        this.contest.id,
+      )
+      .subscribe(e => this.handleEvent(e.type, e.politicalBusinessId));
+  }
+
+  private async handleEvent(type: EventType, politicalBusinessId: string): Promise<void> {
+    switch (type) {
+      case 'ContestDeleted':
+        await this.router.navigate(['../']);
+        break;
+      case 'MajorityElectionDeleted':
+      case 'SecondaryMajorityElectionDeleted':
+      case 'ProportionalElectionDeleted':
+      case 'VoteDeleted':
+        this.removePoliticalBusinessFromUi(politicalBusinessId);
+        break;
+      case 'VoteCreated': {
+        if (this.contest.politicalBusinesses.find(x => x.id === politicalBusinessId)) {
+          break;
+        }
+
+        const vote = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE,
+          politicalBusinessId,
+        );
+        this.addPoliticalBusiness(vote);
+        break;
+      }
+      case 'BallotCreated':
+      case 'BallotUpdated':
+      case 'BallotAfterTestingPhaseUpdated':
+      case 'BallotDeleted':
+      case 'VoteUpdated':
+      case 'VoteActiveStateUpdated': {
+        const vote = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE,
+          politicalBusinessId,
+        );
+        this.replacePoliticalBusinessInUi(vote);
+        break;
+      }
+      case 'ProportionalElectionCreated': {
+        if (this.contest.politicalBusinesses.find(x => x.id === politicalBusinessId)) {
+          break;
+        }
+
+        const election = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION,
+          politicalBusinessId,
+        );
+        this.addPoliticalBusiness(election);
+        break;
+      }
+      case 'ProportionalElectionUpdated':
+      case 'ProportionalElectionActiveStateUpdated':
+      case 'ProportionalElectionAfterTestingPhaseUpdated': {
+        const election = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION,
+          politicalBusinessId,
+        );
+        this.replacePoliticalBusinessInUi(election);
+        break;
+      }
+      case 'MajorityElectionCreated': {
+        if (this.contest.politicalBusinesses.find(x => x.id === politicalBusinessId)) {
+          break;
+        }
+
+        const election = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION,
+          politicalBusinessId,
+        );
+        this.addPoliticalBusiness(election);
+        break;
+      }
+      case 'MajorityElectionUpdated':
+      case 'MajorityElectionActiveStateUpdated':
+      case 'MajorityElectionAfterTestingPhaseUpdated': {
+        const election = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION,
+          politicalBusinessId,
+        );
+        this.replacePoliticalBusinessInUi(election);
+        break;
+      }
+      case 'SecondaryMajorityElectionCreated': {
+        if (this.contest.politicalBusinesses.find(x => x.id === politicalBusinessId)) {
+          break;
+        }
+
+        const election = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION,
+          politicalBusinessId,
+        );
+        this.addPoliticalBusiness(election);
+        break;
+      }
+      case 'SecondaryMajorityElectionUpdated':
+      case 'SecondaryMajorityElectionActiveStateUpdated':
+      case 'SecondaryMajorityElectionAfterTestingPhaseUpdated': {
+        const election = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION,
+          politicalBusinessId,
+        );
+        this.replacePoliticalBusinessInUi(election);
+        break;
+      }
+      case 'MajorityElectionUnionCreated':
+      case 'MajorityElectionUnionUpdated':
+      case 'MajorityElectionUnionEntriesUpdated':
+      case 'MajorityElectionUnionDeleted':
+      case 'ProportionalElectionUnionCreated':
+      case 'ProportionalElectionUnionUpdated':
+      case 'ProportionalElectionUnionEntriesUpdated':
+      case 'ProportionalElectionUnionDeleted':
+      case 'ElectionGroupCreated':
+      case 'ElectionGroupDeleted': {
+        this.contest = await this.contestService.get(this.contest.id);
+        this.politicalBusinessSummaries = await this.contestService.listPoliticalBusinessSummaries(this.contest.id);
+        this.updatePoliticalBusinessesList();
+        break;
+      }
+    }
   }
 
   private updatePoliticalBusinessesList(): void {
@@ -401,55 +535,10 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       active: politicalBusinessSummary.active,
       domainOfInfluenceType: politicalBusinessSummary.domainOfInfluence.type,
       domainOfInfluenceName: politicalBusinessSummary.domainOfInfluence.name,
+      domainOfInfluenceId: politicalBusinessSummary.domainOfInfluence.id,
       owner: politicalBusinessSummary.domainOfInfluence.authorityName,
       ownerId: politicalBusinessSummary.domainOfInfluence.secureConnectId,
     };
-  }
-
-  private patchPoliticalBusinessSummariesFromUnion(entityState: EntityState, politicalBusinessUnion: PoliticalBusinessUnion): void {
-    if (entityState === EntityState.ENTITY_STATE_ADDED) {
-      return;
-    }
-
-    for (const politicalBusinessSummary of this.politicalBusinessSummaries.filter(
-      x => x.politicalBusinessUnionId === politicalBusinessUnion.id,
-    )) {
-      politicalBusinessSummary.politicalBusinessUnionDescription = '';
-      politicalBusinessSummary.politicalBusinessUnionId = '';
-    }
-
-    if (entityState === EntityState.ENTITY_STATE_MODIFIED) {
-      for (const politicalBusinessSummary of this.politicalBusinessSummaries.filter(x =>
-        politicalBusinessUnion.politicalBusinessIds?.includes(x.id),
-      )) {
-        politicalBusinessSummary.politicalBusinessUnionId = politicalBusinessUnion.id;
-        politicalBusinessSummary.politicalBusinessUnionDescription = politicalBusinessUnion.description;
-      }
-    }
-
-    this.updatePoliticalBusinessesList();
-  }
-
-  private patchPoliticalBusinessSummariesFromElectionGroup(entityState: EntityState, electionGroup: ElectionGroup): void {
-    if (entityState === EntityState.ENTITY_STATE_ADDED) {
-      return;
-    }
-
-    for (const politicalBusinessSummary of this.politicalBusinessSummaries.filter(x => x.electionGroupId === electionGroup.id)) {
-      politicalBusinessSummary.electionGroupId = '';
-      politicalBusinessSummary.electionGroupNumber = '';
-    }
-
-    if (entityState === EntityState.ENTITY_STATE_MODIFIED) {
-      for (const politicalBusinessSummary of this.politicalBusinessSummaries.filter(
-        x => electionGroup.primaryMajorityElection?.id === x.id || electionGroup.secondaryElectionIdsList.includes(x.id),
-      )) {
-        politicalBusinessSummary.electionGroupId = electionGroup.id;
-        politicalBusinessSummary.electionGroupNumber = String(electionGroup.number);
-      }
-    }
-
-    this.updatePoliticalBusinessesList();
   }
 }
 
@@ -463,6 +552,7 @@ export type PoliticalBusinessListType = {
   shortDescription: string;
   domainOfInfluenceType: DomainOfInfluenceType;
   domainOfInfluenceName: string;
+  domainOfInfluenceId: string;
   owner: string;
   ownerId: string;
   active: boolean;

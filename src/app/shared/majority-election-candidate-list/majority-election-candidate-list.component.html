@@ -3,7 +3,7 @@
   [dataSource]="candidates"
   cdkDropList
   [cdkDropListData]="candidates"
-  [cdkDropListDisabled]="testingPhaseEnded || readonly"
+  [cdkDropListDisabled]="testingPhaseEnded || locked || readonly"
   (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)"
 >
   <ng-container columnDef="position">
@@ -104,9 +104,15 @@
   <ng-container columnDef="actions">
     <bc-header-cell *headerCellDef></bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <div *ngIf="!locked && element.id && !readonly" class="flex">
+      <div *ngIf="!locked && element.id && !readonly && !hideActionButtons" class="flex">
         <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
-        <bc-icon *ngIf="!testingPhaseEnded" class="clickable ml-2" (click)="delete.emit(element)" icon="trash" iconColor="error"></bc-icon>
+        <bc-icon
+          *ngIf="!testingPhaseEnded && !locked"
+          class="clickable ml-2"
+          (click)="delete.emit(element)"
+          icon="trash"
+          iconColor="error"
+        ></bc-icon>
       </div>
     </bc-data-cell>
   </ng-container>
@@ -115,7 +121,7 @@
   <bc-data-row
     *dataRowDef="let row; columns: columns; let i = index"
     cdkDrag
-    [cdkDragDisabled]="testingPhaseEnded || readonly"
+    [cdkDragDisabled]="testingPhaseEnded || locked || readonly"
     [cdkDragData]="row"
   ></bc-data-row>
 </bc-table>

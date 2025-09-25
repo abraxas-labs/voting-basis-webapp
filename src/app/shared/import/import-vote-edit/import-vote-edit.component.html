@@ -1,7 +1,8 @@
 <bc-expansion-panel [header]="data.politicalBusinessNumber + ': ' + (data.officialDescription | getTranslation)" [expanded]="true">
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
-                [required]="true"
-                [(value)]="data.politicalBusinessNumber"
+           [required]="true"
+           [value]="data.politicalBusinessNumber"
+           (valueChange)="data.politicalBusinessNumber = $event; setIsApplied(false)"
            [subscriptSizing]="'dynamic'"></bc-text>
 
   <bc-dropdown class="full-width"
@@ -30,7 +31,8 @@
                valueExpr="level"
                [clearable]="false"
                [required]="true"
-               [(value)]="data.reportDomainOfInfluenceLevel"
+               [value]="data.reportDomainOfInfluenceLevel"
+               (valueChange)="data.reportDomainOfInfluenceLevel = $event; setIsApplied(false)"
                [label]="'POLITICAL_BUSINESS.REPORT_LEVEL' | translate"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
 
@@ -41,13 +43,16 @@
                valueExpr="value"
                [clearable]="false"
                [required]="true"
-               [(value)]="data.resultAlgorithm"
+               [value]="data.resultAlgorithm"
+               (valueChange)="data.resultAlgorithm = $event; setIsApplied(false)"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <div class="button-container">
+    <bc-icon *ngIf="isApplied" class="mr-2" iconColor="success" icon="checkmark"></bc-icon>
     <bc-button variant="primary"
                [label]="'ACTIONS.APPLY' | translate"
-               [disabled]="!data.politicalBusinessNumber || !data.domainOfInfluenceId || data.reportDomainOfInfluenceLevel === undefined"
+               [disabled]="isApplied || !data.politicalBusinessNumber || !data.domainOfInfluenceId
+                || data.reportDomainOfInfluenceLevel === undefined"
                (buttonClick)="apply()"></bc-button>
   </div>
 </bc-expansion-panel>

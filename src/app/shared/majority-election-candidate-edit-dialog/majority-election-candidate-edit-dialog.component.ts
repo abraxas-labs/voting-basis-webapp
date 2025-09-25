@@ -15,6 +15,7 @@ import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
 import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
+import { isValidZipCode } from '../../core/utils/zip-code.utils';
 
 @Component({
   selector: 'app-majority-election-candidate-edit-dialog',
@@ -76,6 +77,7 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
       !!this.data.number &&
       !!this.data.firstName &&
       !!this.data.lastName &&
+      isValidZipCode(this.data.zipCode, this.data.country) &&
       (this.testingPhaseEnded || isValidDateOfBirth(this.data.dateOfBirth)) &&
       (this.testingPhaseEnded || !this.isCandidateLocalityRequired || !!this.data.locality) &&
       (this.testingPhaseEnded || LanguageService.allLanguagesPresent(this.data.party)) &&

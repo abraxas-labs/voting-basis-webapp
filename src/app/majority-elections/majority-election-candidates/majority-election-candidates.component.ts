@@ -16,6 +16,7 @@ import { SecondaryMajorityElectionService } from '../../core/secondary-majority-
 import {
   MajorityElectionCandidatesImportDialogComponent,
   MajorityElectionCandidatesImportDialogData,
+  MajorityElectionCandidatesImportDialogResult,
 } from '../../shared/import/majority-election-candidates-import-dialog/majority-election-candidates-import-dialog.component';
 import { MajorityElectionBallotGroupOverviewComponent } from '../../shared/majority-election-ballot-groups/majority-election-ballot-group-overview/majority-election-ballot-group-overview.component';
 import {
@@ -40,6 +41,9 @@ export class MajorityElectionCandidatesComponent {
 
   @Input()
   public locked: boolean = false;
+
+  @Input()
+  public eVotingApproved: boolean = false;
 
   @Input()
   public candidateLocalityRequired: boolean = false;
@@ -162,7 +166,7 @@ export class MajorityElectionCandidatesComponent {
     }
   }
 
-  public importCandidates(): void {
+  public async importCandidates(): Promise<void> {
     if (!this.currentMajorityElection) {
       return;
     }
@@ -171,7 +175,24 @@ export class MajorityElectionCandidatesComponent {
       majorityElection: this.currentMajorityElection,
     };
 
-    this.dialogService.open(MajorityElectionCandidatesImportDialogComponent, dialogData);
+    const result = await this.dialogService.openForResult<
+      MajorityElectionCandidatesImportDialogComponent,
+      MajorityElectionCandidatesImportDialogResult
+    >(MajorityElectionCandidatesImportDialogComponent, dialogData);
+
+    if (!result || !result.success) {
+      return;
+    }
+
+    const existingPrimaryCandidates = [...this.candidates];
+    this.candidates = [];
+
+    for (const primaryCandidate of existingPrimaryCandidates) {
+      // the backend fires delete events for referenced candidates automatically
+      this.secondaryCandidatesComponents?.forEach(c => c.primaryCandidateDeleted(primaryCandidate.id));
+    }
+
+    this.refreshExpandedCandidates();
   }
 
   private async fetchDependencies(): Promise<void> {

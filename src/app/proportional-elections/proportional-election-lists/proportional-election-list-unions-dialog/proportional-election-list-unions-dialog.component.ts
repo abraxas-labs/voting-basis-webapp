@@ -4,9 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
+import { PaginatorComponent, SelectionToggleDirective, TableDataSource } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
   newProportionalElection,
@@ -47,6 +47,8 @@ export class ProportionalElectionListUnionsDialogComponent implements OnInit, Af
 
   @ViewChild('paginator') public paginator!: PaginatorComponent;
 
+  @ViewChildren(SelectionToggleDirective) public selectionToggles!: QueryList<SelectionToggleDirective<ProportionalElectionListUnion>>;
+
   public proportionalElection: ProportionalElection = newProportionalElection();
   public lists: ProportionalElectionList[] = [];
 
@@ -63,6 +65,7 @@ export class ProportionalElectionListUnionsDialogComponent implements OnInit, Af
     private readonly snackbarService: SnackbarService,
     private readonly i18n: TranslateService,
     private readonly dialogRef: MatDialogRef<ProportionalElectionListUnionsDialogData>,
+    private readonly cd: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionListUnionsDialogData,
   ) {
     this.lists = dialogData.lists;
@@ -239,9 +242,12 @@ export class ProportionalElectionListUnionsDialogComponent implements OnInit, Af
     }
 
     listUnionsWithSameRoot[existingListUnionIndex] = listUnion;
-
     this.triggerChangeDetectionForListUnions();
     this.reorderAndRefreshListUnions();
+
+    // Refresh the selection toggles (required because we reset the table state (add, reorder, refresh list unions))
+    this.cd.detectChanges();
+    this.selectionToggles.find(t => t.value.id === listUnion.id)?.toggle();
   }
 
   private getListUnionsWithSameRoot(listUnion: ProportionalElectionListUnion): ProportionalElectionListUnion[] {

@@ -46,6 +46,6 @@ export class ImportVoteEditComponent extends ImportPoliticalBusinessEditComponen
     vote.setDomainOfInfluenceId(this.data.domainOfInfluenceId);
     vote.setReportDomainOfInfluenceLevel(this.data.reportDomainOfInfluenceLevel);
     vote.setResultAlgorithm(this.data.resultAlgorithm);
-    this.setValid();
+    this.setIsApplied();
   }
 }

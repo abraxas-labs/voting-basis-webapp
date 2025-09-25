@@ -9,6 +9,8 @@
       <ng-container *ngIf="data.contestId">
         <app-vote-general-informations #step1
                                        [data]="data"
+                                       [isNew]="isNew"
+                                       [locked]="locked"
                                        (contentChanged)="contentChanged()"></app-vote-general-informations>
         <div class="stepper-footer">
           <vo-lib-inline-spinner class="align-right"
@@ -29,6 +31,7 @@
                        [testingPhaseEnded]="testingPhaseEnded"
                        [locked]="locked"
                        [readonly]="!canEdit"
+                       [voteTypeImmutable]="voteTypeImmutable"
                        [multipleVoteBallotsEnabled]="contestDomainOfInfluenceDefaults.multipleVoteBallotsEnabled"
                        [eVoting]="eVoting"
                        [domainOfInfluenceType]="step1?.selectedDomainOfInfluenceType"

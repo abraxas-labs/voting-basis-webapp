@@ -404,13 +404,42 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
           validators: [Validators.email],
         }),
       }),
-      eCollectingMinSignatureCount: this.formBuilder.control(this.data.eCollectingMinSignatureCount, {
-        validators: [Validators.min(0), Validators.max(100000)],
-      }),
-      eCollectingMaxElectronicSignaturePercent: this.formBuilder.control(this.data.eCollectingMaxElectronicSignaturePercent, {
-        validators: [Validators.min(0), Validators.max(100)],
-      }),
+      eCollectingInitiativeMinSignatureCount: this.formBuilder.control(this.data.eCollectingInitiativeMinSignatureCount),
+      eCollectingInitiativeMaxElectronicSignaturePercent: this.formBuilder.control(
+        this.data.eCollectingInitiativeMaxElectronicSignaturePercent,
+      ),
+      eCollectingInitiativeNumberOfMembersCommittee: this.formBuilder.control(this.data.eCollectingInitiativeNumberOfMembersCommittee),
+      eCollectingReferendumMinSignatureCount: this.formBuilder.control(this.data.eCollectingReferendumMinSignatureCount),
+      eCollectingReferendumMaxElectronicSignaturePercent: this.formBuilder.control(
+        this.data.eCollectingReferendumMaxElectronicSignaturePercent,
+      ),
+      eCollectingEmail: this.formBuilder.control(this.data.eCollectingEmail),
     });
+  }
+
+  public updateValidators(eCollectingEnabled: boolean): void {
+    if (eCollectingEnabled) {
+      this.form.controls.eCollectingInitiativeMinSignatureCount.setValidators([Validators.min(0), Validators.max(100000)]);
+      this.form.controls.eCollectingInitiativeMaxElectronicSignaturePercent.setValidators([Validators.min(0), Validators.max(100)]);
+      this.form.controls.eCollectingInitiativeNumberOfMembersCommittee.setValidators([Validators.min(0), Validators.max(100)]);
+      this.form.controls.eCollectingReferendumMinSignatureCount.setValidators([Validators.min(0), Validators.max(100000)]);
+      this.form.controls.eCollectingReferendumMaxElectronicSignaturePercent.setValidators([Validators.min(0), Validators.max(100)]);
+      this.form.controls.eCollectingEmail.setValidators([Validators.email]);
+    } else {
+      this.form.controls.eCollectingInitiativeMinSignatureCount.clearValidators();
+      this.form.controls.eCollectingInitiativeMaxElectronicSignaturePercent.clearValidators();
+      this.form.controls.eCollectingInitiativeNumberOfMembersCommittee.clearValidators();
+      this.form.controls.eCollectingReferendumMinSignatureCount.clearValidators();
+      this.form.controls.eCollectingReferendumMaxElectronicSignaturePercent.clearValidators();
+      this.form.controls.eCollectingEmail.clearValidators();
+    }
+
+    this.form.controls.eCollectingInitiativeMinSignatureCount.updateValueAndValidity();
+    this.form.controls.eCollectingInitiativeMaxElectronicSignaturePercent.updateValueAndValidity();
+    this.form.controls.eCollectingInitiativeNumberOfMembersCommittee.updateValueAndValidity();
+    this.form.controls.eCollectingReferendumMinSignatureCount.updateValueAndValidity();
+    this.form.controls.eCollectingReferendumMaxElectronicSignaturePercent.updateValueAndValidity();
+    this.form.controls.eCollectingEmail.updateValueAndValidity();
   }
 }
 
@@ -433,6 +462,10 @@ export interface Form {
   code: FormControl<string>;
   sortNumber: FormControl<number>;
   contactPerson: FormGroup<ContactPersonForm>;
-  eCollectingMinSignatureCount: FormControl<number>;
-  eCollectingMaxElectronicSignaturePercent: FormControl<number>;
+  eCollectingInitiativeMinSignatureCount: FormControl<number | undefined>;
+  eCollectingInitiativeMaxElectronicSignaturePercent: FormControl<number | undefined>;
+  eCollectingInitiativeNumberOfMembersCommittee: FormControl<number | undefined>;
+  eCollectingReferendumMinSignatureCount: FormControl<number | undefined>;
+  eCollectingReferendumMaxElectronicSignaturePercent: FormControl<number | undefined>;
+  eCollectingEmail: FormControl<string>;
 }

@@ -1,12 +1,17 @@
 <bc-table selection filter sort [sortActive]="[{ id: 'date', direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
-  <ng-container columnDef="date">
+  <ng-container columnDef="dateString">
     <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.DATE' | translate }}
       </span>
     </bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <app-truncated-value [value]="element.date | date"></app-truncated-value>
+      <app-truncated-value
+        [value]="
+          (element.dateString | date) +
+          (element.eVotingApprovalDueDateString ? ' (' + (element.eVotingApprovalDueDateString | date) + ')' : '')
+        "
+      ></app-truncated-value>
     </bc-data-cell>
   </ng-container>
 
@@ -128,10 +133,12 @@
         >
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
-          *ngIf="canEdit 
-            && element.state === contestStates.CONTEST_STATE_PAST_LOCKED 
-            && !element.isPoliticalAssembly
-            && element.ownerId === tenantId"
+          *ngIf="
+            canEdit &&
+            element.state === contestStates.CONTEST_STATE_PAST_LOCKED &&
+            !element.isPoliticalAssembly &&
+            element.ownerId === tenantId
+          "
           (click)="pastUnlock.emit(element.contest)"
           icon="unlock"
           text="CONTEST.PAST_UNLOCK.ACTION"
@@ -149,6 +156,13 @@
           (click)="export.emit(element)"
           icon="download"
           text="ACTIONS.EXPORT"
+        >
+        </vo-lib-action-menu-item>
+        <vo-lib-action-menu-item
+          *ngIf="!element.isPreconfiguredDate && !element.isPoliticalAssembly && element.contest?.eVoting"
+          (click)="exportOnlyEVoting.emit(element)"
+          icon="download"
+          text="CONTEST.EXPORT_E_VOTING_ONLY"
         >
         </vo-lib-action-menu-item>
       </vo-lib-action-menu>

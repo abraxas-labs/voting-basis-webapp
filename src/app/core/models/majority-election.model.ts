@@ -19,11 +19,12 @@ import { SexType } from './sex-type.model';
 export { MajorityElectionProto };
 export type MajorityElection = Omit<
   MajorityElectionProto.AsObject,
-  'shortDescriptionMap' | 'officialDescriptionMap' | 'federalIdentification'
+  'shortDescriptionMap' | 'officialDescriptionMap' | 'federalIdentification' | 'eVotingApproved'
 > & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
   federalIdentification?: number;
+  eVotingApproved?: boolean;
 };
 export { MajorityElectionMandateAlgorithmProto as MajorityElectionMandateAlgorithm };
 export { MajorityElectionResultEntryProto as MajorityElectionResultEntry };

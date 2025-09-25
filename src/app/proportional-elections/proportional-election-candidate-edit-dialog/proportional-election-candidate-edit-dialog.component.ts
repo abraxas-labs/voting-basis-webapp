@@ -20,6 +20,7 @@ import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
 import { Country } from '../../core/models/country.model';
 import { CountryService } from '../../core/country.service';
+import { isValidZipCode } from '../../core/utils/zip-code.utils';
 
 @Component({
   selector: 'app-proportional-election-candidate-edit-dialog',
@@ -107,6 +108,7 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnInit,
       !!this.data.firstName &&
       !!this.data.lastName &&
       this.isDateOfBirthValid() &&
+      isValidZipCode(this.data.zipCode, this.data.country) &&
       (!this.isCandidateLocalityRequired || !!this.data.locality) &&
       !!this.selectedPartyId &&
       this.data.sex !== undefined &&
@@ -155,6 +157,10 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnInit,
 
   public isDateOfBirthValid(): boolean {
     return isValidDateOfBirth(this.data.dateOfBirth);
+  }
+
+  public isZipCodeValid(): boolean {
+    return isValidZipCode(this.data.zipCode, this.data.country);
   }
 
   public async closeWithUnsavedChangesCheck(): Promise<void> {

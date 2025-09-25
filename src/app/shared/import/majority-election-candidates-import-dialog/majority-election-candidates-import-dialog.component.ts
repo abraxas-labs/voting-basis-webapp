@@ -5,13 +5,16 @@
  */
 
 import { SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ImportService } from '../../../core/import.service';
 import { ImportFileContent, ImportType } from '../../../core/models/import.model';
-import { MajorityElection, MajorityElectionCandidateProto } from '../../../core/models/majority-election.model';
+import { MajorityElection, MajorityElectionCandidate, MajorityElectionCandidateProto } from '../../../core/models/majority-election.model';
 import { flatMap } from '../../../core/utils/array.utils';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { SimpleStepperComponent } from '@abraxas/base-components';
+import { MajorityElectionService } from '../../../core/majority-election.service';
 
 @Component({
   selector: 'app-majority-election-candidates-import-dialog',
@@ -23,8 +26,13 @@ export class MajorityElectionCandidatesImportDialogComponent {
   public saving: boolean = false;
   public readonly importTypes: ImportType[] = [ImportType.IMPORT_TYPE_ECH_157];
   private readonly majorityElectionId: string;
+  public lastStep: boolean = false;
+  public candidates?: MajorityElectionCandidate[];
 
-  private majorityElectionCandidates?: MajorityElectionCandidateProto[];
+  private importCandidates?: MajorityElectionCandidateProto[];
+
+  @ViewChild(SimpleStepperComponent, { static: true })
+  public stepper!: SimpleStepperComponent;
 
   constructor(
     private readonly dialogRef: MatDialogRef<MajorityElectionCandidatesImportDialogComponent>,
@@ -37,17 +45,45 @@ export class MajorityElectionCandidatesImportDialogComponent {
   }
 
   public get canSave(): boolean {
-    return !!this.majorityElectionCandidates && this.majorityElectionCandidates.length > 0;
+    return !!this.importCandidates && this.importCandidates.length > 0;
+  }
+
+  public async stepChange(event: StepperSelectionEvent): Promise<void> {
+    this.lastStep = event.selectedIndex === this.stepper.steps.length - 1;
   }
 
   public importFilesChanged(files: ImportFileContent[]): void {
     if (files.length === 0) {
-      delete this.majorityElectionCandidates;
+      delete this.importCandidates;
+      delete this.candidates;
       return;
     }
 
     const majorityElections = flatMap(files.map(c => c.contest.getMajorityElectionsList()));
-    this.majorityElectionCandidates = flatMap(majorityElections.map(m => m.getCandidatesList()));
+    this.importCandidates = flatMap(majorityElections.map(m => m.getCandidatesList()));
+    this.candidates = this.importCandidates.map(MajorityElectionService.mapToMajorityElectionCandidate);
+
+    // trigger an initial reorder which sets the position to a non-zero distinct integer.
+    this.reorderCandidates(this.candidates);
+  }
+
+  public reorderCandidates(candidates: MajorityElectionCandidate[]) {
+    if (!this.candidates || !this.importCandidates) {
+      return;
+    }
+
+    for (let i = 1; i <= this.candidates.length; i++) {
+      candidates[i - 1].position = i;
+      candidates[i - 1].number = '' + i;
+    }
+
+    for (const importCandidate of this.importCandidates) {
+      const dataCandidate = this.candidates.find(c => c.id === importCandidate.getId())!;
+      importCandidate.setPosition(dataCandidate.position);
+      importCandidate.setNumber(dataCandidate.number);
+    }
+
+    this.importCandidates.sort((a, b) => a.getPosition() - b.getPosition());
   }
 
   public async save(): Promise<void> {
@@ -57,10 +93,12 @@ export class MajorityElectionCandidatesImportDialogComponent {
 
     this.saving = true;
     try {
-      await this.importService.importMajorityElectionCandidates(this.majorityElectionId, this.majorityElectionCandidates!);
+      await this.importService.importMajorityElectionCandidates(this.majorityElectionId, this.importCandidates!);
       const message = this.i18n.instant('IMPORT.IMPORT_SUCCESSFUL');
       this.snackbarService.success(message);
-      this.dialogRef.close();
+
+      const result: MajorityElectionCandidatesImportDialogResult = { success: true };
+      this.dialogRef.close(result);
     } finally {
       this.saving = false;
     }
@@ -73,4 +111,8 @@ export class MajorityElectionCandidatesImportDialogComponent {
 
 export interface MajorityElectionCandidatesImportDialogData {
   majorityElection: MajorityElection;
+}
+
+export interface MajorityElectionCandidatesImportDialogResult {
+  success: boolean;
 }

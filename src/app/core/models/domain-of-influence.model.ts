@@ -52,17 +52,26 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     stistatMunicipality: false,
     publishResultsDisabled: false,
     votingCardFlatRateDisabled: false,
+    isMainVotingCardsDomainOfInfluence: false,
     hideLowerDomainOfInfluencesInReports: false,
     eCollectingEnabled: false,
-    eCollectingMinSignatureCount: 0,
-    eCollectingMaxElectronicSignaturePercent: 0,
+    eCollectingEmail: '',
   } as DomainOfInfluence;
 }
 
 export interface DomainOfInfluence
   extends Omit<
     DomainOfInfluenceProto.AsObject,
-    'info' | 'childrenList' | 'plausibilisationConfiguration' | 'partiesList' | 'superiorAuthorityDomainOfInfluence'
+    | 'info'
+    | 'childrenList'
+    | 'plausibilisationConfiguration'
+    | 'partiesList'
+    | 'superiorAuthorityDomainOfInfluence'
+    | 'eCollectingInitiativeMinSignatureCount'
+    | 'eCollectingInitiativeMaxElectronicSignaturePercent'
+    | 'eCollectingInitiativeNumberOfMembersCommittee'
+    | 'eCollectingReferendumMinSignatureCount'
+    | 'eCollectingReferendumMaxElectronicSignaturePercent'
   > {
   createdOn?: Date;
   modifiedOn?: Date;
@@ -72,6 +81,11 @@ export interface DomainOfInfluence
   plausibilisationConfiguration?: PlausibilisationConfiguration;
   parties: DomainOfInfluenceParty[];
   superiorAuthorityDomainOfInfluence?: DomainOfInfluence;
+  eCollectingInitiativeMinSignatureCount?: number;
+  eCollectingInitiativeMaxElectronicSignaturePercent?: number;
+  eCollectingInitiativeNumberOfMembersCommittee?: number;
+  eCollectingReferendumMinSignatureCount?: number;
+  eCollectingReferendumMaxElectronicSignaturePercent?: number;
 }
 
 export interface DomainOfInfluenceLevel {

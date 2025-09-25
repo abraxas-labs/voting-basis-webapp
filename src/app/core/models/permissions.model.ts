@@ -111,6 +111,7 @@ export class Permissions {
     Update: Permissions.VotePrefix + UpdateSuffix,
     Read: Permissions.VotePrefix + ReadSuffix,
     Delete: Permissions.VotePrefix + DeleteSuffix,
+    EVotingApproveRevert: Permissions.VotePrefix + ':e-voting-approve-revert',
   };
 
   private static readonly VoteBallotPrefix = 'VoteBallot';
@@ -127,6 +128,7 @@ export class Permissions {
     Update: Permissions.ProportionalElectionPrefix + UpdateSuffix,
     Read: Permissions.ProportionalElectionPrefix + ReadSuffix,
     Delete: Permissions.ProportionalElectionPrefix + DeleteSuffix,
+    EVotingApproveRevert: Permissions.ProportionalElectionPrefix + ':e-voting-approve-revert',
   };
 
   private static readonly ProportionalElectionListPrefix = 'ProportionalElection.List';
@@ -167,6 +169,7 @@ export class Permissions {
     Update: Permissions.MajorityElectionPrefix + UpdateSuffix,
     Read: Permissions.MajorityElectionPrefix + ReadSuffix,
     Delete: Permissions.MajorityElectionPrefix + DeleteSuffix,
+    EVotingApproveRevert: Permissions.MajorityElectionPrefix + ':e-voting-approve-revert',
   };
 
   private static readonly MajorityElectionCandidatePrefix = 'MajorityElection.Candidate';
@@ -199,6 +202,7 @@ export class Permissions {
     Update: Permissions.SecondaryMajorityElectionPrefix + UpdateSuffix,
     Read: Permissions.SecondaryMajorityElectionPrefix + ReadSuffix,
     Delete: Permissions.SecondaryMajorityElectionPrefix + DeleteSuffix,
+    EVotingApproveRevert: Permissions.SecondaryMajorityElectionPrefix + ':e-voting-approve-revert',
   };
 
   private static readonly SecondaryMajorityElectionCandidatePrefix = 'SecondaryMajorityElection.Candidate';

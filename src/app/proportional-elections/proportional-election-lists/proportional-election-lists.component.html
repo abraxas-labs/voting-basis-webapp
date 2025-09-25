@@ -8,13 +8,13 @@
         <bc-button
           variant="tertiary"
           icon="plus"
-          [disabled]="testingPhaseEnded || readonly"
+          [disabled]="testingPhaseEnded || locked || readonly"
           [label]="'PROPORTIONAL_ELECTION.LIST.NEW' | translate"
           (buttonClick)="createList()"
         ></bc-button>
 
         <bc-button
-          [disabled]="testingPhaseEnded || readonly"
+          [disabled]="testingPhaseEnded || locked || readonly"
           variant="tertiary"
           icon="download"
           [label]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
@@ -26,7 +26,7 @@
           variant="tertiary"
           (buttonClick)="manageListUnions()"
           [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate"
-          [disabled]="testingPhaseEnded || readonly"
+          [disabled]="testingPhaseEnded || locked || readonly"
         ></bc-button>
       </div>
 
@@ -36,7 +36,7 @@
         [dataSource]="lists"
         cdkDropList
         [cdkDropListData]="lists"
-        [cdkDropListDisabled]="testingPhaseEnded || readonly"
+        [cdkDropListDisabled]="testingPhaseEnded || locked || readonly"
         (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)"
       >
         <ng-container columnDef="orderNumber">
@@ -92,7 +92,7 @@
             <div *ngIf="!locked && !readonly" class="flex">
               <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
               <bc-icon
-                *ngIf="!testingPhaseEnded && !readonly"
+                *ngIf="!testingPhaseEnded && !locked && !readonly"
                 class="ml-2"
                 (click)="deleteList(element); $event.stopPropagation()"
                 icon="trash"
@@ -112,7 +112,7 @@
           [selectionRowValue]="row"
           (click)="rowSelection.toggle(); selectList(row)"
           cdkDrag
-          [cdkDragDisabled]="testingPhaseEnded"
+          [cdkDragDisabled]="testingPhaseEnded || locked"
           [cdkDragData]="row"
         ></bc-data-row>
         <ng-template #listUnionDescriptionCol let-element>

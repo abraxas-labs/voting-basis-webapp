@@ -67,8 +67,9 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     'domainOfInfluenceType',
     'shortDescription',
     'domainOfInfluenceName',
-    'type',
+    'primaryType',
     'active',
+    'eVotingApproved',
     'owner',
     'actions',
   ];
@@ -87,7 +88,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   } as Contest;
   public tenantId: string = '';
   public readonly politicalBusinessTypes: typeof PoliticalBusinessType = PoliticalBusinessType;
-  public politicalBusinessTypeList: EnumItemDescription<PoliticalBusinessType>[] = [];
+  public primaryPoliticalBusinessTypeList: EnumItemDescription<PoliticalBusinessType>[] = [];
   public domainOfInfluenceTypeList: EnumItemDescription<DomainOfInfluenceType>[] = [];
   public cantonDefaults?: DomainOfInfluenceCantonDefaults;
   public dataSource = new TableDataSource<PoliticalBusinessListType>();
@@ -95,6 +96,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public hasAdminWritePermissions = false;
   public hasSameTenantReadPermissions = false;
   public hasSameTenantWritePermissions = false;
+  public hasEVotingApproveRevertPermissions = false;
   public politicalBusinessSummaries: PoliticalBusinessSummary[] = [];
   public columns = [...this.originalColumns];
   public activeToggled: boolean = false;
@@ -128,10 +130,9 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public async ngOnInit(): Promise<void> {
     const tenant = await this.auth.getActiveTenant();
     this.tenantId = tenant.id;
-    this.politicalBusinessTypeList = this.enumUtil.getArrayWithDescriptions<PoliticalBusinessType>(
-      PoliticalBusinessType,
-      'POLITICAL_BUSINESS.TYPE.',
-    );
+    this.primaryPoliticalBusinessTypeList = this.enumUtil
+      .getArrayWithDescriptions<PoliticalBusinessType>(PoliticalBusinessType, 'POLITICAL_BUSINESS.TYPE.')
+      .filter(x => x.value !== PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION);
     this.domainOfInfluenceTypeList = this.enumUtil.getArrayWithDescriptions<DomainOfInfluenceType>(
       DomainOfInfluenceType,
       'DOMAIN_OF_INFLUENCE.TYPES.',
@@ -243,6 +244,42 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
+  public async eVotingApprovedChange(row: PoliticalBusinessListType, approved: boolean) {
+    if (approved) {
+      const approveConfirm = await this.dialogService.confirm(
+        'POLITICAL_BUSINESS.CONFIRM_E_VOTING_APPROVED.TITLE',
+        'POLITICAL_BUSINESS.CONFIRM_E_VOTING_APPROVED.TEXT',
+        'APP.YES',
+      );
+      if (!approveConfirm) {
+        row.eVotingApproved = false;
+        return;
+      }
+    }
+
+    try {
+      switch (row.type) {
+        case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE:
+          await this.voteService.updateEVotingApproval(row.id, approved);
+          break;
+        case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION:
+          await this.proportionalElectionService.updateEVotingApproval(row.id, approved);
+          break;
+        case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION:
+          await this.majorityElectionService.updateEVotingApproval(row.id, approved);
+          break;
+        case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION:
+          await this.secondaryMajorityElectionService.updateEVotingApproval(row.id, approved);
+          break;
+      }
+
+      this.snackbarService.success(this.i18n.instant('APP.SAVED'));
+    } catch (err) {
+      row.eVotingApproved = !approved;
+      throw err;
+    }
+  }
+
   public managePoliticalBusinessUnions(): void {
     if (!this.cantonDefaults) {
       return;
@@ -298,6 +335,13 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       );
       this.hasSameTenantReadPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ReadActionsSameTenant);
       this.hasSameTenantWritePermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.WriteActionsSameTenant);
+      this.hasEVotingApproveRevertPermissions = await this.permissionService.hasAnyPermission(
+        Permissions.Vote.EVotingApproveRevert,
+        Permissions.ProportionalElection.EVotingApproveRevert,
+        Permissions.MajorityElection.EVotingApproveRevert,
+        Permissions.SecondaryMajorityElection.EVotingApproveRevert,
+      );
+
       this.startChangesListenerIfNotStarted();
     } finally {
       this.loading = false;
@@ -348,6 +392,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           'VoteCreated',
           'VoteUpdated',
           'VoteActiveStateUpdated',
+          'VoteEVotingApprovalUpdated',
           'VoteDeleted',
           'BallotCreated',
           'BallotUpdated',
@@ -357,6 +402,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           'ProportionalElectionCreated',
           'ProportionalElectionUpdated',
           'ProportionalElectionActiveStateUpdated',
+          'ProportionalElectionEVotingApprovalUpdated',
           'ProportionalElectionAfterTestingPhaseUpdated',
           'ProportionalElectionDeleted',
           'ProportionalElectionUnionCreated',
@@ -367,6 +413,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           'MajorityElectionCreated',
           'MajorityElectionUpdated',
           'MajorityElectionActiveStateUpdated',
+          'MajorityElectionEVotingApprovalUpdated',
           'MajorityElectionDeleted',
           'MajorityElectionAfterTestingPhaseUpdated',
           'MajorityElectionUnionCreated',
@@ -378,6 +425,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           'SecondaryMajorityElectionUpdated',
           'SecondaryMajorityElectionActiveStateUpdated',
           'SecondaryMajorityElectionAfterTestingPhaseUpdated',
+          'SecondaryMajorityElectionEVotingApprovalUpdated',
           'SecondaryMajorityElectionDeleted',
         ],
         this.contest.id,
@@ -413,7 +461,8 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       case 'BallotAfterTestingPhaseUpdated':
       case 'BallotDeleted':
       case 'VoteUpdated':
-      case 'VoteActiveStateUpdated': {
+      case 'VoteActiveStateUpdated':
+      case 'VoteEVotingApprovalUpdated': {
         const vote = await this.contestService.getPoliticalBusinessSummary(
           PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE,
           politicalBusinessId,
@@ -435,6 +484,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       }
       case 'ProportionalElectionUpdated':
       case 'ProportionalElectionActiveStateUpdated':
+      case 'ProportionalElectionEVotingApprovalUpdated':
       case 'ProportionalElectionAfterTestingPhaseUpdated': {
         const election = await this.contestService.getPoliticalBusinessSummary(
           PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_PROPORTIONAL_ELECTION,
@@ -457,6 +507,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       }
       case 'MajorityElectionUpdated':
       case 'MajorityElectionActiveStateUpdated':
+      case 'MajorityElectionEVotingApprovalUpdated':
       case 'MajorityElectionAfterTestingPhaseUpdated': {
         const election = await this.contestService.getPoliticalBusinessSummary(
           PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION,
@@ -479,6 +530,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       }
       case 'SecondaryMajorityElectionUpdated':
       case 'SecondaryMajorityElectionActiveStateUpdated':
+      case 'SecondaryMajorityElectionEVotingApprovalUpdated':
       case 'SecondaryMajorityElectionAfterTestingPhaseUpdated': {
         const election = await this.contestService.getPoliticalBusinessSummary(
           PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION,
@@ -511,6 +563,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.columns = [...this.originalColumns];
     const hasPoliticalBusinessUnionDescription = this.dataSource.data.some(x => !!x.politicalBusinessUnionDescription);
     const hasElectionGroupNumber = this.dataSource.data.some(x => !!x.electionGroupNumber);
+    const hasEVoting = this.contest.eVoting;
 
     if (!hasElectionGroupNumber) {
       this.columns.splice(2, 1);
@@ -518,6 +571,11 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     if (!hasPoliticalBusinessUnionDescription) {
       this.columns.splice(1, 1);
+    }
+
+    if (!hasEVoting) {
+      const eVotingColIndex = this.columns.indexOf('eVotingApproved');
+      this.columns.splice(eVotingColIndex, 1);
     }
   }
 
@@ -529,6 +587,10 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       number: politicalBusinessSummary.politicalBusinessNumber,
       politicalBusinessUnionDescription: politicalBusinessSummary.politicalBusinessUnionDescription,
       electionGroupNumber: politicalBusinessSummary.electionGroupNumber,
+      primaryType:
+        politicalBusinessSummary.politicalBusinessType === PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION
+          ? PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION
+          : politicalBusinessSummary.politicalBusinessType,
       type: politicalBusinessSummary.politicalBusinessType,
       subType: politicalBusinessSummary.politicalBusinessSubType,
       shortDescription: this.languageService.getTranslationForCurrentLang(politicalBusinessSummary.shortDescription),
@@ -538,6 +600,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       domainOfInfluenceId: politicalBusinessSummary.domainOfInfluence.id,
       owner: politicalBusinessSummary.domainOfInfluence.authorityName,
       ownerId: politicalBusinessSummary.domainOfInfluence.secureConnectId,
+      eVotingApproved: politicalBusinessSummary.eVotingApproved,
     };
   }
 }
@@ -547,6 +610,7 @@ export type PoliticalBusinessListType = {
   number: string;
   politicalBusinessUnionDescription: string;
   electionGroupNumber: string;
+  primaryType: PoliticalBusinessType;
   type: PoliticalBusinessType;
   subType: PoliticalBusinessSubType;
   shortDescription: string;
@@ -556,4 +620,5 @@ export type PoliticalBusinessListType = {
   owner: string;
   ownerId: string;
   active: boolean;
+  eVotingApproved?: boolean;
 };

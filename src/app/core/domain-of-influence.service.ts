@@ -57,7 +57,7 @@ import {
 } from './models/plausibilisation.model';
 import { mapToProtoContactPerson } from './utils/contact-person.utils';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
-import { createDoubleValue } from './utils/proto.utils';
+import { createDoubleValue, createInt32Value } from './utils/proto.utils';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -127,10 +127,15 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
         : undefined,
       publishResultsDisabled: doi.getPublishResultsDisabled(),
       votingCardFlatRateDisabled: doi.getVotingCardFlatRateDisabled(),
+      isMainVotingCardsDomainOfInfluence: doi.getIsMainVotingCardsDomainOfInfluence(),
       hideLowerDomainOfInfluencesInReports: doi.getHideLowerDomainOfInfluencesInReports(),
       eCollectingEnabled: doi.getECollectingEnabled(),
-      eCollectingMinSignatureCount: doi.getECollectingMinSignatureCount(),
-      eCollectingMaxElectronicSignaturePercent: doi.getECollectingMaxElectronicSignaturePercent(),
+      eCollectingInitiativeMinSignatureCount: doi.getECollectingInitiativeMinSignatureCount()?.getValue(),
+      eCollectingInitiativeMaxElectronicSignaturePercent: doi.getECollectingInitiativeMaxElectronicSignaturePercent()?.getValue(),
+      eCollectingInitiativeNumberOfMembersCommittee: doi.getECollectingInitiativeNumberOfMembersCommittee()?.getValue(),
+      eCollectingReferendumMinSignatureCount: doi.getECollectingReferendumMinSignatureCount()?.getValue(),
+      eCollectingReferendumMaxElectronicSignaturePercent: doi.getECollectingReferendumMaxElectronicSignaturePercent()?.getValue(),
+      eCollectingEmail: doi.getECollectingEmail(),
     };
   }
 
@@ -369,10 +374,15 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setStistatMunicipality(data.stistatMunicipality);
     result.setPublishResultsDisabled(data.publishResultsDisabled);
     result.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
+    result.setIsMainVotingCardsDomainOfInfluence(data.isMainVotingCardsDomainOfInfluence);
     result.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
     result.setECollectingEnabled(data.eCollectingEnabled);
-    result.setECollectingMinSignatureCount(data.eCollectingMinSignatureCount);
-    result.setECollectingMaxElectronicSignaturePercent(data.eCollectingMaxElectronicSignaturePercent);
+    result.setECollectingInitiativeMinSignatureCount(createInt32Value(data.eCollectingInitiativeMinSignatureCount));
+    result.setECollectingInitiativeMaxElectronicSignaturePercent(createInt32Value(data.eCollectingInitiativeMaxElectronicSignaturePercent));
+    result.setECollectingInitiativeNumberOfMembersCommittee(createInt32Value(data.eCollectingInitiativeNumberOfMembersCommittee));
+    result.setECollectingReferendumMinSignatureCount(createInt32Value(data.eCollectingReferendumMinSignatureCount));
+    result.setECollectingReferendumMaxElectronicSignaturePercent(createInt32Value(data.eCollectingReferendumMaxElectronicSignaturePercent));
+    result.setECollectingEmail(data.eCollectingEmail);
     return result;
   }
 
@@ -418,10 +428,19 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setStistatMunicipality(data.stistatMunicipality);
       adminRequest.setPublishResultsDisabled(data.publishResultsDisabled);
       adminRequest.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
+      adminRequest.setIsMainVotingCardsDomainOfInfluence(data.isMainVotingCardsDomainOfInfluence);
       adminRequest.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
       adminRequest.setECollectingEnabled(data.eCollectingEnabled);
-      adminRequest.setECollectingMinSignatureCount(data.eCollectingMinSignatureCount);
-      adminRequest.setECollectingMaxElectronicSignaturePercent(data.eCollectingMaxElectronicSignaturePercent);
+      adminRequest.setECollectingInitiativeMinSignatureCount(createInt32Value(data.eCollectingInitiativeMinSignatureCount));
+      adminRequest.setECollectingInitiativeMaxElectronicSignaturePercent(
+        createInt32Value(data.eCollectingInitiativeMaxElectronicSignaturePercent),
+      );
+      adminRequest.setECollectingInitiativeNumberOfMembersCommittee(createInt32Value(data.eCollectingInitiativeNumberOfMembersCommittee));
+      adminRequest.setECollectingReferendumMinSignatureCount(createInt32Value(data.eCollectingReferendumMinSignatureCount));
+      adminRequest.setECollectingReferendumMaxElectronicSignaturePercent(
+        createInt32Value(data.eCollectingReferendumMaxElectronicSignaturePercent),
+      );
+      adminRequest.setECollectingEmail(data.eCollectingEmail);
       this.mapToDomainOfInfluenceElectionAdminOrAdminRequest(data, adminRequest);
       result.setAdminRequest(adminRequest);
     } else {

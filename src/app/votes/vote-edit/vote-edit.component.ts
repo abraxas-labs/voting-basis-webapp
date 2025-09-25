@@ -45,6 +45,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
   public eVoting?: boolean;
+  public voteTypeImmutable: boolean = false;
   public isVariantsBallot: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public hasChanges: boolean = false;
@@ -78,8 +79,9 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
 
       const { testingPhaseEnded, locked, eVoting, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
-      this.locked = locked;
+      this.locked = locked || !!this.data.eVotingApproved;
       this.eVoting = eVoting;
+      this.voteTypeImmutable = this.data.ballots.length > 0 && this.data.ballots.some(b => !!b.id);
       this.canEdit = await this.permissionService.hasPermission(Permissions.Vote.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
     } finally {
@@ -167,6 +169,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
 
       for (const ballot of ballotsToCreate) {
         ballot.id = await this.voteService.createBallot(ballot);
+        this.voteTypeImmutable = true;
       }
 
       const deletedBallotIds = ballotsToDelete.map(b => b.id);

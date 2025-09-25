@@ -16,6 +16,7 @@ import {
   ReorderMajorityElectionCandidatesRequest,
   UpdateMajorityElectionActiveStateRequest,
   UpdateMajorityElectionCandidateRequest,
+  UpdateMajorityElectionEVotingApprovalRequest,
   UpdateMajorityElectionRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/majority_election_requests_pb';
 import { SexType } from '@abraxas/voting-basis-service-proto/grpc/shared/sex_pb';
@@ -73,6 +74,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       shortDescription: toJsMap(election.getShortDescriptionMap()),
       officialDescription: toJsMap(election.getOfficialDescriptionMap()),
       federalIdentification: election.getFederalIdentification()?.getValue(),
+      eVotingApproved: election.getEVotingApproved()?.getValue(),
     };
   }
 
@@ -104,6 +106,13 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     req.setId(id);
     req.setActive(active);
     return this.requestEmptyResp(c => c.updateActiveState, req);
+  }
+
+  public updateEVotingApproval(id: string, approved: boolean): Promise<void> {
+    const req = new UpdateMajorityElectionEVotingApprovalRequest();
+    req.setId(id);
+    req.setApproved(approved);
+    return this.requestEmptyResp(c => c.updateEVotingApproval, req);
   }
 
   public get(id: string): Promise<MajorityElection> {

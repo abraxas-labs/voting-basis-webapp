@@ -49,6 +49,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
   public newlyCreated: boolean = false;
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
+  public eVotingApproved: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public hasChanges: boolean = false;
   public canEdit: boolean = false;
@@ -80,6 +81,7 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
 
       const { testingPhaseEnded, locked, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
+      this.eVotingApproved = !!this.data.eVotingApproved;
       this.locked = locked;
       this.canEdit = await this.permissionService.hasPermission(Permissions.MajorityElection.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);

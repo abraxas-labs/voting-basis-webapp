@@ -10,6 +10,7 @@ import { PoliticalAssembly } from './political-assembly.model';
 export type ContestListType = {
   id: string;
   date: Date;
+  dateString: string; // Can be removed after BC fixed the table date filter, VOTING-4891
   type: string;
   isPreconfiguredDate: boolean;
   isPoliticalAssembly: boolean;
@@ -24,4 +25,5 @@ export type ContestListType = {
   ownerId?: string;
   contest?: ContestSummary;
   politicalAssembly?: PoliticalAssembly;
+  eVotingApprovalDueDateString?: string;
 };

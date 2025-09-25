@@ -133,6 +133,7 @@
     [label]="'MAJORITY_ELECTION.CANDIDATE.STREET' | translate"
     [value]="candidate.street"
     (valueChange)="candidate.street = $event; contentChanged.emit()"
+    [readonly]="isCandidateReference"
     subscriptSizing="dynamic"
   ></bc-text>
 
@@ -140,6 +141,7 @@
     [label]="'MAJORITY_ELECTION.CANDIDATE.HOUSE_NUMBER' | translate"
     [value]="candidate.houseNumber"
     (valueChange)="candidate.houseNumber = $event; contentChanged.emit()"
+    [readonly]="isCandidateReference"
     subscriptSizing="dynamic"
   ></bc-text>
 
@@ -148,14 +150,20 @@
     [readonly]="isCandidateReference"
     [value]="candidate.zipCode"
     (valueChange)="candidate.zipCode = $event; contentChanged.emit()"
+    [error]="!!candidate.zipCode && !isZipCodeValid()"
     subscriptSizing="dynamic"
-  ></bc-text>
+  >
+    <bc-error *ngIf="!!candidate.zipCode && !isZipCodeValid()">
+      {{ 'MAJORITY_ELECTION.CANDIDATE.ZIP_CODE_INVALID' | translate }}
+    </bc-error>
+  </bc-text>
 
   <bc-text
     [label]="'MAJORITY_ELECTION.CANDIDATE.LOCALITY' | translate"
     [required]="isCandidateLocalityRequired && !testingPhaseEnded"
     [readonly]="isCandidateReference"
     [value]="candidate.locality"
+    [maxlength]="40"
     (valueChange)="candidate.locality = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
   ></bc-text>
@@ -175,6 +183,7 @@
     [items]="countries"
     [clearable]="false"
     [required]="true"
+    [readonly]="isCandidateReference"
     displayExpr="description"
     valueExpr="isoId"
     [value]="candidate.country"

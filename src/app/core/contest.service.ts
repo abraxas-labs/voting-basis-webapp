@@ -59,6 +59,7 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
       domainOfInfluence: DomainOfInfluenceService.mapToDomainOfInfluence(data.getDomainOfInfluence()!),
       shortDescription: toJsMap(data.getShortDescriptionMap()),
       officialDescription: toJsMap(data.getOfficialDescriptionMap()),
+      eVotingApproved: data.getEVotingApproved()?.getValue(),
     };
   }
 
@@ -204,6 +205,8 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
       locked: state === ContestState.CONTEST_STATE_PAST_LOCKED || state === ContestState.CONTEST_STATE_ARCHIVED,
       domainOfInfluence: DomainOfInfluenceService.mapToDomainOfInfluence(data.getDomainOfInfluence()!),
       previousContestId: data.getPreviousContestId(),
+      eVotingApprovalDueDate: data.getEVotingApprovalDueDate()?.toDate(),
+      eVotingApproved: data.getEVotingApproved(),
     };
   }
 
@@ -232,6 +235,8 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
       domainOfInfluence: DomainOfInfluenceService.mapToDomainOfInfluence(data.getDomainOfInfluence()!),
       politicalBusinessUnions: [],
       politicalBusinesses: [],
+      eVotingApprovalDueDate: data.getEVotingApprovalDueDate()?.toDate(),
+      eVotingApproved: data.getEVotingApproved(),
     };
   }
 
@@ -254,6 +259,7 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
     request.setEVotingFrom(TimestampUtil.toTimestamp(data.eVotingFrom));
     request.setEVotingTo(TimestampUtil.toTimestamp(data.eVotingTo));
     request.setPreviousContestId(data.previousContestId ?? '');
+    request.setEVotingApprovalDueDate(TimestampUtil.toTimestamp(data.eVotingApprovalDueDate));
     return request;
   }
 
@@ -267,6 +273,7 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
     request.setEVotingFrom(TimestampUtil.toTimestamp(data.eVotingFrom));
     request.setEVotingTo(TimestampUtil.toTimestamp(data.eVotingTo));
     request.setPreviousContestId(data.previousContestId ?? '');
+    request.setEVotingApprovalDueDate(TimestampUtil.toTimestamp(data.eVotingApprovalDueDate));
     return request;
   }
 
@@ -280,6 +287,7 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
       shortDescription: toJsMap(data.getShortDescriptionMap()),
       officialDescription: toJsMap(data.getOfficialDescriptionMap()),
       domainOfInfluence: DomainOfInfluenceService.mapToDomainOfInfluence(data.getDomainOfInfluence()!),
+      eVotingApproved: data.getEVotingApproved()?.getValue(),
     };
   }
 }

@@ -1,7 +1,8 @@
 <bc-expansion-panel [header]="data.politicalBusinessNumber + ': ' + (data.officialDescription | getTranslation)" [expanded]="true">
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
            [required]="true"
-           [(value)]="data.politicalBusinessNumber"
+           [value]="data.politicalBusinessNumber"
+           (valueChange)="data.politicalBusinessNumber = $event; setIsApplied(false)"
            [subscriptSizing]="'dynamic'"></bc-text>
 
   <bc-dropdown class="full-width"
@@ -31,22 +32,27 @@
                displayExpr="description"
                valueExpr="value"
                [required]="true"
-               [(value)]="data.mandateAlgorithm"
+               [value]="data.mandateAlgorithm"
+               (valueChange)="data.mandateAlgorithm = $event; setIsApplied(false)"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <div>
     <bc-spinner *ngIf="loadingParties; else partyMappingContent" class="mt-3"></bc-spinner>
     <ng-template #partyMappingContent>
-      <app-import-proportional-election-party-mapping *ngIf="partyMappings !== undefined && partyMappings.parties.length > 0"
-                                                      class="mt-3"
-                                                      [data]="partyMappings!"></app-import-proportional-election-party-mapping>
+      <app-import-proportional-election-party-mapping
+        *ngIf="partyMappings !== undefined && partyMappings.parties.length > 0"
+        class="mt-3"
+        [data]="partyMappings!"
+        (mappingsChange)="setIsApplied(false)"
+      ></app-import-proportional-election-party-mapping>
     </ng-template>
   </div>
 
   <div class="button-container">
+    <bc-icon *ngIf="isApplied" class="mr-2" iconColor="success" icon="checkmark"></bc-icon>
     <bc-button variant="primary"
                [label]="'ACTIONS.APPLY' | translate"
-               [disabled]="!data.politicalBusinessNumber || !data.domainOfInfluenceId || loadingParties"
+               [disabled]="isApplied || !data.politicalBusinessNumber || !data.domainOfInfluenceId || loadingParties"
                (buttonClick)="apply()">
     </bc-button>
   </div>

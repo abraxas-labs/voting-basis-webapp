@@ -7,13 +7,13 @@
     <bc-button variant="tertiary"
                icon="plus"
                [label]="'MAJORITY_ELECTION.CANDIDATE.NEW' | translate"
-               [disabled]="locked || readonly"
+               [disabled]="locked || eVotingApproved || readonly"
                (buttonClick)="createCandidate()"></bc-button>
     <bc-button *ngIf="currentMajorityElection"
                variant="tertiary"
                icon="download"
-               [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES' | translate"
-               [disabled]="locked || readonly"
+               [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE' | translate"
+               [disabled]="locked || eVotingApproved || readonly"
                (buttonClick)="importCandidates()"
                class="ml-2"></bc-button>
 
@@ -21,7 +21,7 @@
 
   <app-majority-election-candidate-list [candidates]="expandedCandidates"
                                         [testingPhaseEnded]="testingPhaseEnded"
-                                        [locked]="locked"
+                                        [locked]="locked || eVotingApproved"
                                         [readonly]="readonly"
                                         [reordering]="reordering"
                                         (candidatesReordered)="reorderCandidates($event)"
@@ -32,6 +32,8 @@
 
   <app-secondary-majority-election-candidates *ngFor="let secondaryMajorityElection of secondaryElections"
                                               [testingPhaseEnded]="testingPhaseEnded"
+                                              [locked]="locked"
+                                              [eVotingApproved]="eVotingApproved"
                                               [readonly]="readonly"
                                               [secondaryMajorityElection]="secondaryMajorityElection"
                                               [candidateLocalityRequired]="candidateLocalityRequired"

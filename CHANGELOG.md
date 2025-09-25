@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.46.3`)
+# ✨ Changelog (`v3.54.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,143 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.46.3
-Previous version ---- v3.35.0
+This version -------- v3.54.0
+Previous version ---- v3.46.3
 Initial version ----- v1.23.0
-Total commits ------- 29
+Total commits ------- 22
 ```
+
+## [v3.54.0] - 2025-08-25
+
+### 🆕 Added
+
+- add main voting cards domain of influence flag
+
+## [v3.53.5] - 2025-08-08
+
+### 🔄 Changed
+
+- restrict editing of candidate reference to correct fields
+
+## [v3.53.4] - 2025-08-08
+
+### 🔄 Changed
+
+- restrict locality to eCH length
+- ensure correct swiss zip code
+
+## [v3.53.3] - 2025-08-08
+
+### 🔄 Changed
+
+- improve political business import
+
+## [v3.53.2] - 2025-07-28
+
+## 🔄 Changed
+
+- fix(VOTING-6086): error snackbars
+
+## [v3.53.1] - 2025-07-22
+
+### 🔄 Changed
+
+- fix bc number clear spacing and perentage display
+
+## [v3.53.0] - 2025-07-11
+
+### 🔄 Changed
+
+- bump BC version
+
+## [v3.52.1] - 2025-07-07
+
+### 🔄 Changed
+
+- prevent vote type change after ballot create
+
+## [v3.52.0] - 2025-07-04
+
+### 🔄 Changed
+
+- set majority election candidate number on import
+
+## [v3.51.0] - 2025-07-03
+
+### 🔄 Changed
+
+- e-voting only contest export
+
+## [v3.50.1] - 2025-07-03
+
+### 🆕 Added
+
+- add contest e-voting approval due date
+
+## [v3.50.0] - 2025-07-01
+
+### 🔄 Changed
+
+- prevent certain political business changes after create
+
+## [v3.49.1] - 2025-06-30
+
+### 🔄 Changed
+
+- fix create contest per preconfigured date
+
+## [v3.49.0] - 2025-06-20
+
+### 🆕 Added
+
+- add e-voting approval on political businesses
+
+## [v3.48.0] - 2025-06-18
+
+### 🆕 Added
+
+- add e-collecting email
+
+## [v3.47.1] - 2025-06-05
+
+### 🔄 Changed
+
+- change vote sub type label
+
+## [v3.47.0] - 2025-05-26
+
+### 🔄 Changed
+
+- refactor dockerfile
+- remove redundant file copies
+- add explicit workdir in final image to avoid surprises
+
+### ❌ Removed
+
+- remove entrypoint shell script since its functionality is shifted to the deployment in ops repo
+
+### 🔒 Security
+
+- refactor dockerfile
+- using explicit nginx user instead of root for copying nginx configs and webroot
+
+## [v3.46.4] - 2025-05-26
+
+### 🔄 Changed
+
+- initiative number of members committee is required for all dois
+
+### 🔄 Changed
+
+- fix secondary majority election filter naming in contest details
+
+### 🆕 Added
+
+- add e-collecting referendum and initiative properties
+
+### 🔄 Changed
+
+- highlight selected list union after create
 
 ## [v3.46.3] - 2025-04-15
 
@@ -175,140 +307,97 @@ Total commits ------- 29
 
 ## [v3.35.1] - 2025-02-12
 
-### 🔄 Changed
+### 🆕 Added
 
-- update max length for short and official descriptions in ballot to align with eCH-0155 v4.0 specification.
-
-### 🔄 Changed
-
-- set popup min width for firefox
+- add main voting cards domain of influence flag
 
 ### 🔄 Changed
 
-- add candidates to secondary majority election bugfixes
-
-## [v3.35.0] - 2025-02-06
-
-### :new: Added
-
-- added hide lower domain of influences in reports flag
-
-## [v3.34.3] - 2025-01-21
+- restrict editing of candidate reference to correct fields
 
 ### 🔄 Changed
 
-- update base components
-
-## [v3.34.2] - 2025-01-16
-
-### 🔄 Changed
-
-- sort domain of influences in dropdowns
-
-## [v3.34.1] - 2025-01-16
+- restrict locality to eCH length
+- ensure correct swiss zip code
 
 ### 🔄 Changed
 
-- save electoral registration enabled when creating domain of influence
+- improve political business import
 
-## [v3.34.0] - 2025-01-15
+## 🔄 Changed
 
-### 🔄 Changed
-
-- change majority election candidate party field to autocomplete
-
-## [v3.33.0] - 2025-01-10
-
-### :arrows_counterclockwise: Changed
-
-- restrict admin permissions
-
-## [v3.32.2] - 2025-01-10
+- fix(VOTING-6086): error snackbars
 
 ### 🔄 Changed
 
-- assign counting circles dialog fix paging
+- fix bc number clear spacing and perentage display
 
-## [v3.32.1] - 2025-01-10
+### 🔄 Changed
+
+- bump BC version
+
+### 🔄 Changed
+
+- prevent vote type change after ballot create
+
+### 🔄 Changed
+
+- set majority election candidate number on import
 
 ### 🆕 Added
 
-- add paging to cc assign dialog
+- add contest e-voting approval due date
 
-## [v3.32.0] - 2025-01-07
+### 🔄 Changed
+
+- prevent certain political business changes after create
+
+### 🔄 Changed
+
+- fix create contest per preconfigured date
 
 ### 🆕 Added
 
-- add robots meta tag to instruct crawlers to not index content
-- add X-Robots-Tag response header to instruct crawlers to not index content
-
-## [v3.31.6] - 2025-01-07
-
-### 🔄 Changed
-
-- add paging for assigned cc in doi overview
-
-## [v3.31.5] - 2025-01-07
-
-### 🔄 Changed
-
-- update dependencies
-
-## [v3.31.4] - 2025-01-06
-
-### 🔄 Changed
-
-- toggle political business active switch should not jump back
-
-## [v3.31.3] - 2024-12-19
-
-### 🔄 Changed
-
-- fixed height for assign counting circle pop up
-
-## [v3.31.2] - 2024-12-19
-
-### 🔄 Changed
-
-- fix reordering of candidates and incumbent of referenced secondary candidates
-
-## [v3.31.1] - 2024-12-13
+- add e-voting approval on political businesses
 
 ### 🆕 Added
 
-- add paginator for all contests tables in overview
+- add e-collecting email
 
-## [v3.31.0] - 2024-12-11
+### 🔄 Changed
+
+- change vote sub type label
+
+### 🔄 Changed
+
+- refactor dockerfile
+- remove redundant file copies
+- add explicit workdir in final image to avoid surprises
+
+### ❌ Removed
+
+- remove entrypoint shell script since its functionality is shifted to the deployment in ops repo
+
+### 🔒 Security
+
+- refactor dockerfile
+- using explicit nginx user instead of root for copying nginx configs and webroot
+
+### 🔄 Changed
+
+- initiative number of members committee is required for all dois
+
+### 🔄 Changed
+
+- fix secondary majority election filter naming in contest details
 
 ### 🆕 Added
 
-- domain of influence voting card flat rate owner
-
-## [v3.30.2] - 2024-12-11
+- add e-collecting referendum and initiative properties
 
 ### 🔄 Changed
 
-- change disabled form fields to readonly
-
-## [v3.30.1] - 2024-12-11
-
-### 🔄 Changed
-
-- majority election candidate optional values in active contest
-
-## [v3.30.0] - 2024-12-03
-
-### 🆕 Added
-
-- show roles in header tenant switch
-
-## [v3.29.1] - 2024-11-29
-
-### 🔄 Changed
-
-- move resolve contest import from grpc to rest
-
-## [v3.29.0] - 2024-11-28
+- highlight selected list union after create
 
 ### 🔄 Changed
 
@@ -414,92 +503,3 @@ Total commits ------- 29
 ### 🔄 Changed
 
 - angular 19 update
-
-### 🔄 Changed
-
-- update max length for short and official descriptions in ballot to align with eCH-0155 v4.0 specification.
-
-### 🔄 Changed
-
-- set popup min width for firefox
-
-### 🔄 Changed
-
-- add candidates to secondary majority election bugfixes
-
-### :new: Added
-
-- added hide lower domain of influences in reports flag
-
-### 🔄 Changed
-
-- update base components
-
-### 🔄 Changed
-
-- sort domain of influences in dropdowns
-
-### 🔄 Changed
-
-- save electoral registration enabled when creating domain of influence
-
-### 🔄 Changed
-
-- change majority election candidate party field to autocomplete
-
-### :arrows_counterclockwise: Changed
-
-- restrict admin permissions
-
-### 🔄 Changed
-
-- assign counting circles dialog fix paging
-
-### 🆕 Added
-
-- add paging to cc assign dialog
-
-### 🆕 Added
-
-- add robots meta tag to instruct crawlers to not index content
-- add X-Robots-Tag response header to instruct crawlers to not index content
-
-### 🔄 Changed
-
-- add paging for assigned cc in doi overview
-
-### 🔄 Changed
-
-- update dependencies
-
-### 🔄 Changed
-
-- toggle political business active switch should not jump back
-
-### 🔄 Changed
-
-- fixed height for assign counting circle pop up
-
-### 🆕 Added
-
-- add paginator for all contests tables in overview
-
-### 🆕 Added
-
-- domain of influence voting card flat rate owner
-
-### 🔄 Changed
-
-- change disabled form fields to readonly
-
-### 🔄 Changed
-
-- majority election candidate optional values in active contest
-
-### 🆕 Added
-
-- show roles in header tenant switch
-
-### 🔄 Changed
-
-- move resolve contest import from grpc to rest

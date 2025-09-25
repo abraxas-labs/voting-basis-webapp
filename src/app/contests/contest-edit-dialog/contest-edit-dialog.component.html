@@ -128,6 +128,12 @@
                  (valueChange)="eVotingToTimeValue = $event; setTime(eVotingToTimeValue, data.eVotingTo); contentChanged()"
                  [subscriptSizing]="'dynamic'"></bc-time>
       </div>
+
+      <bc-date [label]="'CONTEST.E_VOTING_APPROVAL_DUE_DATE' | translate"
+               [readonly]="testingPhaseEnded"
+               [value]="(data.eVotingApprovalDueDate | date) ?? undefined"
+               (valueChange)="updateEVotingApprovalDueDate($event); contentChanged()"
+               [subscriptSizing]="'dynamic'"></bc-date>
     </ng-container>
   </div>
 

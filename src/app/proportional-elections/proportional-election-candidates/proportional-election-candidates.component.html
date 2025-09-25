@@ -4,7 +4,7 @@
     <bc-button
       variant="tertiary"
       icon="plus"
-      [disabled]="expandedCandidates.length >= maxCandidateCount || testingPhaseEnded || readonly"
+      [disabled]="expandedCandidates.length >= maxCandidateCount || testingPhaseEnded || locked || readonly"
       [label]="'PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate"
       (buttonClick)="createCandidate()"
     ></bc-button>
@@ -14,14 +14,14 @@
       <bc-button
         *ngIf="selectedCandidate && selectedCandidate.accumulated"
         variant="tertiary"
-        [disabled]="testingPhaseEnded || readonly"
+        [disabled]="testingPhaseEnded || locked || readonly"
         [label]="'PROPORTIONAL_ELECTION.CANDIDATE.REMOVE_ACCUMULATION' | translate"
         (buttonClick)="removeAccumulation(selectedCandidate!)"
       ></bc-button>
       <bc-button
         *ngIf="!selectedCandidate?.accumulated"
         variant="tertiary"
-        [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded || readonly"
+        [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded || locked || readonly"
         [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ACCUMULATE' | translate"
         (buttonClick)="accumulate(selectedCandidate!)"
       ></bc-button>
@@ -34,7 +34,7 @@
     [dataSource]="expandedCandidates"
     cdkDropList
     [cdkDropListData]="expandedCandidates"
-    [cdkDropListDisabled]="testingPhaseEnded || readonly"
+    [cdkDropListDisabled]="testingPhaseEnded || locked || readonly"
     (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)"
   >
     <ng-container columnDef="position">
@@ -133,7 +133,7 @@
         <div *ngIf="!locked && !readonly" class="flex">
           <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
           <bc-icon
-            *ngIf="!testingPhaseEnded && !readonly"
+            *ngIf="!testingPhaseEnded && !locked && !readonly"
             class="ml-2"
             (click)="deleteCandidate(element); $event.stopPropagation()"
             icon="trash"
@@ -153,7 +153,7 @@
       [selectionRowValue]="row"
       (click)="rowSelection.toggle(); selectCandidate(row)"
       cdkDrag
-      [cdkDragDisabled]="testingPhaseEnded || readonly"
+      [cdkDragDisabled]="testingPhaseEnded || locked || readonly"
       [cdkDragData]="row"
     ></bc-data-row>
   </bc-table>

@@ -24,11 +24,12 @@ import { LanguageService } from '@abraxas/voting-lib';
 export { ProportionalElectionProto };
 export type ProportionalElection = Omit<
   ProportionalElectionProto.AsObject,
-  'shortDescriptionMap' | 'officialDescriptionMap' | 'federalIdentification'
+  'shortDescriptionMap' | 'officialDescriptionMap' | 'federalIdentification' | 'eVotingApproved'
 > & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
   federalIdentification?: number;
+  eVotingApproved?: boolean;
 };
 export { ProportionalElectionMandateAlgorithmProto as ProportionalElectionMandateAlgorithm };
 export { ProportionalElectionReviewProcedureProto as ProportionalElectionReviewProcedure };

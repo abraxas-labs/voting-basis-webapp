@@ -16,7 +16,12 @@ import { PermissionService } from '../../../core/permission.service';
 import { Permissions } from '../../../core/models/permissions.model';
 
 @Directive()
-export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfInfluenceId: string }> implements OnInit {
+export abstract class ImportPoliticalBusinessEditComponent<
+  T extends {
+    domainOfInfluenceId: string;
+  },
+> implements OnInit
+{
   public loading: boolean = true;
 
   public domainOfInfluenceTypes: EnumItemDescription<DomainOfInfluenceType>[] = [];
@@ -29,9 +34,9 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
   public data!: T;
 
   @Output()
-  public valid: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public applied: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  public isValid: boolean = false;
+  public isApplied: boolean = false;
 
   @Input()
   public contestDomainOfInfluenceId: string = '';
@@ -59,6 +64,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
     const politicalBusinessDomainOfInfluenceNode = this.domainOfInfluenceTree?.findNodeById(this.data.domainOfInfluenceId);
     this.domainOfInfluenceLevels = this.doiReportLevelService.buildDomainOfInfluenceReportLevels(politicalBusinessDomainOfInfluenceNode);
     this.handleDomainOfInfluenceChange();
+    this.setIsApplied(false);
   }
 
   public get selectedDomainOfInfluenceType(): DomainOfInfluenceType | undefined {
@@ -70,6 +76,7 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
       return;
     }
 
+    this.setIsApplied(false);
     if (this.selectedDomainOfInfluenceTypeValue) {
       this.selectedDomainOfInfluence = undefined;
     }
@@ -86,9 +93,13 @@ export abstract class ImportPoliticalBusinessEditComponent<T extends { domainOfI
     }
   }
 
-  protected setValid(valid: boolean = true): void {
-    this.isValid = valid;
-    this.valid.emit(valid);
+  protected setIsApplied(applied: boolean = true): void {
+    if (applied === this.isApplied) {
+      return;
+    }
+
+    this.isApplied = applied;
+    this.applied.emit(applied);
   }
 
   protected handleDomainOfInfluenceDefaultsChange(): void {}

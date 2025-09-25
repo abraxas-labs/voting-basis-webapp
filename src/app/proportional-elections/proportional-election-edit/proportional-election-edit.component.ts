@@ -83,7 +83,7 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
 
       const { testingPhaseEnded, locked, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
-      this.locked = locked;
+      this.locked = locked || !!this.data.eVotingApproved;
       this.canEdit = await this.permissionService.hasPermission(Permissions.ProportionalElection.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
 

@@ -10,7 +10,7 @@
         <app-secondary-majority-election-general-informations #step1
                                                               [data]="data"
                                                               [testingPhaseEnded]="testingPhaseEnded"
-                                                              [locked]="locked"
+                                                              [locked]="locked || eVotingApproved"
                                                               [readonly]="!canEdit"
                                                               [eVoting]="eVoting">
         </app-secondary-majority-election-general-informations>
@@ -27,6 +27,7 @@
       <app-secondary-majority-election-candidates [showBallotGroups]="true"
                                                   [testingPhaseEnded]="testingPhaseEnded"
                                                   [locked]="locked"
+                                                  [eVotingApproved]="eVotingApproved"
                                                   [readonly]="!canEdit"
                                                   [loadCandidates]="!newlyCreated"
                                                   #step2

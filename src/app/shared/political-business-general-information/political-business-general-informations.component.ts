@@ -39,6 +39,12 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
   @Input()
   public data: T;
 
+  @Input()
+  public locked: boolean = false;
+
+  @Input()
+  public isNew: boolean = true;
+
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 

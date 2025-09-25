@@ -19,6 +19,7 @@ import {
   UpdateMajorityElectionCandidateReferenceRequest,
   UpdateSecondaryMajorityElectionActiveStateRequest,
   UpdateSecondaryMajorityElectionCandidateRequest,
+  UpdateSecondaryMajorityElectionEVotingApprovalRequest,
   UpdateSecondaryMajorityElectionRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/majority_election_requests_pb';
 import { SexType } from '@abraxas/voting-basis-service-proto/grpc/shared/sex_pb';
@@ -81,6 +82,13 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     req.setId(id);
     req.setActive(active);
     return this.requestEmptyResp(c => c.updateSecondaryMajorityElectionActiveState, req);
+  }
+
+  public updateEVotingApproval(id: string, approved: boolean): Promise<void> {
+    const req = new UpdateSecondaryMajorityElectionEVotingApprovalRequest();
+    req.setId(id);
+    req.setApproved(approved);
+    return this.requestEmptyResp(c => c.updateSecondaryMajorityElectionEVotingApproval, req);
   }
 
   public delete(id: string): Promise<void> {
@@ -157,6 +165,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
       ...election.toObject(),
       shortDescription: toJsMap(election.getShortDescriptionMap()),
       officialDescription: toJsMap(election.getOfficialDescriptionMap()),
+      eVotingApproved: election.getEVotingApproved()?.getValue(),
     };
   }
 

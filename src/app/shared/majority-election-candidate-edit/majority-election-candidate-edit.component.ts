@@ -11,6 +11,7 @@ import { SexType } from '../../core/models/sex-type.model';
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
 import { CountryService } from '../../core/country.service';
 import { Country } from '../../core/models/country.model';
+import { isValidZipCode } from '../../core/utils/zip-code.utils';
 
 @Component({
   selector: 'app-majority-election-candidate-edit',
@@ -74,6 +75,10 @@ export class MajorityElectionCandidateEditComponent implements OnInit {
 
   public isDateOfBirthValid(): boolean {
     return !!this.candidate && isValidDateOfBirth(this.candidate.dateOfBirth);
+  }
+
+  public isZipCodeValid(): boolean {
+    return !!this.candidate && isValidZipCode(this.candidate.zipCode, this.candidate.country);
   }
 
   public setParty(value: string) {

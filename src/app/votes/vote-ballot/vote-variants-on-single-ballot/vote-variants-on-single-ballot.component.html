@@ -37,7 +37,7 @@
           *ngIf="domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH"
           class="ml-4"
           [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
-          [readonly]="testingPhaseEnded || readonly"
+          [readonly]="testingPhaseEnded || readonly || locked"
           [value]="ballotQuestion.federalIdentification"
           (valueChange)="ballotQuestion.federalIdentification = $event; contentChanged.emit()"
           [max]="federalIdentificationMaxValue"
@@ -54,7 +54,7 @@
         >
         </bc-text>
         <bc-icon
-          *ngIf="ballotQuestion.number > 2 && !testingPhaseEnded && !readonly"
+          *ngIf="ballotQuestion.number > 2 && !testingPhaseEnded && !readonly && !locked"
           class="clickable ml-1 remove-button"
           icon="trash"
           iconColor="error"
@@ -75,7 +75,7 @@
   </ng-container>
 
   <bc-button
-    *ngIf="ballot.ballotQuestions.length < maxVariantBallotQuestions && !testingPhaseEnded && !readonly"
+    *ngIf="ballot.ballotQuestions.length < maxVariantBallotQuestions && !testingPhaseEnded && !readonly && !locked"
     [label]="'VOTE.QUESTION.ADD' | translate"
     variant="tertiary"
     icon="plus"
@@ -86,7 +86,7 @@
   <h3 translate class="my-2">VOTE.TIE_BREAK_QUESTION.TITLE</h3>
   <bc-checkbox
     [(checked)]="ballot.hasTieBreakQuestions"
-    [disabled]="testingPhaseEnded || readonly"
+    [disabled]="testingPhaseEnded || readonly || locked"
     [label]="'VOTE.TIE_BREAK_QUESTION.HAS_TIE_BREAK_QUESTIONS' | translate"
     (checkedChange)="updateTieBreakQuestions(ballot); tryPrefillQuestions(); contentChanged.emit()"
     [subscriptSizing]="'dynamic'"
@@ -117,7 +117,7 @@
           *ngIf="domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH"
           class="ml-4"
           [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
-          [readonly]="testingPhaseEnded || readonly"
+          [readonly]="testingPhaseEnded || readonly || locked"
           [value]="ballotTieBreakQuestion.federalIdentification"
           (valueChange)="ballotTieBreakQuestion.federalIdentification = $event; contentChanged.emit()"
           [max]="federalIdentificationMaxValue"

@@ -42,6 +42,9 @@ export class SecondaryMajorityElectionCandidatesComponent {
   public locked: boolean = false;
 
   @Input()
+  public eVotingApproved: boolean = false;
+
+  @Input()
   public readonly: boolean = false;
 
   @Input()

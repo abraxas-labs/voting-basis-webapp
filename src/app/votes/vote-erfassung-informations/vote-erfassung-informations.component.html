@@ -2,7 +2,7 @@
 
   <div class="dropdown-checkbox-container">
     <bc-dropdown [label]="'VOTE.RESULT_ENTRY.TITLE' | translate"
-                 [readonly]="testingPhaseEnded || !isVariantsBallot || readonly"
+                 [readonly]="testingPhaseEnded || locked || !isVariantsBallot || readonly"
                  [items]="resultEntryChoices"
                  displayExpr="description"
                  valueExpr="value"
@@ -14,13 +14,13 @@
                  (checkedChange)="data.enforceResultEntryForCountingCircles = $event; contentChanged.emit()"
                  class="mb-1"
                  [label]="'VOTE.ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES' | translate"
-                 [disabled]="testingPhaseEnded || !isVariantsBallot || readonly"
+                 [disabled]="testingPhaseEnded || locked || !isVariantsBallot || readonly"
                  [subscriptSizing]="'dynamic'"></bc-checkbox>
   </div>
 
   <ng-container *ngIf="data.resultEntry === resultEntryType.VOTE_RESULT_ENTRY_DETAILED">
     <bc-number [label]="'VOTE.BALLOT_BUNDLE_SAMPLE_SIZE_PERCENT' | translate"
-               [readonly]="testingPhaseEnded || readonly"
+               [readonly]="testingPhaseEnded || locked || readonly"
                [max]="100"
                [value]="ballotBundleSampleSizePercent"
                (valueChange)="ballotBundleSampleSizePercent = $event; contentChanged.emit()"
@@ -33,7 +33,7 @@
                                orientation="vertical"
                                [value]="data.automaticBallotBundleNumberGeneration"
                                (valueChange)="data.automaticBallotBundleNumberGeneration = $event; contentChanged.emit()"
-                               [disabled]="testingPhaseEnded || readonly"
+                               [disabled]="testingPhaseEnded || locked || readonly"
                                [subscriptSizing]="'dynamic'">
         </bc-radio-button-group>
       </div>
@@ -45,13 +45,13 @@
                              orientation="vertical"
                              [value]="data.reviewProcedure"
                              (valueChange)="data.reviewProcedure = $event; contentChanged.emit()"
-                             [disabled]="testingPhaseEnded || readonly"
+                             [disabled]="testingPhaseEnded || locked || readonly"
                              [subscriptSizing]="'dynamic'">
       </bc-radio-button-group>
       <bc-checkbox [checked]="data.enforceReviewProcedureForCountingCircles"
                    (checkedChange)="data.enforceReviewProcedureForCountingCircles = $event; contentChanged.emit()"
                    [label]="'VOTE.ENFORCE_REVIEW_PROCEDURE_FOR_COUNTING_CIRCLES' | translate"
-                   [disabled]="testingPhaseEnded || readonly"
+                   [disabled]="testingPhaseEnded || locked || readonly"
                    [subscriptSizing]="'dynamic'"></bc-checkbox>
     </div>
   </ng-container>

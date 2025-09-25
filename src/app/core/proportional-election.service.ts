@@ -26,6 +26,7 @@ import {
   ReorderProportionalElectionListUnionsRequest,
   UpdateProportionalElectionActiveStateRequest,
   UpdateProportionalElectionCandidateRequest,
+  UpdateProportionalElectionEVotingApprovalRequest,
   UpdateProportionalElectionListRequest,
   UpdateProportionalElectionListUnionEntriesRequest,
   UpdateProportionalElectionListUnionMainListRequest,
@@ -69,6 +70,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       shortDescription: toJsMap(election.getShortDescriptionMap()),
       officialDescription: toJsMap(election.getOfficialDescriptionMap()),
       federalIdentification: election.getFederalIdentification()?.getValue(),
+      eVotingApproved: election.getEVotingApproved()?.getValue(),
     };
   }
 
@@ -89,6 +91,13 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     req.setId(id);
     req.setActive(active);
     return this.requestEmptyResp(c => c.updateActiveState, req);
+  }
+
+  public updateEVotingApproval(id: string, approved: boolean): Promise<void> {
+    const req = new UpdateProportionalElectionEVotingApprovalRequest();
+    req.setId(id);
+    req.setApproved(approved);
+    return this.requestEmptyResp(c => c.updateEVotingApproval, req);
   }
 
   public get(id: string): Promise<ProportionalElection> {

@@ -100,11 +100,17 @@
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate"
              [value]="data.zipCode"
              (valueChange)="data.zipCode = $event; contentChanged()"
-             subscriptSizing="dynamic"></bc-text>
+             [error]="!!data.zipCode && !isZipCodeValid()"
+             subscriptSizing="dynamic">
+      <bc-error *ngIf="!!data.zipCode && !isZipCodeValid()">
+        {{ 'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE_INVALID' | translate }}
+      </bc-error>
+    </bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate"
              [required]="isCandidateLocalityRequired"
              [value]="data.locality"
+             [maxlength]="40"
              (valueChange)="data.locality = $event; contentChanged()"
              subscriptSizing="dynamic"></bc-text>
 

@@ -12,9 +12,13 @@ import {
 import { MajorityElectionCandidate, newMajorityElectionCandidate } from './majority-election.model';
 
 export { SecondaryMajorityElectionProto };
-export type SecondaryMajorityElection = Omit<SecondaryMajorityElectionProto.AsObject, 'shortDescriptionMap' | 'officialDescriptionMap'> & {
+export type SecondaryMajorityElection = Omit<
+  SecondaryMajorityElectionProto.AsObject,
+  'shortDescriptionMap' | 'officialDescriptionMap' | 'eVotingApproved'
+> & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
+  eVotingApproved?: boolean;
 };
 export type SecondaryMajorityElectionCandidate = MajorityElectionCandidate & {
   isReferenced: boolean;

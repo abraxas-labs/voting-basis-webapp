@@ -127,11 +127,11 @@
       </bc-data-cell>
     </ng-container>
 
-    <ng-container columnDef="type">
+    <ng-container columnDef="primaryType">
       <bc-header-cell
         filter
         filterType="list"
-        [filterItems]="politicalBusinessTypeList"
+        [filterItems]="primaryPoliticalBusinessTypeList"
         filterDisplayExpr="description"
         filterValueExpr="value"
         sort
@@ -169,6 +169,32 @@
           [subscriptSizing]="'dynamic'"
         >
         </bc-switch>
+      </bc-data-cell>
+    </ng-container>
+
+    <ng-container columnDef="eVotingApproved">
+      <bc-header-cell filter filterType="bool" sort *headerCellDef>
+        <span truncateWithTooltip tooltip>
+          {{ 'POLITICAL_BUSINESS.E_VOTING_APPROVED' | translate }}
+        </span>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <bc-switch
+          *ngIf="element.eVotingApproved !== undefined"
+          class="ml-2"
+          [(checked)]="element.eVotingApproved"
+          (checkedChange)="eVotingApprovedChange(element, $event)"
+          [disabled]="(element.ownerId !== tenantId && !hasAdminReadPermissions)
+            || (element.eVotingApproved && !hasEVotingApproveRevertPermissions)
+            || !hasSameTenantReadPermissions || contest.locked
+            || contest.eVotingApproved"
+          [subscriptSizing]="'dynamic'"
+          [matTooltip]="element.eVotingApproved
+            && !hasEVotingApproveRevertPermissions
+            && !contest.locked
+            ? ('POLITICAL_BUSINESS.E_VOTING_APPROVED_REVERT_TOOLTIP' | translate)
+            : ''"
+        ></bc-switch>
       </bc-data-cell>
     </ng-container>
 

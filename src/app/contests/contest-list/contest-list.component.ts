@@ -49,27 +49,13 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input()
   public set contests(contests: ContestSummary[]) {
-    const contestListTypes = contests
-      .map(x => this.mapContestSummaryToContestListType(x))
-      // VOTING-4595 date format workaround, remove as soon as proper handling within BC is available.
-      // VOTING-4891 is the follow-up ticket.
-      .map(x => {
-        x.date = moment(x.date).format('YYYY-MM-DD') as any as Date;
-        return x;
-      });
+    const contestListTypes = contests.map(x => this.mapContestSummaryToContestListType(x));
     this.dataSource.data = [...this.dataSource.data.filter(x => x.isPoliticalAssembly), ...contestListTypes];
   }
 
   @Input()
   public set politicalAssemblies(politicalAssemblies: PoliticalAssembly[]) {
-    const contestListTypes = politicalAssemblies
-      .map(x => this.mapPoliticalAssemblyToListType(x))
-      // VOTING-4595 date format workaround, remove as soon as proper handling within BC is available.
-      // VOTING-4891 is the follow-up ticket.
-      .map(x => {
-        x.date = moment(x.date).format('YYYY-MM-DD') as any as Date;
-        return x;
-      });
+    const contestListTypes = politicalAssemblies.map(x => this.mapPoliticalAssemblyToListType(x));
     this.dataSource.data = [...this.dataSource.data.filter(x => !x.isPoliticalAssembly), ...contestListTypes];
   }
 
@@ -96,6 +82,9 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Output()
   public export: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
+
+  @Output()
+  public exportOnlyEVoting: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
 
   @ViewChild('paginator') public paginator!: PaginatorComponent;
 
@@ -125,7 +114,17 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   public ngOnChanges(): void {
-    this.columns = ['date', 'type', 'description', 'endOfTestingPhase', 'state', 'archivePer', 'politicalBusinesses', 'owner', 'actions'];
+    this.columns = [
+      'dateString',
+      'type',
+      'description',
+      'endOfTestingPhase',
+      'state',
+      'archivePer',
+      'politicalBusinesses',
+      'owner',
+      'actions',
+    ];
     if (!this.showArchivePer) {
       this.columns.splice(5, 1);
     }
@@ -146,6 +145,7 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
     return {
       id: entry.id,
       date: entry.date!,
+      dateString: moment(entry.date!).format('YYYY-MM-DD'),
       type: entry.isPreconfiguredDate ? '' : this.i18n.instant('CONTEST.TYPE.CONTEST'),
       description: entry.isPreconfiguredDate
         ? this.i18n.instant('CONTEST.PRECONFIGURED_DATE')
@@ -163,6 +163,7 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
           ?.map(x => `${this.i18n.instant('DOMAIN_OF_INFLUENCE.TYPES.' + x.domainOfInfluenceType)}: ${x.contestEntriesCount}`)
           .join('\n') ?? '',
       contest: entry, // keep this around, as some event emitters depend on this
+      eVotingApprovalDueDateString: entry.eVotingApprovalDueDate ? moment(entry.eVotingApprovalDueDate).format('YYYY-MM-DD') : undefined,
     };
   }
 
@@ -170,6 +171,7 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
     return {
       id: politicalAssembly.id,
       date: politicalAssembly.date!,
+      dateString: moment(politicalAssembly.date!).format('YYYY-MM-DD'),
       type: this.i18n.instant('CONTEST.TYPE.POLITICAL_ASSEMBLY'),
       description: this.languageService.getTranslationForCurrentLang(politicalAssembly.description),
       isPoliticalAssembly: true,

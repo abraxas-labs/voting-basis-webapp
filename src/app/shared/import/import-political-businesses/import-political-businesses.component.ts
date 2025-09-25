@@ -35,7 +35,8 @@ export class ImportPoliticalBusinessesComponent {
 
   public checkAllValid(): void {
     for (const editComponent of this.politicalBusinessEditComponents.toArray()) {
-      if (!editComponent.isValid) {
+      if (!editComponent.isApplied) {
+        this.allValid = false;
         return;
       }
     }

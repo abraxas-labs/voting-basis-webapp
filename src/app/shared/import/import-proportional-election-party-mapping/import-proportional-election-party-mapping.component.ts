@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PartyMapping, PartyMappingContainer, PartyWithMappings } from '../../../core/models/domain-of-influence-party.model';
 
 @Component({
@@ -17,6 +17,9 @@ export class ImportProportionalElectionPartyMappingComponent {
   @Input()
   public data!: PartyMappingContainer;
 
+  @Output()
+  public readonly mappingsChange = new EventEmitter<void>();
+
   public addMapping({ sourceName }: PartyMapping, { id: partyId }: PartyWithMappings): void {
     // cant use dragged data directly as it is another instance created by the drag & drop library
     const party = this.findParty(partyId);
@@ -24,6 +27,7 @@ export class ImportProportionalElectionPartyMappingComponent {
     party.mappings = [...party.mappings, this.data.unmapped[mappingIndex]];
     this.data.unmapped.splice(mappingIndex, 1);
     this.data.unmapped = [...this.data.unmapped];
+    this.mappingsChange.emit();
   }
 
   public removeMapping({ sourceName }: PartyMapping, party?: PartyWithMappings): void {
@@ -37,6 +41,7 @@ export class ImportProportionalElectionPartyMappingComponent {
     this.data.unmapped = [party.mappings[mappingIndex], ...this.data.unmapped];
     party.mappings.splice(mappingIndex, 1);
     party.mappings = [...party.mappings];
+    this.mappingsChange.emit();
   }
 
   private findParty(id: string): PartyWithMappings {

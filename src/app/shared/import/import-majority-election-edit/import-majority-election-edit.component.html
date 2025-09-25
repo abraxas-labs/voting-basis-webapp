@@ -1,7 +1,8 @@
 <bc-expansion-panel [header]="data.politicalBusinessNumber + ': ' + (data.officialDescription | getTranslation)" [expanded]="true">
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
            [required]="true"
-           [(value)]="data.politicalBusinessNumber"
+           [value]="data.politicalBusinessNumber"
+           (valueChange)="data.politicalBusinessNumber = $event; setIsApplied(false)"
            [subscriptSizing]="'dynamic'"></bc-text>
 
   <bc-dropdown class="full-width"
@@ -29,7 +30,8 @@
                displayExpr="desc"
                valueExpr="level"
                [required]="true"
-               [(value)]="data.reportDomainOfInfluenceLevel"
+               [value]="data.reportDomainOfInfluenceLevel"
+               (valueChange)="data.reportDomainOfInfluenceLevel = $event; setIsApplied(false)"
                [label]="'POLITICAL_BUSINESS.REPORT_LEVEL' | translate"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
 
@@ -39,18 +41,27 @@
                displayExpr="description"
                valueExpr="value"
                [required]="true"
-               [(value)]="data.mandateAlgorithm"
+               [value]="data.mandateAlgorithm"
+               (valueChange)="data.mandateAlgorithm = $event; setIsApplied(false)"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
 
   <bc-checkbox [checked]="!data.individualCandidatesDisabled"
-               (checkedChange)="data.individualCandidatesDisabled = !$event"
+               (checkedChange)="data.individualCandidatesDisabled = !$event; setIsApplied(false)"
                [label]="'MAJORITY_ELECTION.INDIVIDUAL_CANDIDATES' | translate"
                [subscriptSizing]="'dynamic'"></bc-checkbox>
 
+  <app-majority-election-candidate-list [candidates]="candidates"
+                                        [hideActionButtons]="true"
+                                        (candidatesReordered)="reorderCandidates($event)"
+                                        class="mb-2">
+  </app-majority-election-candidate-list>
+
   <div class="button-container">
-    <bc-button variant="primary"
-               [label]="'ACTIONS.APPLY' | translate"
-               [disabled]="!data.politicalBusinessNumber || !data.domainOfInfluenceId || data.reportDomainOfInfluenceLevel === undefined"
-               (buttonClick)="apply()"></bc-button>
+    <bc-icon *ngIf="isApplied" class="mr-2" iconColor="success" icon="checkmark"></bc-icon>
+    <bc-button
+      variant="primary"
+     [label]="'ACTIONS.APPLY' | translate"
+     [disabled]="isApplied || !data.politicalBusinessNumber || !data.domainOfInfluenceId || data.reportDomainOfInfluenceLevel === undefined"
+     (buttonClick)="apply()"></bc-button>
   </div>
 </bc-expansion-panel>

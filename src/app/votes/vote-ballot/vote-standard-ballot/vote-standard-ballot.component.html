@@ -2,7 +2,7 @@
   <bc-number
     *ngIf="domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH"
     [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
-    [readonly]="testingPhaseEnded || readonly"
+    [readonly]="testingPhaseEnded || readonly || locked"
     [value]="ballotQuestion.federalIdentification"
     (valueChange)="ballotQuestion.federalIdentification = $event; contentChanged.emit()"
     [max]="federalIdentificationMaxValue"

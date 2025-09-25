@@ -19,11 +19,12 @@ export { PoliticalBusinessTypeProto as PoliticalBusinessType };
 export { PoliticalBusinessSubTypeProto as PoliticalBusinessSubType };
 export type PoliticalBusiness = Omit<
   PoliticalBusinessProto.AsObject,
-  'shortDescriptionMap' | 'officialDescriptionMap' | 'domainOfInfluence'
+  'shortDescriptionMap' | 'officialDescriptionMap' | 'domainOfInfluence' | 'eVotingApproved'
 > & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
   domainOfInfluence: DomainOfInfluence;
+  eVotingApproved?: boolean;
 };
 export interface PoliticalBusinessBase {
   id: string;
@@ -33,14 +34,16 @@ export interface PoliticalBusinessBase {
   domainOfInfluenceId: string;
   contestId: string;
   active: boolean;
+  eVotingApproved?: boolean;
 }
 
 export { PoliticalBusinessSummaryProto };
 export type PoliticalBusinessSummary = Omit<
   PoliticalBusinessSummaryProto.AsObject,
-  'shortDescriptionMap' | 'officialDescriptionMap' | 'domainOfInfluence'
+  'shortDescriptionMap' | 'officialDescriptionMap' | 'domainOfInfluence' | 'eVotingApproved'
 > & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
   domainOfInfluence: DomainOfInfluence;
+  eVotingApproved?: boolean;
 };

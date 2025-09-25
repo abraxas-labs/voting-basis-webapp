@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { ContestService } from '../../core/contest.service';
 import { ExportService } from '../../core/export.service';
 import { ContestState, ContestSummary, PreconfiguredContestDate } from '../../core/models/contest.model';
-import { ExportEntityType } from '../../core/models/export.model';
+import { ExportTemplate } from '../../core/models/export.model';
 import { ContestImportDialogComponent } from '../../shared/import/contest-import-dialog/contest-import-dialog.component';
 import { ContestArchiveDialogComponent, ContestArchiveDialogData } from '../contest-archive-dialog/contest-archive-dialog.component';
 import {
@@ -27,7 +27,7 @@ import {
 } from '../contest-past-unlock-dialog/contest-past-unlock-dialog.component';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { AuthorizationService } from '@abraxas/base-components';
-import { PoliticalAssemblyState, PoliticalAssembly } from '../../core/models/political-assembly.model';
+import { PoliticalAssembly, PoliticalAssemblyState } from '../../core/models/political-assembly.model';
 import { PoliticalAssemblyService } from '../../core/political-assembly.service';
 import {
   PoliticalAssemblyEditDialogComponent,
@@ -39,7 +39,7 @@ import { Permissions } from '../../core/models/permissions.model';
 import { PermissionService } from '../../core/permission.service';
 import { EventLogService } from '../../core/event-log.service';
 import { EventType } from '../../core/models/event-log.model';
-import { PoliticalAssemblies } from '@abraxas/voting-basis-service-proto/grpc/models/political_assembly_pb';
+import { ExportEntityType, ExportFileFormat } from '@abraxas/voting-basis-service-proto/grpc/shared/export_pb';
 
 @Component({
   selector: 'app-contest-overview',
@@ -177,8 +177,16 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
     this.dialogService.open(ContestImportDialogComponent, undefined);
   }
 
-  public export(id: string): Promise<void> {
-    return this.exportService.downloadExportOrShowDialog(ExportEntityType.EXPORT_ENTITY_TYPE_CONTEST, id);
+  public export(id: string, eVoting: boolean): Promise<void> {
+    // Cannot use the 'generic' approach here, since we know explicitly which template to use
+    const key = eVoting ? 'contest_ech_0157_and_0159_e_voting' : 'contest_ech_0157_and_0159';
+    const exportTemplate = {
+      key,
+      entityType: ExportEntityType.EXPORT_ENTITY_TYPE_CONTEST,
+      description: '',
+      format: ExportFileFormat.EXPORT_FILE_FORMAT_XML,
+    } satisfies ExportTemplate;
+    return this.exportService.downloadExport(exportTemplate, id);
   }
 
   public async archive(listEntry: ContestListType): Promise<void> {

@@ -1,16 +1,33 @@
 <vo-lib-dialog [contentLoading]="fileSelect.loading">
-  <h1 header translate>IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES</h1>
+  <h1 header translate>IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE</h1>
 
-  <app-import-file-select content
-                          #fileSelect
-                          [importTypes]="importTypes"
-                          (importsChange)="importFilesChanged($event)">
-  </app-import-file-select>
+  <bc-simple-stepper #stepper
+                     content
+                     labelPosition="bottom"
+                     linear
+                     (selectionChange)="stepChange($event)">
+    <bc-simple-step #step1 [label]="'IMPORT.FILE' | translate">
+      <app-import-file-select
+        content
+        #fileSelect
+        [importTypes]="importTypes"
+        (importsChange)="importFilesChanged($event)"
+      ></app-import-file-select>
+    </bc-simple-step>
+    <bc-simple-step [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.CANDIDATE_STEP' | translate" [disabled]="!lastStep">
+        <app-majority-election-candidate-list
+          [candidates]="candidates"
+          [hideActionButtons]="true"
+          (candidatesReordered)="reorderCandidates($event)"
+          class="mb-2">
+        </app-majority-election-candidate-list>
+    </bc-simple-step>
+  </bc-simple-stepper>
 
   <div footer class="mr-3">
     <vo-lib-button-bar footer
-                       [saveLabel]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES' | translate"
-                       (save)="save()"
+                       [saveLabel]="(lastStep ? 'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE' : 'APP.NEXT') | translate"
+                       (save)="lastStep ? save() : stepper.next()"
                        [canSave]="canSave"
                        [saving]="saving"
                        [cancelLabel]="'APP.CANCEL' | translate"

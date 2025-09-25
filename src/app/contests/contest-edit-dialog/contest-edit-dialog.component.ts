@@ -282,6 +282,10 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
     date.setMinutes(time.getMinutes());
   }
 
+  public async updateEVotingApprovalDueDate(date: string): Promise<void> {
+    this.data.eVotingApprovalDueDate = !date ? undefined : new Date(date);
+  }
+
   private async loadPastContestsIfNeeded(): Promise<void> {
     if (!this.data.date || !this.data.domainOfInfluenceId || this.cantonDefaults?.internalPlausibilisationDisabled) {
       return;

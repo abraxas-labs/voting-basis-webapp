@@ -16,6 +16,7 @@ import {
   GetVoteRequest,
   UpdateBallotRequest,
   UpdateVoteActiveStateRequest,
+  UpdateVoteEVotingApprovalRequest,
   UpdateVoteRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/vote_requests_pb';
 import { VoteServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/vote_service_grpc_web_pb';
@@ -49,6 +50,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
       shortDescription: toJsMap(vote.getShortDescriptionMap()),
       officialDescription: toJsMap(vote.getOfficialDescriptionMap()),
       ballots: vote.getBallotsList().map(b => VoteService.mapToBallot(b)),
+      eVotingApproved: vote.getEVotingApproved()?.getValue(),
     };
   }
 
@@ -98,6 +100,13 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     req.setId(id);
     req.setActive(active);
     return this.requestEmptyResp(c => c.updateActiveState, req);
+  }
+
+  public updateEVotingApproval(id: string, approved: boolean): Promise<void> {
+    const req = new UpdateVoteEVotingApprovalRequest();
+    req.setId(id);
+    req.setApproved(approved);
+    return this.requestEmptyResp(c => c.updateEVotingApproval, req);
   }
 
   public get(id: string): Promise<Vote> {

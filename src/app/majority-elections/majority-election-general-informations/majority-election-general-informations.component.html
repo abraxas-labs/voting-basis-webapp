@@ -1,12 +1,12 @@
 <div class="form" *ngIf="contest && data">
   <bc-text [label]="'POLITICAL_BUSINESS.NUMBER' | translate"
-           [readonly]="contest.locked || readonly"
+           [readonly]="locked || readonly"
            [required]="true"
            [value]="data.politicalBusinessNumber"
            (valueChange)="data.politicalBusinessNumber = $event; contentChanged.emit()"
            [subscriptSizing]="'dynamic'"></bc-text>
   <app-translated-formfield [label]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"
-                            [readonly]="contest.locked || readonly"
+                            [readonly]="locked || readonly"
                             [maxlength]="100"
                             [value]="data.shortDescription"
                             (valueChange)="data.shortDescription = $event; contentChanged.emit()"
@@ -14,7 +14,7 @@
 
   <div class="form-group">
     <app-translated-textarea [label]="'POLITICAL_BUSINESS.OFFICIAL_DESCRIPTION' | translate"
-                             [readonly]="contest.locked || readonly"
+                             [readonly]="locked || readonly"
                              [maxlength]="500"
                              class="full-width"
                              [value]="data.officialDescription"
@@ -23,7 +23,7 @@
   </div>
 
   <bc-number [label]="'MAJORITY_ELECTION.NUMBER_OF_MANDATES' | translate"
-             [readonly]="contest.testingPhaseEnded || data.active || readonly"
+             [readonly]="contest.testingPhaseEnded || locked || data.active || readonly"
              [required]="true"
              [value]="data.numberOfMandates"
              (valueChange)="data.numberOfMandates = +$event; contentChanged.emit()"
@@ -32,7 +32,7 @@
                *ngIf="domainOfInfluenceTypeItems.length > 1"
                [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
                [items]="domainOfInfluenceTypeItems"
-               [readonly]="contest.testingPhaseEnded || readonly"
+               [readonly]="contest.testingPhaseEnded || locked || readonly || !isNew"
                [clearable]="false"
                [required]="true"
                displayExpr="description"
@@ -43,7 +43,7 @@
 
   <bc-number *ngIf="selectedDomainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH"
              [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
-             [readonly]="contest.testingPhaseEnded || readonly"
+             [readonly]="contest.testingPhaseEnded || locked || readonly"
              [value]="data.federalIdentification"
              (valueChange)="data.federalIdentification = $event; contentChanged.emit()"
              [max]="federalIdentificationMaxValue"
@@ -52,7 +52,7 @@
   <div class="container">
     <bc-dropdown class="full-width"
                  *ngIf="selectedDomainOfInfluenceType"
-                 [readonly]="contest.testingPhaseEnded || readonly"
+                 [readonly]="contest.testingPhaseEnded || locked || readonly || !isNew"
                  [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
                  displayExpr="name"
                  [required]="true"
@@ -70,7 +70,7 @@
 
   <bc-dropdown class="full-width"
                [items]="domainOfInfluenceLevels"
-               [readonly]="contest.locked || readonly"
+               [readonly]="locked || readonly"
                displayExpr="desc"
                valueExpr="level"
                [required]="true"
@@ -82,7 +82,7 @@
   <bc-dropdown class="full-width"
                [label]="'MAJORITY_ELECTION.MANDATE_ALGORITHM.TITLE' | translate"
                [items]="mandateAlgorithms"
-               [readonly]="contest.testingPhaseEnded || readonly"
+               [readonly]="contest.testingPhaseEnded || locked || readonly || !isNew"
                displayExpr="description"
                valueExpr="value"
                [required]="true"
@@ -93,6 +93,6 @@
   <bc-checkbox [checked]="!data.individualCandidatesDisabled"
                (checkedChange)="data.individualCandidatesDisabled = !$event; contentChanged.emit()"
                [label]="'MAJORITY_ELECTION.INDIVIDUAL_CANDIDATES' | translate"
-               [disabled]="contest.testingPhaseEnded || readonly"
+               [disabled]="contest.testingPhaseEnded || locked || readonly"
                [subscriptSizing]="'dynamic'"></bc-checkbox>
 </div>

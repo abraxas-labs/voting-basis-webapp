@@ -44,6 +44,9 @@ export class MajorityElectionCandidateListComponent {
   @Input()
   public readonly: boolean = false;
 
+  @Input()
+  public hideActionButtons: boolean = false;
+
   @Output()
   public edit: EventEmitter<MajorityElectionCandidate> = new EventEmitter<MajorityElectionCandidate>();
 

@@ -51,11 +51,11 @@ export class ImportProportionalElectionEditComponent extends ImportPoliticalBusi
     proportionalElection.setDomainOfInfluenceId(this.data.domainOfInfluenceId);
     proportionalElection.setMandateAlgorithm(this.data.mandateAlgorithm);
     this.proportionalElectionPartyMappingService.applyMappings(this.partyMappings);
-    this.setValid();
+    this.setIsApplied();
   }
 
   protected async handleDomainOfInfluenceChange(): Promise<void> {
-    this.setValid(false);
+    this.setIsApplied(false);
     await super.handleDomainOfInfluenceChange();
     await this.loadPartyMappings();
   }

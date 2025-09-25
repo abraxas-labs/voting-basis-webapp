@@ -10,7 +10,11 @@ import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-inf
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { MajorityElectionService } from '../../../core/majority-election.service';
 import { MajorityElectionImport } from '../../../core/models/import.model';
-import { MajorityElection, MajorityElectionMandateAlgorithm } from '../../../core/models/majority-election.model';
+import {
+  MajorityElection,
+  MajorityElectionCandidate,
+  MajorityElectionMandateAlgorithm,
+} from '../../../core/models/majority-election.model';
 import { ImportPoliticalBusinessEditComponent } from '../import-political-business-edit/import-political-business-edit.component';
 import { PermissionService } from '../../../core/permission.service';
 
@@ -22,6 +26,7 @@ import { PermissionService } from '../../../core/permission.service';
 })
 export class ImportMajorityElectionEditComponent extends ImportPoliticalBusinessEditComponent<MajorityElection> {
   public mandateAlgorithms: EnumItemDescription<MajorityElectionMandateAlgorithm>[] = [];
+  public candidates: MajorityElectionCandidate[] = [];
   private majorityElectionImport?: MajorityElectionImport;
 
   constructor(
@@ -41,6 +46,29 @@ export class ImportMajorityElectionEditComponent extends ImportPoliticalBusiness
   public set majorityElection(majorityElection: MajorityElectionImport) {
     this.majorityElectionImport = majorityElection;
     this.data = MajorityElectionService.mapToMajorityElection(majorityElection.getElection()!);
+    this.candidates = majorityElection.getCandidatesList()!.map(MajorityElectionService.mapToMajorityElectionCandidate);
+
+    // trigger an initial reorder which sets the position to a non-zero distinct integer.
+    this.reorderCandidates(this.candidates);
+  }
+
+  public reorderCandidates(candidates: MajorityElectionCandidate[]) {
+    for (let i = 1; i <= this.candidates.length; i++) {
+      candidates[i - 1].position = i;
+      candidates[i - 1].number = '' + i;
+    }
+
+    const importCandidates = this.majorityElectionImport!.getCandidatesList()!;
+
+    for (const importCandidate of importCandidates) {
+      const dataCandidate = this.candidates.find(c => c.id === importCandidate.getId())!;
+      importCandidate.setPosition(dataCandidate.position);
+      importCandidate.setNumber(dataCandidate.number);
+    }
+
+    importCandidates.sort((a, b) => a.getPosition() - b.getPosition());
+    this.majorityElectionImport!.setCandidatesList(importCandidates);
+    this.setIsApplied(false);
   }
 
   public apply(): void {
@@ -50,6 +78,6 @@ export class ImportMajorityElectionEditComponent extends ImportPoliticalBusiness
     majorityElection.setReportDomainOfInfluenceLevel(this.data.reportDomainOfInfluenceLevel);
     majorityElection.setMandateAlgorithm(this.data.mandateAlgorithm);
     majorityElection.setIndividualCandidatesDisabled(this.data.individualCandidatesDisabled);
-    this.setValid();
+    this.setIsApplied();
   }
 }

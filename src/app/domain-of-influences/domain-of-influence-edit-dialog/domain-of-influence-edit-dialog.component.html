@@ -1,98 +1,117 @@
 <vo-lib-dialog [formGroup]="form">
-  <h1 header>{{!isNew ? ('DOMAIN_OF_INFLUENCE.EDIT' | translate) : ('DOMAIN_OF_INFLUENCE.NEW' | translate)}}</h1>
+  <h1 header>{{ !isNew ? ('DOMAIN_OF_INFLUENCE.EDIT' | translate) : ('DOMAIN_OF_INFLUENCE.NEW' | translate) }}</h1>
 
   <div content class="form mr-3 my-2">
     <span *ngIf="!isNew" class="modified">
-      {{ ('HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.ACTIVE' | translate: { modifiedOn: data.modifiedOn | date: 'yyyy-MM-dd / HH:mm' }) }}
+      {{ 'HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.ACTIVE' | translate: { modifiedOn: data.modifiedOn | date: 'yyyy-MM-dd / HH:mm' } }}
     </span>
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.NAME' | translate"
-             [required]="true"
-             [maxlength]="100"
-             [readonly]="readonly || !canEditEverything"
-             [value]="data.name"
-             (valueChange)="data.name = $event; contentChanged()"
-             [formControl]="form.controls.name"
-             [showDefaultErrors]="true"
-             [subscriptSizing]="'dynamic'">
+    <bc-text
+      [label]="'DOMAIN_OF_INFLUENCE.NAME' | translate"
+      [required]="true"
+      [maxlength]="100"
+      [readonly]="readonly || !canEditEverything"
+      [value]="data.name"
+      (valueChange)="data.name = $event; contentChanged()"
+      [formControl]="form.controls.name"
+      [showDefaultErrors]="true"
+      [subscriptSizing]="'dynamic'"
+    >
     </bc-text>
 
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.SHORT_NAME' | translate"
-             [maxlength]="5"
-             [readonly]="readonly || !canEditEverything"
-             [value]="data.shortName"
-             (valueChange)="data.shortName = $event; contentChanged()"
-             [formControl]="form.controls.shortName"
-             [showDefaultErrors]="true"
-             [subscriptSizing]="'dynamic'"></bc-text>
+    <bc-text
+      [label]="'DOMAIN_OF_INFLUENCE.SHORT_NAME' | translate"
+      [maxlength]="5"
+      [readonly]="readonly || !canEditEverything"
+      [value]="data.shortName"
+      (valueChange)="data.shortName = $event; contentChanged()"
+      [formControl]="form.controls.shortName"
+      [showDefaultErrors]="true"
+      [subscriptSizing]="'dynamic'"
+    ></bc-text>
 
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.NAME_FOR_PROTOCOL' | translate"
-             [maxlength]="100"
-             [readonly]="readonly || !canEditEverything"
-             [value]="data.nameForProtocol"
-             (valueChange)="data.nameForProtocol = $event; contentChanged()"
-             [formControl]="form.controls.nameForProtocol"
-             [showDefaultErrors]="true"
-             [subscriptSizing]="'dynamic'"></bc-text>
+    <bc-text
+      [label]="'DOMAIN_OF_INFLUENCE.NAME_FOR_PROTOCOL' | translate"
+      [maxlength]="100"
+      [readonly]="readonly || !canEditEverything"
+      [value]="data.nameForProtocol"
+      (valueChange)="data.nameForProtocol = $event; contentChanged()"
+      [formControl]="form.controls.nameForProtocol"
+      [showDefaultErrors]="true"
+      [subscriptSizing]="'dynamic'"
+    ></bc-text>
 
-    <bc-dropdown class="full-width"
-             [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
-             [items]="domainOfInfluenceTypes"
-             [readonly]="!!data.id || readonly || !canEditEverything"
-             displayExpr="description"
-             valueExpr="value"
-             [required]="true"
-             [value]="data.type"
-             (valueChange)="updateDomainOfInfluenceType($event); contentChanged()"
-             [subscriptSizing]="'dynamic'"></bc-dropdown>
+    <bc-dropdown
+      class="full-width"
+      [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
+      [items]="domainOfInfluenceTypes"
+      [readonly]="!!data.id || readonly || !canEditEverything"
+      displayExpr="description"
+      valueExpr="value"
+      [required]="true"
+      [value]="data.type"
+      (valueChange)="updateDomainOfInfluenceType($event); contentChanged()"
+      [subscriptSizing]="'dynamic'"
+    ></bc-dropdown>
 
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.BFS' | translate"
-             [readonly]="readonly || !canEditEverything"
-             [required]="data.type === knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU"
-             [value]="data.bfs"
-             (valueChange)="data.bfs = $event; contentChanged()"
-             [formControl]="form.controls.bfs"
-             [showDefaultErrors]="true"
-             [subscriptSizing]="'dynamic'"></bc-text>
+    <bc-text
+      [label]="'DOMAIN_OF_INFLUENCE.BFS' | translate"
+      [readonly]="readonly || !canEditEverything"
+      [required]="data.type === knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU"
+      [value]="data.bfs"
+      (valueChange)="data.bfs = $event; contentChanged()"
+      [formControl]="form.controls.bfs"
+      [showDefaultErrors]="true"
+      [subscriptSizing]="'dynamic'"
+    ></bc-text>
 
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.CODE' | translate"
-             [maxlength]="20"
-             [readonly]="readonly || !canEditEverything"
-             [value]="data.code"
-             (valueChange)="data.code = $event; contentChanged()"
-             [formControl]="form.controls.code"
-             [showDefaultErrors]="true"
-             [subscriptSizing]="'dynamic'"></bc-text>
+    <bc-text
+      [label]="'DOMAIN_OF_INFLUENCE.CODE' | translate"
+      [maxlength]="20"
+      [readonly]="readonly || !canEditEverything"
+      [value]="data.code"
+      (valueChange)="data.code = $event; contentChanged()"
+      [formControl]="form.controls.code"
+      [showDefaultErrors]="true"
+      [subscriptSizing]="'dynamic'"
+    ></bc-text>
 
-    <bc-number [label]="'DOMAIN_OF_INFLUENCE.SORT_NUMBER' | translate"
-               [max]="999999999"
-               [min]="0"
-               [error]="data.sortNumber < 0 || data.sortNumber > 999999999"
-               [readonly]="readonly || !canEditEverything"
-               [value]="data.sortNumber"
-               (valueChange)="data.sortNumber = $event; contentChanged()"
-               [formControl]="form.controls.sortNumber"
-               [showDefaultErrors]="true"
-               [subscriptSizing]="'dynamic'"></bc-number>
+    <bc-number
+      [label]="'DOMAIN_OF_INFLUENCE.SORT_NUMBER' | translate"
+      [max]="999999999"
+      [min]="0"
+      [error]="data.sortNumber < 0 || data.sortNumber > 999999999"
+      [readonly]="readonly || !canEditEverything"
+      [value]="data.sortNumber"
+      (valueChange)="data.sortNumber = $event; contentChanged()"
+      [formControl]="form.controls.sortNumber"
+      [showDefaultErrors]="true"
+      [subscriptSizing]="'dynamic'"
+    ></bc-number>
 
-    <vo-lib-tenant-selection label="DOMAIN_OF_INFLUENCE.AUTHORITY"
-                             [readonly]="readonly || !canEditEverything"
-                             [selectedTenant]="selectedTenant"
-                             (selectedTenantChange)="selectedTenant = $event; contentChanged()"></vo-lib-tenant-selection>
+    <vo-lib-tenant-selection
+      label="DOMAIN_OF_INFLUENCE.AUTHORITY"
+      [readonly]="readonly || !canEditEverything"
+      [selectedTenant]="selectedTenant"
+      (selectedTenantChange)="selectedTenant = $event; contentChanged()"
+    ></vo-lib-tenant-selection>
 
-    <bc-checkbox class="full-width"
-                 [disabled]="readonly || !canEditEverything"
-                 [label]="'DOMAIN_OF_INFLUENCE.HAS_OTHER_SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE' | translate"
-                 [checked]="hasOtherSuperiorAuthorityDomainOfInfluence"
-                 (checkedChange)="updateHasOtherSuperiorAuthorityDomainOfInfluence($event); contentChanged()"
-                 [subscriptSizing]="'dynamic'"></bc-checkbox>
+    <bc-checkbox
+      class="full-width"
+      [disabled]="readonly || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.HAS_OTHER_SUPERIOR_AUTHORITY_DOMAIN_OF_INFLUENCE' | translate"
+      [checked]="hasOtherSuperiorAuthorityDomainOfInfluence"
+      (checkedChange)="updateHasOtherSuperiorAuthorityDomainOfInfluence($event); contentChanged()"
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
 
-
-    <bc-checkbox class="full-width"
-                 [disabled]="readonly || !canEditEverything"
-                 [label]="'DOMAIN_OF_INFLUENCE.HIDE_LOWER_DOMAIN_OF_INFLUENCES_IN_REPORTS' | translate"
-                 [checked]="data.hideLowerDomainOfInfluencesInReports"
-                 (checkedChange)="data.hideLowerDomainOfInfluencesInReports = $event; contentChanged()"
-                 [subscriptSizing]="'dynamic'"></bc-checkbox>
+    <bc-checkbox
+      class="full-width"
+      [disabled]="readonly || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.HIDE_LOWER_DOMAIN_OF_INFLUENCES_IN_REPORTS' | translate"
+      [checked]="data.hideLowerDomainOfInfluencesInReports"
+      (checkedChange)="data.hideLowerDomainOfInfluencesInReports = $event; contentChanged()"
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
 
     <app-domain-of-influence-selection
       *ngIf="hasOtherSuperiorAuthorityDomainOfInfluence"
@@ -102,17 +121,19 @@
       (selectedDomainOfInfluenceChange)="data.superiorAuthorityDomainOfInfluence = $event; contentChanged()"
     ></app-domain-of-influence-selection>
 
-    <bc-dropdown *ngIf="domainOfInfluenceCantons.length"
-                 class="full-width"
-                 [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
-                 [items]="domainOfInfluenceCantons"
-                 displayExpr="description"
-                 valueExpr="value"
-                 [required]="true"
-                 [readonly]="readonly || !canEditEverything"
-                 [value]="data.canton"
-                 (valueChange)="data.canton = $event; contentChanged()"
-                 [subscriptSizing]="'dynamic'"></bc-dropdown>
+    <bc-dropdown
+      *ngIf="domainOfInfluenceCantons.length"
+      class="full-width"
+      [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
+      [items]="domainOfInfluenceCantons"
+      displayExpr="description"
+      valueExpr="value"
+      [required]="true"
+      [readonly]="readonly || !canEditEverything"
+      [value]="data.canton"
+      (valueChange)="data.canton = $event; contentChanged()"
+      [subscriptSizing]="'dynamic'"
+    ></bc-dropdown>
 
     <bc-checkbox
       *ngIf="!data.parentId"
@@ -121,7 +142,8 @@
       [checked]="data.virtualTopLevel"
       (checkedChange)="data.virtualTopLevel = $event; contentChanged()"
       class="full-width"
-      [subscriptSizing]="'dynamic'"></bc-checkbox>
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
 
     <bc-checkbox
       *ngIf="showPublishResults"
@@ -130,18 +152,23 @@
       [checked]="!data.publishResultsDisabled"
       (checkedChange)="data.publishResultsDisabled = !$event; contentChanged()"
       class="full-width"
-      [subscriptSizing]="'dynamic'"></bc-checkbox>
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
 
     <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
-    <app-contact-person-edit class="form"
-                             [readonly]="readonly"
-                             [formGroup]="form.controls.contactPerson"
-                             (contentChanged)="updateContactPerson(); contentChanged()"></app-contact-person-edit>
+    <app-contact-person-edit
+      class="form"
+      [readonly]="readonly"
+      [formGroup]="form.controls.contactPerson"
+      (contentChanged)="updateContactPerson(); contentChanged()"
+    ></app-contact-person-edit>
 
     <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.PARTY.TITLE</h2>
-    <app-domain-of-influence-parties [parties]="data.parties"
-                                     [disabled]="readonly"
-                                     (partiesChange)="data.parties = $event; contentChanged()"></app-domain-of-influence-parties>
+    <app-domain-of-influence-parties
+      [parties]="data.parties"
+      [disabled]="readonly"
+      (partiesChange)="data.parties = $event; contentChanged()"
+    ></app-domain-of-influence-parties>
 
     <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.TITLE</h2>
 
@@ -151,7 +178,8 @@
       [label]="'DOMAIN_OF_INFLUENCE.VIEW_COUNTING_CIRCLE_PARTIAL_RESULTS' | translate"
       [checked]="data.viewCountingCirclePartialResults"
       (checkedChange)="data.viewCountingCirclePartialResults = $event; contentChanged()"
-      [subscriptSizing]="'dynamic'"></bc-checkbox>
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
 
     <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.VOTER_TYPES.TITLE</h3>
     <bc-checkbox
@@ -160,7 +188,8 @@
       [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.VOTER_TYPES.FOREIGNER' | translate"
       [checked]="data.hasForeignerVoters"
       (checkedChange)="data.hasForeignerVoters = $event; contentChanged()"
-      [subscriptSizing]="'dynamic'"></bc-checkbox>
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
 
     <bc-checkbox
       class="full-width"
@@ -168,20 +197,25 @@
       [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.VOTER_TYPES.MINOR' | translate"
       [checked]="data.hasMinorVoters"
       (checkedChange)="data.hasMinorVoters = $event; contentChanged()"
-      [subscriptSizing]="'dynamic'"></bc-checkbox>
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
 
     <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.TITLE</h3>
-    <app-export-configurations [readonly]="readonly || !canEditEverything"
-                               [configurations]="data.exportConfigurationsList"
-                               (configurationsChange)="data.exportConfigurationsList = $event; contentChanged()"
-                               class="mb-4"></app-export-configurations>
+    <app-export-configurations
+      [readonly]="readonly || !canEditEverything"
+      [configurations]="data.exportConfigurationsList"
+      (configurationsChange)="data.exportConfigurationsList = $event; contentChanged()"
+      class="mb-4"
+    ></app-export-configurations>
 
     <ng-container *ngIf="showInternalPlausibilisation">
       <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.PLAUSIBILISATION_CONFIGURATION.TITLE</h3>
-      <app-plausibilisation-configuration [readonly]="readonly"
-                                          [domainOfInfluence]="data"
-                                          [domainOfInfluenceType]="data.type"
-                                          (contentChanged)="contentChanged()"></app-plausibilisation-configuration>
+      <app-plausibilisation-configuration
+        [readonly]="readonly"
+        [domainOfInfluence]="data"
+        [domainOfInfluenceType]="data.type"
+        (contentChanged)="contentChanged()"
+      ></app-plausibilisation-configuration>
     </ng-container>
 
     <ng-container *ngIf="canEditEverything || data.responsibleForVotingCards">
@@ -192,12 +226,15 @@
         [checked]="data.responsibleForVotingCards"
         (checkedChange)="data.responsibleForVotingCards = $event; contentChanged()"
         class="full-width"
-        [subscriptSizing]="'dynamic'"></bc-checkbox>
-      <app-domain-of-influence-voting-card-data-edit *ngIf="data.responsibleForVotingCards"
-                                                     [disabled]="readonly"
-                                                     [domainOfInfluence]="data"
-                                                     (logoChanged)="logoChanged = true; updatedLogo = $event; contentChanged()"
-                                                     (contentChanged)="contentChanged()">
+        [subscriptSizing]="'dynamic'"
+      ></bc-checkbox>
+      <app-domain-of-influence-voting-card-data-edit
+        *ngIf="data.responsibleForVotingCards"
+        [disabled]="readonly"
+        [domainOfInfluence]="data"
+        (logoChanged)="logoChanged = true; updatedLogo = $event; contentChanged()"
+        (contentChanged)="contentChanged()"
+      >
       </app-domain-of-influence-voting-card-data-edit>
     </ng-container>
 
@@ -205,44 +242,108 @@
       <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.E_COLLECTING.TITLE</h2>
       <bc-checkbox
         [disabled]="readonly"
-        [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.E_COLLECTING_ENABLED' | translate"
+        [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.ENABLED' | translate"
         [checked]="data.eCollectingEnabled"
-        (checkedChange)="data.eCollectingEnabled = $event; contentChanged()"
+        (checkedChange)="data.eCollectingEnabled = $event; contentChanged(); updateValidators($event)"
         class="full-width"
-        [subscriptSizing]="'dynamic'"></bc-checkbox>
+        [subscriptSizing]="'dynamic'"
+      ></bc-checkbox>
       <ng-container *ngIf="data.eCollectingEnabled">
-        <bc-number  
+        <bc-number
+          *ngIf="data.type >= knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU"
           [readonly]="readonly"
-          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.E_COLLECTING_MIN_SIGNATURE_COUNT' | translate"
-          [value]="data.eCollectingMinSignatureCount"
-          (valueChange)="data.eCollectingMinSignatureCount = $event; contentChanged()"
-          [formControl]="form.controls.eCollectingMinSignatureCount"
-          [showDefaultErrors]="true"
-          [error]="form.controls.eCollectingMinSignatureCount.invalid && form.controls.eCollectingMinSignatureCount.touched"
-          [subscriptSizing]="'dynamic'"></bc-number>
-        <bc-number  
-          [readonly]="readonly"
-          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.E_COLLECTING_MAX_ELECTRONIC_SIGNATURE_PERCENT' | translate"
-          [value]="data.eCollectingMaxElectronicSignaturePercent"
-          (valueChange)="data.eCollectingMaxElectronicSignaturePercent = $event; contentChanged()"
-          [formControl]="form.controls.eCollectingMaxElectronicSignaturePercent"
+          [required]="true"
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.INITIATIVE_MIN_SIGNATURE_COUNT' | translate"
+          [value]="data.eCollectingInitiativeMinSignatureCount"
+          (valueChange)="data.eCollectingInitiativeMinSignatureCount = $event; contentChanged()"
+          [formControl]="form.controls.eCollectingInitiativeMinSignatureCount"
           [showDefaultErrors]="true"
           [error]="
-            form.controls.eCollectingMaxElectronicSignaturePercent.invalid && form.controls.eCollectingMaxElectronicSignaturePercent.touched
+            form.controls.eCollectingInitiativeMinSignatureCount.invalid && form.controls.eCollectingInitiativeMinSignatureCount.touched
           "
           [subscriptSizing]="'dynamic'"
         ></bc-number>
+        <bc-number
+          *ngIf="data.type >= knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU"
+          [readonly]="readonly"
+          [required]="true"
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.INITIATIVE_MAX_ELECTRONIC_SIGNATURE_PERCENT' | translate"
+          [value]="data.eCollectingInitiativeMaxElectronicSignaturePercent"
+          (valueChange)="data.eCollectingInitiativeMaxElectronicSignaturePercent = $event; contentChanged()"
+          [formControl]="form.controls.eCollectingInitiativeMaxElectronicSignaturePercent"
+          [showDefaultErrors]="true"
+          [error]="
+            form.controls.eCollectingInitiativeMaxElectronicSignaturePercent.invalid &&
+            form.controls.eCollectingInitiativeMaxElectronicSignaturePercent.touched
+          "
+          [subscriptSizing]="'dynamic'"
+        ></bc-number>
+        <bc-number
+          [readonly]="readonly"
+          [required]="true"
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.INITIATIVE_NUMBER_OF_MEMBERS_COMMITTEE' | translate"
+          [value]="data.eCollectingInitiativeNumberOfMembersCommittee"
+          (valueChange)="data.eCollectingInitiativeNumberOfMembersCommittee = $event; contentChanged()"
+          [formControl]="form.controls.eCollectingInitiativeNumberOfMembersCommittee"
+          [showDefaultErrors]="true"
+          [error]="
+            form.controls.eCollectingInitiativeNumberOfMembersCommittee.invalid &&
+            form.controls.eCollectingInitiativeNumberOfMembersCommittee.touched
+          "
+          [subscriptSizing]="'dynamic'"
+        ></bc-number>
+        <bc-number
+          [readonly]="readonly"
+          [required]="true"
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.REFERENDUM_MIN_SIGNATURE_COUNT' | translate"
+          [value]="data.eCollectingReferendumMinSignatureCount"
+          (valueChange)="data.eCollectingReferendumMinSignatureCount = $event; contentChanged()"
+          [formControl]="form.controls.eCollectingReferendumMinSignatureCount"
+          [showDefaultErrors]="true"
+          [error]="
+            form.controls.eCollectingReferendumMinSignatureCount.invalid && form.controls.eCollectingReferendumMinSignatureCount.touched
+          "
+          [subscriptSizing]="'dynamic'"
+        ></bc-number>
+        <bc-number
+          [readonly]="readonly"
+          [required]="true"
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.REFERENDUM_MAX_ELECTRONIC_SIGNATURE_PERCENT' | translate"
+          [value]="data.eCollectingReferendumMaxElectronicSignaturePercent"
+          (valueChange)="data.eCollectingReferendumMaxElectronicSignaturePercent = $event; contentChanged()"
+          [formControl]="form.controls.eCollectingReferendumMaxElectronicSignaturePercent"
+          [showDefaultErrors]="true"
+          [error]="
+            form.controls.eCollectingReferendumMaxElectronicSignaturePercent.invalid &&
+            form.controls.eCollectingReferendumMaxElectronicSignaturePercent.touched
+          "
+          [subscriptSizing]="'dynamic'"
+        ></bc-number>
+        <bc-text
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.EMAIL' | translate"
+          type="email"
+          [readonly]="readonly"
+          [required]="true"
+          [value]="data.eCollectingEmail"
+          (valueChange)="data.eCollectingEmail = $event; contentChanged()"
+          [formControl]="form.controls.eCollectingEmail"
+          [showDefaultErrors]="true"
+          [error]="form.controls.eCollectingEmail.invalid && form.controls.eCollectingEmail.touched"
+          [subscriptSizing]="'dynamic'"
+        ></bc-text>
       </ng-container>
     </ng-container>
   </div>
 
   <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [canSave]="canSave"
-                       [saving]="saving"
-                       [sticky]="false"
-                       [hasSaveButton]="!readonly"
-                       (save)="save()"
-                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
+    <vo-lib-button-bar
+      footer
+      [canSave]="canSave"
+      [saving]="saving"
+      [sticky]="false"
+      [hasSaveButton]="!readonly"
+      (save)="save()"
+      (cancel)="closeWithUnsavedChangesCheck()"
+    ></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

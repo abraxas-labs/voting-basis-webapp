@@ -33,6 +33,7 @@ import {
   TimeModule,
   TooltipModule,
   TruncateWithTooltipModule,
+  ErrorModule,
 } from '@abraxas/base-components';
 import { VotingLibModule } from '@abraxas/voting-lib';
 import { CommonModule } from '@angular/common';
@@ -83,6 +84,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { TruncatedValueComponent } from './truncated-value/truncated-value.component';
 import { AssignedCountingCirclesDialogComponent } from './assigned-counting-circles-dialog/assigned-counting-circles-dialog.component';
 import { MatDialogClose } from '@angular/material/dialog';
+import { MatTooltip } from '@angular/material/tooltip';
 
 const components = [
   ContactPersonEditComponent,
@@ -156,6 +158,7 @@ const modules = [
   DndModule,
   MatIconModule,
   TooltipModule,
+  MatTooltip,
   TableModule,
   NavLayoutModule,
   DialogModule,
@@ -166,6 +169,7 @@ const modules = [
   IconButtonModule,
   MatDialogClose,
   ReactiveFormsModule,
+  ErrorModule,
 ];
 
 @NgModule({

@@ -17,3 +17,8 @@
 bc-checkbox ~ bc-checkbox {
   margin-left: 0 !important;
 }
+
+// workaround since the bc-number always show the clear and shifts other elements, related to jira BC-765.
+bc-number .clear {
+  display: none !important;
+}

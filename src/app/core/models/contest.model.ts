@@ -33,6 +33,8 @@ export type Contest = {
   politicalBusinessUnions: PoliticalBusinessUnion[];
   state: ContestState;
   previousContestId?: string;
+  eVotingApprovalDueDate?: Date;
+  eVotingApproved: boolean;
 };
 export { ContestDateAvailability };
 export { ContestSummaryProto };

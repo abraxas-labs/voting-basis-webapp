@@ -43,6 +43,7 @@ export type Vote = {
   reviewProcedure: VoteReviewProcedureProto;
   enforceReviewProcedureForCountingCircles: boolean;
   type: VoteTypeProto;
+  eVotingApproved?: boolean;
 };
 export { VoteResultAlgorithmProto as VoteResultAlgorithm };
 export { VoteTypeProto as VoteType };

@@ -3,7 +3,7 @@
     class="full-width"
     [items]="userVoteTypeDescriptions"
     [label]="'VOTE.USER_VOTE_TYPE.TITLE' | translate"
-    [readonly]="testingPhaseEnded || readonly"
+    [readonly]="testingPhaseEnded || readonly || locked || voteTypeImmutable"
     displayExpr="description"
     valueExpr="value"
     [required]="true"

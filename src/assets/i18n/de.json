@@ -214,6 +214,7 @@
       "ELECTORAL_REGISTER_MULTIPLE_ENABLED": "Mehrere Elektorate mit selbem Versand bedienen",
       "STISTAT_MUNICIPALITY": "STISTAT-Gemeinde",
       "VOTING_CARD_FLAT_RATE_OWNER": "Übernimmt Pauschalkosten für Korporation",
+      "IS_MAIN_VOTING_CARDS_DOMAIN_OF_INFLUENCE": "Hauptwahlkreis (Geschäfte weiterer dem Mandanten zugeordneter Auszählungskreise werden bei diesem Wahlkreis angezeigt)",
       "VOTING_CARD_COLOR": "Farbe des Stimmrechtsausweis",
       "VOTING_CARD_COLORS": {
         "1": "Blau",
@@ -334,9 +335,13 @@
     },
     "E_COLLECTING": {
       "TITLE": "E-Collecting",
-      "E_COLLECTING_ENABLED": "Wahlkreis verwendet E-Collecting",
-      "E_COLLECTING_MIN_SIGNATURE_COUNT": "Nötige Anzahl Unterschriften",
-      "E_COLLECTING_MAX_ELECTRONIC_SIGNATURE_PERCENT": "Max. Schwellenwert für Unterschriften E-Collecting (in %)"
+      "ENABLED": "Wahlkreis verwendet E-Collecting",
+      "INITIATIVE_MIN_SIGNATURE_COUNT": "Initiative - Nötige Anzahl Unterschriften",
+      "INITIATIVE_MAX_ELECTRONIC_SIGNATURE_PERCENT": "Initiative - Max. Schwellenwert für Unterschriften E-Collecting (in %)",
+      "INITIATIVE_NUMBER_OF_MEMBERS_COMMITTEE": "Initiative - Anzahl Mitglieder im Initiativkomitee",
+      "REFERENDUM_MIN_SIGNATURE_COUNT": "Referendum - Nötige Anzahl Unterschriften",
+      "REFERENDUM_MAX_ELECTRONIC_SIGNATURE_PERCENT": "Referendum - Max. Schwellenwert für Unterschriften E-Collecting (in %)",
+      "EMAIL": "E-Mail Prüfstelle"
     }
   },
   "CONTEST": {
@@ -362,6 +367,8 @@
     "E_VOTING": "E-Voting",
     "E_VOTING_FROM": "E-Voting Zeitraum von",
     "E_VOTING_TO": "E-Voting Zeitraum bis",
+    "E_VOTING_APPROVAL_DUE_DATE": "Datenabzug für E-Voting",
+    "EXPORT_E_VOTING_ONLY": "E-Voting Export",
     "AVAILABILITY": "Urnengang-Verfügbarkeit",
     "ALREADY_EXISTS": "Es findet bereits ein Urnengang an diesem Termin statt!",
     "CLOSE_TO_OTHER_CONTEST_DATE_QUESTION": "Es findet bereits ein Urnengang in dieser Zeitspanne statt (4 Wochen vor und danach)! Das Wahl- und Abstimmungsmaterial könnte sich überschneiden.",
@@ -445,8 +452,8 @@
       "TITLE": "Geschäftstyp",
       "1": "Abstimmung",
       "1_SUB_TYPE": {
-        "0": "Abstimmung (SGS)",
-        "1": "Abstimmung (SGV)"
+        "0": "Abstimmung",
+        "1": "Varianten Abstimmung"
       },
       "2": "Majorzwahl",
       "3": "Proporzwahl",
@@ -462,6 +469,12 @@
     },
     "GENERAL_INFORMATION": "Allgemeine Angaben",
     "ENABLE_TITLE": "Erfassung",
+    "E_VOTING_APPROVED": "Freigabe für E-Voting",
+    "E_VOTING_APPROVED_REVERT_TOOLTIP": "Für eine erneute Freigabe melden Sie sich bitte bei der Staatskanzlei.",
+    "CONFIRM_E_VOTING_APPROVED": {
+      "TITLE": "E-Voting Freigabe",
+      "TEXT": "Haben Sie alle Angaben für dieses Geschäft kontrolliert? Nach der Bestätigung wird das Geschäft für E-Voting freigegeben und es sind keine Änderungen der Angaben im E-Voting-System mehr möglich."
+    },
     "RESULT_ENTRY_INFORMATION": "Erfassungsweise",
     "FEDERAL_IDENTIFICATION": "Bundes-ID",
     "COUNTING_CIRCLES": "Auszählungskreise anzeigen",
@@ -703,6 +716,7 @@
       "OCCUPATION_TITLE": "Titel und Berufsbezeichnung",
       "INCUMBENT": "Bisher",
       "ZIP_CODE": "PLZ",
+      "ZIP_CODE_INVALID": "Keine Schweizer PLZ, bitte Land auswählen oder korrigieren",
       "LOCALITY": "Wohnort",
       "ACCUMULATE": "Kandidat/in kumulieren",
       "REMOVE_ACCUMULATION": "Kumulation entfernen",
@@ -798,6 +812,7 @@
       "PARTY": "Partei",
       "INCUMBENT": "Bisher",
       "ZIP_CODE": "PLZ",
+      "ZIP_CODE_INVALID": "Keine Schweizer PLZ, bitte Land auswählen oder korrigieren",
       "LOCALITY": "Wohnort",
       "INDIVIDUAL_PLACEHOLDER": "Vereinzelte",
       "INDIVIDUAL_COUNT": "Anzahl Vereinzelte",
@@ -885,7 +900,10 @@
     },
     "IMPORT_CONTEST": "Urnengang importieren",
     "IMPORT_POLITICAL_BUSINESS": "Geschäft(e) importieren",
-    "IMPORT_MAJORITY_ELECTION_CANDIDATES": "Kandidierende importieren",
+    "IMPORT_MAJORITY_ELECTION_CANDIDATES": {
+      "TITLE": "Kandidierende importieren",
+      "CANDIDATE_STEP": "Kandidierende"
+    },
     "IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES": "Importieren",
     "POLITICAL_BUSINESS_INFOS": "Geschäftsinformationen",
     "CONTEST_INFOS": "Urnenganginformationen",
@@ -1104,8 +1122,8 @@
       "ElectionGroupDeleted": "Wahlgruppe gelöscht",
       "ProportionalElectionUnionCreated": "Geschäftsverbindung eingerichtet",
       "ProportionalElectionUnionUpdated": "Geschäftsverbindung editiert",
-      "ProportionalElectionUnionEntriesUpdated": "Geschäftsverbindung gelöscht",
-      "ProportionalElectionUnionDeleted": "Geschäfte einer Geschäftsverbindung zugeordnet",
+      "ProportionalElectionUnionEntriesUpdated": "Geschäfte einer Geschäftsverbindung zugeordnet",
+      "ProportionalElectionUnionDeleted": "Geschäftsverbindung gelöscht",
       "ProportionalElectionUnionToNewContestMoved": "Geschäftsverbindung in neuen Urnengang verschoben",
       "MajorityElectionUnionCreated": "Geschäftsverbindung eingerichtet",
       "MajorityElectionUnionUpdated": "Geschäftsverbindung editiert",

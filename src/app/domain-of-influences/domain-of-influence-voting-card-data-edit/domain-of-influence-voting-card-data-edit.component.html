@@ -22,6 +22,15 @@
     class="full-width mb-2"
     [subscriptSizing]="'dynamic'"
   ></bc-checkbox>
+  <bc-checkbox
+    [disabled]="disabled || !canEditEverything"
+    [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.IS_MAIN_VOTING_CARDS_DOMAIN_OF_INFLUENCE' | translate"
+    [checked]="domainOfInfluence.isMainVotingCardsDomainOfInfluence"
+    (checkedChange)="domainOfInfluence.isMainVotingCardsDomainOfInfluence = $event; contentChanged.emit()"
+    class="full-width mb-2"
+    [subscriptSizing]="'dynamic'"
+  ></bc-checkbox>
+
 
   <app-domain-of-influence-logo-edit [disabled]="disabled"
                                      [domainOfInfluence]="domainOfInfluence"

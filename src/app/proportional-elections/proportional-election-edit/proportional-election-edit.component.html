@@ -10,6 +10,8 @@
         <app-proportional-election-general-informations
           #step1
           [data]="data"
+          [isNew]="isNew"
+          [locked]="locked"
           [proportionalElectionMandateAlgorithmsList]="contestDomainOfInfluenceDefaults.proportionalElectionMandateAlgorithmsList"
           (contentChanged)="contentChanged()"
         ></app-proportional-election-general-informations>

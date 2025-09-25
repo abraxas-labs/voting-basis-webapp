@@ -37,6 +37,9 @@ export class VoteBallotComponent {
   @Input()
   public domainOfInfluenceType?: DomainOfInfluenceType;
 
+  @Input()
+  public voteTypeImmutable: boolean = false;
+
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 

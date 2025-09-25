@@ -21,7 +21,7 @@
   </div>
 
   <bc-number [label]="'MAJORITY_ELECTION.NUMBER_OF_MANDATES' | translate"
-             [readonly]="testingPhaseEnded || data.active || readonly"
+             [readonly]="testingPhaseEnded || locked || data.active || readonly"
              [required]="true"
              [value]="data.numberOfMandates"
              (valueChange)="data.numberOfMandates = +$event"
@@ -30,6 +30,6 @@
   <bc-checkbox [checked]="!data.individualCandidatesDisabled"
                (checkedChange)="data.individualCandidatesDisabled = !$event;"
                [label]="'SECONDARY_ELECTION.MAJORITY.INDIVIDUAL_CANDIDATES' | translate"
-               [disabled]="testingPhaseEnded || readonly"
+               [disabled]="testingPhaseEnded || locked || readonly"
                [subscriptSizing]="'dynamic'"></bc-checkbox>
 </div>

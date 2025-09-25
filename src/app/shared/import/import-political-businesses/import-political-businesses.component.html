@@ -1,13 +1,13 @@
 <app-import-vote-edit *ngFor="let vote of votes"
                       #editComponent
-                      (valid)="checkAllValid()"
+                      (applied)="checkAllValid()"
                       [vote]="vote"
                       [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
 </app-import-vote-edit>
 
 <app-import-proportional-election-edit *ngFor="let proportionalElection of proportionalElections"
                                        #editComponent
-                                       (valid)="checkAllValid()"
+                                       (applied)="checkAllValid()"
                                        [proportionalElection]="proportionalElection"
                                        [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
 </app-import-proportional-election-edit>
@@ -15,7 +15,7 @@
 
 <app-import-majority-election-edit *ngFor="let majorityElection of majorityElections"
                                    #editComponent
-                                   (valid)="checkAllValid()"
+                                   (applied)="checkAllValid()"
                                    [majorityElection]="majorityElection"
                                    [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
 </app-import-majority-election-edit>

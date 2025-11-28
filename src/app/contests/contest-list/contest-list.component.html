@@ -153,16 +153,9 @@
         </vo-lib-action-menu-item>
         <vo-lib-action-menu-item
           *ngIf="!element.isPreconfiguredDate && !element.isPoliticalAssembly"
-          (click)="export.emit(element)"
+          (click)="export.emit(element.contest)"
           icon="download"
           text="ACTIONS.EXPORT"
-        >
-        </vo-lib-action-menu-item>
-        <vo-lib-action-menu-item
-          *ngIf="!element.isPreconfiguredDate && !element.isPoliticalAssembly && element.contest?.eVoting"
-          (click)="exportOnlyEVoting.emit(element)"
-          icon="download"
-          text="CONTEST.EXPORT_E_VOTING_ONLY"
         >
         </vo-lib-action-menu-item>
       </vo-lib-action-menu>

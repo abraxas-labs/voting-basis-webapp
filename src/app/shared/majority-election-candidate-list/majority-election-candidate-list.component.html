@@ -70,7 +70,7 @@
       <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate"></app-truncated-value>
     </bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <app-truncated-value [value]="element.party | getTranslation"></app-truncated-value>
+      <app-truncated-value [value]="element.partyShortDescription | getTranslation"></app-truncated-value>
     </bc-data-cell>
   </ng-container>
 

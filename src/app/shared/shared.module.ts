@@ -85,6 +85,8 @@ import { TruncatedValueComponent } from './truncated-value/truncated-value.compo
 import { AssignedCountingCirclesDialogComponent } from './assigned-counting-circles-dialog/assigned-counting-circles-dialog.component';
 import { MatDialogClose } from '@angular/material/dialog';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ProportionalElectionMandateAlgorithmSelectionComponent } from './proportional-election-mandate-algorithm-selection/proportional-election-mandate-algorithm-selection.component';
+import { VoteResultAlgorithmSelectionComponent } from './vote-result-algorithm-selection/vote-result-algorithm-selection.component';
 
 const components = [
   ContactPersonEditComponent,
@@ -121,6 +123,8 @@ const components = [
   ImportProportionalElectionPartyMappingComponent,
   TruncatedValueComponent,
   AssignedCountingCirclesDialogComponent,
+  ProportionalElectionMandateAlgorithmSelectionComponent,
+  VoteResultAlgorithmSelectionComponent,
 ];
 
 const pipes = [GetTranslationPipe, SafeHtmlPipe, CanEditBallotGroupPipe];

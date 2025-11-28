@@ -5,7 +5,7 @@
     <bc-text [label]="'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate"
              [required]="true"
              [readonly]="testingPhaseEnded"
-             [maxlength]="6"
+             [maxlength]="4"
              [value]="list.orderNumber"
              (valueChange)="list.orderNumber = $event; contentChanged()"
              subscriptSizing="dynamic"></bc-text>

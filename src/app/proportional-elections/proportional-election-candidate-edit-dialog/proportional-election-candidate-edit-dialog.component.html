@@ -7,6 +7,7 @@
              [readonly]="testingPhaseEnded"
              [value]="data.number"
              (valueChange)="data.number = $event; contentChanged()"
+             [maxlength]="5"
              subscriptSizing="dynamic"></bc-text>
 
     <bc-text [label]="'PROPORTIONAL_ELECTION.CANDIDATE.FIRST_NAME' | translate"

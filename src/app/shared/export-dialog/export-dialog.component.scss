@@ -1,3 +1,13 @@
-.pcd {
-  font-style: italic;
+.export-container {
+  display: flex;
+  flex-direction: column;
+
+  bc-button {
+    flex: 1;
+    margin: 0.5rem 0;
+
+    ::ng-deep button {
+      width: 100%;
+    }
+  }
 }

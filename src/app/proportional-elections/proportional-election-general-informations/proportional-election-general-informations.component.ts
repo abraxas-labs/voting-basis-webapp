@@ -17,6 +17,7 @@ import {
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
 import { PermissionService } from '../../core/permission.service';
 import { DialogService } from '@abraxas/base-components';
+import { DomainOfInfluenceCanton, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-proportional-election-general-informations',
@@ -31,7 +32,8 @@ export class ProportionalElectionGeneralInformationsComponent
   @Input()
   public proportionalElectionMandateAlgorithmsList: ProportionalElectionMandateAlgorithm[] = [];
 
-  public mandateAlgorithms: EnumItemDescription<ProportionalElectionMandateAlgorithm>[] = [];
+  @Input()
+  public canton: DomainOfInfluenceCanton = DomainOfInfluenceCanton.DOMAIN_OF_INFLUENCE_CANTON_UNSPECIFIED;
 
   constructor(
     domainOfInfluenceService: DomainOfInfluenceService,
@@ -53,20 +55,6 @@ export class ProportionalElectionGeneralInformationsComponent
   }
 
   public get canSave(): boolean {
-    return this.isValid && this.data.numberOfMandates > 0 && this.data.mandateAlgorithm !== undefined;
-  }
-
-  public async ngOnInit(): Promise<void> {
-    await super.ngOnInit();
-
-    this.mandateAlgorithms = this.enumUtil
-      .getArrayWithDescriptions<ProportionalElectionMandateAlgorithm>(
-        ProportionalElectionMandateAlgorithm,
-        'PROPORTIONAL_ELECTION.MANDATE_ALGORITHM.TYPES.',
-      )
-      .filter(i => this.proportionalElectionMandateAlgorithmsList.includes(i.value) || this.data.mandateAlgorithm === i.value);
-    if (this.mandateAlgorithms.length === 1) {
-      this.data.mandateAlgorithm = this.mandateAlgorithms[0].value;
-    }
+    return this.isValid && this.data.numberOfMandates > 0 && !!this.data.mandateAlgorithm;
   }
 }

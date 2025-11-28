@@ -9,6 +9,7 @@ import {
   MajorityElectionCandidate as MajorityElectionCandidateProto,
 } from '@abraxas/voting-basis-service-proto/grpc/models/majority_election_pb';
 import {
+  MajorityElectionCandidateReportingType as MajorityElectionCandidateReportingTypeProto,
   MajorityElectionMandateAlgorithm as MajorityElectionMandateAlgorithmProto,
   MajorityElectionResultEntry as MajorityElectionResultEntryProto,
   MajorityElectionReviewProcedure as MajorityElectionReviewProcedureProto,
@@ -29,6 +30,7 @@ export type MajorityElection = Omit<
 export { MajorityElectionMandateAlgorithmProto as MajorityElectionMandateAlgorithm };
 export { MajorityElectionResultEntryProto as MajorityElectionResultEntry };
 export { MajorityElectionReviewProcedureProto as MajorityElectionReviewProcedure };
+export { MajorityElectionCandidateReportingTypeProto as MajorityElectionCandidateReportingType };
 export { MajorityElectionCandidateProto };
 
 export type MajorityElectionCandidate = {
@@ -44,7 +46,8 @@ export type MajorityElectionCandidate = {
   occupation: Map<string, string>;
   title: string;
   occupationTitle: Map<string, string>;
-  party: Map<string, string>;
+  partyShortDescription: Map<string, string>;
+  partyLongDescription: Map<string, string>;
   incumbent: boolean;
   zipCode: string;
   locality: string;
@@ -53,6 +56,7 @@ export type MajorityElectionCandidate = {
   street: string;
   houseNumber: string;
   country: string;
+  reportingType: MajorityElectionCandidateReportingTypeProto;
 };
 
 export function newMajorityElection(): MajorityElection {
@@ -71,7 +75,11 @@ export function newMajorityElection(): MajorityElection {
   } as MajorityElection;
 }
 
-export function newMajorityElectionCandidate(position: number, majorityElectionId: string): MajorityElectionCandidate {
+export function newMajorityElectionCandidate(
+  position: number,
+  majorityElectionId: string,
+  hasReportingType: boolean,
+): MajorityElectionCandidate {
   return {
     id: '',
     firstName: '',
@@ -84,7 +92,8 @@ export function newMajorityElectionCandidate(position: number, majorityElectionI
     occupation: new Map<string, string>(),
     title: '',
     occupationTitle: new Map<string, string>(),
-    party: new Map<string, string>(),
+    partyShortDescription: new Map<string, string>(),
+    partyLongDescription: new Map<string, string>(),
     zipCode: '',
     majorityElectionId,
     position,
@@ -93,5 +102,8 @@ export function newMajorityElectionCandidate(position: number, majorityElectionI
     street: '',
     houseNumber: '',
     country: 'CH',
+    reportingType: !hasReportingType
+      ? MajorityElectionCandidateReportingTypeProto.MAJORITY_ELECTION_CANDIDATE_REPORTING_TYPE_UNSPECIFIED
+      : MajorityElectionCandidateReportingTypeProto.MAJORITY_ELECTION_CANDIDATE_REPORTING_TYPE_CANDIDATE,
   };
 }

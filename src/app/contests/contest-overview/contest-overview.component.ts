@@ -178,15 +178,10 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
   }
 
   public export(id: string, eVoting: boolean): Promise<void> {
-    // Cannot use the 'generic' approach here, since we know explicitly which template to use
-    const key = eVoting ? 'contest_ech_0157_and_0159_e_voting' : 'contest_ech_0157_and_0159';
-    const exportTemplate = {
-      key,
-      entityType: ExportEntityType.EXPORT_ENTITY_TYPE_CONTEST,
-      description: '',
-      format: ExportFileFormat.EXPORT_FILE_FORMAT_XML,
-    } satisfies ExportTemplate;
-    return this.exportService.downloadExport(exportTemplate, id);
+    return this.exportService.downloadExportOrShowDialog(ExportEntityType.EXPORT_ENTITY_TYPE_CONTEST, id, template => {
+      // Only show the e-voting template when the contest has e-voting
+      return eVoting || template.key !== 'contest_ech_0157_and_0159_e_voting';
+    });
   }
 
   public async archive(listEntry: ContestListType): Promise<void> {

@@ -13,7 +13,7 @@
                variant="tertiary"
                icon="download"
                [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE' | translate"
-               [disabled]="locked || eVotingApproved || readonly"
+               [disabled]="testingPhaseEnded || locked || eVotingApproved || readonly"
                (buttonClick)="importCandidates()"
                class="ml-2"></bc-button>
 
@@ -40,7 +40,7 @@
                                               [candidateOriginRequired]="candidateOriginRequired"
                                               [hideOccupationTitle]="hideOccupationTitle"
                                               [domainOfInfluenceType]="currentDomainOfInfluence?.type"
-                                              [partyShortDescriptions]="partyShortDescriptions">
+                                              [parties]="parties">
   </app-secondary-majority-election-candidates>
 
   <app-majority-election-ballot-group-overview *ngIf="currentMajorityElection"

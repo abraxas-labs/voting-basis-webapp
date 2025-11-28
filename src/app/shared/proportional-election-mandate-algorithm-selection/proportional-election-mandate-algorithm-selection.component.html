@@ -1,0 +1,12 @@
+<bc-dropdown
+  class="full-width"
+  [label]="'PROPORTIONAL_ELECTION.MANDATE_ALGORITHM.TITLE' | translate"
+  [items]="mandateAlgorithms"
+  [readonly]="readonly"
+  displayExpr="description"
+  valueExpr="value"
+  [required]="true"
+  [(value)]="data.mandateAlgorithm"
+  (valueChange)="data.mandateAlgorithm = $event; contentChanged.emit()"
+  [subscriptSizing]="'dynamic'"
+></bc-dropdown>

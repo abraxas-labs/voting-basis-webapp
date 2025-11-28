@@ -41,9 +41,13 @@ export function newSecondaryMajorityElection(): SecondaryMajorityElection {
   };
 }
 
-export function newSecondaryMajorityElectionCandidate(position: number, majorityElectionId: string): SecondaryMajorityElectionCandidate {
+export function newSecondaryMajorityElectionCandidate(
+  position: number,
+  majorityElectionId: string,
+  hasReportingType: boolean,
+): SecondaryMajorityElectionCandidate {
   return {
-    ...newMajorityElectionCandidate(position, majorityElectionId),
+    ...newMajorityElectionCandidate(position, majorityElectionId, hasReportingType),
     isReferenced: true,
     referencedCandidateId: '',
   };

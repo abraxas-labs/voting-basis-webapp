@@ -1,15 +1,14 @@
 <vo-lib-dialog [contentLoading]="loading">
   <h1 header translate>EXPORTS.TITLE</h1>
 
-  <div content class="form mr-3 my-3">
+  <div content class="export-container">
     <bc-button *ngFor="let exportTemplate of exportTemplates"
                variant="primary"
-               (buttonClick)="downloadExport(exportTemplate)">
-      {{'EXPORTS.TEMPLATE_TITLE' | translate: {
-        entity: ('EXPORTS.ENTITY_TYPES.' + exportTemplate.entityType | translate),
+               (buttonClick)="downloadExport(exportTemplate)"
+               [label]="'EXPORTS.TEMPLATE_TITLE' | translate: {
         format: ('EXPORTS.FILE_FORMATS.' + exportTemplate.format | translate),
         description: exportTemplate.description
-      } }}
+      }">
     </bc-button>
   </div>
 

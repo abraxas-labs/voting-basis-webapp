@@ -13,7 +13,7 @@
       variant="tertiary"
       icon="download"
       label="{{ 'IMPORT.IMPORT_CONTEST' | translate }}"
-      (click)="import()"
+      (buttonClick)="import()"
     ></bc-button>
   </div>
   <app-contest-list
@@ -21,8 +21,7 @@
     (edit)="edit($event)"
     (delete)="delete($event)"
     (view)="view($event.id)"
-    (export)="export($event.id, false)"
-    (exportOnlyEVoting)="export($event.id, true)"
+    (export)="export($event.id, $event.eVoting)"
     [contests]="contests"
     [showEndOfTestingPhase]="true"
     [showType]="canAddPoliticalAssembly"
@@ -40,8 +39,7 @@
     (pastUnlock)="pastUnlock($event)"
     (edit)="edit($event)"
     (view)="view($event.id)"
-    (export)="export($event.id, false)"
-    (exportOnlyEVoting)="export($event.id, true)"
+    (export)="export($event.id, $event.eVoting)"
     [showArchivePer]="true"
     [contests]="pastContests"
     [canCreate]="canCreate"
@@ -56,8 +54,7 @@
   <app-contest-list
     class="mb-4 block"
     (view)="view($event.id)"
-    (export)="export($event.id, false)"
-    (exportOnlyEVoting)="export($event.id, true)"
+    (export)="export($event.id, $event.eVoting)"
     [showPaginator]="true"
     [contests]="archivedContests"
     [canCreate]="canCreate"

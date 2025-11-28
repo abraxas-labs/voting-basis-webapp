@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.54.0`)
+# ✨ Changelog (`v3.57.2`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.54.0
-Previous version ---- v3.46.3
+This version -------- v3.57.2
+Previous version ---- v3.54.0
 Initial version ----- v1.23.0
-Total commits ------- 22
+Total commits ------- 9
 ```
+
+## [v3.57.2] - 2025-10-15
+
+### 🆕 Added
+
+- add proportional election mandate algorithm and vote result algorithm restrictions
+
+## [v3.57.1] - 2025-10-14
+
+### 🔄 Changed
+
+- ensure political business is complete before activation
+
+## [v3.57.0] - 2025-10-13
+
+### 🆕 Added
+
+- add majority election candidate reporting type
+
+## [v3.56.1] - 2025-10-10
+
+### 🔄 Changed
+
+- correctly show party in majority election components
+
+## [v3.56.0] - 2025-10-08
+
+### 🆕 Added
+
+- add party long description to majority election candidates
+
+## [v3.55.0] - 2025-09-30
+
+### 🔄 Changed
+
+- update proto to restrict candidate and list number length
+
+### 🔄 Changed
+
+- restrict candidate and list number length
+
+### 🔄 Changed
+
+- use correct button click api
+
+### 🔄 Changed
+
+- support multiple exports per entity
 
 ## [v3.54.0] - 2025-08-25
 
@@ -259,53 +307,37 @@ Total commits ------- 22
 
 ## [v3.40.1] - 2025-02-20
 
-### 🔄 Changed
+### 🆕 Added
 
-- add candidates to secondary majority election bugfixes
-
-## [v3.40.0] - 2025-02-19
-
-### 🔄 Changed
-
-- show assigned counting circles for political business
-
-## [v3.39.0] - 2025-02-18
+- add proportional election mandate algorithm and vote result algorithm restrictions
 
 ### 🆕 Added
 
-- add domain of influence multiple electoral register flag
-
-## [v3.38.1] - 2025-02-14
+- add majority election candidate reporting type
 
 ### 🔄 Changed
 
-- update node version
-
-## [v3.38.0] - 2025-02-14
-
-### :new: Added
-
-- option to hide occupation title field
-
-## [v3.37.0] - 2025-02-14
+- correctly show party in majority election components
 
 ### 🆕 Added
 
-- add ecounting flag to counting circles
-
-## [v3.36.1] - 2025-02-14
+- add party long description to majority election candidates
 
 ### 🔄 Changed
 
-- sort political assemblies correctly
-
-## [v3.36.0] - 2025-02-13
+- update proto to restrict candidate and list number length
 
 ### 🔄 Changed
 
-- angular 19 update
+- restrict candidate and list number length
 
-## [v3.35.1] - 2025-02-12
+### 🔄 Changed
+
+- use correct button click api
+
+### 🔄 Changed
+
+- support multiple exports per entity
 
 ### 🆕 Added
 
@@ -471,35 +503,3 @@ Total commits ------- 22
 ### 🆕 Added
 
 - add e-collecting flag
-
-### 🔄 Changed
-
-- add candidates to secondary majority election bugfixes
-
-### 🔄 Changed
-
-- show assigned counting circles for political business
-
-### 🆕 Added
-
-- add domain of influence multiple electoral register flag
-
-### 🔄 Changed
-
-- update node version
-
-### :new: Added
-
-- option to hide occupation title field
-
-### 🆕 Added
-
-- add ecounting flag to counting circles
-
-### 🔄 Changed
-
-- sort political assemblies correctly
-
-### 🔄 Changed
-
-- angular 19 update

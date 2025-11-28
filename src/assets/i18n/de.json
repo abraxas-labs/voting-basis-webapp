@@ -59,9 +59,13 @@
     "MajorityElectionCandidateIsInBallotGroupException": "Diese Kandidat/in ist in einer Wahlzettelgruppe und kann nicht gelöscht werden. Bereinigen Sie zuerst die Wahlzettelgruppe.",
     "ProportionalElectionUnionMultipleMandateAlgorithmsException": "Es dürfen nur Proporzwahlen mit gleichem Berechnungsverfahren miteinander verbunden werden.",
     "ProportionalElectionEditMandateAlgorithmInUnionException": "Die Sitzverteilung darf nur bei unverbundenen Proporzwahlen geändert werden.",
+    "ProportionalElectionListIsInListUnionException": "Diese Liste ist in einer Listenverbindung und kann nicht gelöscht werden. Bereinigen Sie zuerst die Listenverbindung.",
+    "ProportionalElectionListUnionMissingListsException": "Die Listenzuordnung einer Listenverbindung ist nicht vollständig.",
     "MajorityElectionBallotGroupVoteCountException": "Bei einer Wahlzettel-Gruppe stimmt die Anzahl Kandidierende nicht mit der Anzahl leerer Zeilen überein.",
     "SecondaryMajorityElectionCreateWithActiveElectionsAndBallotGroupsException": "Es darf nur eine Nebenwahl erstellt werden, wenn die Hauptwahl und deren Nebenwahlen nicht aktiv sind oder keine Wahlzettel-Gruppen existieren.",
-    "SecondaryMajorityElectionCandidateNotSelectedInPrimaryElectionException": "Wenn ein Kandidat aus der Hauptwahl in der Nebenwahl ausgewählt wird, muss er auch in der Hauptwahl ausgewählt sein."
+    "SecondaryMajorityElectionCandidateNotSelectedInPrimaryElectionException": "Wenn ein Kandidat aus der Hauptwahl in der Nebenwahl ausgewählt wird, muss er auch in der Hauptwahl ausgewählt sein.",
+    "MajorityElectionActiveBallotGroupCreateException": "Es darf nur eine Wahlzettel-Gruppe erstellt werden, wenn die Hauptwahl und deren Nebenwahlen nicht aktiv sind.",
+    "PoliticalBusinessNotCompleteException": "Das Geschäft wurde noch nicht vollständig erfasst."
   },
   "CONTACT_PERSON": {
     "PHONE": "Telefon",
@@ -368,7 +372,6 @@
     "E_VOTING_FROM": "E-Voting Zeitraum von",
     "E_VOTING_TO": "E-Voting Zeitraum bis",
     "E_VOTING_APPROVAL_DUE_DATE": "Datenabzug für E-Voting",
-    "EXPORT_E_VOTING_ONLY": "E-Voting Export",
     "AVAILABILITY": "Urnengang-Verfügbarkeit",
     "ALREADY_EXISTS": "Es findet bereits ein Urnengang an diesem Termin statt!",
     "CLOSE_TO_OTHER_CONTEST_DATE_QUESTION": "Es findet bereits ein Urnengang in dieser Zeitspanne statt (4 Wochen vor und danach)! Das Wahl- und Abstimmungsmaterial könnte sich überschneiden.",
@@ -727,6 +730,7 @@
       "MORE_CANDIDATES_THAN_ALLOWED_PLURAL": "Erlaubt sind nur {{max}} Listenplätze.",
       "LESS_CANDIDATES_THAN_ALLOWED_SINGLE": "Sie müssen noch 1 Listenplatz vergeben.",
       "LESS_CANDIDATES_THAN_ALLOWED_PLURAL": "Sie müssen noch {{diff}} Listenplätze vergeben.",
+      "ONE_CANDIDATE_REQUIRED": "Sie müssen mindestens 1 Listenplatz vergeben.",
       "PARTY": "Partei",
       "ORIGIN": "Heimatort",
       "STREET": "Strasse",
@@ -810,6 +814,9 @@
       "TITLE": "Titel",
       "OCCUPATION_TITLE": "Titel und Berufsbezeichnung",
       "PARTY": "Partei",
+      "CUSTOM_PARTY": "Andere",
+      "PARTY_SHORT_DESCRIPTION": "Partei Kurzbezeichnung",
+      "PARTY_LONG_DESCRIPTION": "Partei Langbezeichnung",
       "INCUMBENT": "Bisher",
       "ZIP_CODE": "PLZ",
       "ZIP_CODE_INVALID": "Keine Schweizer PLZ, bitte Land auswählen oder korrigieren",
@@ -819,7 +826,12 @@
       "ORIGIN": "Heimatort",
       "STREET": "Strasse",
       "HOUSE_NUMBER": "Hausnr.",
-      "COUNTRY": "Land"
+      "COUNTRY": "Land",
+      "REPORTING_TYPE": "Ausweisung/Anzeige des Kandidaten",
+      "REPORTING_TYPES": {
+        "1": "Namentlich ausweisen",
+        "2": "Zu Vereinzelte zählen"
+      }
     },
     "BALLOT_GROUP": {
       "TITLE": "Wahlzettel-Gruppen",
@@ -880,7 +892,7 @@
   },
   "EXPORTS": {
     "TITLE": "Exportieren",
-    "TEMPLATE_TITLE": "{{entity}} ({{format}}, {{description}})",
+    "TEMPLATE_TITLE": "{{description}} ({{format}})",
     "DESCRIPTION": "Export",
     "SELECTED": "Ausgewählte Exports",
     "FILE_FORMAT": "Format",

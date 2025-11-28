@@ -9,7 +9,11 @@ import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/cor
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionService } from '../../core/majority-election.service';
-import { MajorityElectionCandidate, newMajorityElectionCandidate } from '../../core/models/majority-election.model';
+import {
+  MajorityElectionCandidate,
+  MajorityElectionCandidateReportingType,
+  newMajorityElectionCandidate,
+} from '../../core/models/majority-election.model';
 import {
   MajorityElectionCandidateReference,
   SecondaryMajorityElection,
@@ -21,6 +25,7 @@ import { cloneDeep, isEqual } from 'lodash';
 import { Subscription } from 'rxjs';
 import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
+import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
 
 @Component({
   selector: 'app-secondary-majority-election-candidate-edit-dialog',
@@ -53,7 +58,8 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
   public isCandidateLocalityRequired: boolean;
   public isCandidateOriginRequired: boolean;
   public hideOccupationTitle: boolean;
-  public partyShortDescriptions: string[];
+  public parties: DomainOfInfluenceParty[];
+  public individualCandidatesDisabled: boolean = false;
 
   constructor(
     private readonly dialogRef: MatDialogRef<SecondaryMajorityElectionCandidateEditDialogData>,
@@ -69,11 +75,12 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
     this.isNew = !this.candidate.id;
     this.selectCandidateFromPrimaryElection = this.candidate.isReferenced;
-    this.selectedMajorityElectionCandidate = { ...newMajorityElectionCandidate(-1, ''), displayName: '' };
+    this.selectedMajorityElectionCandidate = { ...newMajorityElectionCandidate(-1, '', this.testingPhaseEnded), displayName: '' };
     this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
     this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
     this.hideOccupationTitle = dialogData.hideOccupationTitle;
-    this.partyShortDescriptions = dialogData.partyShortDescriptions;
+    this.parties = dialogData.parties;
+    this.individualCandidatesDisabled = dialogData.individualCandidatesDisabled;
     this.originalCandidate = cloneDeep(this.candidate);
 
     this.dialogRef.disableClose = true;
@@ -109,9 +116,11 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       !!this.candidate.lastName &&
       (this.testingPhaseEnded || isValidDateOfBirth(this.candidate.dateOfBirth)) &&
       (this.testingPhaseEnded || !this.isCandidateLocalityRequired || !!this.candidate.locality) &&
-      (this.testingPhaseEnded || LanguageService.allLanguagesPresent(this.candidate.party)) &&
       (this.testingPhaseEnded || this.candidate.sex !== undefined) &&
-      (this.testingPhaseEnded || !this.isCandidateOriginRequired || !!this.candidate.origin)
+      (this.testingPhaseEnded || !this.isCandidateOriginRequired || !!this.candidate.origin) &&
+      (this.testingPhaseEnded ||
+        (LanguageService.allLanguagesPresent(this.candidate.partyShortDescription) &&
+          LanguageService.allLanguagesPresent(this.candidate.partyLongDescription)))
     );
   }
 
@@ -180,6 +189,9 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       return;
     }
 
+    const unspecifiedCandidateReportingType =
+      candidate.reportingType === MajorityElectionCandidateReportingType.MAJORITY_ELECTION_CANDIDATE_REPORTING_TYPE_UNSPECIFIED;
+
     this.selectedMajorityElectionCandidate = candidate;
     this.candidate = {
       ...candidate,
@@ -188,6 +200,12 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       referencedCandidateId: candidate.id,
       incumbent: false,
       position: this.candidate.position,
+      reportingType:
+        !this.testingPhaseEnded || this.individualCandidatesDisabled
+          ? MajorityElectionCandidateReportingType.MAJORITY_ELECTION_CANDIDATE_REPORTING_TYPE_UNSPECIFIED
+          : unspecifiedCandidateReportingType
+            ? MajorityElectionCandidateReportingType.MAJORITY_ELECTION_CANDIDATE_REPORTING_TYPE_CANDIDATE
+            : candidate.reportingType,
     };
   }
 
@@ -216,6 +234,7 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
       incumbent: this.candidate.incumbent,
       position: this.candidate.position,
       number: this.candidate.number,
+      reportingType: this.candidate.reportingType,
     };
 
     if (this.isNew) {
@@ -269,7 +288,8 @@ export interface SecondaryMajorityElectionCandidateEditDialogData {
   candidateLocalityRequired: boolean;
   candidateOriginRequired: boolean;
   hideOccupationTitle: boolean;
-  partyShortDescriptions: string[];
+  parties: DomainOfInfluenceParty[];
+  individualCandidatesDisabled: boolean;
 }
 
 export interface SecondaryMajorityElectionCandidateEditDialogResult {

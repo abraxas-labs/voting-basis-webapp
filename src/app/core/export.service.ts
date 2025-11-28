@@ -54,17 +54,23 @@ export class ExportService extends GrpcService<ExportServicePromiseClient> {
     return templates;
   }
 
-  public async downloadExportOrShowDialog(entityType: ExportEntityType, entityId: string): Promise<void> {
+  public async downloadExportOrShowDialog(
+    entityType: ExportEntityType,
+    entityId: string,
+    filter?: (template: ExportTemplate) => boolean,
+  ): Promise<void> {
     const templates = await this.getTemplatesWithEntityType(ExportGenerator.EXPORT_GENERATOR_VOTING_BASIS, entityType);
-    if (templates.length === 1) {
-      const downloadExportPromise = this.downloadExport(templates[0], entityId);
+    const filteredTemplates = filter ? templates.filter(template => filter(template)) : templates;
+
+    if (filteredTemplates.length === 1) {
+      const downloadExportPromise = this.downloadExport(filteredTemplates[0], entityId);
       await this.cursor.loadingWhile(downloadExportPromise);
       this.snackbarService.success(this.i18n.instant('EXPORTS.SUCCESS'));
       return;
     }
 
     const dialogData: ExportDialogData = {
-      templates,
+      templates: filteredTemplates,
       download: t => this.downloadExport(t, entityId),
     };
     this.dialog.open(ExportDialogComponent, dialogData);

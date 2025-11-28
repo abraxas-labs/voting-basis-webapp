@@ -20,6 +20,7 @@ import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { MajorityElectionService } from '../../core/majority-election.service';
 import { Permissions } from '../../core/models/permissions.model';
 import { PermissionService } from '../../core/permission.service';
+import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
 
 @Component({
   selector: 'app-secondary-majority-election-edit',
@@ -41,7 +42,7 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
   public eVotingApproved: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public domainOfInfluence?: DomainOfInfluence;
-  public partyShortDescriptions: string[] = [];
+  public parties: DomainOfInfluenceParty[] = [];
   private persistedData: SecondaryMajorityElection = newSecondaryMajorityElection();
   public canEdit: boolean = false;
 
@@ -82,9 +83,7 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
       const primaryMajorityElection = await this.majorityElectionService.get(this.persistedData.primaryMajorityElectionId);
       this.contestDomainOfInfluenceDefaults = await this.doiService.getCantonDefaults(primaryMajorityElection.domainOfInfluenceId);
       this.domainOfInfluence = await this.doiService.get(primaryMajorityElection.domainOfInfluenceId);
-      this.partyShortDescriptions = this.domainOfInfluence.parties.map(
-        x => x.shortDescription.get(this.languageService.currentLanguage) ?? '',
-      );
+      this.parties = this.domainOfInfluence.parties;
       if (this.isNew) {
         this.persistedData.isOnSeparateBallot = this.contestDomainOfInfluenceDefaults.secondaryMajorityElectionOnSeparateBallot;
       }
@@ -130,5 +129,9 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
     } finally {
       this.stepLoading = false;
     }
+  }
+
+  public async navigateToContestDetail(): Promise<void> {
+    await this.router.navigate(['../../'], { relativeTo: this.route });
   }
 }

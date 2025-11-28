@@ -17,7 +17,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false,
 })
 export class ExportDialogComponent {
-  public loading: boolean = true;
+  public loading: boolean = false;
   public exportTemplates: ExportTemplate[] = [];
 
   private readonly downloadFn: (template: ExportTemplate) => Promise<void>;

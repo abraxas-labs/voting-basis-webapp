@@ -56,7 +56,8 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       occupation: toJsMap(data.getOccupationMap()),
       title: data.getTitle(),
       occupationTitle: toJsMap(data.getOccupationTitleMap()),
-      party: toJsMap(data.getPartyMap()),
+      partyShortDescription: toJsMap(data.getPartyShortDescriptionMap()),
+      partyLongDescription: toJsMap(data.getPartyLongDescriptionMap()),
       sex: data.getSex(),
       zipCode: data.getZipCode(),
       majorityElectionId: data.getMajorityElectionId(),
@@ -65,6 +66,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       street: data.getStreet(),
       houseNumber: data.getHouseNumber(),
       country: data.getCountry(),
+      reportingType: data.getReportingType(),
     };
   }
 
@@ -255,7 +257,8 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     fillProtoMap(result.getOccupationMap(), data.occupation);
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
-    fillProtoMap(result.getPartyMap(), data.party);
+    fillProtoMap(result.getPartyShortDescriptionMap(), data.partyShortDescription);
+    fillProtoMap(result.getPartyLongDescriptionMap(), data.partyLongDescription);
     result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setMajorityElectionId(data.majorityElectionId);
@@ -264,6 +267,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setStreet(data.street);
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
+    result.setReportingType(data.reportingType);
     return result;
   }
 
@@ -281,7 +285,8 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     fillProtoMap(result.getOccupationMap(), data.occupation);
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
-    fillProtoMap(result.getPartyMap(), data.party);
+    fillProtoMap(result.getPartyShortDescriptionMap(), data.partyShortDescription);
+    fillProtoMap(result.getPartyLongDescriptionMap(), data.partyLongDescription);
     result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setMajorityElectionId(data.majorityElectionId);
@@ -290,6 +295,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setStreet(data.street);
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
+    result.setReportingType(data.reportingType);
     return result;
   }
 }

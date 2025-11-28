@@ -24,7 +24,7 @@
   </div>
 
   <bc-number [label]="'PROPORTIONAL_ELECTION.NUMBER_OF_MANDATES' | translate"
-             [readonly]="contest.testingPhaseEnded || locked || readonly"
+             [readonly]="contest.testingPhaseEnded || locked || readonly || data.active"
              [required]="true"
              [value]="data.numberOfMandates"
              (valueChange)="data.numberOfMandates = +$event; contentChanged.emit()"
@@ -70,14 +70,13 @@
   </div>
 
 
-  <bc-dropdown class="full-width"
-               [label]="'PROPORTIONAL_ELECTION.MANDATE_ALGORITHM.TITLE' | translate"
-               [items]="mandateAlgorithms"
-               [readonly]="contest.testingPhaseEnded || locked || readonly || !isNew"
-               displayExpr="description"
-               valueExpr="value"
-               [required]="true"
-               [(value)]="data.mandateAlgorithm"
-               (valueChange)="data.mandateAlgorithm = $event; contentChanged.emit()"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  <app-proportional-election-mandate-algorithm-selection
+    *ngIf="proportionalElectionMandateAlgorithmsList?.length > 0"
+    [proportionalElectionMandateAlgorithmsList]="proportionalElectionMandateAlgorithmsList"
+    [canton]="canton"
+    [domainOfInfluenceType]="selectedDomainOfInfluenceType"
+    [data]="data"
+    (contentChanged)="contentChanged.emit()"
+    [readonly]="contest.testingPhaseEnded || locked || readonly || !isNew"
+  ></app-proportional-election-mandate-algorithm-selection>
 </div>

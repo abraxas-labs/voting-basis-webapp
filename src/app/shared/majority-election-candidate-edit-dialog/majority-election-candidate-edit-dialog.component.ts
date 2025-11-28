@@ -16,6 +16,7 @@ import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
 import { isValidZipCode } from '../../core/utils/zip-code.utils';
+import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
 
 @Component({
   selector: 'app-majority-election-candidate-edit-dialog',
@@ -40,7 +41,8 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
   public isCandidateLocalityRequired: boolean;
   public isCandidateOriginRequired: boolean;
   public hideOccupationTitle: boolean;
-  public partyShortDescriptions: string[];
+  public parties: DomainOfInfluenceParty[];
+  public individualCandidatesDisabled: boolean = false;
 
   public hasChanges: boolean = false;
   public originalCandidate: MajorityElectionCandidate;
@@ -60,7 +62,8 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
     this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
     this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
     this.hideOccupationTitle = dialogData.hideOccupationTitle;
-    this.partyShortDescriptions = dialogData.partyShortDescriptions;
+    this.parties = dialogData.parties;
+    this.individualCandidatesDisabled = dialogData.individualCandidatesDisabled;
     this.originalCandidate = cloneDeep(this.data);
 
     this.dialogRef.disableClose = true;
@@ -80,9 +83,11 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
       isValidZipCode(this.data.zipCode, this.data.country) &&
       (this.testingPhaseEnded || isValidDateOfBirth(this.data.dateOfBirth)) &&
       (this.testingPhaseEnded || !this.isCandidateLocalityRequired || !!this.data.locality) &&
-      (this.testingPhaseEnded || LanguageService.allLanguagesPresent(this.data.party)) &&
       (this.testingPhaseEnded || this.data.sex !== undefined) &&
-      (this.testingPhaseEnded || !this.isCandidateOriginRequired || !!this.data.origin)
+      (this.testingPhaseEnded || !this.isCandidateOriginRequired || !!this.data.origin) &&
+      (this.testingPhaseEnded ||
+        (LanguageService.allLanguagesPresent(this.data.partyShortDescription) &&
+          LanguageService.allLanguagesPresent(this.data.partyLongDescription)))
     );
   }
 
@@ -142,7 +147,8 @@ export interface MajorityElectionCandidateEditDialogData {
   candidateLocalityRequired: boolean;
   candidateOriginRequired: boolean;
   hideOccupationTitle: boolean;
-  partyShortDescriptions: string[];
+  parties: DomainOfInfluenceParty[];
+  individualCandidatesDisabled: boolean;
 }
 
 export interface MajorityElectionCandidateEditDialogResult {

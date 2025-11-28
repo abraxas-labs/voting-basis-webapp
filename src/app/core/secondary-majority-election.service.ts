@@ -218,7 +218,8 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     fillProtoMap(result.getOccupationMap(), data.occupation);
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
-    fillProtoMap(result.getPartyMap(), data.party);
+    fillProtoMap(result.getPartyShortDescriptionMap(), data.partyShortDescription);
+    fillProtoMap(result.getPartyLongDescriptionMap(), data.partyLongDescription);
     result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setSecondaryMajorityElectionId(data.majorityElectionId);
@@ -227,6 +228,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setStreet(data.street);
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
+    result.setReportingType(data.reportingType);
     return result;
   }
 
@@ -246,7 +248,8 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     fillProtoMap(result.getOccupationMap(), data.occupation);
     result.setTitle(data.title);
     fillProtoMap(result.getOccupationTitleMap(), data.occupationTitle);
-    fillProtoMap(result.getPartyMap(), data.party);
+    fillProtoMap(result.getPartyShortDescriptionMap(), data.partyShortDescription);
+    fillProtoMap(result.getPartyLongDescriptionMap(), data.partyLongDescription);
     result.setSex(data.sex ?? SexType.SEX_TYPE_UNSPECIFIED);
     result.setZipCode(data.zipCode);
     result.setSecondaryMajorityElectionId(data.majorityElectionId);
@@ -255,6 +258,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setStreet(data.street);
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
+    result.setReportingType(data.reportingType);
     return result;
   }
 
@@ -267,6 +271,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setIncumbent(data.incumbent);
     result.setPosition(data.position);
     result.setNumber(data.number);
+    result.setReportingType(data.reportingType);
     return result;
   }
 
@@ -280,6 +285,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setIncumbent(data.incumbent);
     result.setPosition(data.position);
     result.setNumber(data.number);
+    result.setReportingType(data.reportingType);
     return result;
   }
 }

@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
+import { EnumUtil } from '@abraxas/voting-lib';
 import { Component, Input } from '@angular/core';
 import { ProportionalElectionImport } from 'src/app/core/models/import.model';
 import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-influence-report-level.service';
@@ -25,7 +25,6 @@ import { PermissionService } from '../../../core/permission.service';
 export class ImportProportionalElectionEditComponent extends ImportPoliticalBusinessEditComponent<ProportionalElection> {
   public loadingParties: boolean = false;
   public partyMappings?: PartyMappingContainer;
-  public mandateAlgorithms: EnumItemDescription<ProportionalElectionMandateAlgorithm>[] = [];
 
   private proportionalElectionImport?: ProportionalElectionImport;
 
@@ -58,24 +57,6 @@ export class ImportProportionalElectionEditComponent extends ImportPoliticalBusi
     this.setIsApplied(false);
     await super.handleDomainOfInfluenceChange();
     await this.loadPartyMappings();
-  }
-
-  public override handleDomainOfInfluenceDefaultsChange(): void {
-    if (!this.domainOfInfluenceDefaults) {
-      this.mandateAlgorithms = [];
-      return;
-    }
-
-    this.mandateAlgorithms = this.enumUtil
-      .getArrayWithDescriptions<ProportionalElectionMandateAlgorithm>(
-        ProportionalElectionMandateAlgorithm,
-        'PROPORTIONAL_ELECTION.MANDATE_ALGORITHM.TYPES.',
-      )
-      .filter(
-        i =>
-          this.domainOfInfluenceDefaults!.proportionalElectionMandateAlgorithmsList.includes(i.value) ||
-          this.data.mandateAlgorithm === i.value,
-      );
   }
 
   private async loadPartyMappings(): Promise<void> {

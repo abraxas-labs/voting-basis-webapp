@@ -81,10 +81,7 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
   public delete: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
 
   @Output()
-  public export: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
-
-  @Output()
-  public exportOnlyEVoting: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
+  public export: EventEmitter<ContestSummary> = new EventEmitter<ContestSummary>();
 
   @ViewChild('paginator') public paginator!: PaginatorComponent;
 

@@ -22,6 +22,7 @@ import {
   SecondaryMajorityElectionCandidateEditDialogResult,
 } from '../secondary-majority-election-candidate-edit-dialog/secondary-majority-election-candidate-edit-dialog.component';
 import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
+import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
 
 @Component({
   selector: 'app-secondary-majority-election-candidates',
@@ -60,7 +61,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
   public domainOfInfluenceType?: DomainOfInfluenceType;
 
   @Input()
-  public partyShortDescriptions: string[] = [];
+  public parties: DomainOfInfluenceParty[] = [];
 
   @ViewChild(MajorityElectionBallotGroupOverviewComponent, { static: false })
   public ballotGroupOverview?: MajorityElectionBallotGroupOverviewComponent;
@@ -101,14 +102,19 @@ export class SecondaryMajorityElectionCandidatesComponent {
     }
 
     const dialogData: SecondaryMajorityElectionCandidateEditDialogData = {
-      candidate: newSecondaryMajorityElectionCandidate(this.candidates.length + 1, this.currentSecondaryMajorityElection.id),
+      candidate: newSecondaryMajorityElectionCandidate(
+        this.candidates.length + 1,
+        this.currentSecondaryMajorityElection.id,
+        this.testingPhaseEnded && !this.currentSecondaryMajorityElection.individualCandidatesDisabled,
+      ),
       secondaryMajorityElection: this.currentSecondaryMajorityElection,
       testingPhaseEnded: this.testingPhaseEnded,
       doiType: this.domainOfInfluenceType,
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       hideOccupationTitle: this.hideOccupationTitle,
-      partyShortDescriptions: this.partyShortDescriptions,
+      parties: this.parties,
+      individualCandidatesDisabled: this.currentSecondaryMajorityElection.individualCandidatesDisabled,
     };
     const result = await this.dialogService.openForResult(SecondaryMajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);
@@ -127,7 +133,8 @@ export class SecondaryMajorityElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       hideOccupationTitle: this.hideOccupationTitle,
-      partyShortDescriptions: this.partyShortDescriptions,
+      parties: this.parties,
+      individualCandidatesDisabled: this.currentSecondaryMajorityElection!.individualCandidatesDisabled,
     };
     const result = await this.dialogService.openForResult(SecondaryMajorityElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);
@@ -233,7 +240,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
     const candidateList: SecondaryMajorityElectionCandidate[] = [...this.candidates];
 
     if (!this.currentSecondaryMajorityElection!.individualCandidatesDisabled) {
-      const individualPlaceholderCandidate: SecondaryMajorityElectionCandidate = newSecondaryMajorityElectionCandidate(999, '');
+      const individualPlaceholderCandidate: SecondaryMajorityElectionCandidate = newSecondaryMajorityElectionCandidate(999, '', false);
       individualPlaceholderCandidate.lastName = this.i18n.instant('MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_PLACEHOLDER');
       candidateList.push(individualPlaceholderCandidate);
     }

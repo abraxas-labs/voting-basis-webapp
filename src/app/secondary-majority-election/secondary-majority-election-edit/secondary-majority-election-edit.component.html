@@ -36,7 +36,7 @@
                                                   [candidateOriginRequired]="contestDomainOfInfluenceDefaults.candidateOriginRequired"
                                                   [hideOccupationTitle]="contestDomainOfInfluenceDefaults.hideOccupationTitle"
                                                   [domainOfInfluenceType]="domainOfInfluence?.type"
-                                                  [partyShortDescriptions]="partyShortDescriptions">
+                                                  [parties]="parties">
       </app-secondary-majority-election-candidates>
 
       <div class="stepper-footer">
@@ -45,7 +45,7 @@
         <bc-button variant="primary"
                    [disabled]="!step2.canSave"
                    [label]="'APP.FINISH' | translate"
-                   [routerLink]="['../../']"></bc-button>
+                   (buttonClick)="navigateToContestDetail()"></bc-button>
       </div>
     </bc-simple-step>
   </bc-simple-stepper>

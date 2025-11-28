@@ -158,7 +158,7 @@
     ></bc-data-row>
   </bc-table>
 
-  <p *ngIf="expandedCandidates.length === maxCandidateCount; else candidateCount" translate>
+  <p *ngIf="expandedCandidates.length === maxCandidateCount && maxCandidateCount > 0; else candidateCount" translate>
     PROPORTIONAL_ELECTION.CANDIDATE.SAME_CANDIDATE_COUNT_AS_ALLOWED
   </p>
   <ng-template #candidateCount>
@@ -183,6 +183,9 @@
             (maxCandidateCount - expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
             | translate: { diff: maxCandidateCount - expandedCandidates.length }
         }}
+      </span>
+      <span *ngIf="expandedCandidates.length === maxCandidateCount" translate>
+          PROPORTIONAL_ELECTION.CANDIDATE.ONE_CANDIDATE_REQUIRED
       </span>
     </p>
   </ng-template>

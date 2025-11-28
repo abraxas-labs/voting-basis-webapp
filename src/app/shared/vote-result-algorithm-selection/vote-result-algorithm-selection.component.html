@@ -1,0 +1,12 @@
+<bc-dropdown
+  class="full-width"
+  [label]="'VOTE.RESULT_ALGORITHM.TITLE' | translate"
+  [items]="resultAlgorithms"
+  [readonly]="readonly"
+  displayExpr="description"
+  valueExpr="value"
+  [required]="true"
+  [value]="data.resultAlgorithm"
+  (valueChange)="data.resultAlgorithm = $event; contentChanged.emit()"
+  [subscriptSizing]="'dynamic'"
+></bc-dropdown>

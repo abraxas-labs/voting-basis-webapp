@@ -66,6 +66,7 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   public hideOccupationTitle: boolean = false;
 
   public lists: ProportionalElectionList[] = [];
+  public validListUnions: boolean = false;
   public selectedList?: ProportionalElectionList;
   public loading: boolean = false;
   public canSave: boolean = false;
@@ -172,6 +173,7 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
     };
     await this.dialogService.openForResult(ProportionalElectionListUnionsDialogComponent, dialogData);
     await this.loadLists();
+    this.updateCanSave();
   }
 
   public candidateCreated(list: ProportionalElectionList, candidate: ProportionalElectionCandidate): void {
@@ -217,6 +219,11 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
 
   private async loadLists(): Promise<void> {
     this.lists = await this.proportionalElectionService.listLists(this.proportionalElection.id);
+
+    if (this.hasHagenbachBischoffDistribution) {
+      const listUnions = await this.proportionalElectionService.listListUnions(this.proportionalElection.id);
+      this.validListUnions = listUnions.length === 0 || listUnions.every(u => u.proportionalElectionListIds.length > 1);
+    }
   }
 
   private handleCreateList(list: ProportionalElectionList): void {
@@ -260,7 +267,11 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   }
 
   private updateCanSave(): void {
-    this.canSave = this.lists.every(l => l.candidateCountOk);
+    this.canSave =
+      this.lists.length > 0 &&
+      this.lists.every(l => l.countOfCandidates > 0) &&
+      this.lists.every(l => l.candidateCountOk) &&
+      (!this.hasHagenbachBischoffDistribution || this.validListUnions);
   }
 
   private updateAllListCandidatesOk(): void {

@@ -36,16 +36,10 @@
                [label]="'POLITICAL_BUSINESS.REPORT_LEVEL' | translate"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
 
-  <bc-dropdown class="full-width"
-               [label]="'VOTE.RESULT_ALGORITHM.TITLE' | translate"
-               [items]="resultAlgorithms"
-               displayExpr="description"
-               valueExpr="value"
-               [clearable]="false"
-               [required]="true"
-               [value]="data.resultAlgorithm"
-               (valueChange)="data.resultAlgorithm = $event; setIsApplied(false)"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  <app-vote-result-algorithm-selection [domainOfInfluenceType]="selectedDomainOfInfluenceType"
+                                       [data]="data"
+                                       (contentChanged)="setIsApplied(false)"
+  ></app-vote-result-algorithm-selection>
 
   <div class="button-container">
     <bc-icon *ngIf="isApplied" class="mr-2" iconColor="success" icon="checkmark"></bc-icon>

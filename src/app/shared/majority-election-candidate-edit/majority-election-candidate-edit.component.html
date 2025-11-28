@@ -111,15 +111,38 @@
     (valueChange)="candidate.occupationTitle = $event; contentChanged.emit()"
   ></app-translated-formfield>
 
-  <bc-autocomplete
+  <bc-dropdown
+    class="full-width"
     [label]="'MAJORITY_ELECTION.CANDIDATE.PARTY' | translate"
+    [items]="selectableParties"
+    [clearable]="testingPhaseEnded"
     [readonly]="isCandidateReference"
     [required]="!testingPhaseEnded"
-    [value]="candidate.party.get(currentLanguage)"
-    (filterValueChange)="setParty($event)"
-    [items]="partyShortDescriptions"
+    displayExpr="description"
+    [value]="selectedParty"
+    (valueChange)="setParty($event)"
     subscriptSizing="dynamic"
-  ></bc-autocomplete>
+  ></bc-dropdown>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.PARTY_SHORT_DESCRIPTION' | translate"
+    [value]="candidate.partyShortDescription.get(currentLanguage) ?? ''"
+    (valueChange)="setPartyShort($event)"
+    [readonly]="!selectedParty || !selectedParty.isCustomPartySelector"
+    [required]="!testingPhaseEnded"
+    [clearable]="testingPhaseEnded"
+    subscriptSizing="dynamic"
+  ></bc-text>
+
+  <bc-text
+    [label]="'MAJORITY_ELECTION.CANDIDATE.PARTY_LONG_DESCRIPTION' | translate"
+    [value]="candidate.partyLongDescription.get(currentLanguage) ?? ''"
+    (valueChange)="setPartyLong($event)"
+    [readonly]="!selectedParty || !selectedParty.isCustomPartySelector"
+    [required]="!testingPhaseEnded"
+    [clearable]="testingPhaseEnded"
+    subscriptSizing="dynamic"
+  ></bc-text>
 
   <!-- incumbent may be edited even if this is a candidate reference -->
   <bc-checkbox
@@ -188,6 +211,20 @@
     valueExpr="isoId"
     [value]="candidate.country"
     (valueChange)="candidate.country = $event; contentChanged.emit()"
+    subscriptSizing="dynamic"
+  ></bc-dropdown>
+
+  <bc-dropdown
+    *ngIf="testingPhaseEnded && candidate.reportingType && !individualCandidatesDisabled"
+    class="full-width"
+    [label]="'MAJORITY_ELECTION.CANDIDATE.REPORTING_TYPE' | translate"
+    [items]="reportingTypes"
+    [clearable]="false"
+    [required]="true"
+    displayExpr="description"
+    valueExpr="value"
+    [value]="candidate.reportingType"
+    (valueChange)="candidate.reportingType = $event; contentChanged.emit()"
     subscriptSizing="dynamic"
   ></bc-dropdown>
 </div>

@@ -25,16 +25,14 @@
                [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
                [subscriptSizing]="'dynamic'"></bc-dropdown>
 
-  <bc-dropdown class="full-width"
-               *ngIf="!!domainOfInfluenceDefaults"
-               [label]="'MAJORITY_ELECTION.MANDATE_ALGORITHM.TITLE' | translate"
-               [items]="mandateAlgorithms"
-               displayExpr="description"
-               valueExpr="value"
-               [required]="true"
-               [value]="data.mandateAlgorithm"
-               (valueChange)="data.mandateAlgorithm = $event; setIsApplied(false)"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  <app-proportional-election-mandate-algorithm-selection
+    *ngIf="domainOfInfluenceDefaults?.proportionalElectionMandateAlgorithmsList?.length > 0"
+    [proportionalElectionMandateAlgorithmsList]="domainOfInfluenceDefaults?.proportionalElectionMandateAlgorithmsList"
+    [canton]="domainOfInfluenceDefaults?.canton"
+    [domainOfInfluenceType]="selectedDomainOfInfluenceType"
+    [data]="data"
+    (contentChanged)="setIsApplied(false)"
+  ></app-proportional-election-mandate-algorithm-selection>
 
   <div>
     <bc-spinner *ngIf="loadingParties; else partyMappingContent" class="mt-3"></bc-spinner>

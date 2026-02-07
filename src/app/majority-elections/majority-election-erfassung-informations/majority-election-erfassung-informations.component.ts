@@ -6,7 +6,7 @@
 
 import { RadioButton } from '@abraxas/base-components';
 import { EnumItemDescription, EnumUtil, NumberUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { BallotNumberGeneration } from '../../core/models/ballot-number-generation.model';
 import {
@@ -23,6 +23,8 @@ import {
   standalone: false,
 })
 export class MajorityElectionErfassungInformationsComponent implements OnInit {
+  private readonly i18n = inject(TranslateService);
+
   @Input()
   public data: MajorityElection = newMajorityElection();
 
@@ -42,15 +44,36 @@ export class MajorityElectionErfassungInformationsComponent implements OnInit {
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   public resultEntryChoices: EnumItemDescription<MajorityElectionResultEntry>[];
+  public automaticBundleNumberGenerationChoices: RadioButton[];
+  public automaticBallotNumberGenerationChoices: RadioButton[];
   public ballotNumberGenerationChoices: RadioButton[];
   public resultEntryType: typeof MajorityElectionResultEntry = MajorityElectionResultEntry;
   public automaticEmptyVoteCountingChoices: RadioButton[];
   public reviewProcedureChoices: RadioButton[];
 
-  constructor(
-    enumUtil: EnumUtil,
-    private readonly i18n: TranslateService,
-  ) {
+  constructor() {
+    const enumUtil = inject(EnumUtil);
+
+    this.automaticBundleNumberGenerationChoices = [
+      {
+        value: true,
+        displayText: this.i18n.instant('MAJORITY_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.AUTOMATIC'),
+      },
+      {
+        value: false,
+        displayText: this.i18n.instant('MAJORITY_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.MANUAL'),
+      },
+    ];
+    this.automaticBallotNumberGenerationChoices = [
+      {
+        value: true,
+        displayText: this.i18n.instant('MAJORITY_ELECTION.BALLOT_NUMBER_GENERATION.AUTOMATIC'),
+      },
+      {
+        value: false,
+        displayText: this.i18n.instant('MAJORITY_ELECTION.BALLOT_NUMBER_GENERATION.MANUAL'),
+      },
+    ];
     this.resultEntryChoices = enumUtil.getArrayWithDescriptions<MajorityElectionResultEntry>(
       MajorityElectionResultEntry,
       'MAJORITY_ELECTION.RESULT_ENTRY.TYPES.',
@@ -113,13 +136,19 @@ export class MajorityElectionErfassungInformationsComponent implements OnInit {
     this.refreshBallotNumberGenerationChoices();
   }
 
-  public refreshBallotNumberGenerationChoices(): void {
+  public changeAutomaticBallotNumberGeneration(isAutomatic: boolean): void {
+    this.data.automaticBallotNumberGeneration = isAutomatic;
+    this.contentChanged.emit();
+    this.refreshBallotNumberGenerationChoices();
+  }
+
+  private refreshBallotNumberGenerationChoices(): void {
     for (const choice of this.ballotNumberGenerationChoices) {
-      choice.disabled = !this.data.automaticBallotBundleNumberGeneration || this.testingPhaseEnded;
+      choice.disabled = !this.data.automaticBallotNumberGeneration || this.testingPhaseEnded;
     }
 
-    if (!this.data.automaticBallotBundleNumberGeneration) {
-      this.data.ballotNumberGeneration = BallotNumberGeneration.BALLOT_NUMBER_GENERATION_RESTART_FOR_EACH_BUNDLE;
+    if (!this.data.automaticBallotNumberGeneration) {
+      this.data.ballotNumberGeneration = BallotNumberGeneration.BALLOT_NUMBER_GENERATION_CONTINUOUS_FOR_ALL_BUNDLES;
     }
   }
 }

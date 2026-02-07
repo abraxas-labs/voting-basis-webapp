@@ -1,15 +1,16 @@
-<bc-label *ngIf="label" [label]="label" [optional]="optional" [optionalText]="'APP.OPTIONAL' | translate"></bc-label>
+@if (label) {
+  <bc-label [label]="label" [optional]="optional" [optionalText]="'APP.OPTIONAL' | translate"></bc-label>
+}
 
 <div class="textarea-container">
-  <ng-container *ngIf="singleLanguageInput; else multiLanguageInput">
+  @if (singleLanguageInput) {
     <ng-container *ngTemplateOutlet="formInput; context: { $implicit: currentLanguage }"></ng-container>
-  </ng-container>
-  <ng-template #multiLanguageInput>
-    <ng-container *ngFor="let lang of languages">
+  } @else {
+    @for (lang of languages; track lang) {
       <bc-label [label]="lang"></bc-label>
       <ng-container *ngTemplateOutlet="formInput; context: { $implicit: lang }"></ng-container>
-    </ng-container>
-  </ng-template>
+    }
+  }
 
   <ng-template #formInput let-language>
     <bc-textarea

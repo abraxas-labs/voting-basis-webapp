@@ -5,7 +5,7 @@
  */
 
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { ContestProto } from '../../../core/models/contest.model';
@@ -22,6 +22,8 @@ import { TableDataSource } from '@abraxas/base-components';
   standalone: false,
 })
 export class ImportContestEditComponent implements OnInit {
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+
   @Output()
   public contestImport: EventEmitter<ContestImport | undefined> = new EventEmitter<ContestImport | undefined>();
 
@@ -33,8 +35,6 @@ export class ImportContestEditComponent implements OnInit {
   public loading: boolean = false;
   public selection = new SelectionModel<ContestImportFile>(false, []);
   private _importFiles: ImportFileContent[] = [];
-
-  constructor(private readonly domainOfInfluenceService: DomainOfInfluenceService) {}
 
   @Input()
   public set importFiles(importFiles: ImportFileContent[]) {

@@ -16,7 +16,7 @@ import {
   UpdateCantonSettingsRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/canton_settings_requests_pb';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
   CantonSettings,
@@ -29,7 +29,9 @@ import {
   providedIn: 'root',
 })
 export class CantonSettingsService extends GrpcService<CantonSettingsServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(CantonSettingsServicePromiseClient, environment, grpcBackend);
   }
 

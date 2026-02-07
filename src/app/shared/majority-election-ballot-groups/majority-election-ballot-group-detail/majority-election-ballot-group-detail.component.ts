@@ -4,8 +4,8 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, LanguageService } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { LanguageService } from '@abraxas/voting-lib';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MajorityElectionBallotGroupService } from '../../../core/majority-election-ballot-group.service';
 import {
   MajorityElectionBallotGroup,
@@ -31,6 +31,9 @@ interface BallotGroupUiEntry<TElection extends MajorityElection | SecondaryMajor
   standalone: false,
 })
 export class MajorityElectionBallotGroupDetailComponent {
+  private readonly ballotGroupService = inject(MajorityElectionBallotGroupService);
+  private readonly languageService = inject(LanguageService);
+
   @Input()
   public majorityElection!: MajorityElection;
 
@@ -55,12 +58,6 @@ export class MajorityElectionBallotGroupDetailComponent {
   public loading: boolean = false;
   public invalidBallotGroupEntriesError?: string;
   private ballotGroupCandidates?: MajorityElectionBallotGroupCandidates;
-
-  constructor(
-    private readonly dialogService: DialogService,
-    private readonly ballotGroupService: MajorityElectionBallotGroupService,
-    private readonly languageService: LanguageService,
-  ) {}
 
   @Input()
   public set ballotGroup(bg: MajorityElectionBallotGroup | undefined) {

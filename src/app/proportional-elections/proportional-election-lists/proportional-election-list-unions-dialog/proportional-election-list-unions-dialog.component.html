@@ -2,9 +2,9 @@
   <h1 header translate>PROPORTIONAL_ELECTION.LIST_UNION.TITLE</h1>
   <div class="grid" content>
     <div class="pt-5">
-      <bc-spinner class="block" *ngIf="loading; else listUnionOverview"></bc-spinner>
-      <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
-      <ng-template #listUnionOverview>
+      @if (loading) {
+        <bc-spinner class="block"></bc-spinner>
+      } @else {
         <div class="buttons">
           <bc-button
             variant="tertiary"
@@ -12,20 +12,21 @@
             [label]="'PROPORTIONAL_ELECTION.LIST_UNION.ADD' | translate"
             (buttonClick)="createListUnion()"
           ></bc-button>
-          <bc-button
-            *ngIf="selectedListUnion && lists.length && selectedListUnion.proportionalElectionListIds.length"
-            [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.SET' | translate"
-            variant="tertiary"
-            (buttonClick)="updateMainList(selectedListUnion)"
-          ></bc-button>
-          <bc-button
-            *ngIf="selectedListUnion && lists.length"
-            variant="tertiary"
-            [label]="'PROPORTIONAL_ELECTION.LIST_UNION.LISTS.ASSIGN' | translate"
-            (buttonClick)="updateAssignedLists(selectedListUnion)"
-          ></bc-button>
+          @if (selectedListUnion && lists.length && selectedListUnion.proportionalElectionListIds.length) {
+            <bc-button
+              [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.SET' | translate"
+              variant="tertiary"
+              (buttonClick)="updateMainList(selectedListUnion)"
+            ></bc-button>
+          }
+          @if (selectedListUnion && lists.length) {
+            <bc-button
+              variant="tertiary"
+              [label]="'PROPORTIONAL_ELECTION.LIST_UNION.LISTS.ASSIGN' | translate"
+              (buttonClick)="updateAssignedLists(selectedListUnion)"
+            ></bc-button>
+          }
         </div>
-
         <bc-table
           selection
           class="w-full"
@@ -33,7 +34,9 @@
           cdkDropList
           [cdkDropListData]="dataSource"
           (cdkDropListDropped)="moveListUnion($event.previousIndex, $event.currentIndex)"
-        >
+          [sticky]="true"
+          [height]="'30rem'"
+          >
           <ng-container columnDef="number">
             <bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST_UNION.NUMBER' | translate"></app-truncated-value>
@@ -104,15 +107,14 @@
             [cdkDragData]="row"
           ></bc-data-row>
         </bc-table>
-      </ng-template>
+      }
     </div>
 
     <bc-divider orientation="vertical" class="ml-4"></bc-divider>
 
     <div>
-      <ng-container *ngIf="selectedListUnion">
+      @if (selectedListUnion) {
         <h2>{{ 'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate }} {{ selectedListUnion.position }}</h2>
-
         <div class="buttons">
           <bc-button
             variant="tertiary"
@@ -120,20 +122,21 @@
             [label]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.ADD' | translate"
             (buttonClick)="createListUnion(selectedListUnion)"
           ></bc-button>
-          <bc-button
-            *ngIf="selectedSubListUnion && lists.length && selectedSubListUnion.proportionalElectionListIds.length"
-            variant="tertiary"
-            [label]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.MAIN_LIST.SET' | translate"
-            (buttonClick)="updateMainList(selectedSubListUnion)"
-          ></bc-button>
-          <bc-button
-            *ngIf="selectedSubListUnion && lists.length"
-            variant="tertiary"
-            [label]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.LISTS.ASSIGN' | translate"
-            (buttonClick)="updateAssignedLists(selectedSubListUnion)"
-          ></bc-button>
+          @if (selectedSubListUnion && lists.length && selectedSubListUnion.proportionalElectionListIds.length) {
+            <bc-button
+              variant="tertiary"
+              [label]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.MAIN_LIST.SET' | translate"
+              (buttonClick)="updateMainList(selectedSubListUnion)"
+            ></bc-button>
+          }
+          @if (selectedSubListUnion && lists.length) {
+            <bc-button
+              variant="tertiary"
+              [label]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.LISTS.ASSIGN' | translate"
+              (buttonClick)="updateAssignedLists(selectedSubListUnion)"
+            ></bc-button>
+          }
         </div>
-
         <bc-table
           selection
           class="w-full"
@@ -141,7 +144,7 @@
           cdkDropList
           [cdkDropListData]="dataSourceSubLists"
           (cdkDropListDropped)="moveListUnion($event.previousIndex, $event.currentIndex, selectedListUnion)"
-        >
+          >
           <ng-container columnDef="number">
             <bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.NUMBER' | translate"></app-truncated-value>
@@ -201,7 +204,7 @@
             [cdkDragData]="row"
           ></bc-data-row>
         </bc-table>
-      </ng-container>
+      }
     </div>
   </div>
 

@@ -1,199 +1,206 @@
-<div class="mr-3 my-2" *ngIf="!!domainOfInfluence.returnAddress && !!domainOfInfluence.printData && !!domainOfInfluence.swissPostData">
-  <bc-checkbox
-    [disabled]="disabled || !canEditEverything"
-    [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.ELECTORAL_REGISTRATION_ENABLED' | translate"
-    [checked]="domainOfInfluence.electoralRegistrationEnabled"
-    (checkedChange)="updateElectoralRegistrationEnabled($event); contentChanged.emit()"
-    class="full-width"
+@if (!!domainOfInfluence.returnAddress && !!domainOfInfluence.printData && !!domainOfInfluence.swissPostData) {
+  <div class="mr-3 my-2">
+    <bc-checkbox
+      [disabled]="disabled || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.ELECTORAL_REGISTRATION_ENABLED' | translate"
+      [checked]="domainOfInfluence.electoralRegistrationEnabled"
+      (checkedChange)="domainOfInfluence.electoralRegistrationEnabled = $event; contentChanged.emit()"
+      class="full-width"
     [subscriptSizing]="'dynamic'"></bc-checkbox>
-  <bc-checkbox
-    *ngIf="domainOfInfluence.electoralRegistrationEnabled"
-    [disabled]="disabled || !canEditEverything"
-    [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.ELECTORAL_REGISTER_MULTIPLE_ENABLED' | translate"
-    [checked]="domainOfInfluence.electoralRegisterMultipleEnabled"
-    (checkedChange)="domainOfInfluence.electoralRegisterMultipleEnabled = $event; contentChanged.emit()"
-    class="full-width"
-    [subscriptSizing]="'dynamic'"></bc-checkbox>
-  <bc-checkbox
-    [disabled]="disabled || !canEditEverything"
-    [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.STISTAT_MUNICIPALITY' | translate"
-    [checked]="domainOfInfluence.stistatMunicipality"
-    (checkedChange)="domainOfInfluence.stistatMunicipality = $event; contentChanged.emit()"
-    class="full-width mb-2"
-    [subscriptSizing]="'dynamic'"
-  ></bc-checkbox>
-  <bc-checkbox
-    [disabled]="disabled || !canEditEverything"
-    [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.IS_MAIN_VOTING_CARDS_DOMAIN_OF_INFLUENCE' | translate"
-    [checked]="domainOfInfluence.isMainVotingCardsDomainOfInfluence"
-    (checkedChange)="domainOfInfluence.isMainVotingCardsDomainOfInfluence = $event; contentChanged.emit()"
-    class="full-width mb-2"
-    [subscriptSizing]="'dynamic'"
-  ></bc-checkbox>
+    <bc-checkbox
+      [disabled]="disabled || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.ELECTORAL_REGISTER_MULTIPLE_ENABLED' | translate"
+      [checked]="domainOfInfluence.electoralRegisterMultipleEnabled"
+      (checkedChange)="domainOfInfluence.electoralRegisterMultipleEnabled = $event; contentChanged.emit()"
+      class="full-width"
+      [subscriptSizing]="'dynamic'"></bc-checkbox>
+    <bc-checkbox
+      [disabled]="disabled || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.STISTAT_MUNICIPALITY' | translate"
+      [checked]="domainOfInfluence.stistatMunicipality"
+      (checkedChange)="domainOfInfluence.stistatMunicipality = $event; contentChanged.emit()"
+      class="full-width"
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
+    <bc-checkbox
+      [disabled]="disabled || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.IS_MAIN_VOTING_CARDS_DOMAIN_OF_INFLUENCE' | translate"
+      [checked]="domainOfInfluence.isMainVotingCardsDomainOfInfluence"
+      (checkedChange)="domainOfInfluence.isMainVotingCardsDomainOfInfluence = $event; contentChanged.emit()"
+      class="full-width"
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
+    <bc-checkbox
+      [disabled]="disabled || !canEditEverything"
+      [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.HAS_EMPTY_VOTING_CARDS' | translate"
+      [checked]="domainOfInfluence.hasEmptyVotingCards"
+      (checkedChange)="domainOfInfluence.hasEmptyVotingCards = $event; contentChanged.emit()"
+      class="full-width mb-2"
+      [subscriptSizing]="'dynamic'"
+    ></bc-checkbox>
 
-
-  <app-domain-of-influence-logo-edit [disabled]="disabled"
-                                     [domainOfInfluence]="domainOfInfluence"
-                                     (logoChanged)="logoChanged.emit($event)"></app-domain-of-influence-logo-edit>
-  <bc-dropdown class="full-width"
-               [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_COLOR' | translate"
-               [items]="votingCardColors"
-               displayExpr="description"
-               valueExpr="value"
-               [readonly]="disabled"
-               [clearable]="true"
-               [value]="domainOfInfluence.votingCardColor"
-               (valueChange)="domainOfInfluence.votingCardColor = $event; contentChanged.emit()"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
-  <div>
-    <h3 class="mb-1 mt-3" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.TITLE</h3>
-
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.ADDRESS_LINE_1' | translate"
-             [required]="true"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.returnAddress.addressLine1"
-             (valueChange)="domainOfInfluence.returnAddress.addressLine1 = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.ADDRESS_LINE_2' | translate"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.returnAddress.addressLine2"
-             (valueChange)="domainOfInfluence.returnAddress.addressLine2 = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.STREET' | translate"
-             [required]="true"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.returnAddress.street"
-             (valueChange)="domainOfInfluence.returnAddress.street = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.ADDRESS_ADDITION' | translate"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.returnAddress.addressAddition"
-             (valueChange)="domainOfInfluence.returnAddress.addressAddition = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.ZIP_CODE' | translate"
-             [required]="true"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.returnAddress.zipCode"
-             (valueChange)="domainOfInfluence.returnAddress.zipCode = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-
-
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.CITY' | translate"
-             [required]="true"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.returnAddress.city"
-             (valueChange)="domainOfInfluence.returnAddress.city = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-
-
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.COUNTRY' | translate"
-             [required]="true"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.returnAddress.country"
-             (valueChange)="domainOfInfluence.returnAddress.country = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-  </div>
-
-  <div>
-    <h3 class="mb-1 mt-3" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.TITLE</h3>
-
+    <app-domain-of-influence-logo-edit [disabled]="disabled"
+      [domainOfInfluence]="domainOfInfluence"
+      (logoChanged)="logoChanged.emit($event)"></app-domain-of-influence-logo-edit>
     <bc-dropdown class="full-width"
-                 [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.SHIPPING_AWAY' | translate"
-                 [items]="shippingAwayItems"
-                 displayExpr="description"
-                 valueExpr="value"
-                 [required]="true"
-                 [readonly]="disabled"
-                 [value]="domainOfInfluence.printData.shippingAway"
-                 (valueChange)="domainOfInfluence.printData.shippingAway = $event; contentChanged.emit()"
-                 [subscriptSizing]="'dynamic'"></bc-dropdown>
+      [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_COLOR' | translate"
+      [items]="votingCardColors"
+      displayExpr="description"
+      valueExpr="value"
+      [readonly]="disabled"
+      [clearable]="true"
+      [value]="domainOfInfluence.votingCardColor"
+      (valueChange)="domainOfInfluence.votingCardColor = $event; contentChanged.emit()"
+      [subscriptSizing]="'dynamic'"></bc-dropdown>
+    <div>
+      <h3 class="mb-1 mt-3" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.TITLE</h3>
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.ADDRESS_LINE_1' | translate"
+        [required]="true"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.returnAddress.addressLine1"
+        (valueChange)="domainOfInfluence.returnAddress.addressLine1 = $event; contentChanged.emit()"
+      [subscriptSizing]="'dynamic'"></bc-text>
 
-    <bc-dropdown class="full-width"
-                 [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.SHIPPING_RETURN' | translate"
-                 [items]="shippingReturnItems"
-                 displayExpr="description"
-                 valueExpr="value"
-                 [required]="true"
-                 [readonly]="disabled"
-                 [value]="domainOfInfluence.printData.shippingReturn"
-                 (valueChange)="domainOfInfluence.printData.shippingReturn = $event; contentChanged.emit()"
-                 [subscriptSizing]="'dynamic'"></bc-dropdown>
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.ADDRESS_LINE_2' | translate"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.returnAddress.addressLine2"
+        (valueChange)="domainOfInfluence.returnAddress.addressLine2 = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
 
-    <bc-dropdown class="full-width"
-                 [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.SHIPPING_METHOD' | translate"
-                 [items]="shippingMethodItems"
-                 displayExpr="description"
-                 valueExpr="value"
-                 [required]="true"
-                 [readonly]="disabled"
-                 [value]="domainOfInfluence.printData.shippingMethod"
-                 (valueChange)="domainOfInfluence.printData.shippingMethod = $event; contentChanged.emit()"
-                 [subscriptSizing]="'dynamic'"></bc-dropdown>
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.STREET' | translate"
+        [required]="true"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.returnAddress.street"
+        (valueChange)="domainOfInfluence.returnAddress.street = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
 
-    <bc-checkbox class="mt-2"
-                 [disabled]="disabled"
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.ADDRESS_ADDITION' | translate"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.returnAddress.addressAddition"
+        (valueChange)="domainOfInfluence.returnAddress.addressAddition = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
+
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.ZIP_CODE' | translate"
+        [required]="true"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.returnAddress.zipCode"
+        (valueChange)="domainOfInfluence.returnAddress.zipCode = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
+
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.CITY' | translate"
+        [required]="true"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.returnAddress.city"
+        (valueChange)="domainOfInfluence.returnAddress.city = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
+
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_RETURN_ADDRESS.COUNTRY' | translate"
+        [required]="true"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.returnAddress.country"
+        (valueChange)="domainOfInfluence.returnAddress.country = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
+    </div>
+
+    <div>
+      <h3 class="mb-1 mt-3" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.TITLE</h3>
+
+      <bc-dropdown class="full-width"
+        [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.SHIPPING_AWAY' | translate"
+        [items]="shippingAwayItems"
+        displayExpr="description"
+        valueExpr="value"
+        [required]="true"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.printData.shippingAway"
+        (valueChange)="domainOfInfluence.printData.shippingAway = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-dropdown>
+
+      <bc-dropdown class="full-width"
+        [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.SHIPPING_RETURN' | translate"
+        [items]="shippingReturnItems"
+        displayExpr="description"
+        valueExpr="value"
+        [required]="true"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.printData.shippingReturn"
+        (valueChange)="domainOfInfluence.printData.shippingReturn = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-dropdown>
+
+      <bc-dropdown class="full-width"
+        [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.SHIPPING_METHOD' | translate"
+        [items]="shippingMethodItems"
+        displayExpr="description"
+        valueExpr="value"
+        [required]="true"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.printData.shippingMethod"
+        (valueChange)="domainOfInfluence.printData.shippingMethod = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-dropdown>
+
+      <bc-checkbox class="mt-2"
+        [disabled]="disabled"
                  [label]="
                   'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_PRINT_DATA.SHIPPING_VOTING_CARDS_TO_DELIVERY_ADDRESS' | translate
                  "
-                 [checked]="domainOfInfluence.printData.shippingVotingCardsToDeliveryAddress"
-                 (checkedChange)="domainOfInfluence.printData.shippingVotingCardsToDeliveryAddress = $event; contentChanged.emit()"
-                 [subscriptSizing]="'dynamic'">
-    </bc-checkbox>
+        [checked]="domainOfInfluence.printData.shippingVotingCardsToDeliveryAddress"
+        (checkedChange)="domainOfInfluence.printData.shippingVotingCardsToDeliveryAddress = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'">
+      </bc-checkbox>
 
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.INVOICE_REFERENCE_NUMBER' | translate"
-             [readonly]="disabled || !canEditEverything"
-             [required]="true"
-             [value]="domainOfInfluence.swissPostData.invoiceReferenceNumber"
-             (valueChange)="domainOfInfluence.swissPostData.invoiceReferenceNumber = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.INVOICE_REFERENCE_NUMBER' | translate"
+        [readonly]="disabled || !canEditEverything"
+        [required]="true"
+        [value]="domainOfInfluence.swissPostData.invoiceReferenceNumber"
+        (valueChange)="domainOfInfluence.swissPostData.invoiceReferenceNumber = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
 
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.FRANKING_LICENCE_AWAY_NUMBER' | translate"
-             [readonly]="disabled || !canEditEverything"
-             [required]="true"
-             [value]="domainOfInfluence.swissPostData.frankingLicenceAwayNumber"
-             (valueChange)="domainOfInfluence.swissPostData.frankingLicenceAwayNumber = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.FRANKING_LICENCE_AWAY_NUMBER' | translate"
+        [readonly]="disabled || !canEditEverything"
+        [required]="true"
+        [value]="domainOfInfluence.swissPostData.frankingLicenceAwayNumber"
+        (valueChange)="domainOfInfluence.swissPostData.frankingLicenceAwayNumber = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
 
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.FRANKING_LICENCE_RETURN_NUMBER' | translate"
-             [readonly]="disabled || !canEditEverything"
-             [required]="true"
-             [value]="domainOfInfluence.swissPostData.frankingLicenceReturnNumber"
-             (valueChange)="domainOfInfluence.swissPostData.frankingLicenceReturnNumber = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_SWISS_POST_DATA.FRANKING_LICENCE_RETURN_NUMBER' | translate"
+        [readonly]="disabled || !canEditEverything"
+        [required]="true"
+        [value]="domainOfInfluence.swissPostData.frankingLicenceReturnNumber"
+        (valueChange)="domainOfInfluence.swissPostData.frankingLicenceReturnNumber = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
 
-    <bc-checkbox [disabled]="disabled || !canEditEverything"
-                 [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_FLAT_RATE_OWNER' | translate"
-                 [checked]="!domainOfInfluence.votingCardFlatRateDisabled"
-                 (checkedChange)="domainOfInfluence.votingCardFlatRateDisabled = !$event; contentChanged.emit()"
-                 class="full-width"
-                 [subscriptSizing]="'dynamic'">
-    </bc-checkbox>
+      <bc-checkbox [disabled]="disabled || !canEditEverything"
+        [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.VOTING_CARD_FLAT_RATE_OWNER' | translate"
+        [checked]="!domainOfInfluence.votingCardFlatRateDisabled"
+        (checkedChange)="domainOfInfluence.votingCardFlatRateDisabled = !$event; contentChanged.emit()"
+        class="full-width"
+        [subscriptSizing]="'dynamic'">
+      </bc-checkbox>
+    </div>
+
+    <div>
+      <h5 class="mb-1 mt-3" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.PRINTING_CENTER.TITLE</h5>
+
+      <bc-checkbox  [disabled]="disabled"
+        [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.PRINTING_CENTER.EXTERNAL' | translate"
+        [checked]="domainOfInfluence.externalPrintingCenter"
+        (checkedChange)="domainOfInfluence.externalPrintingCenter = $event; contentChanged.emit()"
+      [subscriptSizing]="'dynamic'"></bc-checkbox>
+
+      @if (domainOfInfluence.externalPrintingCenter) {
+        <bc-text
+          [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.PRINTING_CENTER.EXTERNAL_EAI_MESSAGE_TYPE' | translate"
+          [readonly]="disabled"
+          [value]="domainOfInfluence.externalPrintingCenterEaiMessageType"
+          (valueChange)="domainOfInfluence.externalPrintingCenterEaiMessageType = $event; contentChanged.emit()"
+          [subscriptSizing]="'dynamic'"></bc-text>
+      }
+
+      <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.PRINTING_CENTER.SAP_CUSTOMER_ORDER_NUMBER' | translate"
+        [readonly]="disabled"
+        [value]="domainOfInfluence.sapCustomerOrderNumber"
+        (valueChange)="domainOfInfluence.sapCustomerOrderNumber = $event; contentChanged.emit()"
+        [subscriptSizing]="'dynamic'"></bc-text>
+    </div>
   </div>
-
-  <div>
-    <h5 class="mb-1 mt-3" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.PRINTING_CENTER.TITLE</h5>
-
-    <bc-checkbox  [disabled]="disabled"
-                  [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.PRINTING_CENTER.EXTERNAL' | translate"
-                  [checked]="domainOfInfluence.externalPrintingCenter"
-                  (checkedChange)="domainOfInfluence.externalPrintingCenter = $event; contentChanged.emit()"
-                  [subscriptSizing]="'dynamic'"></bc-checkbox>
-
-    <bc-text *ngIf="domainOfInfluence.externalPrintingCenter"
-             [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.PRINTING_CENTER.EXTERNAL_EAI_MESSAGE_TYPE' | translate"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.externalPrintingCenterEaiMessageType"
-             (valueChange)="domainOfInfluence.externalPrintingCenterEaiMessageType = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-
-    <bc-text [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.PRINTING_CENTER.SAP_CUSTOMER_ORDER_NUMBER' | translate"
-             [readonly]="disabled"
-             [value]="domainOfInfluence.sapCustomerOrderNumber"
-             (valueChange)="domainOfInfluence.sapCustomerOrderNumber = $event; contentChanged.emit()"
-             [subscriptSizing]="'dynamic'"></bc-text>
-  </div>
-</div>
+}

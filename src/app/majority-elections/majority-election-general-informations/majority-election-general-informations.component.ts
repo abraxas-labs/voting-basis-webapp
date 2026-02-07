@@ -4,15 +4,10 @@
  * For license information see LICENSE file.
  */
 
-import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
+import { EnumItemDescription } from '@abraxas/voting-lib';
 import { Component, OnInit } from '@angular/core';
-import { ContestService } from '../../core/contest.service';
-import { DomainOfInfluenceReportLevelService } from '../../core/domain-of-influence-report-level.service';
-import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { MajorityElection, MajorityElectionMandateAlgorithm, newMajorityElection } from '../../core/models/majority-election.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
-import { PermissionService } from '../../core/permission.service';
-import { DialogService } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-majority-election-general-informations',
@@ -26,23 +21,8 @@ export class MajorityElectionGeneralInformationsComponent
 {
   public mandateAlgorithms: EnumItemDescription<MajorityElectionMandateAlgorithm>[] = [];
 
-  constructor(
-    domainOfInfluenceService: DomainOfInfluenceService,
-    enumUtil: EnumUtil,
-    contestService: ContestService,
-    doiReportLevelService: DomainOfInfluenceReportLevelService,
-    permissionService: PermissionService,
-    dialogService: DialogService,
-  ) {
-    super(
-      enumUtil,
-      domainOfInfluenceService,
-      contestService,
-      doiReportLevelService,
-      permissionService,
-      dialogService,
-      newMajorityElection(),
-    );
+  constructor() {
+    super(newMajorityElection());
   }
 
   public get canSave(): boolean {

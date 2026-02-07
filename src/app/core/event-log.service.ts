@@ -12,7 +12,7 @@ import {
   WatchEventsRequestFilter,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/event_log_requests_pb';
 import { GrpcBackendService, GrpcService, retryForeverWithBackoff } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Event, EventLog, EventLogProto, EventType, EventTypePrefix } from './models/event-log.model';
 import { Page, Pageable, PageableProto } from './models/page.model';
@@ -35,7 +35,9 @@ export class EventLogService extends GrpcService<EventLogServicePromiseClient> {
   );
   private watchCallSubscription?: Subscription;
 
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(EventLogServicePromiseClient, environment, grpcBackend);
   }
 

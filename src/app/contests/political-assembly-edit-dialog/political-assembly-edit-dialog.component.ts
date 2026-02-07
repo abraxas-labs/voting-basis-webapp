@@ -6,7 +6,7 @@
 
 import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { DatePipe } from '@angular/common';
-import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
@@ -26,6 +26,14 @@ import { Subscription } from 'rxjs';
   standalone: false,
 })
 export class PoliticalAssemblyEditDialogComponent implements OnInit, OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<PoliticalAssemblyEditDialogData>>(MatDialogRef);
+  private readonly contestService = inject(ContestService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly politicalAssemblyService = inject(PoliticalAssemblyService);
+  private readonly dialogService = inject(DialogService);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -54,17 +62,8 @@ export class PoliticalAssemblyEditDialogComponent implements OnInit, OnDestroy {
   private dialogData: PoliticalAssemblyEditDialogData;
   private dateStringValue: string = '';
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<PoliticalAssemblyEditDialogData>,
-    private readonly contestService: ContestService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly politicalAssemblyService: PoliticalAssemblyService,
-    private readonly dialogService: DialogService,
-    @Inject(MAT_DIALOG_DATA) dialogData: PoliticalAssemblyEditDialogData,
-  ) {
-    this.dialogData = dialogData;
+  constructor() {
+    this.dialogData = inject<PoliticalAssemblyEditDialogData>(MAT_DIALOG_DATA);
 
     this.dialogRef.disableClose = true;
     this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());

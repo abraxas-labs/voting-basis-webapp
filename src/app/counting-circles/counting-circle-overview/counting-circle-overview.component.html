@@ -5,23 +5,26 @@
       (filterChange)="historizationFilterChange($event)"
     ></app-historization-filter-bar>
 
-    <div class="flex buttons" *ngIf="!historizationFilter.date && (canCreate || canMerge)">
-      <bc-button
-        variant="tertiary"
-        *ngIf="canCreate"
-        [label]="'COUNTING_CIRCLE.NEW' | translate"
-        icon="plus"
-        (buttonClick)="create()"
-      ></bc-button>
-      <bc-button
-        variant="tertiary"
-        *ngIf="canMerge"
-        (buttonClick)="openMergers()"
-        [label]="'COUNTING_CIRCLE.MERGE.TITLE' | translate"
-      ></bc-button>
-    </div>
+    @if (!historizationFilter.date && (canCreate || canMerge)) {
+      <div class="flex buttons">
+        @if (canCreate) {
+          <bc-button variant="tertiary" [label]="'COUNTING_CIRCLE.NEW' | translate" icon="plus" (buttonClick)="create()"></bc-button>
+        }
+        @if (canMerge) {
+          <bc-button variant="tertiary" (buttonClick)="openMergers()" [label]="'COUNTING_CIRCLE.MERGE.TITLE' | translate"></bc-button>
+        }
+      </div>
+    }
 
-    <bc-table selection filter sort [sortActive]="[{ id: nameColumn, direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
+    <bc-table
+      selection
+      filter
+      sort
+      [sortActive]="[{ id: nameColumn, direction: 'asc' }]"
+      class="w-full"
+      [dataSource]="dataSource"
+      [sticky]="true"
+    >
       <ng-container [columnDef]="nameColumn">
         <bc-header-cell filter sort *headerCellDef>
           <span truncateWithTooltip tooltip>
@@ -29,7 +32,7 @@
           </span>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <app-truncated-value [value]="element.name"></app-truncated-value>
+          <span>{{ element.name }}</span>
         </bc-data-cell>
       </ng-container>
 
@@ -40,7 +43,7 @@
           </span>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <app-truncated-value [value]="element.bfs"></app-truncated-value>
+          <span>{{ element.bfs }}</span>
         </bc-data-cell>
       </ng-container>
 
@@ -51,7 +54,7 @@
           </span>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <app-truncated-value [value]="element.code"></app-truncated-value>
+          <span>{{ element.code }}</span>
         </bc-data-cell>
       </ng-container>
 
@@ -62,7 +65,7 @@
           </span>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <app-truncated-value [value]="element.responsibleAuthority.name"></app-truncated-value>
+          <span>{{ element.responsibleAuthority.name }}</span>
         </bc-data-cell>
       </ng-container>
 
@@ -73,7 +76,7 @@
           </span>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <app-truncated-value [value]="element.modifiedOn | date: 'short'"></app-truncated-value>
+          <span>{{ element.modifiedOn | date: 'short' }}</span>
         </bc-data-cell>
       </ng-container>
 
@@ -92,20 +95,16 @@
           </span>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <app-truncated-value [value]="'COUNTING_CIRCLE.STATES.' + element.state | translate"></app-truncated-value>
+          <span>{{ 'COUNTING_CIRCLE.STATES.' + element.state | translate }}</span>
         </bc-data-cell>
       </ng-container>
 
       <ng-container [columnDef]="actionsColumn">
         <bc-header-cell *headerCellDef></bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <bc-icon
-            *ngIf="!element.deletedOn && canDelete"
-            (click)="delete(element); $event.stopPropagation()"
-            icon="trash"
-            iconColor="error"
-          >
-          </bc-icon>
+          @if (!element.deletedOn && canDelete) {
+            <bc-icon (click)="delete(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
+          }
         </bc-data-cell>
       </ng-container>
 
@@ -120,6 +119,6 @@
       ></bc-data-row>
     </bc-table>
 
-    <bc-paginator #paginator showFirstLastButtons [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]"></bc-paginator>
+    <bc-paginator #paginator showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[5, 10, 15, 20, 100]"></bc-paginator>
   </div>
 </vo-lib-page>

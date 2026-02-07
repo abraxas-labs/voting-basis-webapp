@@ -4,10 +4,8 @@
  * For license information see LICENSE file.
  */
 
-import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
+import { EnumItemDescription } from '@abraxas/voting-lib';
 import { Component, Input } from '@angular/core';
-import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-influence-report-level.service';
-import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { MajorityElectionService } from '../../../core/majority-election.service';
 import { MajorityElectionImport } from '../../../core/models/import.model';
 import {
@@ -16,7 +14,6 @@ import {
   MajorityElectionMandateAlgorithm,
 } from '../../../core/models/majority-election.model';
 import { ImportPoliticalBusinessEditComponent } from '../import-political-business-edit/import-political-business-edit.component';
-import { PermissionService } from '../../../core/permission.service';
 
 @Component({
   selector: 'app-import-majority-election-edit',
@@ -29,14 +26,9 @@ export class ImportMajorityElectionEditComponent extends ImportPoliticalBusiness
   public candidates: MajorityElectionCandidate[] = [];
   private majorityElectionImport?: MajorityElectionImport;
 
-  constructor(
-    enumUtil: EnumUtil,
-    doiReportLevelService: DomainOfInfluenceReportLevelService,
-    domainOfInfluenceService: DomainOfInfluenceService,
-    permissionService: PermissionService,
-  ) {
-    super(enumUtil, doiReportLevelService, domainOfInfluenceService, permissionService);
-    this.mandateAlgorithms = enumUtil.getArrayWithDescriptions<MajorityElectionMandateAlgorithm>(
+  constructor() {
+    super();
+    this.mandateAlgorithms = this.enumUtil.getArrayWithDescriptions<MajorityElectionMandateAlgorithm>(
       MajorityElectionMandateAlgorithm,
       'MAJORITY_ELECTION.MANDATE_ALGORITHM.TYPES.',
     );

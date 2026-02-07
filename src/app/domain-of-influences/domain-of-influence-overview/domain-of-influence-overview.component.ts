@@ -6,7 +6,7 @@
 
 import { AuthorizationService, PaginatorComponent, TableDataSource, Tenant } from '@abraxas/base-components';
 import { DialogService, EnumUtil, SnackbarService, TreeNode } from '@abraxas/voting-lib';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
 import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
@@ -35,6 +35,16 @@ import { flatMap } from '../../core/utils/array.utils';
   standalone: false,
 })
 export class DomainOfInfluenceOverviewComponent implements OnInit {
+  private readonly i18n = inject(TranslateService);
+  private readonly permissionService = inject(PermissionService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly countingCircleService = inject(CountingCircleService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly dialogService = inject(DialogService);
+  private readonly auth = inject(AuthorizationService);
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly cd = inject(ChangeDetectorRef);
+
   public readonly columns = ['name', 'bfs', 'authority'];
 
   @ViewChild('paginator')
@@ -59,18 +69,6 @@ export class DomainOfInfluenceOverviewComponent implements OnInit {
 
   public selectedDomainOfInfluenceValue?: DomainOfInfluence;
   private tenant?: Tenant;
-
-  constructor(
-    private readonly i18n: TranslateService,
-    private readonly permissionService: PermissionService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly countingCircleService: CountingCircleService,
-    private readonly snackbarService: SnackbarService,
-    private readonly dialogService: DialogService,
-    private readonly auth: AuthorizationService,
-    private readonly enumUtil: EnumUtil,
-    private readonly cd: ChangeDetectorRef,
-  ) {}
 
   public get selectedDomainOfInfluence(): DomainOfInfluence | undefined {
     return this.selectedDomainOfInfluenceValue;

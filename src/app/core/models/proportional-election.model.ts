@@ -97,6 +97,7 @@ export function newProportionalElection(): ProportionalElection {
     shortDescription: new Map<string, string>(),
     officialDescription: new Map<string, string>(),
     automaticBallotBundleNumberGeneration: false,
+    automaticBallotNumberGeneration: true,
     automaticEmptyVoteCounting: false,
     reviewProcedure: ProportionalElectionReviewProcedureProto.PROPORTIONAL_ELECTION_REVIEW_PROCEDURE_ELECTRONICALLY,
   } as ProportionalElection;

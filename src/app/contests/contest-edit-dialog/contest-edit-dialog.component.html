@@ -2,19 +2,21 @@
   <h1 header>{{!isNew ? ('CONTEST.EDIT' | translate) : ('CONTEST.NEW' | translate)}}</h1>
 
   <div content class="form mr-3">
-    <bc-dropdown *ngIf="domainOfInfluences.length !== 1"
-                 truncateWithTooltip tooltip
-                 [items]="domainOfInfluences"
-                 [readonly]="!isNew"
-                 displayExpr="name"
-                 valueExpr="id"
-                 [required]="true"
-                 [value]="data.domainOfInfluenceId"
-                 (valueChange)="updateDomainOfInfluenceId($event); contentChanged()"
-                 [label]="'CONTEST.DOMAIN_OF_INFLUENCE' | translate"
-                 [subscriptSizing]="'dynamic'"></bc-dropdown>
+    @if (domainOfInfluences.length !== 1) {
+      <bc-dropdown
+        truncateWithTooltip tooltip
+        [items]="domainOfInfluences"
+        [readonly]="!isNew"
+        displayExpr="name"
+        valueExpr="id"
+        [required]="true"
+        [value]="data.domainOfInfluenceId"
+        (valueChange)="updateDomainOfInfluenceId($event); contentChanged()"
+        [label]="'CONTEST.DOMAIN_OF_INFLUENCE' | translate"
+        [subscriptSizing]="'dynamic'"></bc-dropdown>
+    }
 
-    <ng-container *ngIf="isNew; else editDate">
+    @if (isNew) {
       <bc-dropdown [label]="'CONTEST.PRECONFIGURED_DATE' | translate"
                    [readonly]="customDateSelected || testingPhaseEnded"
                    [items]="preconfiguredDates"
@@ -34,15 +36,14 @@
                [value]="data.date | date"
                (valueChange)="updateDate($event); contentChanged()"
                [subscriptSizing]="'dynamic'"></bc-date>
-    </ng-container>
-    <ng-template #editDate>
+    } @else {
       <bc-date [label]="'CONTEST.CONTEST_DATE' | translate"
-                    [required]="true"
-                    [readonly]="testingPhaseEnded"
-                    [value]="data.date | date"
-                    (valueChange)="updateDate($event); contentChanged()"
-                    [subscriptSizing]="'dynamic'"></bc-date>
-    </ng-template>
+               [required]="true"
+               [readonly]="testingPhaseEnded"
+               [value]="data.date | date"
+               (valueChange)="updateDate($event); contentChanged()"
+               [subscriptSizing]="'dynamic'"></bc-date>
+    }
 
     <app-translated-formfield [label]="'CONTEST.DESCRIPTION' | translate"
                               [readonly]="testingPhaseEnded"
@@ -76,10 +77,10 @@
                [subscriptSizing]="'dynamic'"></bc-time>
     </div>
 
-    <bc-spinner class="block" size="1.5rem" *ngIf="pastContestsLoading; else pastContestsDropdown"></bc-spinner>
-    <ng-template #pastContestsDropdown>
-      <bc-dropdown *ngIf="pastContests.length > 0 && !this.cantonDefaults?.internalPlausibilisationDisabled"
-                   [readonly]="testingPhaseEnded"
+    @if (pastContestsLoading) {
+      <bc-spinner class="block" size="1.5rem"></bc-spinner>
+    } @else if (pastContests.length > 0 && !this.cantonDefaults?.internalPlausibilisationDisabled) {
+      <bc-dropdown [readonly]="testingPhaseEnded"
                    [items]="pastContests"
                    displayExpr="dateString"
                    valueExpr="id"
@@ -88,7 +89,7 @@
                    (valueChange)="data.previousContestId = $event; contentChanged()"
                    [label]="'CONTEST.PREVIOUS_CONTEST' | translate"
                    [subscriptSizing]="'dynamic'"></bc-dropdown>
-    </ng-template>
+    }
 
     <bc-checkbox [checked]="data.eVoting"
                  [disabled]="testingPhaseEnded"
@@ -96,7 +97,7 @@
                  (checkedChange)="data.eVoting = $event; contentChanged()"
                  [subscriptSizing]="'dynamic'"></bc-checkbox>
 
-    <ng-container *ngIf="data.eVoting">
+    @if (data.eVoting) {
       <div class="flex">
         <bc-date [label]="'CONTEST.E_VOTING_FROM' | translate"
                  [readonly]="testingPhaseEnded"
@@ -134,7 +135,7 @@
                [value]="(data.eVotingApprovalDueDate | date) ?? undefined"
                (valueChange)="updateEVotingApprovalDueDate($event); contentChanged()"
                [subscriptSizing]="'dynamic'"></bc-date>
-    </ng-container>
+    }
   </div>
 
   <div footer class="mr-3">

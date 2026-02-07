@@ -5,7 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { ImportService } from '../../../core/import.service';
 import { ImportFileContent, ImportType } from '../../../core/models/import.model';
 import { TableDataSource } from '@abraxas/base-components';
@@ -17,6 +17,9 @@ import { TableDataSource } from '@abraxas/base-components';
   standalone: false,
 })
 export class ImportFileSelectComponent {
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly importService = inject(ImportService);
+
   public readonly columns = ['filename', 'type', 'actions'];
   public dataSource: TableDataSource<ImportFileContent> = new TableDataSource<ImportFileContent>();
   public importTypeItemDescriptions: EnumItemDescription<ImportType>[] = [];
@@ -32,10 +35,7 @@ export class ImportFileSelectComponent {
   @ViewChild('fileInput', { static: false })
   private fileInput!: ElementRef;
 
-  constructor(
-    private readonly enumUtil: EnumUtil,
-    private readonly importService: ImportService,
-  ) {
+  constructor() {
     this.importTypes = [ImportType.IMPORT_TYPE_ECH_159, ImportType.IMPORT_TYPE_ECH_157];
   }
 

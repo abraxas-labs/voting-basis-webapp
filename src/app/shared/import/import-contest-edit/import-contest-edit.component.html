@@ -56,14 +56,16 @@
 
   <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
   <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
-    selectionRow [selectionRowValue]="row" (click)="setSelected(row, true)"></bc-data-row>
+  selectionRow [selectionRowValue]="row" (click)="setSelected(row, true)"></bc-data-row>
 </bc-table>
 
 <div class="mt-4">
-  <bc-dropdown *ngIf="domainOfInfluences.length !== 1" [items]="domainOfInfluences" class="full-width"
-    displayExpr="name" valueExpr="id" [required]="true" [(value)]="domainOfInfluenceId"
+  @if (domainOfInfluences.length !== 1) {
+    <bc-dropdown [items]="domainOfInfluences" class="full-width"
+      displayExpr="name" valueExpr="id" [required]="true" [(value)]="domainOfInfluenceId"
     (valueChange)="emitContestImport()" [label]="'CONTEST.DOMAIN_OF_INFLUENCE' | translate"></bc-dropdown>
+  }
 
   <bc-date [label]="'CONTEST.END_OF_TESTING_PHASE' | translate" [required]="true"
-    (valueChange)="endOfTestingPhaseString = $event; emitContestImport()" [value]="endOfTestingPhaseString"></bc-date>
+  (valueChange)="endOfTestingPhaseString = $event; emitContestImport()" [value]="endOfTestingPhaseString"></bc-date>
 </div>

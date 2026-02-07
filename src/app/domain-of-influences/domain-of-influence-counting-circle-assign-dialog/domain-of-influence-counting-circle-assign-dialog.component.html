@@ -3,7 +3,15 @@
 
   <div content class="grid">
     <div left>
-      <bc-table filter sort [sortActive]="[{ id: nameColumn, direction: 'asc' }]" selection class="w-full" [dataSource]="dataSource">
+      <bc-table
+        filter
+        sort
+        [sortActive]="[{ id: nameColumn, direction: 'asc' }]"
+        selection
+        class="w-full"
+        [dataSource]="dataSource"
+        [sticky]="true"
+      >
         <ng-container [columnDef]="selectColumn">
           <bc-header-cell *headerCellDef>
             <bc-checkbox
@@ -67,7 +75,7 @@
           (click)="selection.toggle(row); updateIsAllSelected(); contentChanged()"
         ></bc-data-row>
       </bc-table>
-      <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 15]"></bc-paginator>
+      <bc-paginator #paginator showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[5, 10, 15, 100]"></bc-paginator>
     </div>
     <bc-divider class="ml-3" orientation="vertical"></bc-divider>
     <div right>
@@ -92,9 +100,9 @@
         <bc-header-row *headerRowDef="let row; columns: columnsSelected"></bc-header-row>
         <bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></bc-data-row>
       </bc-table>
-      <ng-container *ngIf="inheritedCountingCirclesDatasource.data.length">
+      @if (inheritedCountingCirclesDatasource.data.length) {
         <h2 translate class="mb-0 mt-3">DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.INHERITED_OVERVIEW</h2>
-        <bc-table class="w-full" [dataSource]="inheritedCountingCirclesDatasource">
+        <bc-table class="w-full" [dataSource]="inheritedCountingCirclesDatasource" [sticky]="true" [height]="'32rem'">
           <ng-container [columnDef]="nameColumnInherited">
             <bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'COUNTING_CIRCLE.NAME' | translate"></app-truncated-value>
@@ -107,8 +115,7 @@
           <bc-header-row *headerRowDef="let row; columns: columnsInherited"></bc-header-row>
           <bc-data-row *dataRowDef="let row; columns: columnsInherited; let i = index"></bc-data-row>
         </bc-table>
-        <bc-paginator #inheritedPaginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 15]"></bc-paginator>
-      </ng-container>
+      }
     </div>
   </div>
 

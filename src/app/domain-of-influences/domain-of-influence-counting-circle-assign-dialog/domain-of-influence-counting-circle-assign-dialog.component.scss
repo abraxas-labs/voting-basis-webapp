@@ -12,6 +12,10 @@
   @include table.truncate-long-sortable-table-header();
 }
 
+::ng-deep bc-header-cell {
+  z-index: 100; // without this, the checkbox component would be visible inside the header during scrolling
+}
+
 :host {
   min-width: 80vw; // workaround for firefox
 }

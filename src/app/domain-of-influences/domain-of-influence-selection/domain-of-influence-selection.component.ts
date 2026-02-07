@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -14,6 +14,8 @@ import { TranslateService } from '@ngx-translate/core';
   standalone: false,
 })
 export class DomainOfInfluenceSelectionComponent {
+  private readonly i18n = inject(TranslateService);
+
   private domainOfInfluencesValue: DomainOfInfluence[] = [];
 
   @Input()
@@ -34,8 +36,6 @@ export class DomainOfInfluenceSelectionComponent {
 
   public domainOfInfluenceSelectionItems: DomainOfInfluenceSelectionItem[] = [];
   public selectedDomainOfInfluenceSelectionItem: DomainOfInfluenceSelectionItem | undefined;
-
-  constructor(private readonly i18n: TranslateService) {}
 
   @Input()
   public set selectedDomainOfInfluence(v: DomainOfInfluence | undefined) {

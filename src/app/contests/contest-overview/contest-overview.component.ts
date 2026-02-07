@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
@@ -13,7 +13,6 @@ import { Subscription } from 'rxjs';
 import { ContestService } from '../../core/contest.service';
 import { ExportService } from '../../core/export.service';
 import { ContestState, ContestSummary, PreconfiguredContestDate } from '../../core/models/contest.model';
-import { ExportTemplate } from '../../core/models/export.model';
 import { ContestImportDialogComponent } from '../../shared/import/contest-import-dialog/contest-import-dialog.component';
 import { ContestArchiveDialogComponent, ContestArchiveDialogData } from '../contest-archive-dialog/contest-archive-dialog.component';
 import {
@@ -39,7 +38,7 @@ import { Permissions } from '../../core/models/permissions.model';
 import { PermissionService } from '../../core/permission.service';
 import { EventLogService } from '../../core/event-log.service';
 import { EventType } from '../../core/models/event-log.model';
-import { ExportEntityType, ExportFileFormat } from '@abraxas/voting-basis-service-proto/grpc/shared/export_pb';
+import { ExportEntityType } from '@abraxas/voting-basis-service-proto/grpc/shared/export_pb';
 
 @Component({
   selector: 'app-contest-overview',
@@ -48,6 +47,19 @@ import { ExportEntityType, ExportFileFormat } from '@abraxas/voting-basis-servic
   standalone: false,
 })
 export class ContestOverviewComponent implements OnInit, OnDestroy {
+  private readonly exportService = inject(ExportService);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly dialogService = inject(DialogService);
+  private readonly contestService = inject(ContestService);
+  private readonly eventLogService = inject(EventLogService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly auth = inject(AuthorizationService);
+  private readonly politicalAssemblyService = inject(PoliticalAssemblyService);
+  private readonly permissionService = inject(PermissionService);
+
   public loading: boolean = true;
   public contests: ContestSummary[] = [];
   public pastContests: ContestSummary[] = [];
@@ -62,21 +74,6 @@ export class ContestOverviewComponent implements OnInit, OnDestroy {
 
   private preconfiguredDates: PreconfiguredContestDate[] = [];
   private overviewChangesSubscription?: Subscription;
-
-  constructor(
-    private readonly exportService: ExportService,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly dialogService: DialogService,
-    private readonly contestService: ContestService,
-    private readonly eventLogService: EventLogService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly auth: AuthorizationService,
-    private readonly politicalAssemblyService: PoliticalAssemblyService,
-    private readonly permissionService: PermissionService,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     try {

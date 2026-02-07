@@ -5,7 +5,7 @@
  */
 
 import { TreeNode } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluence, DomainOfInfluenceLevel } from './models/domain-of-influence.model';
 import { flatMap } from './utils/array.utils';
@@ -14,7 +14,7 @@ import { flatMap } from './utils/array.utils';
   providedIn: 'root',
 })
 export class DomainOfInfluenceReportLevelService {
-  constructor(private readonly i18n: TranslateService) {}
+  private readonly i18n = inject(TranslateService);
 
   public buildDomainOfInfluenceReportLevels(politicalDomainOfInfluenceNode?: TreeNode<DomainOfInfluence>): DomainOfInfluenceLevel[] {
     if (!politicalDomainOfInfluenceNode) {

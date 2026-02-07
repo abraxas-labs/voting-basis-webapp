@@ -6,100 +6,102 @@
         (filterChange)="historizationFilterChange($event)"
       ></app-historization-filter-bar>
 
-      <bc-spinner class="block" *ngIf="loading; else domainOfInfluencesList"></bc-spinner>
-      <ng-template #domainOfInfluencesList>
-        <vo-lib-searchable-tree-navigation
-          *ngIf="tree"
-          class="overflow-tree"
-          [nodes]="tree.nodes"
-          (selectedNodeChange)="nodeSelect($event)"
-          (nodeEdit)="nodeEdit($event, false)"
-          (nodeInfo)="nodeEdit($event, true)"
-          (nodeDelete)="nodeDelete($event)"
-          [editModeEnabled]="true"
-          [addLabel]="'DOMAIN_OF_INFLUENCE.NEW'"
-          [showAdd]="canCreate && !historizationFilter.date"
-          (addClicked)="create()"
-          [rowTemplate]="doiTreeRowTemplate"
-        ></vo-lib-searchable-tree-navigation>
-
+      @if (loading) {
+        <bc-spinner class="block"></bc-spinner>
+      } @else {
+        @if (tree) {
+          <vo-lib-searchable-tree-navigation
+            class="overflow-tree"
+            [nodes]="tree.nodes"
+            (selectedNodeChange)="nodeSelect($event)"
+            (nodeEdit)="nodeEdit($event, false)"
+            (nodeInfo)="nodeEdit($event, true)"
+            (nodeDelete)="nodeDelete($event)"
+            [editModeEnabled]="true"
+            [addLabel]="'DOMAIN_OF_INFLUENCE.NEW'"
+            [showAdd]="canCreate && !historizationFilter.date"
+            (addClicked)="create()"
+            [rowTemplate]="doiTreeRowTemplate"
+          ></vo-lib-searchable-tree-navigation>
+        }
         <ng-template #doiTreeRowTemplate let-node>
           <span class="tree-row">
             <span [class.disabled]="!!node.data.deletedOn">{{ node.displayName }}</span>
-            <span *ngIf="node.data.deletedOn" class="disabled pl-3"
-              >({{
+            @if (node.data.deletedOn) {
+              <span class="disabled pl-3"
+                >({{
                 'HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.DELETED'
-                  | translate
-                    : {
-                        createdOn: node.data.createdOn | date: 'yyyy-MM-dd / HH:mm',
-                        deletedOn: node.data.deletedOn | date: 'yyyy-MM-dd / HH:mm',
-                      }
+                | translate
+                : {
+                createdOn: node.data.createdOn | date: 'yyyy-MM-dd / HH:mm',
+                deletedOn: node.data.deletedOn | date: 'yyyy-MM-dd / HH:mm',
+              }
               }})</span
-            >
+              >
+            }
           </span>
         </ng-template>
-      </ng-template>
+      }
     </div>
     <bc-divider class="ml-4" orientation="vertical"></bc-divider>
     <div>
       <h2 translate>DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN_SELECTED_OVERVIEW</h2>
 
-      <bc-spinner *ngIf="loadingDetail; else countingCircleDetail" class="block"></bc-spinner>
-      <ng-template #countingCircleDetail>
-        <ng-container *ngIf="selectedDomainOfInfluence; else noDomainOfInfluenceSelected">
+      @if (loadingDetail) {
+        <bc-spinner class="block"></bc-spinner>
+      } @else {
+        @if (selectedDomainOfInfluence) {
           <div class="flex">
             <vo-lib-inline-spinner position="right" [loading]="loadingAssignableCountingCircles">
-              <bc-button
-                *ngIf="canAssignCountingCircles && !selectedDomainOfInfluence.deletedOn && !historizationFilter.date"
-                variant="tertiary"
-                icon="plus"
-                class="my-2"
-                [label]="'DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN' | translate"
-                (buttonClick)="assignCountingCircles()"
-              >
-              </bc-button>
+              @if (canAssignCountingCircles && !selectedDomainOfInfluence.deletedOn && !historizationFilter.date) {
+                <bc-button
+                  variant="tertiary"
+                  icon="plus"
+                  class="my-2"
+                  [label]="'DOMAIN_OF_INFLUENCE.COUNTING_CIRCLE.ASSIGN' | translate"
+                  (buttonClick)="assignCountingCircles()"
+                  >
+                </bc-button>
+              }
             </vo-lib-inline-spinner>
           </div>
-          <div class="overflow-table">
-            <bc-table class="w-full" [dataSource]="dataSource">
-              <ng-container columnDef="name">
-                <bc-header-cell *headerCellDef>
-                  <app-truncated-value [value]="'COUNTING_CIRCLE.NAME' | translate"></app-truncated-value>
-                </bc-header-cell>
-                <bc-data-cell *dataCellDef="let element">
-                  <app-truncated-value [value]="element.name"></app-truncated-value>
-                </bc-data-cell>
-              </ng-container>
+          <bc-table class="w-full" [dataSource]="dataSource" [sticky]="true" [height]="'38rem'">
+            <ng-container columnDef="name">
+              <bc-header-cell *headerCellDef>
+                <app-truncated-value [value]="'COUNTING_CIRCLE.NAME' | translate"></app-truncated-value>
+              </bc-header-cell>
+              <bc-data-cell *dataCellDef="let element">
+                <app-truncated-value [value]="element.name"></app-truncated-value>
+              </bc-data-cell>
+            </ng-container>
 
-              <ng-container columnDef="bfs">
-                <bc-header-cell *headerCellDef>
-                  <app-truncated-value [value]="'COUNTING_CIRCLE.BFS' | translate"></app-truncated-value>
-                </bc-header-cell>
-                <bc-data-cell *dataCellDef="let element">
-                  <app-truncated-value [value]="element.bfs"></app-truncated-value>
-                </bc-data-cell>
-              </ng-container>
+            <ng-container columnDef="bfs">
+              <bc-header-cell *headerCellDef>
+                <app-truncated-value [value]="'COUNTING_CIRCLE.BFS' | translate"></app-truncated-value>
+              </bc-header-cell>
+              <bc-data-cell *dataCellDef="let element">
+                <app-truncated-value [value]="element.bfs"></app-truncated-value>
+              </bc-data-cell>
+            </ng-container>
 
-              <ng-container columnDef="authority">
-                <bc-header-cell *headerCellDef>
-                  <app-truncated-value [value]="'COUNTING_CIRCLE.AUTHORITY' | translate"></app-truncated-value>
-                </bc-header-cell>
-                <bc-data-cell *dataCellDef="let element">
-                  <app-truncated-value [value]="element.responsibleAuthority.name"></app-truncated-value>
-                </bc-data-cell>
-              </ng-container>
+            <ng-container columnDef="authority">
+              <bc-header-cell *headerCellDef>
+                <app-truncated-value [value]="'COUNTING_CIRCLE.AUTHORITY' | translate"></app-truncated-value>
+              </bc-header-cell>
+              <bc-data-cell *dataCellDef="let element">
+                <app-truncated-value [value]="element.responsibleAuthority.name"></app-truncated-value>
+              </bc-data-cell>
+            </ng-container>
 
-              <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-              <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
-            </bc-table>
+            <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+            <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+          </bc-table>
 
-            <bc-paginator #paginator showFirstLastButtons [pageSize]="15" [pageSizeOptions]="[5, 10, 15]"></bc-paginator>
-          </div>
-        </ng-container>
-      </ng-template>
-      <ng-template #noDomainOfInfluenceSelected>
-        <span class="no-items-message" translate>DOMAIN_OF_INFLUENCE.NO_DOMAIN_OF_INFLUENCE_SELECTED</span>
-      </ng-template>
+          <bc-paginator #paginator showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[5, 10, 15, 100]"></bc-paginator>
+        } @else {
+          <span class="no-items-message" translate>DOMAIN_OF_INFLUENCE.NO_DOMAIN_OF_INFLUENCE_SELECTED</span>
+        }
+      }
     </div>
   </div>
 </vo-lib-page>

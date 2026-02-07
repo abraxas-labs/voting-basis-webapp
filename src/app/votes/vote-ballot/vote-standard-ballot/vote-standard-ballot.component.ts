@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { BallotSubType, VoteType } from '@abraxas/voting-basis-service-proto/grpc/shared/vote_pb';
 import { BallotQuestion, newBallot, Vote } from '../../../core/models/vote.model';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,6 +17,8 @@ import { LanguageService } from '@abraxas/voting-lib';
   standalone: false,
 })
 export class VoteStandardBallotComponent {
+  private readonly i18n = inject(TranslateService);
+
   public readonly domainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
   public readonly federalIdentificationMaxValue: number = 2147483647;
 
@@ -37,8 +39,6 @@ export class VoteStandardBallotComponent {
 
   public ballotQuestion?: BallotQuestion;
   private _eVoting?: boolean;
-
-  constructor(private readonly i18n: TranslateService) {}
 
   @Input()
   public set vote(value: Vote) {

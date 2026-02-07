@@ -6,7 +6,7 @@
 
 import { RadioButton } from '@abraxas/base-components';
 import { EnumItemDescription, EnumUtil, NumberUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { newVote, Vote, VoteResultEntry, VoteReviewProcedure } from '../../core/models/vote.model';
 
@@ -17,6 +17,8 @@ import { newVote, Vote, VoteResultEntry, VoteReviewProcedure } from '../../core/
   standalone: false,
 })
 export class VoteErfassungInformationsComponent {
+  private readonly i18n = inject(TranslateService);
+
   @Input()
   public data: Vote = newVote();
 
@@ -38,12 +40,12 @@ export class VoteErfassungInformationsComponent {
   public resultEntryChoices: EnumItemDescription<VoteResultEntry>[];
   public resultEntryType: typeof VoteResultEntry = VoteResultEntry;
   public automaticBallotBundleNumberGenerationChoices: RadioButton[];
+  public automaticBallotNumberGenerationChoices: RadioButton[];
   public reviewProcedureChoices: RadioButton[];
 
-  constructor(
-    enumUtil: EnumUtil,
-    private readonly i18n: TranslateService,
-  ) {
+  constructor() {
+    const enumUtil = inject(EnumUtil);
+
     this.resultEntryChoices = enumUtil.getArrayWithDescriptions<VoteResultEntry>(VoteResultEntry, 'VOTE.RESULT_ENTRY.TYPES.');
 
     this.automaticBallotBundleNumberGenerationChoices = [
@@ -54,6 +56,16 @@ export class VoteErfassungInformationsComponent {
       {
         value: false,
         displayText: this.i18n.instant('VOTE.BALLOT_BUNDLE_NUMBER_GENERATION.MANUAL'),
+      },
+    ];
+    this.automaticBallotNumberGenerationChoices = [
+      {
+        value: true,
+        displayText: this.i18n.instant('VOTE.BALLOT_NUMBER_GENERATION.AUTOMATIC'),
+      },
+      {
+        value: false,
+        displayText: this.i18n.instant('VOTE.BALLOT_NUMBER_GENERATION.MANUAL'),
       },
     ];
 

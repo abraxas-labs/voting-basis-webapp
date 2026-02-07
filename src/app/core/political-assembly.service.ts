@@ -5,7 +5,7 @@
  */
 
 import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
@@ -24,7 +24,9 @@ import {
   providedIn: 'root',
 })
 export class PoliticalAssemblyService extends GrpcService<PoliticalAssemblyServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(PoliticalAssemblyServicePromiseClient, environment, grpcBackend);
   }
 

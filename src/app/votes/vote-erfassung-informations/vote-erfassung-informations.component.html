@@ -18,13 +18,13 @@
                  [subscriptSizing]="'dynamic'"></bc-checkbox>
   </div>
 
-  <ng-container *ngIf="data.resultEntry === resultEntryType.VOTE_RESULT_ENTRY_DETAILED">
+  @if (data.resultEntry === resultEntryType.VOTE_RESULT_ENTRY_DETAILED) {
     <bc-number [label]="'VOTE.BALLOT_BUNDLE_SAMPLE_SIZE_PERCENT' | translate"
-               [readonly]="testingPhaseEnded || locked || readonly"
-               [max]="100"
-               [value]="ballotBundleSampleSizePercent"
-               (valueChange)="ballotBundleSampleSizePercent = $event; contentChanged.emit()"
-               [subscriptSizing]="'dynamic'"></bc-number>
+      [readonly]="testingPhaseEnded || locked || readonly"
+      [max]="100"
+      [value]="ballotBundleSampleSizePercent"
+      (valueChange)="ballotBundleSampleSizePercent = $event; contentChanged.emit()"
+      [subscriptSizing]="'dynamic'"></bc-number>
     <div class="ballot-numbers">
       <div>
         <bc-label class="full-width" [label]="'VOTE.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
@@ -33,6 +33,19 @@
                                orientation="vertical"
                                [value]="data.automaticBallotBundleNumberGeneration"
                                (valueChange)="data.automaticBallotBundleNumberGeneration = $event; contentChanged.emit()"
+                               [disabled]="testingPhaseEnded || locked || readonly"
+                               [subscriptSizing]="'dynamic'">
+        </bc-radio-button-group>
+      </div>
+    </div>
+    <div class="ballot-numbers">
+      <div>
+        <bc-label class="full-width" [label]="'VOTE.BALLOT_NUMBER_GENERATION.TITLE' | translate"></bc-label>
+        <bc-radio-button-group class="mt-2"
+                               [items]="automaticBallotNumberGenerationChoices"
+                               orientation="vertical"
+                               [value]="data.automaticBallotNumberGeneration"
+                               (valueChange)="data.automaticBallotNumberGeneration = $event; contentChanged.emit()"
                                [disabled]="testingPhaseEnded || locked || readonly"
                                [subscriptSizing]="'dynamic'">
         </bc-radio-button-group>
@@ -54,5 +67,5 @@
                    [disabled]="testingPhaseEnded || locked || readonly"
                    [subscriptSizing]="'dynamic'"></bc-checkbox>
     </div>
-  </ng-container>
+  }
 </div>

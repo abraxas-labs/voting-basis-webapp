@@ -5,7 +5,7 @@
  */
 
 import { DialogService, EnumUtil } from '@abraxas/voting-lib';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CantonSettingsService } from '../../core/canton-settings.service';
 import { CantonSettings, newCantonSettings } from '../../core/models/canton-settings.model';
 import { DomainOfInfluenceCanton } from '../../core/models/domain-of-influence.model';
@@ -23,6 +23,11 @@ import { Permissions } from '../../core/models/permissions.model';
   standalone: false,
 })
 export class CantonSettingsOverviewComponent implements OnInit {
+  private readonly cantonSettingsService = inject(CantonSettingsService);
+  private readonly permissionService = inject(PermissionService);
+  private readonly dialogService = inject(DialogService);
+  private readonly enumUtil = inject(EnumUtil);
+
   public readonly columns = ['name', 'shortName', 'authority'];
 
   public loading: boolean = true;
@@ -30,13 +35,6 @@ export class CantonSettingsOverviewComponent implements OnInit {
   public canEdit: boolean = false;
 
   public cantonSettingsList: CantonSettings[] = [];
-
-  constructor(
-    private readonly cantonSettingsService: CantonSettingsService,
-    private readonly permissionService: PermissionService,
-    private readonly dialogService: DialogService,
-    private readonly enumUtil: EnumUtil,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     try {

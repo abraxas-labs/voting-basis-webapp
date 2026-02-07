@@ -7,7 +7,7 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
@@ -29,7 +29,19 @@ import { Permissions } from '../../core/models/permissions.model';
   templateUrl: './proportional-election-edit.component.html',
   standalone: false,
 })
-export class ProportionalElectionEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
+export class ProportionalElectionEditComponent implements OnInit, HasUnsavedChanges {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly location = inject(Location);
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly contestService = inject(ContestService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly proportionalElectionUnionService = inject(ProportionalElectionUnionService);
+  private readonly dialogService = inject(DialogService);
+  private readonly permissionService = inject(PermissionService);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -57,21 +69,6 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
 
   private persistedData: ProportionalElection = newProportionalElection();
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly cd: ChangeDetectorRef,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly location: Location,
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly contestService: ContestService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly proportionalElectionUnionService: ProportionalElectionUnionService,
-    private readonly dialogService: DialogService,
-    private readonly permissionService: PermissionService,
-  ) {}
-
   public async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.params.proportionalElectionId;
     this.isNew = !id;
@@ -93,12 +90,6 @@ export class ProportionalElectionEditComponent implements OnInit, AfterContentCh
     } finally {
       this.initialLoading = false;
     }
-  }
-
-  public ngAfterContentChecked(): void {
-    // prevent mat-stepper from showing other icon types, which it does by default
-    this.stepper._getIndicatorType = () => 'number';
-    this.cd.detectChanges();
   }
 
   public get hasUnsavedChanges(): boolean {

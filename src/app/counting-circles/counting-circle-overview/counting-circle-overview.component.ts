@@ -5,7 +5,7 @@
  */
 
 import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
@@ -26,6 +26,16 @@ import { EventType } from '../../core/models/event-log.model';
   standalone: false,
 })
 export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly i18n = inject(TranslateService);
+  private readonly permissionService = inject(PermissionService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly countingCircleService = inject(CountingCircleService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly dialogService = inject(DialogService);
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly eventLog = inject(EventLogService);
+
   public readonly nameColumn = 'name';
   public readonly bfsColumn = 'bfs';
   public readonly codeColumn = 'code';
@@ -64,18 +74,6 @@ export class CountingCircleOverviewComponent implements OnInit, AfterViewInit, O
   public stateList: EnumItemDescription<CountingCircleState>[] = [];
 
   private changesSubscription?: Subscription;
-
-  constructor(
-    private readonly router: Router,
-    private readonly i18n: TranslateService,
-    private readonly permissionService: PermissionService,
-    private readonly snackbarService: SnackbarService,
-    private readonly countingCircleService: CountingCircleService,
-    private readonly route: ActivatedRoute,
-    private readonly dialogService: DialogService,
-    private readonly enumUtil: EnumUtil,
-    private readonly eventLog: EventLogService,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     this.stateList = this.enumUtil.getArrayWithDescriptions<CountingCircleState>(CountingCircleState, 'COUNTING_CIRCLE.STATES.');

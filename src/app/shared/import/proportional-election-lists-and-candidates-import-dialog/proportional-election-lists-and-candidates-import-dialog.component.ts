@@ -7,7 +7,7 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterContentChecked, ChangeDetectorRef, Component, Inject, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { ImportService } from '../../../core/import.service';
@@ -16,7 +16,7 @@ import { ImportFileContent, ImportType, ProportionalElectionListImport } from '.
 import { ProportionalElection, ProportionalElectionListUnionProto } from '../../../core/models/proportional-election.model';
 import { ProportionalElectionPartyMappingService } from '../../../core/proportional-election-party-mapping.service';
 import { flatMap } from '../../../core/utils/array.utils';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-proportional-election-lists-and-candidates-import-dialog',
@@ -24,7 +24,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./proportional-election-lists-and-candidates-import-dialog.component.scss'],
   standalone: false,
 })
-export class ProportionalElectionListsAndCandidatesImportDialogComponent implements AfterContentChecked {
+export class ProportionalElectionListsAndCandidatesImportDialogComponent {
+  private readonly dialogRef = inject<MatDialogRef<ProportionalElectionListsAndCandidatesImportDialogComponent>>(MatDialogRef);
+  private readonly importService = inject(ImportService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly partyMappingService = inject(ProportionalElectionPartyMappingService);
+
   public saving: boolean = false;
   public loadingParties: boolean = false;
   public lastStep: boolean = false;
@@ -38,16 +45,9 @@ export class ProportionalElectionListsAndCandidatesImportDialogComponent impleme
   @ViewChild(SimpleStepperComponent, { static: true })
   public stepper!: SimpleStepperComponent;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<ProportionalElectionListsAndCandidatesImportDialogComponent>,
-    private readonly importService: ImportService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly cd: ChangeDetectorRef,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly partyMappingService: ProportionalElectionPartyMappingService,
-    @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionListsAndCandidatesImportDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ProportionalElectionListsAndCandidatesImportDialogData>(MAT_DIALOG_DATA);
+
     this.proportionalElection = dialogData.proportionalElection;
   }
 
@@ -56,12 +56,6 @@ export class ProportionalElectionListsAndCandidatesImportDialogComponent impleme
       (!!this.proportionalElectionLists && this.proportionalElectionLists.length > 0) ||
       (!!this.proportionalElectionListUnions && this.proportionalElectionListUnions.length > 0)
     );
-  }
-
-  public ngAfterContentChecked(): void {
-    // prevent mat-stepper from showing other icon types, which it does by default
-    this.stepper._getIndicatorType = () => 'number';
-    this.cd.detectChanges();
   }
 
   public importFilesChanged(files: ImportFileContent[]): void {

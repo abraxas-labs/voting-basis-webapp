@@ -4,9 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { ThemeService } from '@abraxas/voting-lib';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter, startWith, Subscription } from 'rxjs';
 
 @Component({
@@ -15,6 +15,8 @@ import { filter, startWith, Subscription } from 'rxjs';
   standalone: false,
 })
 export class SideNavComponent implements OnDestroy {
+  private readonly router = inject(Router);
+
   public readonly contestNavIndex: number = 1;
   public readonly contestUrl: string = 'contests';
   public readonly countingCircleNavIndex: number = 2;
@@ -31,11 +33,9 @@ export class SideNavComponent implements OnDestroy {
 
   private routerSubscription: Subscription;
 
-  constructor(
-    themeService: ThemeService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-  ) {
+  constructor() {
+    const themeService = inject(ThemeService);
+
     themeService.theme$.subscribe(theme => (this.theme = theme ?? ''));
     this.routerSubscription = this.router.events
       .pipe(

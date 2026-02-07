@@ -35,4 +35,5 @@ export interface BallotGroupUiEntry {
   candidates: MajorityElectionCandidate[];
   selectedCandidateIds: string[];
   entry: MajorityElectionBallotGroupEntry;
+  isSecondaryMajorityElection: boolean;
 }

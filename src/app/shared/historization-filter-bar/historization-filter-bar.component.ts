@@ -5,7 +5,7 @@
  */
 
 import { RadioButton } from '@abraxas/base-components';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import moment, { Moment } from 'moment';
 import { TranslateService } from '../../core/translate.service';
 
@@ -16,6 +16,8 @@ import { TranslateService } from '../../core/translate.service';
   standalone: false,
 })
 export class HistorizationFilterBarComponent {
+  private readonly i18n = inject(TranslateService);
+
   public date?: Moment;
   public statusChoices: RadioButton[];
   public isCurrentStatus: boolean = true;
@@ -27,7 +29,7 @@ export class HistorizationFilterBarComponent {
   @Output()
   public filterChange: EventEmitter<HistorizationFilter> = new EventEmitter<HistorizationFilter>();
 
-  constructor(private readonly i18n: TranslateService) {
+  constructor() {
     this.statusChoices = [
       {
         value: true,

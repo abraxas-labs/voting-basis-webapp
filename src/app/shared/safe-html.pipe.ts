@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Pipe({
@@ -12,7 +12,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   standalone: false,
 })
 export class SafeHtmlPipe implements PipeTransform {
-  constructor(private readonly sanitizer: DomSanitizer) {}
+  private readonly sanitizer = inject(DomSanitizer);
 
   public transform(value: string): SafeHtml {
     // Note that this could be a dangerous operation. It should only be used on trusted input.

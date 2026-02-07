@@ -4,17 +4,13 @@
  * For license information see LICENSE file.
  */
 
-import { EnumUtil } from '@abraxas/voting-lib';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ProportionalElectionImport } from 'src/app/core/models/import.model';
-import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-influence-report-level.service';
-import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { PartyMappingContainer } from '../../../core/models/domain-of-influence-party.model';
-import { ProportionalElection, ProportionalElectionMandateAlgorithm } from '../../../core/models/proportional-election.model';
+import { ProportionalElection } from '../../../core/models/proportional-election.model';
 import { ProportionalElectionPartyMappingService } from '../../../core/proportional-election-party-mapping.service';
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
 import { ImportPoliticalBusinessEditComponent } from '../import-political-business-edit/import-political-business-edit.component';
-import { PermissionService } from '../../../core/permission.service';
 
 @Component({
   selector: 'app-import-proportional-election-edit',
@@ -23,19 +19,15 @@ import { PermissionService } from '../../../core/permission.service';
   standalone: false,
 })
 export class ImportProportionalElectionEditComponent extends ImportPoliticalBusinessEditComponent<ProportionalElection> {
+  private readonly proportionalElectionPartyMappingService = inject(ProportionalElectionPartyMappingService);
+
   public loadingParties: boolean = false;
   public partyMappings?: PartyMappingContainer;
 
   private proportionalElectionImport?: ProportionalElectionImport;
 
-  constructor(
-    enumUtil: EnumUtil,
-    doiReportLevelService: DomainOfInfluenceReportLevelService,
-    domainOfInfluenceService: DomainOfInfluenceService,
-    permissionService: PermissionService,
-    private readonly proportionalElectionPartyMappingService: ProportionalElectionPartyMappingService,
-  ) {
-    super(enumUtil, doiReportLevelService, domainOfInfluenceService, permissionService);
+  constructor() {
+    super();
   }
 
   @Input()

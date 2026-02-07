@@ -1,9 +1,9 @@
 <div class="grid">
   <div left>
-    <bc-spinner class="block" *ngIf="loading; else listOverview"></bc-spinner>
-    <ng-template #listOverview>
+    @if (loading) {
+      <bc-spinner class="block"></bc-spinner>
+    } @else {
       <h2 translate>PROPORTIONAL_ELECTION.LIST.TITLE</h2>
-
       <div class="buttons">
         <bc-button
           variant="tertiary"
@@ -12,7 +12,6 @@
           [label]="'PROPORTIONAL_ELECTION.LIST.NEW' | translate"
           (buttonClick)="createList()"
         ></bc-button>
-
         <bc-button
           [disabled]="testingPhaseEnded || locked || readonly"
           variant="tertiary"
@@ -20,16 +19,15 @@
           [label]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
           (buttonClick)="importListsAndCandidates()"
         ></bc-button>
-
-        <bc-button
-          *ngIf="hasHagenbachBischoffDistribution"
-          variant="tertiary"
-          (buttonClick)="manageListUnions()"
-          [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate"
-          [disabled]="testingPhaseEnded || locked || readonly"
-        ></bc-button>
+        @if (hasHagenbachBischoffDistribution) {
+          <bc-button
+            variant="tertiary"
+            (buttonClick)="manageListUnions()"
+            [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MANAGE' | translate"
+            [disabled]="testingPhaseEnded || locked || readonly"
+          ></bc-button>
+        }
       </div>
-
       <bc-table
         selection
         class="w-full"
@@ -38,7 +36,9 @@
         [cdkDropListData]="lists"
         [cdkDropListDisabled]="testingPhaseEnded || locked || readonly"
         (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)"
-      >
+        [sticky]="true"
+        [height]="'34rem'"
+        >
         <ng-container columnDef="orderNumber">
           <bc-header-cell *headerCellDef>
             <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate"></app-truncated-value>
@@ -89,16 +89,19 @@
         <ng-container columnDef="actions">
           <bc-header-cell *headerCellDef></bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
-            <div *ngIf="!locked && !readonly" class="flex">
-              <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
-              <bc-icon
-                *ngIf="!testingPhaseEnded && !locked && !readonly"
-                class="ml-2"
-                (click)="deleteList(element); $event.stopPropagation()"
-                icon="trash"
-                iconColor="error"
-              ></bc-icon>
-            </div>
+            @if (!locked && !readonly && element !== placeholderList) {
+              <div class="flex">
+                <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
+                @if (!testingPhaseEnded && !locked && !readonly) {
+                  <bc-icon
+                    class="ml-2"
+                    (click)="deleteList(element); $event.stopPropagation()"
+                    icon="trash"
+                    iconColor="error"
+                  ></bc-icon>
+                }
+              </div>
+            }
           </bc-data-cell>
         </ng-container>
 
@@ -112,7 +115,7 @@
           [selectionRowValue]="row"
           (click)="rowSelection.toggle(); selectList(row)"
           cdkDrag
-          [cdkDragDisabled]="testingPhaseEnded || locked"
+          [cdkDragDisabled]="testingPhaseEnded || locked || row === placeholderList"
           [cdkDragData]="row"
         ></bc-data-row>
         <ng-template #listUnionDescriptionCol let-element>
@@ -121,13 +124,13 @@
           <div class="list-union-description" [innerHTML]="element | safeHtml"></div>
         </ng-template>
       </bc-table>
-    </ng-template>
+    }
   </div>
 
   <bc-divider orientation="vertical" class="ml-4"></bc-divider>
 
   <div right>
-    <ng-container *ngIf="selectedList; else noListSelected">
+    @if (selectedList) {
       <h2>{{ selectedList.shortDescription | getTranslation }}</h2>
       <app-proportional-election-candidates
         [list]="selectedList"
@@ -143,11 +146,10 @@
         (candidateUpdated)="candidateAccumulationUpdated(selectedList, $event.candidate.accumulated, $event.wasAccumulated)"
         [maxCandidateCount]="proportionalElection.numberOfMandates - selectedList.blankRowCount"
         [parties]="parties"
-      >
+        >
       </app-proportional-election-candidates>
-    </ng-container>
-    <ng-template #noListSelected>
+    } @else {
       <p class="no-items-message" translate>PROPORTIONAL_ELECTION.LIST.NO_LIST_SELECTED</p>
-    </ng-template>
+    }
   </div>
 </div>

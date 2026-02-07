@@ -6,12 +6,12 @@
 
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
-import { AfterContentChecked, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep } from 'lodash';
 import { CountingCircleService } from '../../core/counting-circle.service';
 import { CountingCircle, CountingCirclesMerger, newCountingCirclesMerger } from '../../core/models/counting-circle.model';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-counting-circle-merger-dialog',
@@ -19,7 +19,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./counting-circle-merger-dialog.component.scss'],
   standalone: false,
 })
-export class CountingCircleMergerDialogComponent implements OnInit, AfterContentChecked {
+export class CountingCircleMergerDialogComponent implements OnInit {
+  private readonly countingCircleService = inject(CountingCircleService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly dialogRef = inject<MatDialogRef<CountingCirclesMergerDialogData>>(MatDialogRef);
+
   public loading: boolean = true;
   public saving: boolean = false;
   public selectableCountingCircles: CountingCircle[] = [];
@@ -32,14 +37,9 @@ export class CountingCircleMergerDialogComponent implements OnInit, AfterContent
   @ViewChild(SimpleStepperComponent, { static: true })
   public stepper!: SimpleStepperComponent;
 
-  constructor(
-    private readonly countingCircleService: CountingCircleService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly dialogRef: MatDialogRef<CountingCirclesMergerDialogData>,
-    private readonly cd: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) data: CountingCirclesMergerDialogData,
-  ) {
+  constructor() {
+    const data = inject<CountingCirclesMergerDialogData>(MAT_DIALOG_DATA);
+
     if (data.entry === undefined) {
       this.isNew = true;
       this.merger = newCountingCirclesMerger();
@@ -71,12 +71,6 @@ export class CountingCircleMergerDialogComponent implements OnInit, AfterContent
     } finally {
       this.loading = false;
     }
-  }
-
-  public ngAfterContentChecked(): void {
-    // prevent mat-stepper from showing other icon types, which it does by default
-    this.stepper._getIndicatorType = () => 'number';
-    this.cd.detectChanges();
   }
 
   public async completeCurrentStep(): Promise<void> {

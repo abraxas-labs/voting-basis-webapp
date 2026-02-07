@@ -5,17 +5,18 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { ProportionalElection, ProportionalElectionMandateAlgorithm } from '../../core/models/proportional-election.model';
 import { DomainOfInfluenceCanton, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-proportional-election-mandate-algorithm-selection',
   templateUrl: './proportional-election-mandate-algorithm-selection.component.html',
-  styleUrl: './proportional-election-mandate-algorithm-selection.component.scss',
   standalone: false,
 })
 export class ProportionalElectionMandateAlgorithmSelectionComponent implements OnInit {
+  private readonly enumUtil = inject(EnumUtil);
+
   private domainOfInfluenceTypeValue?: DomainOfInfluenceType;
 
   private defaultMandateAlgorithms: EnumItemDescription<ProportionalElectionMandateAlgorithm>[] = [];
@@ -50,8 +51,6 @@ export class ProportionalElectionMandateAlgorithmSelectionComponent implements O
 
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
-
-  constructor(private readonly enumUtil: EnumUtil) {}
 
   public ngOnInit(): void {
     this.defaultMandateAlgorithms = this.mandateAlgorithms = this.enumUtil

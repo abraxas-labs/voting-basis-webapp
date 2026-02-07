@@ -2,25 +2,27 @@
   <h1 header translate>POLITICAL_BUSINESS_UNION.TITLE</h1>
   <div content class="grid">
     <div class="pt-5">
-      <bc-spinner class="block" *ngIf="loading; else politicalBusinessUnionOverview"></bc-spinner>
-      <ng-template #politicalBusinessUnionOverview>
+      @if (loading) {
+        <bc-spinner class="block"></bc-spinner>
+      } @else {
         <div class="buttons">
-          <bc-button
-            *ngIf="cantonDefaults.enabledPoliticalBusinessUnionTypesList.length > 0"
-            variant="tertiary"
-            icon="plus"
-            [label]="'POLITICAL_BUSINESS_UNION.ADD' | translate"
-            [disabled]="disabled"
-            (buttonClick)="createPoliticalBusinessUnion()"
-          ></bc-button>
-
-          <bc-button
-            *ngIf="selectedPoliticalBusinessUnion && (selectedPoliticalBusinessUnion.secureConnectId === tenantId || hasAdminPermissions)"
-            variant="tertiary"
-            [disabled]="disabled"
-            [label]="'POLITICAL_BUSINESS_UNION.ASSIGN' | translate"
-            (buttonClick)="updateAssignedPoliticalBusinesses()"
-          ></bc-button>
+          @if (cantonDefaults.enabledPoliticalBusinessUnionTypesList.length > 0) {
+            <bc-button
+              variant="tertiary"
+              icon="plus"
+              [label]="'POLITICAL_BUSINESS_UNION.ADD' | translate"
+              [disabled]="disabled"
+              (buttonClick)="createPoliticalBusinessUnion()"
+            ></bc-button>
+          }
+          @if (selectedPoliticalBusinessUnion && (selectedPoliticalBusinessUnion.secureConnectId === tenantId || hasAdminPermissions)) {
+            <bc-button
+              variant="tertiary"
+              [disabled]="disabled"
+              [label]="'POLITICAL_BUSINESS_UNION.ASSIGN' | translate"
+              (buttonClick)="updateAssignedPoliticalBusinesses()"
+            ></bc-button>
+          }
         </div>
 
         <bc-table selection class="w-full" [dataSource]="politicalBusinessUnions">
@@ -45,25 +47,27 @@
           <ng-container columnDef="owner">
             <bc-header-cell *headerCellDef></bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <app-truncated-value
-                *ngIf="element.secureConnectId === tenantId"
-                [value]="'POLITICAL_BUSINESS_UNION.OWN_POLITICAL_BUSINESS_UNION' | translate"
-              ></app-truncated-value>
+              @if (element.secureConnectId === tenantId) {
+                <app-truncated-value
+                  [value]="'POLITICAL_BUSINESS_UNION.OWN_POLITICAL_BUSINESS_UNION' | translate"
+                ></app-truncated-value>
+              }
             </bc-data-cell>
           </ng-container>
-
           <ng-container columnDef="actions">
             <bc-header-cell *headerCellDef></bc-header-cell>
             <bc-data-cell *dataCellDef="let element">
-              <div *ngIf="element.secureConnectId === tenantId || hasAdminPermissions" class="flex">
-                <bc-icon (click)="editPoliticalBusinessUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
-                <bc-icon
-                  class="ml-2"
-                  (click)="deletePoliticalBusinessUnion(element); $event.stopPropagation()"
-                  icon="trash"
-                  iconColor="error"
-                ></bc-icon>
-              </div>
+              @if (element.secureConnectId === tenantId || hasAdminPermissions) {
+                <div class="flex">
+                  <bc-icon (click)="editPoliticalBusinessUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
+                  <bc-icon
+                    class="ml-2"
+                    (click)="deletePoliticalBusinessUnion(element); $event.stopPropagation()"
+                    icon="trash"
+                    iconColor="error"
+                  ></bc-icon>
+                </div>
+              }
             </bc-data-cell>
           </ng-container>
 
@@ -77,24 +81,21 @@
             (click)="selectPoliticalBusinessUnion(row)"
           ></bc-data-row>
         </bc-table>
-      </ng-template>
+      }
     </div>
     <bc-divider orientation="vertical" class="ml-4"></bc-divider>
     <div>
-      <ng-container *ngIf="selectedPoliticalBusinessUnion">
+      @if (selectedPoliticalBusinessUnion) {
         <h2 translate>POLITICAL_BUSINESS_UNION.DETAIL.TITLE</h2>
-
-        <ng-container
-          *ngIf="selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_PROPORTIONAL_ELECTION"
-        >
+        @if (selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_PROPORTIONAL_ELECTION) {
           <app-proportional-election-union-detail [politicalBusinessUnion]="selectedPoliticalBusinessUnion">
           </app-proportional-election-union-detail>
-        </ng-container>
-        <ng-container *ngIf="selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_MAJORITY_ELECTION">
+        }
+        @if (selectedPoliticalBusinessUnion.type === PoliticalBusinessUnionType.POLITICAL_BUSINESS_UNION_MAJORITY_ELECTION) {
           <app-majority-election-union-detail [politicalBusinessUnion]="selectedPoliticalBusinessUnion">
           </app-majority-election-union-detail>
-        </ng-container>
-      </ng-container>
+        }
+      }
     </div>
   </div>
 

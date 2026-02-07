@@ -6,12 +6,12 @@
                           labelPosition="bottom"
                           linear>
     <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
-      <ng-container *ngIf="data.contestId">
+      @if (data.contestId) {
         <app-vote-general-informations #step1
-                                       [data]="data"
-                                       [isNew]="isNew"
-                                       [locked]="locked"
-                                       (contentChanged)="contentChanged()"></app-vote-general-informations>
+          [data]="data"
+          [isNew]="isNew"
+          [locked]="locked"
+          (contentChanged)="contentChanged()"></app-vote-general-informations>
         <div class="stepper-footer">
           <vo-lib-inline-spinner class="align-right"
                                  position="left"
@@ -22,7 +22,7 @@
                        (buttonClick)="submitVote()"></bc-button>
           </vo-lib-inline-spinner>
         </div>
-      </ng-container>
+      }
     </bc-simple-step>
 
     <bc-simple-step [label]="'VOTE.BALLOT.TITLE' | translate" [disabled]="!step1?.canSave || stepLoading">

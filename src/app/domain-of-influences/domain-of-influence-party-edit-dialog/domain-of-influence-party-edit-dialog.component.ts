@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DomainOfInfluenceParty, newDomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LanguageService } from '@abraxas/voting-lib';
@@ -15,13 +15,14 @@ import { LanguageService } from '@abraxas/voting-lib';
   standalone: false,
 })
 export class DomainOfInfluencePartyEditDialogComponent {
+  readonly dialogRef = inject<MatDialogRef<DomainOfInfluencePartyEditDialogData>>(MatDialogRef);
+
   public readonly isNew: boolean = false;
   public readonly party: DomainOfInfluenceParty = newDomainOfInfluenceParty();
 
-  constructor(
-    public readonly dialogRef: MatDialogRef<DomainOfInfluencePartyEditDialogData>,
-    @Inject(MAT_DIALOG_DATA) dialogData: DomainOfInfluencePartyEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<DomainOfInfluencePartyEditDialogData>(MAT_DIALOG_DATA);
+
     this.party = dialogData.party;
     this.isNew = !this.party.id;
   }

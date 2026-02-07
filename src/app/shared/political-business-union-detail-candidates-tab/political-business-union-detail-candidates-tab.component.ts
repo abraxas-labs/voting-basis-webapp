@@ -5,7 +5,7 @@
  */
 
 import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild, inject } from '@angular/core';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
 import { ElectionCandidate } from '../../core/models/election-candidate.model';
 import { PoliticalBusinessUnion, PoliticalBusinessUnionType } from '../../core/models/political-business-union.model';
@@ -18,6 +18,9 @@ import { ProportionalElectionUnionService } from '../../core/proportional-electi
   standalone: false,
 })
 export class PoliticalBusinessUnionDetailCandidatesTabComponent implements AfterViewInit {
+  private readonly proportionalElectionUnionService = inject(ProportionalElectionUnionService);
+  private readonly majorityElectionUnionService = inject(MajorityElectionUnionService);
+
   public readonly columns = ['number', 'lastName', 'firstName', 'dateOfBirth', 'sex', 'title', 'incumbent', 'zipCode', 'locality'];
 
   @ViewChild('paginator') public paginator!: PaginatorComponent;
@@ -26,11 +29,6 @@ export class PoliticalBusinessUnionDetailCandidatesTabComponent implements After
   public dataSource = new TableDataSource<ElectionCandidate>();
 
   private politicalBusinessUnionValue!: PoliticalBusinessUnion;
-
-  constructor(
-    private readonly proportionalElectionUnionService: ProportionalElectionUnionService,
-    private readonly majorityElectionUnionService: MajorityElectionUnionService,
-  ) {}
 
   public ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

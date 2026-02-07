@@ -5,25 +5,27 @@
            (valueChange)="data.politicalBusinessNumber = $event; setIsApplied(false)"
            [subscriptSizing]="'dynamic'"></bc-text>
 
-  <bc-dropdown class="full-width"
-               *ngIf="domainOfInfluenceTypes.length > 1"
-               [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
-               [items]="domainOfInfluenceTypes"
-               [clearable]="false"
-               displayExpr="description"
-               valueExpr="value"
-               [required]="true"
-               [(value)]="selectedDomainOfInfluenceType"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  @if (domainOfInfluenceTypes.length > 1) {
+    <bc-dropdown class="full-width"
+      [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
+      [items]="domainOfInfluenceTypes"
+      [clearable]="false"
+      displayExpr="description"
+      valueExpr="value"
+      [required]="true"
+      [(value)]="selectedDomainOfInfluenceType"
+      [subscriptSizing]="'dynamic'"></bc-dropdown>
+  }
 
-  <bc-dropdown class="full-width"
-               *ngIf="selectedDomainOfInfluenceType"
-               [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
-               displayExpr="name"
-               [required]="true"
-               [(value)]="selectedDomainOfInfluence"
-               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  @if (selectedDomainOfInfluenceType) {
+    <bc-dropdown class="full-width"
+      [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
+      displayExpr="name"
+      [required]="true"
+      [(value)]="selectedDomainOfInfluence"
+      [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
+      [subscriptSizing]="'dynamic'"></bc-dropdown>
+  }
 
   <bc-dropdown class="full-width"
                [items]="domainOfInfluenceLevels"
@@ -57,7 +59,9 @@
   </app-majority-election-candidate-list>
 
   <div class="button-container">
-    <bc-icon *ngIf="isApplied" class="mr-2" iconColor="success" icon="checkmark"></bc-icon>
+    @if (isApplied) {
+      <bc-icon class="mr-2" iconColor="success" icon="checkmark"></bc-icon>
+    }
     <bc-button
       variant="primary"
      [label]="'ACTIONS.APPLY' | translate"

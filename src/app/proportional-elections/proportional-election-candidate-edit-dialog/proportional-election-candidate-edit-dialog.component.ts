@@ -5,7 +5,7 @@
  */
 
 import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
@@ -30,6 +30,15 @@ import { isValidZipCode } from '../../core/utils/zip-code.utils';
   standalone: false,
 })
 export class ProportionalElectionCandidateEditDialogComponent implements OnInit, OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<ProportionalElectionCandidateEditDialogData>>(MatDialogRef);
+  private readonly i18n = inject(TranslateService);
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly getTranslationPipe = inject(GetTranslationPipe);
+  private readonly dialogService = inject(DialogService);
+  private readonly countryService = inject(CountryService);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -55,17 +64,9 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnInit,
   public originalCandidate: ProportionalElectionCandidate;
   public readonly backdropClickSubscription: Subscription;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<ProportionalElectionCandidateEditDialogData>,
-    private readonly i18n: TranslateService,
-    private readonly enumUtil: EnumUtil,
-    private readonly snackbarService: SnackbarService,
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly getTranslationPipe: GetTranslationPipe,
-    private readonly dialogService: DialogService,
-    private readonly countryService: CountryService,
-    @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionCandidateEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ProportionalElectionCandidateEditDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.candidate;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
     this.isNew = !this.data.id;

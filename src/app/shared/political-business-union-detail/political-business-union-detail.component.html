@@ -8,8 +8,10 @@
       <app-political-business-union-detail-candidates-tab [politicalBusinessUnion]="politicalBusinessUnion">
       </app-political-business-union-detail-candidates-tab>
     </bc-tab>
-    <bc-tab *ngIf="listTab" [label]="'POLITICAL_BUSINESS_UNION.DETAIL.LISTS' | translate">
-      <ng-container *ngTemplateOutlet="listTab"></ng-container>
-    </bc-tab>
+    @if (listTab) {
+      <bc-tab [label]="'POLITICAL_BUSINESS_UNION.DETAIL.LISTS' | translate">
+        <ng-container *ngTemplateOutlet="listTab"></ng-container>
+      </bc-tab>
+    }
   </bc-tab-bar>
 </ng-container>

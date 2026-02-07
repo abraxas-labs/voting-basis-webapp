@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, Output, inject } from '@angular/core';
 import { LanguageService, allLanguages } from '@abraxas/voting-lib';
 
 @Directive()
@@ -36,7 +36,8 @@ export abstract class TranslatedFieldComponent {
   private placeholderLang?: string;
   private emptyLanguages: Set<string> = new Set<string>();
 
-  protected constructor(languageService: LanguageService) {
+  protected constructor() {
+    const languageService = inject(LanguageService);
     this.currentLanguage = languageService.currentLanguage;
   }
 

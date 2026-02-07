@@ -67,17 +67,19 @@
     </bc-checkbox>
 
     <bc-label class="full-width" [label]="'CANTON_SETTINGS.PROPORTIONAL_ELECTION.MANDATE_ALGORITHM' | translate"></bc-label>
-    <bc-checkbox *ngFor="let proportionalElectionMandateAlgorithm of proportionalElectionMandateAlgorithms.items"
-                 [checked]="proportionalElectionMandateAlgorithm.checked"
+    @for (proportionalElectionMandateAlgorithm of proportionalElectionMandateAlgorithms.items; track proportionalElectionMandateAlgorithm) {
+      <bc-checkbox
+        [checked]="proportionalElectionMandateAlgorithm.checked"
                  (checkedChange)="
                   proportionalElectionMandateAlgorithms.updateChecked(proportionalElectionMandateAlgorithm, $event);
                   contentChanged()
                  "
-                 [label]="proportionalElectionMandateAlgorithm.item.description"
-                 class="full-width"
-                 [disabled]="readonly"
-                 [subscriptSizing]="'dynamic'">
-    </bc-checkbox>
+        [label]="proportionalElectionMandateAlgorithm.item.description"
+        class="full-width"
+        [disabled]="readonly"
+        [subscriptSizing]="'dynamic'">
+      </bc-checkbox>
+    }
 
     <h2 class="title" translate>CANTON_SETTINGS.MAJORITY_ELECTION.TITLE</h2>
 
@@ -181,39 +183,46 @@
     </bc-checkbox>
 
     <bc-label class="mt-2 full-width" [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.TITLE' | translate"></bc-label>
-    <div *ngFor="let countingCircleResultStateDescription of data.countingCircleResultStateDescriptionsList">
-      <div class="counting-circle-result-state-descriptions">
-        <div class="state-colorbox" [ngClass]="'result-state-' + countingCircleResultStateDescription.state"></div>
-        <div class="text-checkbox-container full-width">
-          <bc-text
-            [placeholder]="'COUNTING_CIRCLE_RESULT_STATE.' + countingCircleResultStateDescription.state | translate"
-            [readonly]="readonly"
-            [required]="true"
-            [value]="countingCircleResultStateDescription.description"
-            (valueChange)="countingCircleResultStateDescription.description = $event; contentChanged()"
-            [subscriptSizing]="'dynamic'"></bc-text>
-          <bc-checkbox *ngIf="countingCircleResultStateDescription.state === states.COUNTING_CIRCLE_RESULT_STATE_PLAUSIBILISED"
-                       class="mt-1"
-                       [checked]="!data.statePlausibilisedDisabled"
-                       (checkedChange)="data.statePlausibilisedDisabled = !$event; contentChanged()"
-                       [disabled]="readonly"
-                       [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.USE_STATE' | translate">
-          </bc-checkbox>
+    @for (
+      countingCircleResultStateDescription of data.countingCircleResultStateDescriptionsList;
+      track countingCircleResultStateDescription
+      ) {
+      <div>
+        <div class="counting-circle-result-state-descriptions">
+          <div class="state-colorbox" [ngClass]="'result-state-' + countingCircleResultStateDescription.state"></div>
+          <div class="text-checkbox-container full-width">
+            <bc-text
+              [placeholder]="'COUNTING_CIRCLE_RESULT_STATE.' + countingCircleResultStateDescription.state | translate"
+              [readonly]="readonly"
+              [required]="true"
+              [value]="countingCircleResultStateDescription.description"
+              (valueChange)="countingCircleResultStateDescription.description = $event; contentChanged()"
+              [subscriptSizing]="'dynamic'"></bc-text>
+            @if (countingCircleResultStateDescription.state === states.COUNTING_CIRCLE_RESULT_STATE_PLAUSIBILISED) {
+              <bc-checkbox
+                class="mt-1"
+                [checked]="!data.statePlausibilisedDisabled"
+                (checkedChange)="data.statePlausibilisedDisabled = !$event; contentChanged()"
+                [disabled]="readonly"
+                [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.USE_STATE' | translate">
+              </bc-checkbox>
+            }
+          </div>
         </div>
-
       </div>
-
-    </div>
+    }
 
     <bc-label class="mt-2 full-width" [label]="'CANTON_SETTINGS.POLITICAL_BUSINESS_UNIONS.TITLE' | translate"></bc-label>
-    <bc-checkbox *ngFor="let unionType of politicalBusinessUnionTypes.items"
-                 [checked]="unionType.checked"
-                 (checkedChange)="politicalBusinessUnionTypes.updateChecked(unionType, $event); contentChanged()"
-                 [disabled]="readonly"
-                 [label]="unionType.item.description"
-                 class="full-width"
-                 [subscriptSizing]="'dynamic'">
-    </bc-checkbox>
+    @for (unionType of politicalBusinessUnionTypes.items; track unionType) {
+      <bc-checkbox
+        [checked]="unionType.checked"
+        (checkedChange)="politicalBusinessUnionTypes.updateChecked(unionType, $event); contentChanged()"
+        [disabled]="readonly"
+        [label]="unionType.item.description"
+        class="full-width"
+        [subscriptSizing]="'dynamic'">
+      </bc-checkbox>
+    }
 
     <bc-dropdown class="full-width"
                  [label]="'CANTON_SETTINGS.SWISS_ABROAD_VOTING_RIGHT.TITLE' | translate"
@@ -227,30 +236,39 @@
                  [subscriptSizing]="'dynamic'"></bc-dropdown>
 
     <bc-label class="mt-2 full-width"
-              [label]="'CANTON_SETTINGS.SWISS_ABROAD_VOTING_RIGHT.DOMAIN_OF_INFLUENCE_TYPES' | translate"></bc-label>
-    <bc-checkbox *ngFor="let swissAbroadVotingRightDomainOfInfluenceType of swissAbroadVotingRightDomainOfInfluenceTypes.items"
-                 [checked]="swissAbroadVotingRightDomainOfInfluenceType.checked"
+    [label]="'CANTON_SETTINGS.SWISS_ABROAD_VOTING_RIGHT.DOMAIN_OF_INFLUENCE_TYPES' | translate"></bc-label>
+    @for (
+      swissAbroadVotingRightDomainOfInfluenceType of swissAbroadVotingRightDomainOfInfluenceTypes.items;
+      track swissAbroadVotingRightDomainOfInfluenceType
+      ) {
+      <bc-checkbox
+        [checked]="swissAbroadVotingRightDomainOfInfluenceType.checked"
                  (checkedChange)="
                   swissAbroadVotingRightDomainOfInfluenceTypes.updateChecked(swissAbroadVotingRightDomainOfInfluenceType, $event);
                   contentChanged()
                  "
-                 [disabled]="readonly"
-                 [label]="swissAbroadVotingRightDomainOfInfluenceType.item.description"
-                 class="full-width"
-                 [subscriptSizing]="'dynamic'">
-    </bc-checkbox>
+        [disabled]="readonly"
+        [label]="swissAbroadVotingRightDomainOfInfluenceType.item.description"
+        class="full-width"
+        [subscriptSizing]="'dynamic'">
+      </bc-checkbox>
+    }
 
     <h2 class="title" translate>CANTON_SETTINGS.VOTING_CARDS.TITLE</h2>
-    <p *ngIf="!votingCardChannels.atLeastOneChecked"
-       class="error mb-1 mt-0">{{'CANTON_SETTINGS.VOTING_CARDS.NONE_SELECTED' | translate}}</p>
-    <bc-checkbox *ngFor="let votingCardChannel of votingCardChannels.items"
-                 [checked]="votingCardChannel.checked"
-                 (checkedChange)="votingCardChannels.updateChecked(votingCardChannel, $event); contentChanged()"
-                 [disabled]="readonly"
-                 [label]="votingCardChannel.item.description"
-                 class="full-width"
-                 [subscriptSizing]="'dynamic'">
-    </bc-checkbox>
+    @if (!votingCardChannels.atLeastOneChecked) {
+      <p
+      class="error mb-1 mt-0">{{'CANTON_SETTINGS.VOTING_CARDS.NONE_SELECTED' | translate}}</p>
+    }
+    @for (votingCardChannel of votingCardChannels.items; track votingCardChannel) {
+      <bc-checkbox
+        [checked]="votingCardChannel.checked"
+        (checkedChange)="votingCardChannels.updateChecked(votingCardChannel, $event); contentChanged()"
+        [disabled]="readonly"
+        [label]="votingCardChannel.item.description"
+        class="full-width"
+        [subscriptSizing]="'dynamic'">
+      </bc-checkbox>
+    }
 
     <h2 class="title" translate>CANTON_SETTINGS.VOTING_DOCUMENTS.TITLE</h2>
     <bc-text [label]="'CANTON_SETTINGS.VOTING_DOCUMENTS.E_VOTING_EAI_MESSAGE_TYPE' | translate"

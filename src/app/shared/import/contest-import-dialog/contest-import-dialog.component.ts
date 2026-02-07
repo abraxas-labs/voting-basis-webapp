@@ -7,7 +7,7 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterContentChecked, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ImportService } from '../../../core/import.service';
 import { ContestImport, ImportFileContent } from '../../../core/models/import.model';
@@ -19,7 +19,12 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./contest-import-dialog.component.scss'],
   standalone: false,
 })
-export class ContestImportDialogComponent implements AfterContentChecked {
+export class ContestImportDialogComponent {
+  private readonly dialogRef = inject<MatDialogRef<ContestImportDialogComponent>>(MatDialogRef);
+  private readonly importService = inject(ImportService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+
   public importFiles: ImportFileContent[] = [];
   public contestImport?: ContestImport;
   public contestDomainOfInfluenceId?: string;
@@ -33,20 +38,6 @@ export class ContestImportDialogComponent implements AfterContentChecked {
   // Workaround, since #step3 is used in conjunction with ngIf
   @ViewChild('step3Content', { static: false })
   public step3Content?: ImportPoliticalBusinessesComponent;
-
-  constructor(
-    private readonly dialogRef: MatDialogRef<ContestImportDialogComponent>,
-    private readonly importService: ImportService,
-    private readonly cd: ChangeDetectorRef,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-  ) {}
-
-  public ngAfterContentChecked(): void {
-    // prevent mat-stepper from showing other icon types, which it does by default
-    this.stepper._getIndicatorType = () => 'number';
-    this.cd.detectChanges();
-  }
 
   public stepChange(event: StepperSelectionEvent): void {
     this.firstStep = event.selectedIndex === 0;

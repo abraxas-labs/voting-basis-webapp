@@ -1,9 +1,10 @@
-<bc-spinner class="block" *ngIf="loading; else candidateOverview"></bc-spinner>
-<ng-template #candidateOverview>
+@if (loading) {
+  <bc-spinner class="block"></bc-spinner>
+} @else {
   <h2 class="mt-4">
     {{
     'MAJORITY_ELECTION.CANDIDATE.TITLE_DESCRIPTION'
-      | translate: { name: (currentSecondaryMajorityElection?.shortDescription | getTranslation) }
+    | translate: { name: (currentSecondaryMajorityElection?.shortDescription | getTranslation) }
     }}
   </h2>
   <div class="flex">
@@ -24,19 +25,18 @@
                                         (delete)="deleteCandidate($event)"
                                         class="mb-2">
   </app-majority-election-candidate-list>
-
-  <app-majority-election-ballot-group-overview
-    *ngIf="showBallotGroups
-      && majorityElection
-      && currentSecondaryMajorityElection
-      && !currentSecondaryMajorityElection.isOnSeparateBallot"
-    [testingPhaseEnded]="testingPhaseEnded"
-    [locked]="locked"
-    [readonly]="readonly"
-    [loadBallotGroupsInitially]="true"
-    [majorityElection]="majorityElection"
-    [secondaryMajorityElections]="secondaryMajorityElections"
-    [forSecondaryElection]="currentSecondaryMajorityElection">
-  </app-majority-election-ballot-group-overview>
-
-</ng-template>
+  @if (showBallotGroups
+    && majorityElection
+    && currentSecondaryMajorityElection
+    && !currentSecondaryMajorityElection.isOnSeparateBallot) {
+    <app-majority-election-ballot-group-overview
+      [testingPhaseEnded]="testingPhaseEnded"
+      [locked]="locked"
+      [readonly]="readonly"
+      [loadBallotGroupsInitially]="true"
+      [majorityElection]="majorityElection"
+      [secondaryMajorityElections]="secondaryMajorityElections"
+      [forSecondaryElection]="currentSecondaryMajorityElection">
+    </app-majority-election-ballot-group-overview>
+  }
+}

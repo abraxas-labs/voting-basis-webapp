@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { LanguageService } from '@abraxas/voting-lib';
 
 @Pipe({
@@ -12,7 +12,7 @@ import { LanguageService } from '@abraxas/voting-lib';
   standalone: false,
 })
 export class GetTranslationPipe implements PipeTransform {
-  constructor(private readonly languageService: LanguageService) {}
+  private readonly languageService = inject(LanguageService);
 
   public transform(translations?: Map<string, string>): string {
     return this.languageService.getTranslationForCurrentLang(translations);

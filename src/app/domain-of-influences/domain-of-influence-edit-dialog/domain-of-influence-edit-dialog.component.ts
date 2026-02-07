@@ -6,7 +6,7 @@
 
 import { Tenant } from '@abraxas/base-components';
 import { AsyncInputValidators, DialogService, EnumItemDescription, EnumUtil, InputValidators, SnackbarService } from '@abraxas/voting-lib';
-import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
@@ -29,6 +29,16 @@ import { CantonSettingsService } from '../../core/canton-settings.service';
   standalone: false,
 })
 export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<DomainOfInfluenceEditDialogData>>(MatDialogRef);
+  private readonly permissionService = inject(PermissionService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly i18n = inject(TranslateService);
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly dialogService = inject(DialogService);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly cantonSettingsService = inject(CantonSettingsService);
+
   public readonly knownDomainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
 
   @HostListener('window:beforeunload')
@@ -65,18 +75,9 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public showPublishResults: boolean = false;
   public form!: FormGroup<Form>;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<DomainOfInfluenceEditDialogData>,
-    private readonly permissionService: PermissionService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly i18n: TranslateService,
-    private readonly enumUtil: EnumUtil,
-    private readonly snackbarService: SnackbarService,
-    private readonly dialogService: DialogService,
-    private readonly formBuilder: NonNullableFormBuilder,
-    private readonly cantonSettingsService: CantonSettingsService,
-    @Inject(MAT_DIALOG_DATA) dialogData: DomainOfInfluenceEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<DomainOfInfluenceEditDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.domainOfInfluence;
     this.data.parentId = dialogData.parent?.id || '';
     this.parentType = dialogData.parent?.type;
@@ -130,7 +131,6 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
           !!this.data.swissPostData.frankingLicenceAwayNumber &&
           !!this.data.swissPostData.frankingLicenceReturnNumber)) &&
       !(!this.data.responsibleForVotingCards && this.data.electoralRegistrationEnabled) &&
-      !(!this.data.electoralRegistrationEnabled && this.data.electoralRegisterMultipleEnabled) &&
       (!this.showInternalPlausibilisation ||
         (!!this.data.plausibilisationConfiguration &&
           this.data.plausibilisationConfiguration.comparisonVoterParticipationConfigurationsList.every(

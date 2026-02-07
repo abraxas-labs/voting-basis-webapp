@@ -5,9 +5,9 @@
  */
 
 import { SimpleStepperComponent } from '@abraxas/base-components';
-import { LanguageService, SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
@@ -27,7 +27,18 @@ import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-pa
   templateUrl: './secondary-majority-election-edit.component.html',
   standalone: false,
 })
-export class SecondaryMajorityElectionEditComponent implements OnInit, AfterContentChecked {
+export class SecondaryMajorityElectionEditComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly location = inject(Location);
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly secondaryMajorityElectionService = inject(SecondaryMajorityElectionService);
+  private readonly contestService = inject(ContestService);
+  private readonly doiService = inject(DomainOfInfluenceService);
+  private readonly permissionService = inject(PermissionService);
+
   @ViewChild(SimpleStepperComponent, { static: true })
   public stepper!: SimpleStepperComponent;
 
@@ -44,22 +55,8 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
   public domainOfInfluence?: DomainOfInfluence;
   public parties: DomainOfInfluenceParty[] = [];
   private persistedData: SecondaryMajorityElection = newSecondaryMajorityElection();
+  private readonly dialogService = inject(DialogService);
   public canEdit: boolean = false;
-
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly cd: ChangeDetectorRef,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly location: Location,
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
-    private readonly contestService: ContestService,
-    private readonly doiService: DomainOfInfluenceService,
-    private readonly languageService: LanguageService,
-    private readonly permissionService: PermissionService,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.params.secondaryMajorityElectionId;
@@ -94,12 +91,6 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
     }
   }
 
-  public ngAfterContentChecked(): void {
-    // prevent mat-stepper from showing other icon types, which it does by default
-    this.stepper._getIndicatorType = () => 'number';
-    this.cd.detectChanges();
-  }
-
   public async save(): Promise<void> {
     this.stepLoading = true;
 
@@ -132,6 +123,13 @@ export class SecondaryMajorityElectionEditComponent implements OnInit, AfterCont
   }
 
   public async navigateToContestDetail(): Promise<void> {
+    const confirm = await this.dialogService.confirm(
+      'MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TITLE',
+      'MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TEXT',
+    );
+    if (!confirm) {
+      return;
+    }
     await this.router.navigate(['../../'], { relativeTo: this.route });
   }
 }

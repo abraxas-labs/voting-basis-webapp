@@ -34,7 +34,7 @@ import {
   UpdateProportionalElectionRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/proportional_election_requests_pb';
 import { GrpcBackendService, GrpcService, LanguageService, TimestampUtil } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
 import { PoliticalBusiness, PoliticalBusinessType } from './models/political-business.model';
@@ -57,10 +57,11 @@ import { createInt32Value } from './utils/proto.utils';
   providedIn: 'root',
 })
 export class ProportionalElectionService extends GrpcService<ProportionalElectionServicePromiseClient> {
-  constructor(
-    grpcBackend: GrpcBackendService,
-    private readonly languageService: LanguageService,
-  ) {
+  private readonly languageService = inject(LanguageService);
+
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(ProportionalElectionServicePromiseClient, environment, grpcBackend);
   }
 
@@ -339,6 +340,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setBallotBundleSize(data.ballotBundleSize);
     result.setBallotBundleSampleSize(data.ballotBundleSampleSize);
     result.setAutomaticBallotBundleNumberGeneration(data.automaticBallotBundleNumberGeneration);
+    result.setAutomaticBallotNumberGeneration(data.automaticBallotNumberGeneration);
     result.setBallotNumberGeneration(data.ballotNumberGeneration);
     result.setAutomaticEmptyVoteCounting(data.automaticEmptyVoteCounting);
     result.setEnforceEmptyVoteCountingForCountingCircles(data.enforceEmptyVoteCountingForCountingCircles);
@@ -363,6 +365,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setBallotBundleSize(data.ballotBundleSize);
     result.setBallotBundleSampleSize(data.ballotBundleSampleSize);
     result.setAutomaticBallotBundleNumberGeneration(data.automaticBallotBundleNumberGeneration);
+    result.setAutomaticBallotNumberGeneration(data.automaticBallotNumberGeneration);
     result.setBallotNumberGeneration(data.ballotNumberGeneration);
     result.setAutomaticEmptyVoteCounting(data.automaticEmptyVoteCounting);
     result.setEnforceEmptyVoteCountingForCountingCircles(data.enforceEmptyVoteCountingForCountingCircles);

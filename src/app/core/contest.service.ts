@@ -20,7 +20,7 @@ import {
   UpdateContestRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/contest_requests_pb';
 import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { DomainOfInfluenceService } from './domain-of-influence.service';
 import {
@@ -49,7 +49,9 @@ import { fillProtoMap, toJsMap } from './utils/map.utils';
 export class ContestService extends GrpcService<ContestServicePromiseClient> {
   private static preconfiguredContestDateCache?: PreconfiguredContestDate[];
 
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(ContestServicePromiseClient, environment, grpcBackend);
   }
 

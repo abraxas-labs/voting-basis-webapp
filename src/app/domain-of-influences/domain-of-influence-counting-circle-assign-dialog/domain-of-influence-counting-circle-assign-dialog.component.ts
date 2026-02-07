@@ -7,7 +7,7 @@
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { FilterDirective, SortDirective, PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
@@ -25,6 +25,13 @@ import { cloneDeep, isEqual } from 'lodash';
   standalone: false,
 })
 export class DomainOfInfluenceCountingCircleAssignDialogComponent implements AfterViewInit, OnInit, OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<DomainOfInfluenceCountingCircleAssignDialogData>>(MatDialogRef);
+  private readonly permissionService = inject(PermissionService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly dialogService = inject(DialogService);
+
   public readonly selectColumn = 'select';
   public readonly nameColumn = 'name';
   public readonly bfsColumn = 'bfs';
@@ -48,9 +55,6 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
   @ViewChild('paginator')
   public paginator!: PaginatorComponent;
 
-  @ViewChild('inheritedPaginator')
-  public inheritedPaginator!: PaginatorComponent;
-
   @ViewChild(FilterDirective, { static: true })
   public filter!: FilterDirective;
 
@@ -72,15 +76,9 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
 
   private readonly assignableCountingCircles: DomainOfInfluenceCountingCircle[];
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<DomainOfInfluenceCountingCircleAssignDialogData>,
-    private readonly permissionService: PermissionService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly dialogService: DialogService,
-    @Inject(MAT_DIALOG_DATA) dialogData: DomainOfInfluenceCountingCircleAssignDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<DomainOfInfluenceCountingCircleAssignDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.domainOfInfluence;
     this.inheritedCountingCirclesDatasource.data = this.data.countingCircles?.filter(cc => cc.inherited) ?? [];
     this.assignableCountingCircles = dialogData.countingCircles;
@@ -122,8 +120,6 @@ export class DomainOfInfluenceCountingCircleAssignDialogComponent implements Aft
 
     // allocate data after setting the paginator, so that the table is not initialized with the entire data set
     this.dataSource.data = this.assignableCountingCircles;
-
-    this.inheritedCountingCirclesDatasource.paginator = this.inheritedPaginator;
   }
 
   public async save(): Promise<void> {

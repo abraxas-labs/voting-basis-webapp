@@ -5,7 +5,7 @@
  */
 
 import { SnackbarService } from '@abraxas/voting-lib';
-import { Component, EventEmitter, HostListener, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnDestroy, Output, inject } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
@@ -17,6 +17,10 @@ import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
   standalone: false,
 })
 export class DomainOfInfluenceLogoEditComponent implements OnDestroy {
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+
   @Input()
   public disabled: boolean = false;
 
@@ -34,12 +38,6 @@ export class DomainOfInfluenceLogoEditComponent implements OnDestroy {
   private uploadedLogoPreviewUrl?: string;
 
   private readonly maxSizeInBytes: number = 3000000; // 3MB
-
-  constructor(
-    private readonly sanitizer: DomSanitizer,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-  ) {}
 
   public ngOnDestroy(): void {
     this.disposeUploadedLogoPreviewSrcIfNeeded();

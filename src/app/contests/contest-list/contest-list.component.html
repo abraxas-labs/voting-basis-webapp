@@ -1,4 +1,11 @@
-<bc-table selection filter sort [sortActive]="[{ id: 'date', direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
+<bc-table
+  selection
+  filter
+  sort
+  [sortActive]="[{ id: 'dateString', direction: dateSortDirection }]"
+  class="w-full"
+  [dataSource]="dataSource"
+>
   <ng-container columnDef="dateString">
     <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
       <span truncateWithTooltip tooltip>
@@ -68,7 +75,7 @@
       filterValueExpr="value"
       sort
       *headerCellDef
-    >
+      >
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.STATE' | translate }}
       </span>
@@ -103,62 +110,71 @@
   <ng-container columnDef="actions">
     <bc-header-cell *headerCellDef></bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <vo-lib-action-menu *ngIf="canCreate || !element.isPreconfiguredDate">
-        <vo-lib-action-menu-item
-          *ngIf="!element.isPreconfiguredDate && !element.isPoliticalAssembly"
-          (click)="view.emit(element)"
-          icon="eye"
-          text="ACTIONS.OPEN"
-        >
-        </vo-lib-action-menu-item>
-        <vo-lib-action-menu-item
-          *ngIf="element.isPreconfiguredDate"
-          (click)="create.emit(element)"
-          icon="plus"
-          text="CONTEST.CREATE_FROM_PRECONFIGURED_DATE"
-        >
-        </vo-lib-action-menu-item>
-        <vo-lib-action-menu-item
-          *ngIf="canEdit && !element.locked && element.ownerId === tenantId"
-          (click)="edit.emit(element)"
-          icon="edit"
-          text="ACTIONS.EDIT"
-        >
-        </vo-lib-action-menu-item>
-        <vo-lib-action-menu-item
-          *ngIf="canEdit && element.state === contestStates.CONTEST_STATE_PAST_LOCKED && element.ownerId === tenantId"
-          (click)="archive.emit(element)"
-          icon="archive"
-          text="CONTEST.ARCHIVE.ACTION"
-        >
-        </vo-lib-action-menu-item>
-        <vo-lib-action-menu-item
-          *ngIf="
+      @if (canCreate || !element.isPreconfiguredDate) {
+        <vo-lib-action-menu>
+          @if (!element.isPreconfiguredDate && !element.isPoliticalAssembly) {
+            <vo-lib-action-menu-item
+              (click)="view.emit(element)"
+              icon="eye"
+              text="ACTIONS.OPEN"
+              >
+            </vo-lib-action-menu-item>
+          }
+          @if (element.isPreconfiguredDate) {
+            <vo-lib-action-menu-item
+              (click)="create.emit(element)"
+              icon="plus"
+              text="CONTEST.CREATE_FROM_PRECONFIGURED_DATE"
+              >
+            </vo-lib-action-menu-item>
+          }
+          @if (canEdit && !element.locked && element.ownerId === tenantId) {
+            <vo-lib-action-menu-item
+              (click)="edit.emit(element)"
+              icon="edit"
+              text="ACTIONS.EDIT"
+              >
+            </vo-lib-action-menu-item>
+          }
+          @if (canEdit && element.state === contestStates.CONTEST_STATE_PAST_LOCKED && element.ownerId === tenantId) {
+            <vo-lib-action-menu-item
+              (click)="archive.emit(element)"
+              icon="archive"
+              text="CONTEST.ARCHIVE.ACTION"
+              >
+            </vo-lib-action-menu-item>
+          }
+          @if (
             canEdit &&
             element.state === contestStates.CONTEST_STATE_PAST_LOCKED &&
             !element.isPoliticalAssembly &&
             element.ownerId === tenantId
-          "
-          (click)="pastUnlock.emit(element.contest)"
-          icon="unlock"
-          text="CONTEST.PAST_UNLOCK.ACTION"
-        >
-        </vo-lib-action-menu-item>
-        <vo-lib-action-menu-item
-          *ngIf="canDelete && !element.testingPhaseEnded && element.ownerId === tenantId"
-          (click)="delete.emit(element)"
-          icon="trash"
-          text="ACTIONS.DELETE"
-        >
-        </vo-lib-action-menu-item>
-        <vo-lib-action-menu-item
-          *ngIf="!element.isPreconfiguredDate && !element.isPoliticalAssembly"
-          (click)="export.emit(element.contest)"
-          icon="download"
-          text="ACTIONS.EXPORT"
-        >
-        </vo-lib-action-menu-item>
-      </vo-lib-action-menu>
+            ) {
+            <vo-lib-action-menu-item
+              (click)="pastUnlock.emit(element.contest)"
+              icon="unlock"
+              text="CONTEST.PAST_UNLOCK.ACTION"
+              >
+            </vo-lib-action-menu-item>
+          }
+          @if (canDelete && !element.testingPhaseEnded && element.ownerId === tenantId) {
+            <vo-lib-action-menu-item
+              (click)="delete.emit(element)"
+              icon="trash"
+              text="ACTIONS.DELETE"
+              >
+            </vo-lib-action-menu-item>
+          }
+          @if (!element.isPreconfiguredDate && !element.isPoliticalAssembly) {
+            <vo-lib-action-menu-item
+              (click)="export.emit(element.contest)"
+              icon="download"
+              text="ACTIONS.EXPORT"
+              >
+            </vo-lib-action-menu-item>
+          }
+        </vo-lib-action-menu>
+      }
     </bc-data-cell>
   </ng-container>
 
@@ -172,4 +188,6 @@
     (click)="!row.isPreconfiguredDate && !row.isPoliticalAssembly ? view.emit(row) : undefined"
   ></bc-data-row>
 </bc-table>
-<bc-paginator *ngIf="showPaginator" #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
+@if (showPaginator) {
+  <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
+}

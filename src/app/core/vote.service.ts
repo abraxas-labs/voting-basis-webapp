@@ -21,7 +21,7 @@ import {
 } from '@abraxas/voting-basis-service-proto/grpc/requests/vote_requests_pb';
 import { VoteServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/vote_service_grpc_web_pb';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {
   Ballot,
@@ -40,7 +40,9 @@ import { createInt32Value } from './utils/proto.utils';
   providedIn: 'root',
 })
 export class VoteService extends GrpcService<VoteServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(VoteServicePromiseClient, environment, grpcBackend);
   }
 
@@ -170,6 +172,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     result.setBallotBundleSampleSizePercent(data.ballotBundleSampleSizePercent);
     result.setResultEntry(data.resultEntry);
     result.setAutomaticBallotBundleNumberGeneration(data.automaticBallotBundleNumberGeneration);
+    result.setAutomaticBallotNumberGeneration(data.automaticBallotNumberGeneration);
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
     result.setType(data.type);

@@ -7,7 +7,7 @@
 import { ExportServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/export_service_grpc_web_pb';
 import { GetExportTemplatesRequest } from '@abraxas/voting-basis-service-proto/grpc/requests/export_requests_pb';
 import { DialogService, FileDownloadService, GrpcBackendService, GrpcService, SnackbarService } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
 import { ExportDialogComponent, ExportDialogData } from '../shared/export-dialog/export-dialog.component';
@@ -18,20 +18,21 @@ import { ExportEntityType, ExportGenerator, ExportTemplate, GenerateExportReques
   providedIn: 'root',
 })
 export class ExportService extends GrpcService<ExportServicePromiseClient> {
+  private readonly dialog = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly cursor = inject(CursorService);
+  private readonly fileDownloadService = inject(FileDownloadService);
+
   private readonly restApiUrl: string = '';
   private readonly templatesByGeneratorCache: { [key in ExportGenerator]?: ExportTemplate[] } = {};
   private readonly templatesByGeneratorAndEntityTypeCache: {
     [key in ExportGenerator]?: { [key2 in ExportEntityType]?: ExportTemplate[] };
   } = {};
 
-  constructor(
-    grpcBackend: GrpcBackendService,
-    private readonly dialog: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly cursor: CursorService,
-    private readonly fileDownloadService: FileDownloadService,
-  ) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(ExportServicePromiseClient, environment, grpcBackend);
     this.restApiUrl = `${environment.restApiEndpoint}/exports`;
   }

@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, HostListener, Inject, OnDestroy, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, ViewChild, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionBallotGroupService } from '../../../core/majority-election-ballot-group.service';
@@ -33,6 +33,14 @@ import { MajorityElectionService } from '../../../core/majority-election.service
   standalone: false,
 })
 export class MajorityElectionBallotGroupEditDialogComponent implements OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<MajorityElectionBallotGroupEditDialogComponent>>(MatDialogRef);
+  private readonly ballotGroupService = inject(MajorityElectionBallotGroupService);
+  private readonly i18n = inject(TranslateService);
+  private readonly dialogService = inject(DialogService);
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly secondaryMajorityElectionService = inject(SecondaryMajorityElectionService);
+  private readonly snackbarService = inject(SnackbarService);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -58,17 +66,11 @@ export class MajorityElectionBallotGroupEditDialogComponent implements OnDestroy
   public loading = false;
   public updatedBallotGroupCandidates?: MajorityElectionBallotGroupCandidates;
   public resultHasChanges = false;
+  public secondaryMajorityElectionIds: string[];
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<MajorityElectionBallotGroupEditDialogComponent>,
-    private readonly ballotGroupService: MajorityElectionBallotGroupService,
-    private readonly i18n: TranslateService,
-    private readonly dialogService: DialogService,
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
-    private readonly snackbarService: SnackbarService,
-    @Inject(MAT_DIALOG_DATA) dialogData: MajorityElectionBallotGroupEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<MajorityElectionBallotGroupEditDialogData>(MAT_DIALOG_DATA);
+
     this.ballotGroup = dialogData.ballotGroup;
     this.isNew = !this.ballotGroup.id;
 
@@ -76,6 +78,7 @@ export class MajorityElectionBallotGroupEditDialogComponent implements OnDestroy
       this.elections.push(dialogData.majorityElection);
     }
     this.elections = [...this.elections, ...dialogData.secondaryElections];
+    this.secondaryMajorityElectionIds = dialogData.secondaryElections.map(election => election.id);
     this.dialogRef.disableClose = true;
     this.backdropClickSubscription = this.dialogRef.backdropClick().subscribe(async () => this.closeWithUnsavedChangesCheck());
     this.initStep();
@@ -276,6 +279,7 @@ export class MajorityElectionBallotGroupEditDialogComponent implements OnDestroy
         selectedCandidateIds: ballotGroupCandidates[e.id]?.candidateIdsList ?? [],
         candidates: [],
         selection: new SelectionModel<MajorityElectionCandidate>(),
+        isSecondaryMajorityElection: this.secondaryMajorityElectionIds.includes(e.electionId),
       }))
       .filter(x => x.election !== undefined);
   }

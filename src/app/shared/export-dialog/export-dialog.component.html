@@ -2,19 +2,21 @@
   <h1 header translate>EXPORTS.TITLE</h1>
 
   <div content class="export-container">
-    <bc-button *ngFor="let exportTemplate of exportTemplates"
-               variant="primary"
-               (buttonClick)="downloadExport(exportTemplate)"
+    @for (exportTemplate of exportTemplates; track exportTemplate) {
+      <bc-button
+        variant="primary"
+        (buttonClick)="downloadExport(exportTemplate)"
                [label]="'EXPORTS.TEMPLATE_TITLE' | translate: {
         format: ('EXPORTS.FILE_FORMATS.' + exportTemplate.format | translate),
         description: exportTemplate.description
       }">
-    </bc-button>
+      </bc-button>
+    }
   </div>
 
   <div footer class="mr-3">
     <vo-lib-button-bar footer
-                       [hasSaveButton]="false"
-                       (cancel)="cancel()"></vo-lib-button-bar>
+      [hasSaveButton]="false"
+    (cancel)="cancel()"></vo-lib-button-bar>
   </div>
 </vo-lib-dialog>

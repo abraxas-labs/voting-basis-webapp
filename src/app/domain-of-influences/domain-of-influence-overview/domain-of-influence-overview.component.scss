@@ -15,20 +15,13 @@
 .overflow-tree {
   display: flex;
   flex-direction: column;
-  height: 48rem;
+  height: 44rem;
 
   ::ng-deep vo-lib-tree-navigation {
     display: flex;
     flex-direction: column;
     overflow: auto;
   }
-}
-
-.overflow-table {
-  display: flex;
-  flex-direction: column;
-  height: 48rem;
-  overflow: auto;
 }
 
 bc-paginator {

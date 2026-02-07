@@ -3,7 +3,7 @@
   [header]="('CONTEST.DETAIL.FROM' | translate) + (contest?.date || '' | date: 'dd.MM.yyyy')"
   [showBackButton]="true"
   [backButtonNavigateCommands]="['../']"
->
+  >
   <div class="flex">
     <bc-button
       [matMenuTriggerFor]="contest.testingPhaseEnded || !hasSameTenantWritePermissions ? null : menu"
@@ -31,14 +31,15 @@
       class="ml-2"
     ></bc-button>
 
-    <bc-button
-      *ngIf="cantonDefaults?.enabledPoliticalBusinessUnionTypesList.length > 0"
-      variant="tertiary"
-      icon="building"
-      (buttonClick)="managePoliticalBusinessUnions()"
-      [label]="'CONTEST.POLITICAL_BUSINESS_UNION_MANAGE' | translate"
-      [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions"
-    ></bc-button>
+    @if (cantonDefaults && cantonDefaults.enabledPoliticalBusinessUnionTypesList.length > 0) {
+      <bc-button
+        variant="tertiary"
+        icon="building"
+        (buttonClick)="managePoliticalBusinessUnions()"
+        [label]="'CONTEST.POLITICAL_BUSINESS_UNION_MANAGE' | translate"
+        [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions"
+      ></bc-button>
+    }
   </div>
 
   <bc-table
@@ -47,12 +48,15 @@
     [sortMultiple]="true"
     [sortActive]="[
       { id: 'domainOfInfluenceType', direction: 'asc' },
+      { id: 'domainOfInfluenceName', direction: 'asc' },
+      { id: 'primaryType', direction: 'asc' },
       { id: 'number', direction: 'asc' },
     ]"
     filter
     class="w-full"
     [dataSource]="dataSource"
-  >
+    [sticky]="true"
+    >
     <ng-container columnDef="number">
       <bc-header-cell filter sort *headerCellDef class="small-filter-component">
         <span [tooltip]="'POLITICAL_BUSINESS.NUMBER' | translate">
@@ -106,7 +110,7 @@
         filterValueExpr="value"
         sort
         *headerCellDef
-      >
+        >
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE_TYPE' | translate }}
         </span>
@@ -136,7 +140,7 @@
         filterValueExpr="value"
         sort
         *headerCellDef
-      >
+        >
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.TYPE.TITLE' | translate }}
         </span>
@@ -167,7 +171,7 @@
           [disabled]="(element.ownerId !== tenantId && !hasAdminWritePermissions)
             || !hasSameTenantWritePermissions || contest.testingPhaseEnded"
           [subscriptSizing]="'dynamic'"
-        >
+          >
         </bc-switch>
       </bc-data-cell>
     </ng-container>
@@ -179,22 +183,23 @@
         </span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <bc-switch
-          *ngIf="element.eVotingApproved !== undefined"
-          class="ml-2"
-          [(checked)]="element.eVotingApproved"
-          (checkedChange)="eVotingApprovedChange(element, $event)"
-          [disabled]="(element.ownerId !== tenantId && !hasAdminReadPermissions)
-            || (element.eVotingApproved && !hasEVotingApproveRevertPermissions)
-            || !hasSameTenantReadPermissions || contest.locked
-            || contest.eVotingApproved"
-          [subscriptSizing]="'dynamic'"
-          [matTooltip]="element.eVotingApproved
-            && !hasEVotingApproveRevertPermissions
-            && !contest.locked
-            ? ('POLITICAL_BUSINESS.E_VOTING_APPROVED_REVERT_TOOLTIP' | translate)
-            : ''"
-        ></bc-switch>
+        @if (element.eVotingApproved !== undefined) {
+          <bc-switch
+            class="ml-2"
+            [(checked)]="element.eVotingApproved"
+            (checkedChange)="eVotingApprovedChange(element, $event)"
+            [disabled]="(element.ownerId !== tenantId && !hasAdminReadPermissions)
+              || (element.eVotingApproved && !hasEVotingApproveRevertPermissions)
+              || !hasSameTenantReadPermissions || contest.locked
+              || contest.eVotingApproved"
+            [subscriptSizing]="'dynamic'"
+            [matTooltip]="element.eVotingApproved
+              && !hasEVotingApproveRevertPermissions
+              && !contest.locked
+              ? ('POLITICAL_BUSINESS.E_VOTING_APPROVED_REVERT_TOOLTIP' | translate)
+              : ''"
+          ></bc-switch>
+        }
       </bc-data-cell>
     </ng-container>
 
@@ -212,42 +217,47 @@
     <ng-container columnDef="actions">
       <bc-header-cell *headerCellDef></bc-header-cell>
       <bc-data-cell *dataCellDef="let element; let i = index">
-        <vo-lib-action-menu *ngIf="(element.ownerId === tenantId && hasSameTenantReadPermissions) || hasAdminReadPermissions">
-          <vo-lib-action-menu-item
-            icon="edit"
-            text="ACTIONS.EDIT"
-            *ngIf="!contest.locked; else viewMenuItem"
-            (click)="open(element)"
-          ></vo-lib-action-menu-item>
-          <ng-template #viewMenuItem>
-            <vo-lib-action-menu-item icon="eye" text="ACTIONS.OPEN" (click)="open(element)"></vo-lib-action-menu-item>
-          </ng-template>
-          <vo-lib-action-menu-item
-            icon="trash"
-            text="ACTIONS.DELETE"
-            *ngIf="!contest.testingPhaseEnded && hasSameTenantWritePermissions
-              && (element.ownerId === tenantId || hasAdminWritePermissions)"
-            (click)="delete(element)"
-          ></vo-lib-action-menu-item>
-          <vo-lib-action-menu-item
-            icon="download"
-            text="ACTIONS.EXPORT"
-            *ngIf="element.type !== politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION"
-            (click)="export(element)"
-          ></vo-lib-action-menu-item>
-          <vo-lib-action-menu-item
-            icon="plus"
-            text="POLITICAL_BUSINESS.ADD_SECONDARY_ELECTION"
-            *ngIf="element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION
-              && (hasAdminWritePermissions || (element.ownerId === tenantId && hasSameTenantWritePermissions))"
-            (click)="createSecondaryElection(element.id)"
-          ></vo-lib-action-menu-item>
-          <vo-lib-action-menu-item
-            icon="info-circle-o"
-            text="POLITICAL_BUSINESS.COUNTING_CIRCLES"
-            (click)="openAssignedCountingCircles(element)"
-          ></vo-lib-action-menu-item>
-        </vo-lib-action-menu>
+        @if ((element.ownerId === tenantId && hasSameTenantReadPermissions) || hasAdminReadPermissions) {
+          <vo-lib-action-menu>
+            @if (!contest.locked) {
+              <vo-lib-action-menu-item
+                icon="edit"
+                text="ACTIONS.EDIT"
+                (click)="open(element)"
+              ></vo-lib-action-menu-item>
+            } @else {
+              <vo-lib-action-menu-item icon="eye" text="ACTIONS.OPEN" (click)="open(element)"></vo-lib-action-menu-item>
+            }
+            @if (!contest.testingPhaseEnded && hasSameTenantWritePermissions
+              && (element.ownerId === tenantId || hasAdminWritePermissions)) {
+              <vo-lib-action-menu-item
+                icon="trash"
+                text="ACTIONS.DELETE"
+                (click)="delete(element)"
+              ></vo-lib-action-menu-item>
+            }
+            @if (element.type !== politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_SECONDARY_MAJORITY_ELECTION) {
+              <vo-lib-action-menu-item
+                icon="download"
+                text="ACTIONS.EXPORT"
+                (click)="export(element)"
+              ></vo-lib-action-menu-item>
+            }
+            @if (element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION
+              && (hasAdminWritePermissions || (element.ownerId === tenantId && hasSameTenantWritePermissions))) {
+              <vo-lib-action-menu-item
+                icon="plus"
+                text="POLITICAL_BUSINESS.ADD_SECONDARY_ELECTION"
+                (click)="createSecondaryElection(element.id)"
+              ></vo-lib-action-menu-item>
+            }
+            <vo-lib-action-menu-item
+              icon="info-circle-o"
+              text="POLITICAL_BUSINESS.COUNTING_CIRCLES"
+              (click)="openAssignedCountingCircles(element)"
+            ></vo-lib-action-menu-item>
+          </vo-lib-action-menu>
+        }
       </bc-data-cell>
     </ng-container>
 
@@ -262,5 +272,5 @@
       (click)="open(row)"
     ></bc-data-row>
   </bc-table>
-  <bc-paginator #paginator showFirstLastButtons [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]"></bc-paginator>
+  <bc-paginator #paginator showFirstLastButtons [pageSize]="20" [pageSizeOptions]="[5, 10, 15, 20]"></bc-paginator>
 </vo-lib-page>

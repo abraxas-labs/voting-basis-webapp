@@ -4,7 +4,9 @@
     {{ 'POLITICAL_BUSINESS.ASSIGNED_COUNTING_CIRCLES' | translate }}
   </div>
   <div>
-    <bc-spinner *ngIf="loading"></bc-spinner>
+    @if (loading) {
+      <bc-spinner></bc-spinner>
+    }
     <bc-table filter sort [sortActive]="[{ id: nameColumn, direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
       <ng-container columnDef="name">
         <bc-header-cell *headerCellDef filter sort>

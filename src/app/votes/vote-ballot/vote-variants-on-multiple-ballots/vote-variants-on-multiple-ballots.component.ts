@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { EnumItemDescription, EnumUtil, LanguageService } from '@abraxas/voting-lib';
 import { BallotQuestionType, BallotSubType, BallotType, VoteType } from '@abraxas/voting-basis-service-proto/grpc/shared/vote_pb';
 import { Ballot, newBallot, Vote } from '../../../core/models/vote.model';
@@ -17,6 +17,10 @@ import { TranslateService } from '@ngx-translate/core';
   standalone: false,
 })
 export class VoteVariantsOnMultipleBallotsComponent {
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly i18n = inject(TranslateService);
+  private readonly languageService = inject(LanguageService);
+
   public readonly maxBallotQuestions: number = 3;
 
   public ballotSubTypeDescriptions: EnumItemDescription<BallotSubType>[] = [];
@@ -39,11 +43,7 @@ export class VoteVariantsOnMultipleBallotsComponent {
   private _vote?: Vote;
   private _eVoting?: boolean;
 
-  constructor(
-    private readonly enumUtil: EnumUtil,
-    private readonly i18n: TranslateService,
-    private readonly languageService: LanguageService,
-  ) {
+  constructor() {
     this.ballotSubTypeDescriptions = this.enumUtil.getArrayWithDescriptions<BallotSubType>(BallotSubType, 'VOTE.BALLOT_SUB_TYPE.TYPES.');
     this.tieBreakQuestionCountDescriptions = [
       { value: 0, description: this.i18n.instant('VOTE.TIE_BREAK_QUESTION_COUNT.0') },

@@ -1,21 +1,27 @@
-<app-import-vote-edit *ngFor="let vote of votes"
-                      #editComponent
-                      (applied)="checkAllValid()"
-                      [vote]="vote"
-                      [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
-</app-import-vote-edit>
+@for (vote of votes; track vote) {
+  <app-import-vote-edit
+    #editComponent
+    (applied)="checkAllValid()"
+    [vote]="vote"
+    [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
+  </app-import-vote-edit>
+}
 
-<app-import-proportional-election-edit *ngFor="let proportionalElection of proportionalElections"
-                                       #editComponent
-                                       (applied)="checkAllValid()"
-                                       [proportionalElection]="proportionalElection"
-                                       [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
-</app-import-proportional-election-edit>
+@for (proportionalElection of proportionalElections; track proportionalElection) {
+  <app-import-proportional-election-edit
+    #editComponent
+    (applied)="checkAllValid()"
+    [proportionalElection]="proportionalElection"
+    [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
+  </app-import-proportional-election-edit>
+}
 
 
-<app-import-majority-election-edit *ngFor="let majorityElection of majorityElections"
-                                   #editComponent
-                                   (applied)="checkAllValid()"
-                                   [majorityElection]="majorityElection"
-                                   [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
-</app-import-majority-election-edit>
+@for (majorityElection of majorityElections; track majorityElection) {
+  <app-import-majority-election-edit
+    #editComponent
+    (applied)="checkAllValid()"
+    [majorityElection]="majorityElection"
+    [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
+  </app-import-majority-election-edit>
+}

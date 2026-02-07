@@ -54,7 +54,7 @@ body {
   }
 
   &[aria-selected='true'] ~ .mat-mdc-step-header .mat-mdc-step-icon {
-    background-color: rgba(0 0 0 / 54%) !important;
+    background-color: rgb(0 0 0 / 54%) !important;
   }
 }
 

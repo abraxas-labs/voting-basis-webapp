@@ -5,7 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil, LanguageService } from '@abraxas/voting-lib';
-import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { ContestService } from '../../core/contest.service';
 import { DomainOfInfluenceReportLevelService } from '../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
@@ -24,6 +24,13 @@ import {
 
 @Directive()
 export abstract class PoliticalBusinessGeneralInformationsComponent<T extends PoliticalBusinessBase> implements OnInit {
+  protected readonly enumUtil = inject(EnumUtil);
+  protected readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly contestService = inject(ContestService);
+  private readonly doiReportLevelService = inject(DomainOfInfluenceReportLevelService);
+  private readonly permissionService = inject(PermissionService);
+  private readonly dialogService = inject(DialogService);
+
   public readonly domainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
   public readonly federalIdentificationMaxValue: number = 2147483647;
 
@@ -53,15 +60,8 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
   private selectedDomainOfInfluenceTypeValue?: DomainOfInfluenceType;
   private domainOfInfluenceTree?: DomainOfInfluenceTree;
 
-  protected constructor(
-    protected readonly enumUtil: EnumUtil,
-    protected readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly contestService: ContestService,
-    private readonly doiReportLevelService: DomainOfInfluenceReportLevelService,
-    private readonly permissionService: PermissionService,
-    private readonly dialogService: DialogService,
-    initialData: T,
-  ) {
+  // eslint-disable-next-line @angular-eslint/prefer-inject
+  protected constructor(initialData: T) {
     this.data = initialData;
   }
 

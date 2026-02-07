@@ -3,7 +3,7 @@
 ::ng-deep .bc-column-number {
   @include table.truncate-long-sortable-table-header();
 
-  width: 4.5rem;
+  width: 5rem;
 }
 
 ::ng-deep .bc-column-political-business-union-description {
@@ -56,10 +56,6 @@ bc-paginator {
   overflow: hidden;
 }
 
-bc-table {
-  overflow-x: hidden;
-}
-
 ::ng-deep .small-filter-component {
   .mat-mdc-form-field-icon-suffix {
     display: none;
@@ -68,4 +64,8 @@ bc-table {
   .mat-mdc-form-field-icon-prefix {
     display: none;
   }
+}
+
+::ng-deep bc-header-cell {
+  z-index: 100; // without this, the switch component would be visible inside the header during scrolling
 }

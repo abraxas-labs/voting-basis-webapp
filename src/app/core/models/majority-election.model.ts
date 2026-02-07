@@ -65,6 +65,7 @@ export function newMajorityElection(): MajorityElection {
     ballotBundleSize: 0,
     ballotBundleSampleSize: 0,
     candidateCheckDigit: false,
+    automaticBallotNumberGeneration: true,
     ballotNumberGeneration: BallotNumberGeneration.BALLOT_NUMBER_GENERATION_RESTART_FOR_EACH_BUNDLE,
     resultEntry: MajorityElectionResultEntryProto.MAJORITY_ELECTION_RESULT_ENTRY_FINAL_RESULTS,
     mandateAlgorithm: MajorityElectionMandateAlgorithmProto.MAJORITY_ELECTION_MANDATE_ALGORITHM_ABSOLUTE_MAJORITY,

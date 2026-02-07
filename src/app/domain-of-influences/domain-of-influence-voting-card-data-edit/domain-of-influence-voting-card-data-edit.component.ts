@@ -5,7 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { newDomainOfInfluenceVotingCardReturnAddress } from '../../core/models/domain-of-influence-return-address.model';
 import {
   newDomainOfInfluenceVotingCardPrintData,
@@ -24,6 +24,9 @@ import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared
   standalone: false,
 })
 export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly permissionService = inject(PermissionService);
+
   public shippingAwayItems: EnumItemDescription<VotingCardShippingFranking>[] = [];
   public shippingReturnItems: EnumItemDescription<VotingCardShippingFranking>[] = [];
   public shippingMethodItems: EnumItemDescription<VotingCardShippingMethod>[] = [];
@@ -41,11 +44,6 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
   public canEditEverything: boolean = false;
 
   private domainOfInfluenceValue!: DomainOfInfluence;
-
-  constructor(
-    private readonly enumUtil: EnumUtil,
-    private readonly permissionService: PermissionService,
-  ) {}
 
   public get domainOfInfluence(): DomainOfInfluence {
     return this.domainOfInfluenceValue;
@@ -112,13 +110,5 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
       );
 
     this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateSameCanton);
-  }
-
-  public updateElectoralRegistrationEnabled(v: boolean): void {
-    this.domainOfInfluence.electoralRegistrationEnabled = v;
-
-    if (!v) {
-      this.domainOfInfluence.electoralRegisterMultipleEnabled = false;
-    }
   }
 }

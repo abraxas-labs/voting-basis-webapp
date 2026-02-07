@@ -1,12 +1,13 @@
 <vo-lib-page [contentLoading]="loading" header="CANTON_SETTINGS.TITLE">
   <div class="flex">
-    <bc-button
-      *ngIf="canCreate"
-      variant="tertiary"
-      icon="plus"
-      [label]="'CANTON_SETTINGS.NEW' | translate"
-      (buttonClick)="createOrEdit()"
-    ></bc-button>
+    @if (canCreate) {
+      <bc-button
+        variant="tertiary"
+        icon="plus"
+        [label]="'CANTON_SETTINGS.NEW' | translate"
+        (buttonClick)="createOrEdit()"
+      ></bc-button>
+    }
   </div>
 
   <bc-table selection class="w-full" [dataSource]="cantonSettingsList">

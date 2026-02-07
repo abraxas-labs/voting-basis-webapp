@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { FilterDirective, PaginatorComponent, SortDirective, TableDataSource } from '@abraxas/base-components';
 import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -16,6 +16,8 @@ import { CountingCircleService } from '../../core/counting-circle.service';
   standalone: false,
 })
 export class AssignedCountingCirclesDialogComponent implements OnInit, AfterViewInit {
+  private readonly countingCircleService = inject(CountingCircleService);
+
   public readonly nameColumn = 'name';
   public readonly columns = [this.nameColumn];
 
@@ -33,10 +35,9 @@ export class AssignedCountingCirclesDialogComponent implements OnInit, AfterView
 
   private readonly domainOfInfluenceId: string;
 
-  constructor(
-    private readonly countingCircleService: CountingCircleService,
-    @Inject(MAT_DIALOG_DATA) dialogData: AssignedCountingCirclesDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<AssignedCountingCirclesDialogData>(MAT_DIALOG_DATA);
+
     this.domainOfInfluenceId = dialogData.domainOfInfluenceId;
   }
 

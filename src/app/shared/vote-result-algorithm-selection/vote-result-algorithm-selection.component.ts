@@ -5,7 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Vote, VoteResultAlgorithm } from '../../core/models/vote.model';
 import { isPoliticalDoiType } from '../../core/utils/domain-of-influence.utils';
 import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
@@ -21,7 +21,9 @@ export class VoteResultAlgorithmSelectionComponent {
 
   public resultAlgorithms: EnumItemDescription<VoteResultAlgorithm>[] = [];
 
-  constructor(enumUtil: EnumUtil) {
+  constructor() {
+    const enumUtil = inject(EnumUtil);
+
     this.resultAlgorithms = this.defaultResultAlgorithms = enumUtil.getArrayWithDescriptions<VoteResultAlgorithm>(
       VoteResultAlgorithm,
       'VOTE.RESULT_ALGORITHM.TYPES.',

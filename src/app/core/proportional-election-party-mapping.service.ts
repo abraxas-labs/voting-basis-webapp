@@ -5,7 +5,7 @@
  */
 
 import { DomainOfInfluenceParty as DomainOfInfluencePartyProto } from '@abraxas/voting-basis-service-proto/grpc/models/domain_of_influence_party_pb';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { DomainOfInfluenceParty, PartyMapping, PartyMappingContainer, PartyWithMappings } from './models/domain-of-influence-party.model';
 import { ProportionalElectionListImport } from './models/import.model';
 import { ProportionalElectionCandidateProto } from './models/proportional-election.model';
@@ -17,7 +17,7 @@ const unknownSourceParty = '<unknown>';
   providedIn: 'root',
 })
 export class ProportionalElectionPartyMappingService {
-  constructor(private readonly languageService: LanguageService) {}
+  private readonly languageService = inject(LanguageService);
 
   public applyMappings(partyMappings?: PartyMappingContainer): void {
     if (partyMappings === undefined) {

@@ -5,7 +5,7 @@
  */
 
 import { DialogService } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { DomainOfInfluenceParty, newDomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
 import {
   DomainOfInfluencePartyEditDialogComponent,
@@ -19,6 +19,8 @@ import {
   standalone: false,
 })
 export class DomainOfInfluencePartiesComponent {
+  private readonly dialogService = inject(DialogService);
+
   @Input()
   public disabled: boolean = false;
 
@@ -27,8 +29,6 @@ export class DomainOfInfluencePartiesComponent {
 
   @Output()
   public partiesChange: EventEmitter<DomainOfInfluenceParty[]> = new EventEmitter<DomainOfInfluenceParty[]>();
-
-  constructor(private readonly dialogService: DialogService) {}
 
   public async addParty(): Promise<void> {
     const party = newDomainOfInfluenceParty();

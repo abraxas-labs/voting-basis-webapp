@@ -1,36 +1,38 @@
-<ng-container *ngIf="formGroup" [formGroup]="formGroup">
-  <div class="full-width form-field">
-    <bc-text [label]="'CONTACT_PERSON.FAMILY_NAME' | translate"
+@if (formGroup) {
+  <ng-container [formGroup]="formGroup">
+    <div class="full-width form-field">
+      <bc-text [label]="'CONTACT_PERSON.FAMILY_NAME' | translate"
+               [readonly]="readonly"
+               (valueChange)="contentChanged.emit()"
+               [formControlName]="'familyName'"
+               [showDefaultErrors]="true"
+               [subscriptSizing]="'dynamic'"></bc-text>
+      <bc-text class="ml-2"
+               [label]="'CONTACT_PERSON.FIRST_NAME' | translate"
+               [readonly]="readonly"
+               (valueChange)="contentChanged.emit()"
+               [formControl]="formGroup.controls.firstName"
+               [showDefaultErrors]="true"
+               [subscriptSizing]="'dynamic'"></bc-text>
+    </div>
+    <bc-text [label]="'CONTACT_PERSON.PHONE' | translate"
              [readonly]="readonly"
              (valueChange)="contentChanged.emit()"
-             [formControlName]="'familyName'"
+             [formControl]="formGroup.controls.phone"
              [showDefaultErrors]="true"
              [subscriptSizing]="'dynamic'"></bc-text>
-    <bc-text class="ml-2"
-             [label]="'CONTACT_PERSON.FIRST_NAME' | translate"
+    <bc-text [label]="'CONTACT_PERSON.MOBILE_PHONE' | translate"
              [readonly]="readonly"
              (valueChange)="contentChanged.emit()"
-             [formControl]="formGroup.controls.firstName"
+             [formControl]="formGroup.controls.mobilePhone"
              [showDefaultErrors]="true"
              [subscriptSizing]="'dynamic'"></bc-text>
-  </div>
-  <bc-text [label]="'CONTACT_PERSON.PHONE' | translate"
-           [readonly]="readonly"
-           (valueChange)="contentChanged.emit()"
-           [formControl]="formGroup.controls.phone"
-           [showDefaultErrors]="true"
-           [subscriptSizing]="'dynamic'"></bc-text>
-  <bc-text [label]="'CONTACT_PERSON.MOBILE_PHONE' | translate"
-           [readonly]="readonly"
-           (valueChange)="contentChanged.emit()"
-           [formControl]="formGroup.controls.mobilePhone"
-           [showDefaultErrors]="true"
-           [subscriptSizing]="'dynamic'"></bc-text>
-  <bc-text [label]="'CONTACT_PERSON.EMAIL' | translate"
-           type="email"
-           [readonly]="readonly"
-           (valueChange)="contentChanged.emit()"
-           [formControl]="formGroup.controls.email"
-           [showDefaultErrors]="true"
-           [subscriptSizing]="'dynamic'"></bc-text>
-</ng-container>
+    <bc-text [label]="'CONTACT_PERSON.EMAIL' | translate"
+             type="email"
+             [readonly]="readonly"
+             (valueChange)="contentChanged.emit()"
+             [formControl]="formGroup.controls.email"
+             [showDefaultErrors]="true"
+             [subscriptSizing]="'dynamic'"></bc-text>
+  </ng-container>
+}

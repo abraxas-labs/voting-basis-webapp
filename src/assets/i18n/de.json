@@ -219,6 +219,7 @@
       "STISTAT_MUNICIPALITY": "STISTAT-Gemeinde",
       "VOTING_CARD_FLAT_RATE_OWNER": "Übernimmt Pauschalkosten für Korporation",
       "IS_MAIN_VOTING_CARDS_DOMAIN_OF_INFLUENCE": "Hauptwahlkreis (Geschäfte weiterer dem Mandanten zugeordneter Auszählungskreise werden bei diesem Wahlkreis angezeigt)",
+      "HAS_EMPTY_VOTING_CARDS": "Leere Stimmrechtsausweise für Urnengänge",
       "VOTING_CARD_COLOR": "Farbe des Stimmrechtsausweis",
       "VOTING_CARD_COLORS": {
         "1": "Blau",
@@ -597,6 +598,11 @@
       "AUTOMATIC": "Automatisch",
       "MANUAL": "Manuell"
     },
+    "BALLOT_NUMBER_GENERATION": {
+      "TITLE": "Vergabe Stimmzettelnummer",
+      "AUTOMATIC": "Automatisch",
+      "MANUAL": "Manuell"
+    },
     "REVIEW_PROCEDURE": {
       "TITLE": "Erfassungsweise (Kontrolle)",
       "TYPES": {
@@ -634,14 +640,17 @@
     "ENFORCE_EMPTY_VOTE_COUNTING_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen",
     "BALLOT_BUNDLE_NUMBER_GENERATION": {
       "TITLE": "Vergabe Bundnummer",
-      "AUTOMATIC": "Automatisch"
+      "AUTOMATIC": "Automatisch",
+      "MANUAL": "Manuell"
     },
     "BALLOT_NUMBER_GENERATION": {
       "TITLE": "Vergabe Wahlzettelnummer",
       "TYPES": {
         "1": "Neubeginn bei jedem Bund (z.B. 1-25)",
         "2": "Fortlaufend über alle Bunde (z.B. 1-25, 26-50, 51-75, …)"
-      }
+      },
+      "AUTOMATIC": "Automatisch",
+      "MANUAL": "Manuell"
     },
     "LIST_STEP": "Kandidierende & Listen",
     "LIST": {
@@ -654,7 +663,8 @@
       "SHORT_DESCRIPTION": "Kurzbezeichnung",
       "BLANK_ROW_COUNT": "Leere Zeilen",
       "CONFIRM_DELETE": "Diese Liste wirklich löschen?",
-      "PARTY": "Partei"
+      "PARTY": "Partei",
+      "EMPTY_LIST_PLACEHOLDER": "WoP"
     },
     "LIST_UNION": {
       "TITLE": "Listenverbindungen",
@@ -735,7 +745,9 @@
       "ORIGIN": "Heimatort",
       "STREET": "Strasse",
       "HOUSE_NUMBER": "Hausnr.",
-      "COUNTRY": "Land"
+      "COUNTRY": "Land",
+      "PERSONAL_DATA": "Persönliche Angaben",
+      "ADDRESS": "Adresse"
     },
     "REVIEW_PROCEDURE": {
       "TITLE": "Erfassungsweise (Kontrolle)",
@@ -769,6 +781,10 @@
         "2": "Relatives Mehr"
       }
     },
+    "FINISH_CANDIDATE_EDIT_STEP_NOTE": {
+      "TITLE": "Hinweis Erfassung Kandidierende",
+      "TEXT": "Alle vor dem Urnengang erfassten und publizierten Kandidierenden müssen am Wahltag einzeln ausgezählt und ausgewiesen werden."
+    },
     "AUTOMATIC_EMPTY_VOTE_COUNTING": {
       "TITLE": "Erfassung leere Zeilen",
       "AUTOMATIC": "Automatisch",
@@ -785,14 +801,17 @@
     "ENFORCE_RESULT_ENTRY_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen",
     "BALLOT_BUNDLE_NUMBER_GENERATION": {
       "TITLE": "Vergabe Bundnummer",
-      "AUTOMATIC": "Automatisch"
+      "AUTOMATIC": "Automatisch",
+      "MANUAL": "Manuell"
     },
     "BALLOT_NUMBER_GENERATION": {
       "TITLE": "Vergabe Wahlzettelnummer",
       "TYPES": {
         "1": "Neubeginn bei jedem Bund (z.B. 1-25)",
         "2": "Fortlaufend über alle Bunde (z.B. 1-25, 26-50, 51-75, …)"
-      }
+      },
+      "AUTOMATIC": "Automatisch",
+      "MANUAL": "Manuell"
     },
     "CANDIDATE_STEP": "Kandidierende",
     "CANDIDATE": {
@@ -831,7 +850,9 @@
       "REPORTING_TYPES": {
         "1": "Namentlich ausweisen",
         "2": "Zu Vereinzelte zählen"
-      }
+      },
+      "PERSONAL_DATA": "Persönliche Angaben",
+      "ADDRESS": "Adresse"
     },
     "BALLOT_GROUP": {
       "TITLE": "Wahlzettel-Gruppen",
@@ -992,13 +1013,15 @@
         "1": "St. Gallen",
         "2": "Thurgau",
         "3": "Zürich",
-        "4": "Graubünden"
+        "4": "Graubünden",
+        "5": "Appenzell Ausserrhoden"
       },
       "SHORT_NAMES": {
         "1": "SG",
         "2": "TG",
         "3": "ZH",
-        "4": "GR"
+        "4": "GR",
+        "5": "AR"
       }
     },
     "VOTING_CARDS": {

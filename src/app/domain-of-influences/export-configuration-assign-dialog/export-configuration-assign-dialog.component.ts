@@ -6,10 +6,10 @@
 
 import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { ExportService } from '../../core/export.service';
 import { ExportGenerator, ExportTemplate } from '../../core/models/export.model';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-export-configuration-assign-dialog',
@@ -18,6 +18,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false,
 })
 export class ExportConfigurationAssignDialogComponent implements OnInit, AfterViewInit {
+  private readonly dialogRef = inject<MatDialogRef<ExportConfigurationAssignDialogData>>(MatDialogRef);
+  private readonly exportService = inject(ExportService);
+  private readonly dialogData = inject<ExportConfigurationAssignDialogData>(MAT_DIALOG_DATA);
+
   public readonly columns = ['select', 'description', 'format'];
   public readonly columnsSelected = ['description', 'actions'];
   public loading: boolean = true;
@@ -27,13 +31,6 @@ export class ExportConfigurationAssignDialogComponent implements OnInit, AfterVi
   public dataSource = new TableDataSource<ExportTemplate>();
   public selection = new SelectionModel<ExportTemplate>(true, []);
   public isAllSelected: boolean = false;
-
-  constructor(
-    private readonly dialogRef: MatDialogRef<ExportConfigurationAssignDialogData>,
-    private readonly cd: ChangeDetectorRef,
-    private readonly exportService: ExportService,
-    @Inject(MAT_DIALOG_DATA) private readonly dialogData: ExportConfigurationAssignDialogData,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     try {

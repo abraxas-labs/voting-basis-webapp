@@ -21,7 +21,7 @@ import {
   UpdateScheduledCountingCirclesMergerRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/counting_circle_requests_pb';
 import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
   Authority,
@@ -41,7 +41,9 @@ import { mapToProtoContactPerson } from './utils/contact-person.utils';
   providedIn: 'root',
 })
 export class CountingCircleService extends GrpcService<CountingCircleServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(CountingCircleServicePromiseClient, environment, grpcBackend);
   }
 

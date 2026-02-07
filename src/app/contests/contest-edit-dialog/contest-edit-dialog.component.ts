@@ -6,7 +6,7 @@
 
 import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
 import { DatePipe } from '@angular/common';
-import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
@@ -27,6 +27,14 @@ import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settin
   standalone: false,
 })
 export class ContestEditDialogComponent implements OnInit, OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<ContestEditDialogData>>(MatDialogRef);
+  private readonly contestService = inject(ContestService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly i18n = inject(TranslateService);
+  private readonly dialogService = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly datePipe = inject(DatePipe);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -65,16 +73,9 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
   public originalContest?: Contest;
   public readonly backdropClickSubscription: Subscription;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<ContestEditDialogData>,
-    private readonly contestService: ContestService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly i18n: TranslateService,
-    private readonly dialogService: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly datePipe: DatePipe,
-    @Inject(MAT_DIALOG_DATA) dialogData: ContestEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ContestEditDialogData>(MAT_DIALOG_DATA);
+
     this.dialogData = dialogData;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
 

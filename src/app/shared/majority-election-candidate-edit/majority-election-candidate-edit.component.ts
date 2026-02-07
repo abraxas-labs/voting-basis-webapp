@@ -5,7 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil, LanguageService, allLanguages } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { MajorityElectionCandidate, MajorityElectionCandidateReportingType } from '../../core/models/majority-election.model';
 import { SexType } from '../../core/models/sex-type.model';
 import { isValidDateOfBirth } from '../../core/utils/date-of-birth.utils';
@@ -22,6 +22,9 @@ import { TranslateService } from '@ngx-translate/core';
   standalone: false,
 })
 export class MajorityElectionCandidateEditComponent implements OnInit {
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly countryService = inject(CountryService);
+
   @Input()
   public candidate?: MajorityElectionCandidate;
 
@@ -59,12 +62,10 @@ export class MajorityElectionCandidateEditComponent implements OnInit {
 
   private readonly customPartySelector: SelectableParty;
 
-  constructor(
-    private readonly enumUtil: EnumUtil,
-    private readonly countryService: CountryService,
-    languageService: LanguageService,
-    i18n: TranslateService,
-  ) {
+  constructor() {
+    const languageService = inject(LanguageService);
+    const i18n = inject(TranslateService);
+
     this.sexTypes = this.enumUtil.getArrayWithDescriptions<SexType>(SexType, 'SEX_TYPE.').filter(
       // deprecated values
       p => p.value !== SexType.SEX_TYPE_UNDEFINED,

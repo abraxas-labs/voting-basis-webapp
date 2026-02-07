@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
-import { Component, HostListener, Inject, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionService } from '../../core/majority-election.service';
@@ -25,6 +25,12 @@ import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-pa
   standalone: false,
 })
 export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<MajorityElectionCandidateEditDialogData>>(MatDialogRef);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly dialogService = inject(DialogService);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -48,14 +54,9 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
   public originalCandidate: MajorityElectionCandidate;
   public readonly backdropClickSubscription: Subscription;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<MajorityElectionCandidateEditDialogData>,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly dialogService: DialogService,
-    @Inject(MAT_DIALOG_DATA) dialogData: MajorityElectionCandidateEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<MajorityElectionCandidateEditDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.candidate;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
     this.isNew = !this.data.id;

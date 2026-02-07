@@ -5,7 +5,7 @@
  */
 
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { CountryServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/country_service_grpc_web_pb';
 import { Country, CountryProto } from './models/country.model';
@@ -15,7 +15,9 @@ import { ListCountriesRequest } from '@abraxas/voting-basis-service-proto/grpc/r
   providedIn: 'root',
 })
 export class CountryService extends GrpcService<CountryServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(CountryServicePromiseClient, environment, grpcBackend);
   }
 

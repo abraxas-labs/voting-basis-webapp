@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CountingCircleElectorate } from '../../core/models/counting-circle.model';
 import { TranslateService } from '../../core/translate.service';
 import {
@@ -22,6 +22,9 @@ import { flatMap } from '../../core/utils/array.utils';
   standalone: false,
 })
 export class CountingCircleElectoratesComponent {
+  private readonly i18n = inject(TranslateService);
+  private readonly dialogService = inject(DialogService);
+
   private electoratesValue: CountingCircleElectorate[] = [];
 
   public electorateLabelByIndex: Map<number, string> = new Map<number, string>();
@@ -45,11 +48,6 @@ export class CountingCircleElectoratesComponent {
 
   @Output()
   public electoratesChange: EventEmitter<CountingCircleElectorate[]> = new EventEmitter<CountingCircleElectorate[]>();
-
-  constructor(
-    private readonly i18n: TranslateService,
-    private readonly dialogService: DialogService,
-  ) {}
 
   public async assign(electorate: CountingCircleElectorate): Promise<void> {
     const disabledDoiTypes = flatMap(this.electorates.filter(e => e !== electorate).map(e => e.domainOfInfluenceTypesList));

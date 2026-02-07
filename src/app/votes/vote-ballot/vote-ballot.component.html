@@ -1,43 +1,47 @@
-<div class="form" *ngIf="vote && vote.ballots !== undefined && userVoteType">
-  <bc-dropdown
-    class="full-width"
-    [items]="userVoteTypeDescriptions"
-    [label]="'VOTE.USER_VOTE_TYPE.TITLE' | translate"
-    [readonly]="testingPhaseEnded || readonly || locked || voteTypeImmutable"
-    displayExpr="description"
-    valueExpr="value"
-    [required]="true"
-    [(value)]="userVoteType"
-    (valueChange)="contentChanged.emit()"
-    [subscriptSizing]="'dynamic'"
-  ></bc-dropdown>
-
-  <ng-container [ngSwitch]="userVoteType">
-    <app-vote-standard-ballot
-      *ngSwitchCase="userVoteTypes.StandardVote"
-      (contentChanged)="contentChanged.emit()"
-      [eVoting]="eVoting"
-      [locked]="locked"
-      [readonly]="readonly"
-      [testingPhaseEnded]="testingPhaseEnded"
-      [domainOfInfluenceType]="domainOfInfluenceType"
-      [vote]="vote"></app-vote-standard-ballot>
-    <app-vote-variants-on-single-ballot
-      *ngSwitchCase="userVoteTypes.VariantQuestionsOnSingleBallot"
-      (contentChanged)="contentChanged.emit()"
-      [eVoting]="eVoting"
-      [locked]="locked"
-      [readonly]="readonly"
-      [testingPhaseEnded]="testingPhaseEnded"
-      [domainOfInfluenceType]="domainOfInfluenceType"
-      [vote]="vote"></app-vote-variants-on-single-ballot>
-    <app-vote-variants-on-multiple-ballots
-      *ngSwitchCase="userVoteTypes.VariantQuestionsOnMultipleBallots"
-      (contentChanged)="contentChanged.emit()"
-      [eVoting]="eVoting"
-      [locked]="locked"
-      [readonly]="readonly"
-      [testingPhaseEnded]="testingPhaseEnded"
-      [vote]="vote"></app-vote-variants-on-multiple-ballots>
-  </ng-container>
-</div>
+@if (vote && vote.ballots !== undefined && userVoteType) {
+  <div class="form">
+    <bc-dropdown
+      class="full-width"
+      [items]="userVoteTypeDescriptions"
+      [label]="'VOTE.USER_VOTE_TYPE.TITLE' | translate"
+      [readonly]="testingPhaseEnded || readonly || locked || voteTypeImmutable"
+      displayExpr="description"
+      valueExpr="value"
+      [required]="true"
+      [(value)]="userVoteType"
+      (valueChange)="contentChanged.emit()"
+      [subscriptSizing]="'dynamic'"
+    ></bc-dropdown>
+    @switch (userVoteType) {
+      @case (userVoteTypes.StandardVote) {
+        <app-vote-standard-ballot
+          (contentChanged)="contentChanged.emit()"
+          [eVoting]="eVoting"
+          [locked]="locked"
+          [readonly]="readonly"
+          [testingPhaseEnded]="testingPhaseEnded"
+          [domainOfInfluenceType]="domainOfInfluenceType"
+          [vote]="vote"></app-vote-standard-ballot>
+      }
+      @case (userVoteTypes.VariantQuestionsOnSingleBallot) {
+        <app-vote-variants-on-single-ballot
+          (contentChanged)="contentChanged.emit()"
+          [eVoting]="eVoting"
+          [locked]="locked"
+          [readonly]="readonly"
+          [testingPhaseEnded]="testingPhaseEnded"
+          [domainOfInfluenceType]="domainOfInfluenceType"
+          [vote]="vote"></app-vote-variants-on-single-ballot>
+      }
+      @case (userVoteTypes.VariantQuestionsOnMultipleBallots) {
+        <app-vote-variants-on-multiple-ballots
+          (contentChanged)="contentChanged.emit()"
+          [eVoting]="eVoting"
+          [locked]="locked"
+          [readonly]="readonly"
+          [testingPhaseEnded]="testingPhaseEnded"
+          [vote]="vote"></app-vote-variants-on-multiple-ballots>
+      }
+    }
+  </div>
+}

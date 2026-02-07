@@ -8,7 +8,7 @@ import { AuthenticationService, AuthorizationService, SnackbarComponent } from '
 import { OAuthService } from 'angular-oauth2-oidc';
 import { SnackbarService, ThemeService, LanguageService } from '@abraxas/voting-lib';
 import { LocationStrategy } from '@angular/common';
-import { Component, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import 'moment/locale/de';
@@ -22,6 +22,15 @@ import { Title } from '@angular/platform-browser';
   standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private readonly translations = inject(TranslateService);
+  private readonly oauthService = inject(OAuthService);
+  private readonly auth = inject(AuthenticationService);
+  private readonly authorization = inject(AuthorizationService);
+  private readonly languageService = inject(LanguageService);
+  private readonly locationStrategy = inject(LocationStrategy);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly title = inject(Title);
+
   public authenticated = false;
   public hasTenant = false;
   public loading = true;
@@ -37,18 +46,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
-  constructor(
-    cursorService: CursorService,
-    themeService: ThemeService,
-    private readonly translations: TranslateService,
-    private readonly oauthService: OAuthService,
-    private readonly auth: AuthenticationService,
-    private readonly authorization: AuthorizationService,
-    private readonly languageService: LanguageService,
-    private readonly locationStrategy: LocationStrategy,
-    private readonly snackbarService: SnackbarService,
-    private readonly title: Title,
-  ) {
+  constructor() {
+    const cursorService = inject(CursorService);
+    const themeService = inject(ThemeService);
+
     // enable automatic silent refresh
     this.oauthService.setupAutomaticSilentRefresh({}, 'access_token');
 

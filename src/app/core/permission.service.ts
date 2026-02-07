@@ -5,7 +5,7 @@
  */
 
 import { PermissionServicePromiseClient } from '@abraxas/voting-basis-service-proto/grpc/permission_service_grpc_web_pb';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
 import { environment } from '../../environments/environment';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
@@ -16,7 +16,9 @@ import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 export class PermissionService extends GrpcService<PermissionServicePromiseClient> {
   private permissionCache?: Set<string>;
 
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(PermissionServicePromiseClient, environment, grpcBackend);
   }
 

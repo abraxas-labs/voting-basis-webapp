@@ -14,7 +14,7 @@ import {
   UpdateMajorityElectionBallotGroupRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/majority_election_requests_pb';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {
   MajorityElectionBallotGroup,
@@ -31,7 +31,9 @@ import {
   providedIn: 'root',
 })
 export class MajorityElectionBallotGroupService extends GrpcService<MajorityElectionServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(MajorityElectionServicePromiseClient, environment, grpcBackend);
   }
 

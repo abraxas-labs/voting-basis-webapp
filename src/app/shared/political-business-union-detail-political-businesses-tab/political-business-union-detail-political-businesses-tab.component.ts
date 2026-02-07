@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild, inject } from '@angular/core';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
 import { PoliticalBusinessUnion, PoliticalBusinessUnionType } from '../../core/models/political-business-union.model';
 import { PoliticalBusiness } from '../../core/models/political-business.model';
@@ -17,6 +17,9 @@ import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
   standalone: false,
 })
 export class PoliticalBusinessUnionDetailPoliticalBusinessesTabComponent implements AfterViewInit {
+  private readonly proportionalElectionUnionService = inject(ProportionalElectionUnionService);
+  private readonly majorityElectionUnionService = inject(MajorityElectionUnionService);
+
   public readonly columns = ['politicalBusinessNumber', 'shortDescription', 'domainOfInfluenceName'];
 
   @ViewChild('paginator') public paginator!: PaginatorComponent;
@@ -25,11 +28,6 @@ export class PoliticalBusinessUnionDetailPoliticalBusinessesTabComponent impleme
   public dataSource = new TableDataSource<PoliticalBusiness>();
 
   private politicalBusinessUnionValue!: PoliticalBusinessUnion;
-
-  constructor(
-    private readonly proportionalElectionUnionService: ProportionalElectionUnionService,
-    private readonly majorityElectionUnionService: MajorityElectionUnionService,
-  ) {}
 
   public get politicalBusinessUnion(): PoliticalBusinessUnion {
     return this.politicalBusinessUnionValue;

@@ -5,7 +5,7 @@
  */
 
 import { SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ImportService } from '../../../core/import.service';
 import { ImportFileContent, ImportType } from '../../../core/models/import.model';
@@ -23,6 +23,11 @@ import { MajorityElectionService } from '../../../core/majority-election.service
   standalone: false,
 })
 export class MajorityElectionCandidatesImportDialogComponent {
+  private readonly dialogRef = inject<MatDialogRef<MajorityElectionCandidatesImportDialogComponent>>(MatDialogRef);
+  private readonly importService = inject(ImportService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+
   public saving: boolean = false;
   public readonly importTypes: ImportType[] = [ImportType.IMPORT_TYPE_ECH_157];
   private readonly majorityElectionId: string;
@@ -34,13 +39,9 @@ export class MajorityElectionCandidatesImportDialogComponent {
   @ViewChild(SimpleStepperComponent, { static: true })
   public stepper!: SimpleStepperComponent;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<MajorityElectionCandidatesImportDialogComponent>,
-    private readonly importService: ImportService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    @Inject(MAT_DIALOG_DATA) dialogData: MajorityElectionCandidatesImportDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<MajorityElectionCandidatesImportDialogData>(MAT_DIALOG_DATA);
+
     this.majorityElectionId = dialogData.majorityElection.id;
   }
 

@@ -2,7 +2,9 @@
   <h1 header translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ASSIGN</h1>
 
   <div content>
-    <bc-spinner *ngIf="loading" class="block"></bc-spinner>
+    @if (loading) {
+      <bc-spinner class="block"></bc-spinner>
+    }
 
     <div class="grid">
       <div>
@@ -14,7 +16,7 @@
                 (checkedChange)="toggleAllRows($event)"
                 [checked]="selection.hasValue() && isAllSelected"
                 [indeterminate]="selection.hasValue() && !isAllSelected"
-              >
+                >
               </bc-checkbox>
             </bc-header-cell>
             <bc-data-cell *dataCellDef="let element">

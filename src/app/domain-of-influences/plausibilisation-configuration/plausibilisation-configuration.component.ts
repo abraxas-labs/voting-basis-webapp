@@ -5,7 +5,7 @@
  */
 
 import { DialogService, EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
 import { DomainOfInfluence, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 import {
@@ -28,6 +28,9 @@ import {
   standalone: false,
 })
 export class PlausibilisationConfigurationComponent {
+  private readonly enumUtil = inject(EnumUtil);
+  readonly dialogService = inject(DialogService);
+
   public readonly translationPrefix: string = 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.PLAUSIBILISATION_CONFIGURATION.';
   public plausiConfig!: PlausibilisationConfiguration;
   public domainOfInfluenceTypeItems: EnumItemDescription<DomainOfInfluenceType>[] = [];
@@ -41,11 +44,6 @@ export class PlausibilisationConfigurationComponent {
 
   private domainOfInfluenceValue!: DomainOfInfluence;
   private domainOfInfluenceTypeValue!: DomainOfInfluenceType;
-
-  constructor(
-    private readonly enumUtil: EnumUtil,
-    public readonly dialogService: DialogService,
-  ) {}
 
   public get domainOfInfluence(): DomainOfInfluence {
     return this.domainOfInfluenceValue;

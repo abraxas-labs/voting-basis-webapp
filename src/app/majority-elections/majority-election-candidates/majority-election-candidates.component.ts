@@ -4,8 +4,8 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
-import { Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { DialogService, SnackbarService } from '@abraxas/voting-lib';
+import { Component, inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { MajorityElectionService } from '../../core/majority-election.service';
@@ -34,6 +34,13 @@ import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-pa
   standalone: false,
 })
 export class MajorityElectionCandidatesComponent {
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly secondaryMajorityElectionService = inject(SecondaryMajorityElectionService);
+  private readonly dialogService = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+
   @Input()
   public loadDependencies: boolean = false;
 
@@ -72,16 +79,6 @@ export class MajorityElectionCandidatesComponent {
   public secondaryElections: SecondaryMajorityElection[] = [];
   public currentDomainOfInfluence?: DomainOfInfluence;
   public parties: DomainOfInfluenceParty[] = [];
-
-  constructor(
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
-    private readonly dialogService: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly languageService: LanguageService,
-  ) {}
 
   @Input()
   public set majorityElection(value: MajorityElection) {

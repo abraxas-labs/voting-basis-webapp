@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
-import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionService } from '../../core/majority-election.service';
@@ -34,6 +34,13 @@ import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-pa
   standalone: false,
 })
 export class SecondaryMajorityElectionCandidateEditDialogComponent implements OnInit, OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<SecondaryMajorityElectionCandidateEditDialogData>>(MatDialogRef);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly secondaryMajorityElectionService = inject(SecondaryMajorityElectionService);
+  private readonly dialogService = inject(DialogService);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -61,15 +68,9 @@ export class SecondaryMajorityElectionCandidateEditDialogComponent implements On
   public parties: DomainOfInfluenceParty[];
   public individualCandidatesDisabled: boolean = false;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<SecondaryMajorityElectionCandidateEditDialogData>,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
-    private readonly dialogService: DialogService,
-    @Inject(MAT_DIALOG_DATA) dialogData: SecondaryMajorityElectionCandidateEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<SecondaryMajorityElectionCandidateEditDialogData>(MAT_DIALOG_DATA);
+
     this.candidate = dialogData.candidate;
     this.secondaryMajorityElection = dialogData.secondaryMajorityElection;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;

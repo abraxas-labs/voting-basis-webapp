@@ -5,7 +5,7 @@
   [cdkDropListData]="candidates"
   [cdkDropListDisabled]="testingPhaseEnded || locked || readonly"
   (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)"
->
+  >
   <ng-container columnDef="position">
     <bc-header-cell *headerCellDef>
       <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.POSITION' | translate"></app-truncated-value>
@@ -52,7 +52,9 @@
       <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.SEX' | translate"></app-truncated-value>
     </bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <app-truncated-value *ngIf="!!element.sex" [value]="'SEX_TYPE.' + element.sex | translate"></app-truncated-value>
+      @if (!!element.sex) {
+        <app-truncated-value [value]="'SEX_TYPE.' + element.sex | translate"></app-truncated-value>
+      }
     </bc-data-cell>
   </ng-container>
 
@@ -79,7 +81,9 @@
       <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.INCUMBENT' | translate"></app-truncated-value>
     </bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <bc-icon *ngIf="element.incumbent" icon="checkmark"></bc-icon>
+      @if (element.incumbent) {
+        <bc-icon icon="checkmark"></bc-icon>
+      }
     </bc-data-cell>
   </ng-container>
 
@@ -104,16 +108,19 @@
   <ng-container columnDef="actions">
     <bc-header-cell *headerCellDef></bc-header-cell>
     <bc-data-cell *dataCellDef="let element">
-      <div *ngIf="!locked && element.id && !readonly && !hideActionButtons" class="flex">
-        <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
-        <bc-icon
-          *ngIf="!testingPhaseEnded && !locked"
-          class="clickable ml-2"
-          (click)="delete.emit(element)"
-          icon="trash"
-          iconColor="error"
-        ></bc-icon>
-      </div>
+      @if (!locked && element.id && !readonly && !hideActionButtons) {
+        <div class="flex">
+          <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
+          @if (!testingPhaseEnded && !locked) {
+            <bc-icon
+              class="clickable ml-2"
+              (click)="delete.emit(element)"
+              icon="trash"
+              iconColor="error"
+            ></bc-icon>
+          }
+        </div>
+      }
     </bc-data-cell>
   </ng-container>
 

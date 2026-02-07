@@ -7,7 +7,7 @@
 import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ProportionalElectionList, ProportionalElectionListUnion } from '../../../core/models/proportional-election.model';
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
@@ -20,6 +20,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false,
 })
 export class ProportionalElectionListUnionEntriesEditDialogComponent implements AfterViewInit {
+  private readonly dialogRef = inject<MatDialogRef<ProportionalElectionListUnionEntriesEditDialogData>>(MatDialogRef);
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+
   public readonly columns = ['select', 'orderNumber', 'shortDescription'];
   public readonly columnsSelected = ['orderNumber', 'shortDescription', 'actions'];
 
@@ -33,13 +38,9 @@ export class ProportionalElectionListUnionEntriesEditDialogComponent implements 
   public selection = new SelectionModel<ProportionalElectionList>(true, []);
   public isAllSelected: boolean = false;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<ProportionalElectionListUnionEntriesEditDialogData>,
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionListUnionEntriesEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ProportionalElectionListUnionEntriesEditDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.listUnion;
     this.dataSource.data = dialogData.lists;
     this.listUnionTitleType = this.data.proportionalElectionRootListUnionId ? 'SUB_LIST_UNION' : 'LIST_UNION';

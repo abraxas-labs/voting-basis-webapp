@@ -1,145 +1,166 @@
-<vo-lib-page [contentLoading]="loading"
-             [header]="!isNew && data?.name || 'COUNTING_CIRCLE.NEW'"
-             [showBackButton]="true">
-  <div class="grid" *ngIf="data && form" [formGroup]="form">
-    <h2 class="mx-1" translate>COUNTING_CIRCLE.DETAIL.GENERAL_INFORMATION</h2>
-    <div class="mx-1">
-      <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
-      <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_DURING_EVENT</span>
+<vo-lib-page [contentLoading]="loading" [header]="(!isNew && data?.name) || 'COUNTING_CIRCLE.NEW'" [showBackButton]="true">
+  @if (data && form) {
+    <div class="grid" [formGroup]="form">
+      <h2 class="mx-1" translate>COUNTING_CIRCLE.DETAIL.GENERAL_INFORMATION</h2>
+      <div class="mx-1">
+        <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
+        <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_DURING_EVENT</span>
+      </div>
+      <h2 translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.ASSIGNMENT</h2>
+      <div class="form">
+        <bc-text
+          [label]="'COUNTING_CIRCLE.NAME' | translate"
+          [required]="true"
+          [maxlength]="100"
+          [readonly]="!canEditEverything"
+          [value]="data.name"
+          (valueChange)="data.name = $event; contentChanged()"
+          [formControl]="form.controls.name"
+          [showDefaultErrors]="true"
+          [subscriptSizing]="'dynamic'"
+        ></bc-text>
+        <bc-text
+          [label]="'COUNTING_CIRCLE.NAME_FOR_PROTOCOL' | translate"
+          [maxlength]="100"
+          [readonly]="!canEditEverything"
+          [value]="data.nameForProtocol"
+          (valueChange)="data.nameForProtocol = $event; contentChanged()"
+          [formControl]="form.controls.nameForProtocol"
+          [showDefaultErrors]="true"
+          [subscriptSizing]="'dynamic'"
+        ></bc-text>
+        <bc-dropdown
+          class="full-width"
+          [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
+          [items]="cantons"
+          displayExpr="description"
+          valueExpr="value"
+          [required]="true"
+          [readonly]="!canEditEverything"
+          [value]="data.canton"
+          (valueChange)="data.canton = $event; contentChanged()"
+          [subscriptSizing]="'dynamic'"
+        ></bc-dropdown>
+        <bc-text
+          [label]="'COUNTING_CIRCLE.BFS' | translate"
+          [required]="true"
+          [readonly]="!canEditEverything"
+          [value]="data.bfs"
+          (valueChange)="data.bfs = $event; contentChanged()"
+          [formControl]="form.controls.bfs"
+          [showDefaultErrors]="true"
+          [subscriptSizing]="'dynamic'"
+        ></bc-text>
+        <bc-text
+          [label]="'COUNTING_CIRCLE.CODE' | translate"
+          [maxlength]="20"
+          [readonly]="!canEditEverything"
+          [value]="data.code"
+          (valueChange)="data.code = $event; contentChanged()"
+          [formControl]="form.controls.code"
+          [showDefaultErrors]="true"
+          [subscriptSizing]="'dynamic'"
+        ></bc-text>
+        <bc-number
+          [label]="'COUNTING_CIRCLE.SORT_NUMBER' | translate"
+          [max]="999999999"
+          [min]="0"
+          [error]="data.sortNumber < 0 || data.sortNumber > 999999999"
+          [readonly]="!canEditEverything"
+          [value]="data.sortNumber"
+          (valueChange)="data.sortNumber = $event ?? 0; contentChanged()"
+          [formControl]="form.controls.sortNumber"
+          [showDefaultErrors]="true"
+          [subscriptSizing]="'dynamic'"
+        ></bc-number>
+        <vo-lib-tenant-selection
+          label="COUNTING_CIRCLE.DETAIL.AUTHORITY"
+          [readonly]="!canEditEverything"
+          [selectedTenant]="selectedResponsibleAuthority"
+          (selectedTenantChange)="selectedResponsibleAuthority = $event; contentChanged()"
+        ></vo-lib-tenant-selection>
+        <bc-checkbox
+          class="block"
+          [label]="'COUNTING_CIRCLE.E_COUNTING' | translate"
+          [(checked)]="data.eCounting"
+          (checkedChange)="contentChanged()"
+          [disabled]="!canEditEverything"
+          [subscriptSizing]="'dynamic'"
+        ></bc-checkbox>
+        <bc-checkbox
+          [label]="'COUNTING_CIRCLE.E_VOTING' | translate"
+          [checked]="showEVotingActiveFrom"
+          (checkedChange)="updateShowEVotingActiveFrom($event); contentChanged()"
+          [disabled]="!canEditEverything"
+          [subscriptSizing]="'dynamic'"
+        ></bc-checkbox>
+        @if (showEVotingActiveFrom) {
+          <bc-date
+            [label]="'COUNTING_CIRCLE.E_VOTING_ACTIVE_FROM' | translate"
+            [required]="true"
+            [readonly]="!canEditEverything"
+            [value]="(data.eVotingActiveFrom | date) ?? undefined"
+            (valueChange)="updateEVotingActiveFrom($event); contentChanged()"
+          ></bc-date>
+        }
+        <app-authority-address-edit
+          [authority]="data.responsibleAuthority!"
+          (contentChanged)="contentChanged()"
+          [readonly]="!isResponsibleAuthorityOrCanEditEverything"
+        ></app-authority-address-edit>
+      </div>
+      <div class="form">
+        <app-contact-person-edit
+          class="form"
+          [readonly]="!isResponsibleAuthorityOrCanEditEverything"
+          [formGroup]="form.controls.contactPersonDuringEvent"
+          (contentChanged)="updateContactPerson(); contentChanged()"
+        ></app-contact-person-edit>
+        <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
+        <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_AFTER_EVENT</span>
+        <bc-checkbox
+          class="ml-2"
+          [label]="'COUNTING_CIRCLE.DETAIL.SAME_CONTACT_PERSON' | translate"
+          [disabled]="!isResponsibleAuthorityOrCanEditEverything"
+          [checked]="data.contactPersonSameDuringEventAsAfter"
+          (checkedChange)="data.contactPersonSameDuringEventAsAfter = $event; contentChanged()"
+          [subscriptSizing]="'dynamic'"
+        ></bc-checkbox>
+        @if (!data.contactPersonSameDuringEventAsAfter) {
+          <app-contact-person-edit
+            class="form"
+            [readonly]="!isResponsibleAuthorityOrCanEditEverything"
+            [formGroup]="form.controls.contactPersonAfterEvent"
+            (contentChanged)="updateContactPerson(); contentChanged()"
+          ></app-contact-person-edit>
+        }
+        <h2 class="mb-2" translate>COUNTING_CIRCLE.ELECTORATE.TITLE</h2>
+        <span class="subtitle" translate>COUNTING_CIRCLE.ELECTORATE.SUB_TITLE</span>
+        <app-counting-circle-electorates
+          [(electorates)]="data.electoratesList"
+          (electoratesChange)="data.electoratesList = $event; contentChanged()"
+          [disabled]="!canEditEverything"
+        ></app-counting-circle-electorates>
+      </div>
+      <div>
+        @if (loading) {
+          <bc-spinner></bc-spinner>
+        } @else {
+          @if (domainOfInfluences.length) {
+            @for (domainOfInfluence of domainOfInfluences; track domainOfInfluence) {
+              <p class="my-1">{{ domainOfInfluence.name }}</p>
+            }
+          } @else {
+            <p class="my-1 no-items-message" translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.EMPTY</p>
+          }
+        }
+      </div>
     </div>
-    <h2 translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.ASSIGNMENT</h2>
-
-    <div class="form">
-      <bc-text [label]="'COUNTING_CIRCLE.NAME' | translate"
-               [required]="true"
-               [maxlength]="100"
-               [readonly]="!canEditEverything"
-               [value]="data.name"
-               (valueChange)="data.name = $event; contentChanged()"
-               [formControl]="form.controls.name"
-               [showDefaultErrors]="true"
-               [subscriptSizing]="'dynamic'"></bc-text>
-      <bc-text [label]="'COUNTING_CIRCLE.NAME_FOR_PROTOCOL' | translate"
-               [maxlength]="100"
-               [readonly]="!canEditEverything"
-               [value]="data.nameForProtocol"
-               (valueChange)="data.nameForProtocol = $event; contentChanged()"
-               [formControl]="form.controls.nameForProtocol"
-               [showDefaultErrors]="true"
-               [subscriptSizing]="'dynamic'"></bc-text>
-      <bc-dropdown class="full-width"
-                   [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
-                   [items]="cantons"
-                   displayExpr="description"
-                   valueExpr="value"
-                   [required]="true"
-                   [readonly]="!canEditEverything"
-                   [value]="data.canton"
-                   (valueChange)="data.canton = $event; contentChanged()"
-                   [subscriptSizing]="'dynamic'"></bc-dropdown>
-      <bc-text [label]="'COUNTING_CIRCLE.BFS' | translate"
-               [required]="true"
-               [readonly]="!canEditEverything"
-               [value]="data.bfs"
-               (valueChange)="data.bfs = $event; contentChanged()"
-               [formControl]="form.controls.bfs"
-               [showDefaultErrors]="true"
-               [subscriptSizing]="'dynamic'"></bc-text>
-      <bc-text [label]="'COUNTING_CIRCLE.CODE' | translate"
-               [maxlength]="20"
-               [readonly]="!canEditEverything"
-               [value]="data.code"
-               (valueChange)="data.code = $event; contentChanged()"
-               [formControl]="form.controls.code"
-               [showDefaultErrors]="true"
-               [subscriptSizing]="'dynamic'"></bc-text>
-      <bc-number [label]="'COUNTING_CIRCLE.SORT_NUMBER' | translate"
-                 [max]="999999999"
-                 [min]="0"
-                 [error]="data.sortNumber < 0 || data.sortNumber > 999999999"
-                 [readonly]="!canEditEverything"
-                 [value]="data.sortNumber"
-                 (valueChange)="data.sortNumber = $event; contentChanged()"
-                 [formControl]="form.controls.sortNumber"
-                 [showDefaultErrors]="true"
-                 [subscriptSizing]="'dynamic'"></bc-number>
-
-      <vo-lib-tenant-selection label="COUNTING_CIRCLE.DETAIL.AUTHORITY"
-                               [readonly]="!canEditEverything"
-                               [selectedTenant]="selectedResponsibleAuthority"
-                               (selectedTenantChange)="selectedResponsibleAuthority = $event; contentChanged()"></vo-lib-tenant-selection>
-
-      <bc-checkbox class="block"
-                   [label]="'COUNTING_CIRCLE.E_COUNTING' | translate"
-                   [(checked)]="data.eCounting"
-                   (checkedChange)="contentChanged()"
-                   [disabled]="!canEditEverything"
-                   [subscriptSizing]="'dynamic'"></bc-checkbox>
-
-      <bc-checkbox [label]="'COUNTING_CIRCLE.E_VOTING' | translate"
-                   [checked]="showEVotingActiveFrom"
-                   (checkedChange)="updateShowEVotingActiveFrom($event); contentChanged()"
-                   [disabled]="!canEditEverything"
-                   [subscriptSizing]="'dynamic'"></bc-checkbox>
-
-      <bc-date *ngIf="showEVotingActiveFrom"
-               [label]="'COUNTING_CIRCLE.E_VOTING_ACTIVE_FROM' | translate"
-               [required]="true"
-               [readonly]="!canEditEverything"
-               [value]="data.eVotingActiveFrom | date"
-               (valueChange)="updateEVotingActiveFrom($event); contentChanged()"></bc-date>
-
-      <app-authority-address-edit [authority]="data.responsibleAuthority!"
-                                  (contentChanged)="contentChanged()"
-                                  [readonly]="!isResponsibleAuthorityOrCanEditEverything"></app-authority-address-edit>
-    </div>
-
-    <div class="form">
-      <app-contact-person-edit class="form"
-                               [readonly]="!isResponsibleAuthorityOrCanEditEverything"
-                               [formGroup]="form.controls.contactPersonDuringEvent"
-                               (contentChanged)="updateContactPerson(); contentChanged()"></app-contact-person-edit>
-
-      <h2 class="mb-1" translate>CONTACT_PERSON.TITLE</h2>
-      <span class="subtitle" translate>COUNTING_CIRCLE.DETAIL.CONTACT_PERSON_AFTER_EVENT</span>
-      <bc-checkbox class="ml-2"
-                   [label]="'COUNTING_CIRCLE.DETAIL.SAME_CONTACT_PERSON' | translate"
-                   [disabled]="!isResponsibleAuthorityOrCanEditEverything"
-                   [checked]="data.contactPersonSameDuringEventAsAfter"
-                   (checkedChange)="data.contactPersonSameDuringEventAsAfter = $event; contentChanged()"
-                   [subscriptSizing]="'dynamic'"></bc-checkbox>
-      <app-contact-person-edit *ngIf="!data.contactPersonSameDuringEventAsAfter"
-                               class="form"
-                               [readonly]="!isResponsibleAuthorityOrCanEditEverything"
-                               [formGroup]="form.controls.contactPersonAfterEvent"
-                               (contentChanged)="updateContactPerson(); contentChanged()"></app-contact-person-edit>
-
-      <h2 class="mb-2" translate>COUNTING_CIRCLE.ELECTORATE.TITLE</h2>
-      <span class="subtitle" translate>COUNTING_CIRCLE.ELECTORATE.SUB_TITLE</span>
-
-      <app-counting-circle-electorates [(electorates)]="data.electoratesList"
-                                       (electoratesChange)="data.electoratesList = $event; contentChanged()"
-                                       [disabled]="!canEditEverything"></app-counting-circle-electorates>
-    </div>
-
-    <div>
-      <bc-spinner *ngIf="loading; else domainOfInfluencesList"></bc-spinner>
-      <ng-template #domainOfInfluencesList>
-        <ng-container *ngIf="domainOfInfluences.length; else domainOfInfluencesEmpty">
-          <p class="my-1" *ngFor="let domainOfInfluence of domainOfInfluences">{{ domainOfInfluence.name }}</p>
-        </ng-container>
-        <ng-template #domainOfInfluencesEmpty>
-          <p class="my-1 no-items-message" translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.EMPTY</p>
-        </ng-template>
-      </ng-template>
-    </div>
-  </div>
+  }
 
   <ng-container page-footer>
-    <vo-lib-button-bar *ngIf="isResponsibleAuthorityOrCanEditEverything"
-                       (cancel)="cancel()"
-                       [saving]="saving"
-                       [canSave]="canSave"
-                       (save)="save()"></vo-lib-button-bar>
+    @if (isResponsibleAuthorityOrCanEditEverything) {
+      <vo-lib-button-bar (cancel)="cancel()" [saving]="saving" [canSave]="canSave" (save)="save()"></vo-lib-button-bar>
+    }
   </ng-container>
 </vo-lib-page>

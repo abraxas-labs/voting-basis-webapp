@@ -5,49 +5,56 @@
            (valueChange)="data.politicalBusinessNumber = $event; setIsApplied(false)"
            [subscriptSizing]="'dynamic'"></bc-text>
 
-  <bc-dropdown class="full-width"
-               *ngIf="domainOfInfluenceTypes.length > 1"
-               [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
-               [items]="domainOfInfluenceTypes"
-               [clearable]="false"
-               displayExpr="description"
-               valueExpr="value"
-               [required]="true"
-               [(value)]="selectedDomainOfInfluenceType"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  @if (domainOfInfluenceTypes.length > 1) {
+    <bc-dropdown class="full-width"
+      [label]="'DOMAIN_OF_INFLUENCE.TYPE' | translate"
+      [items]="domainOfInfluenceTypes"
+      [clearable]="false"
+      displayExpr="description"
+      valueExpr="value"
+      [required]="true"
+      [(value)]="selectedDomainOfInfluenceType"
+    [subscriptSizing]="'dynamic'"></bc-dropdown>
+  }
 
-  <bc-dropdown class="full-width"
-               *ngIf="selectedDomainOfInfluenceType"
-               [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
-               displayExpr="name"
-               [required]="true"
-               [(value)]="selectedDomainOfInfluence"
-               [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
-               [subscriptSizing]="'dynamic'"></bc-dropdown>
+  @if (selectedDomainOfInfluenceType) {
+    <bc-dropdown class="full-width"
+      [items]="domainOfInfluencesByType[selectedDomainOfInfluenceType]"
+      displayExpr="name"
+      [required]="true"
+      [(value)]="selectedDomainOfInfluence"
+      [label]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"
+    [subscriptSizing]="'dynamic'"></bc-dropdown>
+  }
 
-  <app-proportional-election-mandate-algorithm-selection
-    *ngIf="domainOfInfluenceDefaults?.proportionalElectionMandateAlgorithmsList?.length > 0"
-    [proportionalElectionMandateAlgorithmsList]="domainOfInfluenceDefaults?.proportionalElectionMandateAlgorithmsList"
-    [canton]="domainOfInfluenceDefaults?.canton"
-    [domainOfInfluenceType]="selectedDomainOfInfluenceType"
-    [data]="data"
-    (contentChanged)="setIsApplied(false)"
-  ></app-proportional-election-mandate-algorithm-selection>
+  @if (domainOfInfluenceDefaults?.proportionalElectionMandateAlgorithmsList?.length > 0) {
+    <app-proportional-election-mandate-algorithm-selection
+      [proportionalElectionMandateAlgorithmsList]="domainOfInfluenceDefaults?.proportionalElectionMandateAlgorithmsList"
+      [canton]="domainOfInfluenceDefaults?.canton"
+      [domainOfInfluenceType]="selectedDomainOfInfluenceType"
+      [data]="data"
+      (contentChanged)="setIsApplied(false)"
+    ></app-proportional-election-mandate-algorithm-selection>
+  }
 
   <div>
-    <bc-spinner *ngIf="loadingParties; else partyMappingContent" class="mt-3"></bc-spinner>
-    <ng-template #partyMappingContent>
-      <app-import-proportional-election-party-mapping
-        *ngIf="partyMappings !== undefined && partyMappings.parties.length > 0"
-        class="mt-3"
-        [data]="partyMappings!"
-        (mappingsChange)="setIsApplied(false)"
-      ></app-import-proportional-election-party-mapping>
-    </ng-template>
+    @if (loadingParties) {
+      <bc-spinner class="mt-3"></bc-spinner>
+    } @else {
+      @if (partyMappings !== undefined && partyMappings.parties.length > 0) {
+        <app-import-proportional-election-party-mapping
+          class="mt-3"
+          [data]="partyMappings!"
+          (mappingsChange)="setIsApplied(false)"
+        ></app-import-proportional-election-party-mapping>
+      }
+    }
   </div>
 
   <div class="button-container">
-    <bc-icon *ngIf="isApplied" class="mr-2" iconColor="success" icon="checkmark"></bc-icon>
+    @if (isApplied) {
+      <bc-icon class="mr-2" iconColor="success" icon="checkmark"></bc-icon>
+    }
     <bc-button variant="primary"
                [label]="'ACTIONS.APPLY' | translate"
                [disabled]="isApplied || !data.politicalBusinessNumber || !data.domainOfInfluenceId || loadingParties"

@@ -5,7 +5,7 @@
  */
 
 import { SnackbarService, LanguageService } from '@abraxas/voting-lib';
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ProportionalElectionListUnion } from '../../../core/models/proportional-election.model';
 import { ProportionalElectionService } from '../../../core/proportional-election.service';
@@ -17,18 +17,19 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false,
 })
 export class ProportionalElectionListUnionEditDialogComponent {
+  private readonly dialogRef = inject<MatDialogRef<ProportionalElectionListUnionEditDialogData>>(MatDialogRef);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+
   public data: ProportionalElectionListUnion;
   public isNew: boolean = false;
   public saving: boolean = false;
   public listUnionTitleType: string = '';
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<ProportionalElectionListUnionEditDialogData>,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly proportionalElectionService: ProportionalElectionService,
-    @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionListUnionEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ProportionalElectionListUnionEditDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.listUnion;
     this.isNew = !this.data.id;
     this.listUnionTitleType = this.data.proportionalElectionRootListUnionId ? 'SUB_LIST_UNION' : 'LIST_UNION';

@@ -53,6 +53,7 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     publishResultsDisabled: false,
     votingCardFlatRateDisabled: false,
     isMainVotingCardsDomainOfInfluence: false,
+    hasEmptyVotingCards: false,
     hideLowerDomainOfInfluencesInReports: false,
     eCollectingEnabled: false,
     eCollectingEmail: '',

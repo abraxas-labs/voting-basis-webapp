@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { AfterContentInit, Component, Input } from '@angular/core';
+import { AfterContentInit, Component, Input, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionService } from '../../../core/majority-election.service';
 import { MajorityElectionBallotGroupEntryCandidates } from '../../../core/models/majority-election-ballot-group.model';
@@ -19,6 +19,10 @@ import { groupBySingle } from '../../../core/utils/array.utils';
   standalone: false,
 })
 export class MajorityElectionBallotGroupCandidatesComponent implements AfterContentInit {
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly secondaryMajorityElectionService = inject(SecondaryMajorityElectionService);
+  readonly i18n = inject(TranslateService);
+
   public readonly columns = ['number', 'lastName', 'firstName'];
 
   @Input()
@@ -35,12 +39,6 @@ export class MajorityElectionBallotGroupCandidatesComponent implements AfterCont
   public allCandidatesById: Record<string, MajorityElectionCandidate> = {};
 
   private selectedCandidateIds: Record<string, boolean> = {};
-
-  constructor(
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
-    readonly i18n: TranslateService,
-  ) {}
 
   @Input()
   public set candidateEntry(entryCandidates: MajorityElectionBallotGroupEntryCandidates | undefined) {

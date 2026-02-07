@@ -7,7 +7,7 @@
 import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
 import { PoliticalBusinessUnion, PoliticalBusinessUnionType } from '../../core/models/political-business-union.model';
@@ -22,6 +22,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   standalone: false,
 })
 export class PoliticalBusinessUnionEntriesEditDialogComponent implements AfterViewInit {
+  private readonly dialogRef = inject<MatDialogRef<PoliticalBusinessUnionEntriesEditDialogData>>(MatDialogRef);
+  private readonly proportionalElectionUnionService = inject(ProportionalElectionUnionService);
+  private readonly majorityElectionUnionService = inject(MajorityElectionUnionService);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+
   public readonly columns = ['select', 'politicalBusinessNumber', 'shortDescription'];
   public readonly columnsSelected = ['politicalBusinessNumber', 'actions'];
   public readonly dataSource = new TableDataSource<PoliticalBusiness>();
@@ -33,14 +39,9 @@ export class PoliticalBusinessUnionEntriesEditDialogComponent implements AfterVi
   public data: PoliticalBusinessUnion;
   public saving: boolean = false;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<PoliticalBusinessUnionEntriesEditDialogData>,
-    private readonly proportionalElectionUnionService: ProportionalElectionUnionService,
-    private readonly majorityElectionUnionService: MajorityElectionUnionService,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    @Inject(MAT_DIALOG_DATA) dialogData: PoliticalBusinessUnionEntriesEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<PoliticalBusinessUnionEntriesEditDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.politicalBusinessUnion;
     this.dataSource.data = dialogData.selectablePoliticalBusinesses;
     const selectedPoliticalBusinessIds = this.data.politicalBusinesses?.map(pb => pb.id) ?? [];

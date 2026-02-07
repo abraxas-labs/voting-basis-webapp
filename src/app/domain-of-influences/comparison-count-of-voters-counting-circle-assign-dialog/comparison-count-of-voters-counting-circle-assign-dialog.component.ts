@@ -6,7 +6,7 @@
 
 import { PaginatorComponent, TableDataSource } from '@abraxas/base-components';
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomainOfInfluenceCountingCircle } from '../../core/models/counting-circle.model';
 import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
@@ -18,6 +18,8 @@ import { ComparisonCountOfVotersCategory } from '../../core/models/plausibilisat
   standalone: false,
 })
 export class ComparisonCountOfVotersCountingCircleAssignDialogComponent implements AfterViewInit {
+  readonly dialogRef = inject<MatDialogRef<ComparisonCountOfVotersCountingCircleAssignDialogData>>(MatDialogRef);
+
   public readonly translationPrefix: string = 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.PLAUSIBILISATION_CONFIGURATION.';
   public readonly dataSource = new TableDataSource<ComparisonCountOfVotersCountingCircleTableItem>();
   public readonly categoryItems: EnumItemDescription<ComparisonCountOfVotersCategory>[] = [];
@@ -28,11 +30,10 @@ export class ComparisonCountOfVotersCountingCircleAssignDialogComponent implemen
 
   public domainOfInfluence!: DomainOfInfluence;
 
-  constructor(
-    public readonly dialogRef: MatDialogRef<ComparisonCountOfVotersCountingCircleAssignDialogData>,
-    enumUtil: EnumUtil,
-    @Inject(MAT_DIALOG_DATA) dialogData: ComparisonCountOfVotersCountingCircleAssignDialogData,
-  ) {
+  constructor() {
+    const enumUtil = inject(EnumUtil);
+    const dialogData = inject<ComparisonCountOfVotersCountingCircleAssignDialogData>(MAT_DIALOG_DATA);
+
     this.domainOfInfluence = dialogData.domainOfInfluence;
     this.readonly = dialogData.readonly;
 

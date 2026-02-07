@@ -7,7 +7,7 @@
 import { RadioButton, Tenant } from '@abraxas/base-components';
 import { VotingChannel } from '@abraxas/voting-basis-service-proto/grpc/shared/voting_channel_pb';
 import { DialogService, EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CantonSettingsService } from '../../core/canton-settings.service';
 import {
@@ -43,6 +43,13 @@ const availableVotingCardChannels: CantonSettingsVotingCardChannel[] = [
   standalone: false,
 })
 export class CantonSettingsEditDialogComponent implements OnInit, OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<CantonSettingsEditDialogData>>(MatDialogRef);
+  private readonly cantonSettingsService = inject(CantonSettingsService);
+  private readonly i18n = inject(TranslateService);
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly dialogService = inject(DialogService);
+
   public readonly states: typeof CountingCircleResultState = CountingCircleResultState;
 
   @HostListener('window:beforeunload')
@@ -77,15 +84,10 @@ export class CantonSettingsEditDialogComponent implements OnInit, OnDestroy {
   public originalSwissAbroadVotingRightDomainOfInfluenceTypes?: CheckableItems<EnumItemDescription<DomainOfInfluenceType>>;
   public readonly backdropClickSubscription: Subscription;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<CantonSettingsEditDialogData>,
-    private readonly cantonSettingsService: CantonSettingsService,
-    private readonly i18n: TranslateService,
-    private readonly enumUtil: EnumUtil,
-    private readonly snackbarService: SnackbarService,
-    private readonly dialogService: DialogService,
-    @Inject(MAT_DIALOG_DATA) dialogData: CantonSettingsEditDialogData,
-  ) {
+  constructor() {
+    const enumUtil = this.enumUtil;
+    const dialogData = inject<CantonSettingsEditDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.cantonSettings;
     this.cantons = dialogData.cantons;
     this.readonly = dialogData.readonly;

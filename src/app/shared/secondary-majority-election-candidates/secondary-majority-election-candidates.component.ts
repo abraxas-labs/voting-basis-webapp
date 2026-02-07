@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionService } from '../../core/majority-election.service';
 import { MajorityElection } from '../../core/models/majority-election.model';
@@ -30,6 +30,12 @@ import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-pa
   standalone: false,
 })
 export class SecondaryMajorityElectionCandidatesComponent {
+  private readonly secondaryMajorityElectionService = inject(SecondaryMajorityElectionService);
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly dialogService = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+
   @Input()
   public loadCandidates: boolean = true;
 
@@ -73,14 +79,6 @@ export class SecondaryMajorityElectionCandidatesComponent {
   public currentSecondaryMajorityElection?: SecondaryMajorityElection;
   public majorityElection?: MajorityElection;
   public secondaryMajorityElections: SecondaryMajorityElection[] = [];
-
-  constructor(
-    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly dialogService: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-  ) {}
 
   public get canSave(): boolean {
     return !this.ballotGroupOverview || this.ballotGroupOverview.canSave;

@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
 import { CountingCirclesMerger } from '../../core/models/counting-circle.model';
@@ -18,17 +18,15 @@ import { CountingCircleMergerDialogComponent } from '../counting-circle-merger-d
   standalone: false,
 })
 export class CountingCircleMergersComponent implements OnInit {
+  private readonly dialogService = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly countingCirclesService = inject(CountingCircleService);
+
   public readonly columns = ['name', 'bfs', 'code', 'activeFrom', 'mergedCountingCircles', 'actions'];
   public loading: boolean = true;
 
   public mergers: CountingCirclesMerger[] = [];
-
-  constructor(
-    private readonly dialogService: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly countingCirclesService: CountingCircleService,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     try {

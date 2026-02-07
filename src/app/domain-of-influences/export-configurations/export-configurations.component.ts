@@ -5,7 +5,7 @@
  */
 
 import { DialogService, EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { ExportConfiguration } from '../../core/models/export.model';
 import {
   ExportConfigurationAssignDialogComponent,
@@ -20,6 +20,9 @@ import { ExportProvider } from '@abraxas/voting-basis-service-proto/grpc/shared/
   standalone: false,
 })
 export class ExportConfigurationsComponent {
+  private readonly dialogService = inject(DialogService);
+  private readonly enumUtil = inject(EnumUtil);
+
   public providers: EnumItemDescription<ExportProvider>[] = [];
 
   @Input()
@@ -31,10 +34,9 @@ export class ExportConfigurationsComponent {
   @Output()
   public configurationsChange: EventEmitter<ExportConfiguration[]> = new EventEmitter<ExportConfiguration[]>();
 
-  constructor(
-    private readonly dialogService: DialogService,
-    private readonly enumUtil: EnumUtil,
-  ) {
+  constructor() {
+    const enumUtil = this.enumUtil;
+
     this.providers = enumUtil.getArrayWithDescriptions<ExportProvider>(
       ExportProvider,
       'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDERS.',

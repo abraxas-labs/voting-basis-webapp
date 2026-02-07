@@ -16,9 +16,13 @@
 
     <bc-simple-step [label]="'IMPORT.PARTY_MAPPING.TITLE' | translate">
       <div class="party-mapping">
-        <bc-spinner *ngIf="loadingParties"></bc-spinner>
-        <app-import-proportional-election-party-mapping *ngIf="partyMappings !== undefined"
-                                                        [data]="partyMappings!"></app-import-proportional-election-party-mapping>
+        @if (loadingParties) {
+          <bc-spinner></bc-spinner>
+        }
+        @if (partyMappings !== undefined) {
+          <app-import-proportional-election-party-mapping
+          [data]="partyMappings!"></app-import-proportional-election-party-mapping>
+        }
       </div>
     </bc-simple-step>
   </bc-simple-stepper>

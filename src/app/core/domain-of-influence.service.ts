@@ -25,7 +25,7 @@ import {
 } from '@abraxas/voting-basis-service-proto/grpc/requests/domain_of_influence_requests_pb';
 import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { DomainOfInfluenceCantonDefaults } from './models/canton-settings.model';
 import { DomainOfInfluenceParty, DomainOfInfluencePartyProto } from './models/domain-of-influence-party.model';
@@ -64,13 +64,14 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServicePromiseClient> {
+  private readonly http = inject(HttpClient);
+  private readonly auth = inject(AuthorizationService);
+
   private readonly restApiUrl: string;
 
-  constructor(
-    grpcBackend: GrpcBackendService,
-    private readonly http: HttpClient,
-    private readonly auth: AuthorizationService,
-  ) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(DomainOfInfluenceServicePromiseClient, environment, grpcBackend);
     this.restApiUrl = `${environment.restApiEndpoint}/domain-of-influences`;
   }
@@ -128,6 +129,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       publishResultsDisabled: doi.getPublishResultsDisabled(),
       votingCardFlatRateDisabled: doi.getVotingCardFlatRateDisabled(),
       isMainVotingCardsDomainOfInfluence: doi.getIsMainVotingCardsDomainOfInfluence(),
+      hasEmptyVotingCards: doi.getHasEmptyVotingCards(),
       hideLowerDomainOfInfluencesInReports: doi.getHideLowerDomainOfInfluencesInReports(),
       eCollectingEnabled: doi.getECollectingEnabled(),
       eCollectingInitiativeMinSignatureCount: doi.getECollectingInitiativeMinSignatureCount()?.getValue(),
@@ -375,6 +377,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setPublishResultsDisabled(data.publishResultsDisabled);
     result.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
     result.setIsMainVotingCardsDomainOfInfluence(data.isMainVotingCardsDomainOfInfluence);
+    result.setHasEmptyVotingCards(data.hasEmptyVotingCards);
     result.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
     result.setECollectingEnabled(data.eCollectingEnabled);
     result.setECollectingInitiativeMinSignatureCount(createInt32Value(data.eCollectingInitiativeMinSignatureCount));
@@ -429,6 +432,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setPublishResultsDisabled(data.publishResultsDisabled);
       adminRequest.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
       adminRequest.setIsMainVotingCardsDomainOfInfluence(data.isMainVotingCardsDomainOfInfluence);
+      adminRequest.setHasEmptyVotingCards(data.hasEmptyVotingCards);
       adminRequest.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
       adminRequest.setECollectingEnabled(data.eCollectingEnabled);
       adminRequest.setECollectingInitiativeMinSignatureCount(createInt32Value(data.eCollectingInitiativeMinSignatureCount));

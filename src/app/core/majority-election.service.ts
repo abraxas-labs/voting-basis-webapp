@@ -21,7 +21,7 @@ import {
 } from '@abraxas/voting-basis-service-proto/grpc/requests/majority_election_requests_pb';
 import { SexType } from '@abraxas/voting-basis-service-proto/grpc/shared/sex_pb';
 import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {
   MajorityElection,
@@ -38,7 +38,9 @@ import { createInt32Value } from './utils/proto.utils';
   providedIn: 'root',
 })
 export class MajorityElectionService extends GrpcService<MajorityElectionServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(MajorityElectionServicePromiseClient, environment, grpcBackend);
   }
 
@@ -200,6 +202,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setBallotBundleSize(data.ballotBundleSize);
     result.setBallotBundleSampleSize(data.ballotBundleSampleSize);
     result.setAutomaticBallotBundleNumberGeneration(data.automaticBallotBundleNumberGeneration);
+    result.setAutomaticBallotNumberGeneration(data.automaticBallotNumberGeneration);
     result.setBallotNumberGeneration(data.ballotNumberGeneration);
     result.setAutomaticEmptyVoteCounting(data.automaticEmptyVoteCounting);
     result.setEnforceEmptyVoteCountingForCountingCircles(data.enforceEmptyVoteCountingForCountingCircles);
@@ -228,6 +231,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setBallotBundleSize(data.ballotBundleSize);
     result.setBallotBundleSampleSize(data.ballotBundleSampleSize);
     result.setAutomaticBallotBundleNumberGeneration(data.automaticBallotBundleNumberGeneration);
+    result.setAutomaticBallotNumberGeneration(data.automaticBallotNumberGeneration);
     result.setBallotNumberGeneration(data.ballotNumberGeneration);
     result.setAutomaticEmptyVoteCounting(data.automaticEmptyVoteCounting);
     result.setEnforceEmptyVoteCountingForCountingCircles(data.enforceEmptyVoteCountingForCountingCircles);

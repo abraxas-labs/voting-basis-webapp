@@ -8,7 +8,7 @@
             (checkedChange)="toggleAllRows($event); contentChanged.emit()"
             [checked]="selection.hasValue() && isAllSelected"
             [indeterminate]="selection.hasValue() && !isAllSelected"
-          >
+            >
           </bc-checkbox>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
@@ -16,7 +16,7 @@
             class="ml-2"
             (checkedChange)="toggleRowWithValue(element, $event); contentChanged.emit()"
             [checked]="selection.isSelected(element)"
-          >
+            >
           </bc-checkbox>
         </bc-data-cell>
       </ng-container>
@@ -62,7 +62,9 @@
           <app-truncated-value [value]="'MAJORITY_ELECTION.CANDIDATE.SEX' | translate"></app-truncated-value>
         </bc-header-cell>
         <bc-data-cell *dataCellDef="let element">
-          <app-truncated-value *ngIf="!!element.sex" [value]="'SEX_TYPE.' + element.sex | translate"></app-truncated-value>
+          @if (!!element.sex) {
+            <app-truncated-value [value]="'SEX_TYPE.' + element.sex | translate"></app-truncated-value>
+          }
         </bc-data-cell>
       </ng-container>
 
@@ -130,24 +132,26 @@
       <bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></bc-data-row>
     </bc-table>
 
-    <bc-number
-      *ngIf="entry && showBlankRowCount"
-      [required]="true"
-      [label]="'MAJORITY_ELECTION.BALLOT_GROUP.BLANK_ROWS' | translate"
-      [min]="0"
-      [max]="entry.election.numberOfMandates"
-      [ngModel]="entry.entry.blankRowCount"
-      (ngModelChange)="entry.entry.blankRowCount = $event; contentChanged.emit()"
-    ></bc-number>
+    @if (entry && showBlankRowCount) {
+      <bc-number
+        [required]="true"
+        [label]="'MAJORITY_ELECTION.BALLOT_GROUP.BLANK_ROWS' | translate"
+        [min]="0"
+        [max]="entry.election.numberOfMandates"
+        [ngModel]="entry.entry.blankRowCount"
+        (ngModelChange)="entry.entry.blankRowCount = $event; contentChanged.emit()"
+      ></bc-number>
+    }
 
-    <bc-number
-      *ngIf="entry && !entry.election.individualCandidatesDisabled"
-      [required]="true"
-      [label]="'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate"
-      [min]="0"
-      [max]="entry.election.numberOfMandates"
-      [ngModel]="entry.entry.individualCandidatesVoteCount"
-      (ngModelChange)="entry.entry.individualCandidatesVoteCount = $event; contentChanged.emit()"
-    ></bc-number>
+    @if (entry && !entry.election.individualCandidatesDisabled) {
+      <bc-number
+        [required]="true"
+        [label]="'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate"
+        [min]="0"
+        [max]="entry.election.numberOfMandates"
+        [ngModel]="entry.entry.individualCandidatesVoteCount"
+        (ngModelChange)="entry.entry.individualCandidatesVoteCount = $event; contentChanged.emit()"
+      ></bc-number>
+    }
   </div>
 </div>

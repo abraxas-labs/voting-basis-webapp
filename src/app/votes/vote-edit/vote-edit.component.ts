@@ -7,7 +7,7 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
@@ -26,7 +26,18 @@ import { Permissions } from '../../core/models/permissions.model';
   templateUrl: './vote-edit.component.html',
   standalone: false,
 })
-export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
+export class VoteEditComponent implements OnInit, HasUnsavedChanges {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly location = inject(Location);
+  private readonly voteService = inject(VoteService);
+  private readonly contestService = inject(ContestService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly dialogService = inject(DialogService);
+  private readonly permissionService = inject(PermissionService);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -53,20 +64,6 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
 
   private persistedData: Vote = {} as Vote;
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly cd: ChangeDetectorRef,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly location: Location,
-    private readonly voteService: VoteService,
-    private readonly contestService: ContestService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly dialogService: DialogService,
-    private readonly permissionService: PermissionService,
-  ) {}
-
   public async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.params.voteId;
     this.isNew = !id;
@@ -87,12 +84,6 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
     } finally {
       this.initialLoading = false;
     }
-  }
-
-  public ngAfterContentChecked(): void {
-    // prevent mat-stepper from showing other icon types, which it does by default
-    this.stepper._getIndicatorType = () => 'number';
-    this.cd.detectChanges();
   }
 
   public get hasUnsavedChanges(): boolean {
@@ -231,7 +222,7 @@ export class VoteEditComponent implements OnInit, AfterContentChecked, HasUnsave
 
   private refreshIsVariantsBallot(): void {
     // eslint-disable-next-line
-    // according to https://jira.abraxas-tools.ch/jira/browse/VOTING-1169?focusedCommentId=640226&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-640226
+    // according to ticket VOTING-1169 (comment: 640226)
     this.isVariantsBallot = this.data.ballots.length === 1 && this.data.ballots[0].ballotType === BallotType.BALLOT_TYPE_VARIANTS_BALLOT;
   }
 

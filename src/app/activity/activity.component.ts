@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EventLogService } from '../core/event-log.service';
 import { EventLog } from '../core/models/event-log.model';
@@ -18,12 +18,12 @@ import { MatPaginator } from '@angular/material/paginator';
   standalone: false,
 })
 export class ActivityComponent implements AfterViewInit, OnDestroy {
+  private readonly eventLogService = inject(EventLogService);
+
   public readonly dataSource = new ServerSidePaginationDataSource<EventLog>();
   @ViewChild('paginator') public paginator!: MatPaginator;
 
   private pagingSubscription: Subscription = Subscription.EMPTY;
-
-  constructor(private readonly eventLogService: EventLogService) {}
 
   public ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

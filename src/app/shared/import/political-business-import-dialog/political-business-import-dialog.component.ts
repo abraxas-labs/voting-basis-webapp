@@ -7,21 +7,26 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { SnackbarService } from '@abraxas/voting-lib';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterContentChecked, ChangeDetectorRef, Component, Inject, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ImportService } from '../../../core/import.service';
 import { Contest } from '../../../core/models/contest.model';
 import { ContestImport, ImportFileContent } from '../../../core/models/import.model';
 import { flatMap } from '../../../core/utils/array.utils';
 import { ImportPoliticalBusinessesComponent } from '../import-political-businesses/import-political-businesses.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   templateUrl: './political-business-import-dialog.component.html',
   styleUrls: ['./political-business-import-dialog.component.scss'],
   standalone: false,
 })
-export class PoliticalBusinessImportDialogComponent implements AfterContentChecked {
+export class PoliticalBusinessImportDialogComponent {
+  private readonly dialogRef = inject<MatDialogRef<PoliticalBusinessImportDialogComponent>>(MatDialogRef);
+  private readonly importService = inject(ImportService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+
   public contestImport?: ContestImport;
   public firstStep: boolean = true;
   public lastStep: boolean = false;
@@ -37,22 +42,11 @@ export class PoliticalBusinessImportDialogComponent implements AfterContentCheck
   public readonly contestDomainOfInfluenceId: string;
   private readonly contestId: string;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<PoliticalBusinessImportDialogComponent>,
-    private readonly importService: ImportService,
-    private readonly cd: ChangeDetectorRef,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    @Inject(MAT_DIALOG_DATA) dialogData: PoliticalBusinessImportDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<PoliticalBusinessImportDialogData>(MAT_DIALOG_DATA);
+
     this.contestId = dialogData.contest.id;
     this.contestDomainOfInfluenceId = dialogData.contest.domainOfInfluenceId;
-  }
-
-  public ngAfterContentChecked(): void {
-    // prevent mat-stepper from showing other icon types, which it does by default
-    this.stepper._getIndicatorType = () => 'number';
-    this.cd.detectChanges();
   }
 
   public stepChange(event: StepperSelectionEvent): void {

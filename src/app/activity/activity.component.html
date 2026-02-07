@@ -1,9 +1,9 @@
 <vo-lib-page [contentLoading]="false" header="ACTIVITY.TITLE">
-  <bc-table class="w-full" [dataSource]="dataSource">
+  <bc-table class="w-full" [dataSource]="dataSource" [sticky]="true">
 
     <ng-container columnDef="eventName">
       <bc-header-cell *headerCellDef>
-        <app-truncated-value [value]="'ACTIVITY.EVENT_NAME' | translate"></app-truncated-value>
+        <span>{{ 'ACTIVITY.EVENT_NAME' | translate }}</span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="'ACTIVITY.EVENT.' + element.eventName | translate"></app-truncated-value>
@@ -12,28 +12,28 @@
 
     <ng-container columnDef="timestamp">
       <bc-header-cell *headerCellDef>
-        <app-truncated-value [value]="'ACTIVITY.TIMESTAMP' | translate"></app-truncated-value>
+        <span>{{ 'ACTIVITY.TIMESTAMP' | translate }}</span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <app-truncated-value [value]="element.timestamp | date:'short'"></app-truncated-value>
+        <span>{{ element.timestamp | date:'short' }}</span>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="user">
       <bc-header-cell *headerCellDef>
-        <app-truncated-value [value]="'ACTIVITY.USER' | translate"></app-truncated-value>
+        <span>{{ 'ACTIVITY.USER' | translate }}</span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <app-truncated-value [value]="element.eventUser.firstName + ' ' + element.eventUser.lastName"></app-truncated-value>
+        <span>{{ element.eventUser.firstName + ' ' + element.eventUser.lastName }}</span>
       </bc-data-cell>
     </ng-container>
 
     <ng-container columnDef="tenantName">
       <bc-header-cell *headerCellDef>
-        <app-truncated-value [value]="'ACTIVITY.TENANT' | translate"></app-truncated-value>
+        <span>{{ 'ACTIVITY.TENANT' | translate }}</span>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <app-truncated-value [value]="element.eventTenant.tenantName"></app-truncated-value>
+        <span>{{ element.eventTenant.tenantName }}</span>
       </bc-data-cell>
     </ng-container>
 
@@ -41,7 +41,9 @@
     <bc-data-row *dataRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']; let i = index"></bc-data-row>
   </bc-table>
 
-  <bc-paginator #paginator showFirstLastButtons [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]"></bc-paginator>
+  <bc-paginator #paginator showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[5, 10, 15, 20, 100]"></bc-paginator>
 
-  <bc-spinner *ngIf="dataSource.loading"></bc-spinner>
+  @if (dataSource.loading) {
+    <bc-spinner></bc-spinner>
+  }
 </vo-lib-page>

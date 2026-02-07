@@ -1,26 +1,29 @@
 <div class="mt-5 grid">
   <div class="ml-1 mr-4 mb-5">
     <h2 translate>MAJORITY_ELECTION.BALLOT_GROUP.TITLE</h2>
-    <bc-spinner class="block" *ngIf="loading; else ballotGroupList"></bc-spinner>
-    <ng-template #ballotGroupList>
+    @if (loading) {
+      <bc-spinner class="block"></bc-spinner>
+    } @else {
       <div class="flex-end">
-        <bc-button
-          variant="tertiary"
-          icon="plus"
-          class="my-2"
-          *ngIf="!forSecondaryElection"
-          [disabled]="locked || readonly"
-          [label]="'MAJORITY_ELECTION.BALLOT_GROUP.NEW' | translate"
-          (buttonClick)="create()"
-        ></bc-button>
-        <bc-button
-          variant="tertiary"
-          class="my-2"
-          *ngIf="!!forSecondaryElection"
-          [disabled]="!selectedBallotGroup || testingPhaseEnded || locked || readonly"
-          [label]="'MAJORITY_ELECTION.BALLOT_GROUP.FILL_BLANK_ROWS' | translate"
-          (buttonClick)="fillBlankRows()"
-        ></bc-button>
+        @if (!forSecondaryElection) {
+          <bc-button
+            variant="tertiary"
+            icon="plus"
+            class="my-2"
+            [disabled]="locked || readonly"
+            [label]="'MAJORITY_ELECTION.BALLOT_GROUP.NEW' | translate"
+            (buttonClick)="create()"
+          ></bc-button>
+        }
+        @if (!!forSecondaryElection) {
+          <bc-button
+            variant="tertiary"
+            class="my-2"
+            [disabled]="!selectedBallotGroup || testingPhaseEnded || locked || readonly"
+            [label]="'MAJORITY_ELECTION.BALLOT_GROUP.FILL_BLANK_ROWS' | translate"
+            (buttonClick)="fillBlankRows()"
+          ></bc-button>
+        }
       </div>
 
       <bc-table selection class="w-full" [dataSource]="ballotGroups">
@@ -54,21 +57,25 @@
         <ng-container columnDef="actions">
           <bc-header-cell *headerCellDef></bc-header-cell>
           <bc-data-cell *dataCellDef="let element">
-            <div *ngIf="!forSecondaryElection && !locked && !readonly" class="flex">
-              <bc-icon
-                *ngIf="element | canEditBallotGroup: testingPhaseEnded"
-                class="clickable"
-                (click)="edit(element); $event.stopPropagation()"
-                icon="edit"
-              ></bc-icon>
-              <bc-icon
-                *ngIf="!testingPhaseEnded"
-                class="clickable ml-2"
-                (click)="delete(element); $event.stopPropagation()"
-                icon="trash"
-                iconColor="error"
-              ></bc-icon>
-            </div>
+            @if (!forSecondaryElection && !locked && !readonly) {
+              <div class="flex">
+                @if (element | canEditBallotGroup: testingPhaseEnded) {
+                  <bc-icon
+                    class="clickable"
+                    (click)="edit(element); $event.stopPropagation()"
+                    icon="edit"
+                  ></bc-icon>
+                }
+                @if (!testingPhaseEnded) {
+                  <bc-icon
+                    class="clickable ml-2"
+                    (click)="delete(element); $event.stopPropagation()"
+                    icon="trash"
+                    iconColor="error"
+                  ></bc-icon>
+                }
+              </div>
+            }
           </bc-data-cell>
         </ng-container>
 
@@ -83,14 +90,15 @@
           (click)="rowSelection.toggle(); selectedBallotGroup = row"
         ></bc-data-row>
       </bc-table>
-
-      <p class="warn mt-2" *ngIf="ballotGroupsWithMissingSecondaryElection.length > 0">
-        {{
+      @if (ballotGroupsWithMissingSecondaryElection.length > 0) {
+        <p class="warn mt-2">
+          {{
           'MAJORITY_ELECTION.BALLOT_GROUP.BALLOT_GROUP_WITHOUT_ELECTION_WARNING'
-            | translate: { ballotGroups: ballotGroupsWithMissingSecondaryElectionDescription }
-        }}
-      </p>
-    </ng-template>
+          | translate: { ballotGroups: ballotGroupsWithMissingSecondaryElectionDescription }
+          }}
+        </p>
+      }
+    }
   </div>
   <bc-divider orientation="vertical" class="ml-4"></bc-divider>
   <div class="ml-4">

@@ -5,7 +5,7 @@
  */
 
 import { SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ContestService } from '../../core/contest.service';
 import { ContestListType } from '../../core/models/contest-list.model';
@@ -20,19 +20,20 @@ import { PoliticalAssemblyService } from '../../core/political-assembly.service'
   standalone: false,
 })
 export class ContestArchiveDialogComponent {
+  private readonly dialogRef = inject<MatDialogRef<ContestArchiveDialogData>>(MatDialogRef);
+  private readonly contestService = inject(ContestService);
+  private readonly politicalAssemblyService = inject(PoliticalAssemblyService);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+
   public archivePer?: Date;
   public saving: boolean = false;
   public readonly now: Date = new Date();
   public readonly listEntry: ContestListType;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<ContestArchiveDialogData>,
-    private readonly contestService: ContestService,
-    private readonly politicalAssemblyService: PoliticalAssemblyService,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    @Inject(MAT_DIALOG_DATA) dialogData: ContestArchiveDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ContestArchiveDialogData>(MAT_DIALOG_DATA);
+
     this.listEntry = dialogData.listEntry;
     this.archivePer = this.listEntry.archivePer;
   }

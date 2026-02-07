@@ -17,7 +17,7 @@ import {
   UpdateProportionalElectionUnionRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/proportional_election_union_requests_pb';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ContestService } from './contest.service';
 import { ElectionCandidate, ElectionCandidateProto } from './models/election-candidate.model';
@@ -34,7 +34,9 @@ import { ProportionalElectionMandateAlgorithm } from './models/proportional-elec
   providedIn: 'root',
 })
 export class ProportionalElectionUnionService extends GrpcService<ProportionalElectionUnionServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(ProportionalElectionUnionServicePromiseClient, environment, grpcBackend);
   }
 

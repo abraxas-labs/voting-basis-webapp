@@ -2,21 +2,22 @@
   <h1 header>{{ !isNew ? ('POLITICAL_ASSEMBLY.EDIT' | translate) : ('POLITICAL_ASSEMBLY.NEW' | translate) }}</h1>
 
   <div content class="form mr-3">
-    <bc-dropdown
-      *ngIf="domainOfInfluences.length !== 1"
-      truncateWithTooltip tooltip
-      [items]="domainOfInfluences"
-      [readonly]="!isNew"
-      displayExpr="name"
-      valueExpr="id"
-      [required]="true"
-      [value]="data.domainOfInfluenceId"
-      (valueChange)="updateDomainOfInfluenceId($event); contentChanged()"
-      [label]="'POLITICAL_ASSEMBLY.DOMAIN_OF_INFLUENCE' | translate"
-      [subscriptSizing]="'dynamic'"
-    ></bc-dropdown>
+    @if (domainOfInfluences.length !== 1) {
+      <bc-dropdown
+        truncateWithTooltip tooltip
+        [items]="domainOfInfluences"
+        [readonly]="!isNew"
+        displayExpr="name"
+        valueExpr="id"
+        [required]="true"
+        [value]="data.domainOfInfluenceId"
+        (valueChange)="updateDomainOfInfluenceId($event); contentChanged()"
+        [label]="'POLITICAL_ASSEMBLY.DOMAIN_OF_INFLUENCE' | translate"
+        [subscriptSizing]="'dynamic'"
+      ></bc-dropdown>
+    }
 
-    <ng-container *ngIf="isNew; else editDate">
+    @if (isNew) {
       <bc-dropdown
         [label]="'POLITICAL_ASSEMBLY.PRECONFIGURED_DATE' | translate"
         [readonly]="customDateSelected"
@@ -41,8 +42,7 @@
         (valueChange)="updateDate($event); contentChanged()"
         [subscriptSizing]="'dynamic'"
       ></bc-date>
-    </ng-container>
-    <ng-template #editDate>
+    } @else {
       <bc-date
         [label]="'POLITICAL_ASSEMBLY.CONTEST_DATE' | translate"
         [required]="true"
@@ -50,7 +50,7 @@
         (valueChange)="updateDate($event); contentChanged()"
         [subscriptSizing]="'dynamic'"
       ></bc-date>
-    </ng-template>
+    }
 
     <app-translated-formfield
       [label]="'POLITICAL_ASSEMBLY.DESCRIPTION' | translate"

@@ -5,7 +5,7 @@
  */
 
 import { SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ContestService } from '../../core/contest.service';
 import { ContestState, ContestSummary } from '../../core/models/contest.model';
@@ -17,16 +17,17 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false,
 })
 export class ContestPastUnlockDialogComponent {
+  private readonly dialogRef = inject<MatDialogRef<ContestPastUnlockDialogData>>(MatDialogRef);
+  private readonly contestService = inject(ContestService);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+
   public saving: boolean = false;
   public readonly contest: ContestSummary;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<ContestPastUnlockDialogData>,
-    private readonly contestService: ContestService,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    @Inject(MAT_DIALOG_DATA) dialogData: ContestPastUnlockDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ContestPastUnlockDialogData>(MAT_DIALOG_DATA);
+
     this.contest = dialogData.contest;
   }
 

@@ -7,7 +7,7 @@
 import { SimpleStepperComponent } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
 import { Location } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep, isEqual } from 'lodash';
@@ -27,7 +27,18 @@ import { Permissions } from '../../core/models/permissions.model';
   templateUrl: './majority-election-edit.component.html',
   standalone: false,
 })
-export class MajorityElectionEditComponent implements OnInit, AfterContentChecked, HasUnsavedChanges {
+export class MajorityElectionEditComponent implements OnInit, HasUnsavedChanges {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly contestService = inject(ContestService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly dialogService = inject(DialogService);
+  private readonly permissionService = inject(PermissionService);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -56,20 +67,6 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
 
   private persistedData: MajorityElection = newMajorityElection();
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly cd: ChangeDetectorRef,
-    private readonly location: Location,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly contestService: ContestService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly dialogService: DialogService,
-    private readonly permissionService: PermissionService,
-  ) {}
-
   public async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.params.majorityElectionId;
     this.isNew = !id;
@@ -88,12 +85,6 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
     } finally {
       this.initialLoading = false;
     }
-  }
-
-  public ngAfterContentChecked(): void {
-    // prevent mat-stepper from showing other icon types, which it does by default
-    this.stepper._getIndicatorType = () => 'number';
-    this.cd.detectChanges();
   }
 
   public get hasUnsavedChanges(): boolean {
@@ -146,6 +137,19 @@ export class MajorityElectionEditComponent implements OnInit, AfterContentChecke
     }
 
     this.stepper.previous();
+  }
+
+  public async confirmCandidateCreateNote(): Promise<void> {
+    const confirm = await this.dialogService.confirm(
+      'MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TITLE',
+      'MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TEXT',
+    );
+
+    if (!confirm) {
+      return;
+    }
+
+    this.stepper.next();
   }
 
   private async confirmToLeaveWithUnsavedChanges(): Promise<boolean> {

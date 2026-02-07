@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 
 @Pipe({
@@ -12,7 +12,7 @@ import { DomainOfInfluenceService } from '../../core/domain-of-influence.service
   standalone: false,
 })
 export class DomainOfInfluenceLogoUrlPipe implements PipeTransform {
-  constructor(private readonly doiService: DomainOfInfluenceService) {}
+  private readonly doiService = inject(DomainOfInfluenceService);
 
   public transform(doiId: string): Promise<string> {
     return this.doiService.getLogoUrl(doiId);

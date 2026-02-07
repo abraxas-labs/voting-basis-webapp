@@ -12,7 +12,7 @@ import {
   ImportProportionalElectionListsAndCandidatesRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/import_requests_pb';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {
   ContestImport,
@@ -29,12 +29,13 @@ import { MultipartFormDataHttpService } from './http/multipart-form-data-http.se
   providedIn: 'root',
 })
 export class ImportService extends GrpcService<ImportServicePromiseClient> {
+  private readonly http = inject(MultipartFormDataHttpService);
+
   private readonly restApiUrl: string = '';
 
-  constructor(
-    grpcBackend: GrpcBackendService,
-    private readonly http: MultipartFormDataHttpService,
-  ) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(ImportServicePromiseClient, environment, grpcBackend);
     this.restApiUrl = `${environment.restApiEndpoint}/imports`;
   }

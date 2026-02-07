@@ -5,7 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 import { Vote } from '../../core/models/vote.model';
 import { BallotType, VoteType } from '@abraxas/voting-basis-service-proto/grpc/shared/vote_pb';
 import { VoteStandardBallotComponent } from './vote-standard-ballot/vote-standard-ballot.component';
@@ -19,6 +19,8 @@ import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.mod
   standalone: false,
 })
 export class VoteBallotComponent {
+  private readonly enumUtil = inject(EnumUtil);
+
   public userVoteTypeDescriptions: EnumItemDescription<UserVoteType>[] = [];
   public userVoteTypes: typeof UserVoteType = UserVoteType;
 
@@ -56,7 +58,7 @@ export class VoteBallotComponent {
   private _vote?: Vote;
   private readonly allUserVoteTypeDescriptions: EnumItemDescription<UserVoteType>[];
 
-  constructor(private readonly enumUtil: EnumUtil) {
+  constructor() {
     this.allUserVoteTypeDescriptions = this.enumUtil.getArrayWithDescriptions<UserVoteType>(UserVoteType, 'VOTE.USER_VOTE_TYPE.TYPES.');
     this.userVoteTypeDescriptions = [...this.allUserVoteTypeDescriptions];
   }

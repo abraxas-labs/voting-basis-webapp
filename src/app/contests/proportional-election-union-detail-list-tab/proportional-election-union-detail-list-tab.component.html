@@ -1,5 +1,6 @@
-<bc-spinner class="block" *ngIf="loading; else showUnionLists"></bc-spinner>
-<ng-template #showUnionLists>
+@if (loading) {
+  <bc-spinner class="block"></bc-spinner>
+} @else {
   <bc-table class="w-full" [dataSource]="dataSource">
     <ng-container columnDef="orderNumber">
       <bc-header-cell *headerCellDef>
@@ -42,5 +43,5 @@
     <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
     <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
   </bc-table>
-</ng-template>
+}
 <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>

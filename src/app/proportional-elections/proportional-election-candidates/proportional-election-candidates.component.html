@@ -1,5 +1,6 @@
-<bc-spinner class="block" *ngIf="loading; else candidateOverview"></bc-spinner>
-<ng-template #candidateOverview>
+@if (loading) {
+  <bc-spinner class="block"></bc-spinner>
+} @else {
   <div class="buttons">
     <bc-button
       variant="tertiary"
@@ -9,22 +10,25 @@
       (buttonClick)="createCandidate()"
     ></bc-button>
     <div>
-      <bc-spinner *ngIf="savingAccumulation"></bc-spinner>
-
-      <bc-button
-        *ngIf="selectedCandidate && selectedCandidate.accumulated"
-        variant="tertiary"
-        [disabled]="testingPhaseEnded || locked || readonly"
-        [label]="'PROPORTIONAL_ELECTION.CANDIDATE.REMOVE_ACCUMULATION' | translate"
-        (buttonClick)="removeAccumulation(selectedCandidate!)"
-      ></bc-button>
-      <bc-button
-        *ngIf="!selectedCandidate?.accumulated"
-        variant="tertiary"
-        [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded || locked || readonly"
-        [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ACCUMULATE' | translate"
-        (buttonClick)="accumulate(selectedCandidate!)"
-      ></bc-button>
+      @if (savingAccumulation) {
+        <bc-spinner></bc-spinner>
+      }
+      @if (selectedCandidate && selectedCandidate.accumulated) {
+        <bc-button
+          variant="tertiary"
+          [disabled]="testingPhaseEnded || locked || readonly"
+          [label]="'PROPORTIONAL_ELECTION.CANDIDATE.REMOVE_ACCUMULATION' | translate"
+          (buttonClick)="removeAccumulation(selectedCandidate!)"
+        ></bc-button>
+      }
+      @if (!selectedCandidate?.accumulated) {
+        <bc-button
+          variant="tertiary"
+          [disabled]="!selectedCandidate || expandedCandidates.length >= maxCandidateCount || testingPhaseEnded || locked || readonly"
+          [label]="'PROPORTIONAL_ELECTION.CANDIDATE.ACCUMULATE' | translate"
+          (buttonClick)="accumulate(selectedCandidate!)"
+        ></bc-button>
+      }
     </div>
   </div>
 
@@ -36,7 +40,9 @@
     [cdkDropListData]="expandedCandidates"
     [cdkDropListDisabled]="testingPhaseEnded || locked || readonly"
     (cdkDropListDropped)="moveCandidate($event.previousIndex, $event.currentIndex)"
-  >
+    [sticky]="true"
+    [height]="'31rem'"
+    >
     <ng-container columnDef="position">
       <bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.POSITION' | translate"></app-truncated-value>
@@ -105,7 +111,9 @@
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"></app-truncated-value>
       </bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <bc-icon *ngIf="element.incumbent" icon="checkmark"></bc-icon>
+        @if (element.incumbent) {
+          <bc-icon icon="checkmark"></bc-icon>
+        }
       </bc-data-cell>
     </ng-container>
 
@@ -130,16 +138,19 @@
     <ng-container columnDef="actions">
       <bc-header-cell *headerCellDef></bc-header-cell>
       <bc-data-cell *dataCellDef="let element">
-        <div *ngIf="!locked && !readonly" class="flex">
-          <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
-          <bc-icon
-            *ngIf="!testingPhaseEnded && !locked && !readonly"
-            class="ml-2"
-            (click)="deleteCandidate(element); $event.stopPropagation()"
-            icon="trash"
-            iconColor="error"
-          ></bc-icon>
-        </div>
+        @if (!locked && !readonly) {
+          <div class="flex">
+            <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
+            @if (!testingPhaseEnded && !locked && !readonly) {
+              <bc-icon
+                class="ml-2"
+                (click)="deleteCandidate(element); $event.stopPropagation()"
+                icon="trash"
+                iconColor="error"
+              ></bc-icon>
+            }
+          </div>
+        }
       </bc-data-cell>
     </ng-container>
 
@@ -157,36 +168,40 @@
       [cdkDragData]="row"
     ></bc-data-row>
   </bc-table>
-
-  <p *ngIf="expandedCandidates.length === maxCandidateCount && maxCandidateCount > 0; else candidateCount" translate>
-    PROPORTIONAL_ELECTION.CANDIDATE.SAME_CANDIDATE_COUNT_AS_ALLOWED
-  </p>
-  <ng-template #candidateCount>
+  @if (expandedCandidates.length === maxCandidateCount && maxCandidateCount > 0) {
+    <p translate>
+      PROPORTIONAL_ELECTION.CANDIDATE.SAME_CANDIDATE_COUNT_AS_ALLOWED
+    </p>
+  } @else {
     <p class="error">
       <span>
         {{
-          'PROPORTIONAL_ELECTION.CANDIDATE.COUNT_OF_CANDIDATES_' + (expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
-            | translate: { current: expandedCandidates.length }
+        'PROPORTIONAL_ELECTION.CANDIDATE.COUNT_OF_CANDIDATES_' + (expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
+        | translate: { current: expandedCandidates.length }
         }}
       </span>
-
-      <span *ngIf="expandedCandidates.length > maxCandidateCount">
-        {{
+      @if (expandedCandidates.length > maxCandidateCount) {
+        <span>
+          {{
           'PROPORTIONAL_ELECTION.CANDIDATE.MORE_CANDIDATES_THAN_ALLOWED_' + (maxCandidateCount === 1 ? 'SINGLE' : 'PLURAL')
-            | translate: { max: maxCandidateCount }
-        }}
-      </span>
-
-      <span *ngIf="expandedCandidates.length < maxCandidateCount">
-        {{
+          | translate: { max: maxCandidateCount }
+          }}
+        </span>
+      }
+      @if (expandedCandidates.length < maxCandidateCount) {
+        <span>
+          {{
           'PROPORTIONAL_ELECTION.CANDIDATE.LESS_CANDIDATES_THAN_ALLOWED_' +
-            (maxCandidateCount - expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
-            | translate: { diff: maxCandidateCount - expandedCandidates.length }
-        }}
-      </span>
-      <span *ngIf="expandedCandidates.length === maxCandidateCount" translate>
+          (maxCandidateCount - expandedCandidates.length === 1 ? 'SINGLE' : 'PLURAL')
+          | translate: { diff: maxCandidateCount - expandedCandidates.length }
+          }}
+        </span>
+      }
+      @if (expandedCandidates.length === maxCandidateCount) {
+        <span translate>
           PROPORTIONAL_ELECTION.CANDIDATE.ONE_CANDIDATE_REQUIRED
-      </span>
+        </span>
+      }
     </p>
-  </ng-template>
-</ng-template>
+  }
+}

@@ -4,15 +4,11 @@
  * For license information see LICENSE file.
  */
 
-import { EnumUtil } from '@abraxas/voting-lib';
 import { Component, Input } from '@angular/core';
-import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-influence-report-level.service';
-import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
 import { VoteImport } from '../../../core/models/import.model';
 import { Vote } from '../../../core/models/vote.model';
 import { VoteService } from '../../../core/vote.service';
 import { ImportPoliticalBusinessEditComponent } from '../import-political-business-edit/import-political-business-edit.component';
-import { PermissionService } from '../../../core/permission.service';
 
 @Component({
   selector: 'app-import-vote-edit',
@@ -23,13 +19,8 @@ import { PermissionService } from '../../../core/permission.service';
 export class ImportVoteEditComponent extends ImportPoliticalBusinessEditComponent<Vote> {
   private voteImport?: VoteImport;
 
-  constructor(
-    enumUtil: EnumUtil,
-    doiReportLevelService: DomainOfInfluenceReportLevelService,
-    domainOfInfluenceService: DomainOfInfluenceService,
-    permissionService: PermissionService,
-  ) {
-    super(enumUtil, doiReportLevelService, domainOfInfluenceService, permissionService);
+  constructor() {
+    super();
   }
 
   @Input()

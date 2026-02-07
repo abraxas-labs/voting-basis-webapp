@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService, LanguageService } from '@abraxas/voting-lib';
-import { Component, HostListener, Inject, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { ProportionalElectionList, updateProportionalElectionListCandidateCountOk } from '../../../core/models/proportional-election.model';
@@ -23,6 +23,14 @@ import { GetTranslationPipe } from '../../../shared/get-translation.pipe';
   standalone: false,
 })
 export class ProportionalElectionListEditDialogComponent implements OnDestroy {
+  private readonly dialogRef = inject<MatDialogRef<ProportionalElectionListEditDialogData>>(MatDialogRef);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly languageService = inject(LanguageService);
+  private readonly dialogService = inject(DialogService);
+  private readonly getTranslationPipe = inject(GetTranslationPipe);
+
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
     return !this.hasChanges;
@@ -44,16 +52,9 @@ export class ProportionalElectionListEditDialogComponent implements OnDestroy {
   public originalList: ProportionalElectionList;
   public readonly backdropClickSubscription: Subscription;
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<ProportionalElectionListEditDialogData>,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly languageService: LanguageService,
-    private readonly dialogService: DialogService,
-    private readonly getTranslationPipe: GetTranslationPipe,
-    @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionListEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ProportionalElectionListEditDialogData>(MAT_DIALOG_DATA);
+
     this.list = dialogData.list;
     this.testingPhaseEnded = dialogData.testingPhaseEnded;
     this.isNew = !this.list.id;
@@ -77,7 +78,7 @@ export class ProportionalElectionListEditDialogComponent implements OnDestroy {
       LanguageService.allLanguagesPresent(this.list.description) &&
       LanguageService.allLanguagesPresent(this.list.shortDescription) &&
       this.list.blankRowCount >= 0 &&
-      this.list.blankRowCount <= this.numberOfMandates
+      this.list.blankRowCount <= this.numberOfMandates - 1
     );
   }
 

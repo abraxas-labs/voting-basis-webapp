@@ -5,7 +5,7 @@
  */
 
 import { EnumItemDescription, EnumUtil } from '@abraxas/voting-lib';
-import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { DomainOfInfluenceReportLevelService } from '../../../core/domain-of-influence-report-level.service';
 import { DomainOfInfluenceTree } from '../../../core/domain-of-influence-tree';
 import { DomainOfInfluenceService } from '../../../core/domain-of-influence.service';
@@ -22,6 +22,11 @@ export abstract class ImportPoliticalBusinessEditComponent<
   },
 > implements OnInit
 {
+  protected readonly enumUtil = inject(EnumUtil);
+  private readonly doiReportLevelService = inject(DomainOfInfluenceReportLevelService);
+  protected readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly permissionService = inject(PermissionService);
+
   public loading: boolean = true;
 
   public domainOfInfluenceTypes: EnumItemDescription<DomainOfInfluenceType>[] = [];
@@ -45,13 +50,6 @@ export abstract class ImportPoliticalBusinessEditComponent<
   private selectedDomainOfInfluenceTypeValue?: DomainOfInfluenceType;
   private domainOfInfluenceTree?: DomainOfInfluenceTree;
   private hasAdminPermissions = false;
-
-  protected constructor(
-    protected readonly enumUtil: EnumUtil,
-    private readonly doiReportLevelService: DomainOfInfluenceReportLevelService,
-    protected readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly permissionService: PermissionService,
-  ) {}
 
   public get selectedDomainOfInfluence(): DomainOfInfluence | undefined {
     return this.selectedDomainOfInfluenceValue;

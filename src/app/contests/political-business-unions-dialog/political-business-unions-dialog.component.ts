@@ -6,7 +6,7 @@
 
 import { AuthorizationService } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
@@ -44,6 +44,18 @@ import { Permissions } from '../../core/models/permissions.model';
   standalone: false,
 })
 export class PoliticalBusinessUnionsDialogComponent implements OnInit {
+  private readonly proportionalElectionUnionService = inject(ProportionalElectionUnionService);
+  private readonly majorityElectionUnionService = inject(MajorityElectionUnionService);
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly dialogService = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly dialogRef = inject<MatDialogRef<PoliticalBusinessUnionsDialogData>>(MatDialogRef);
+  private readonly auth = inject(AuthorizationService);
+  private readonly permissionService = inject(PermissionService);
+
   public readonly columns = ['description', 'type', 'owner', 'actions'];
   public readonly PoliticalBusinessUnionType: typeof PoliticalBusinessUnionType = PoliticalBusinessUnionType;
 
@@ -62,20 +74,9 @@ export class PoliticalBusinessUnionsDialogComponent implements OnInit {
 
   public loading: boolean = true;
 
-  constructor(
-    private readonly proportionalElectionUnionService: ProportionalElectionUnionService,
-    private readonly majorityElectionUnionService: MajorityElectionUnionService,
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly dialogService: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly dialogRef: MatDialogRef<PoliticalBusinessUnionsDialogData>,
-    private readonly auth: AuthorizationService,
-    private readonly permissionService: PermissionService,
-    @Inject(MAT_DIALOG_DATA) dialogData: PoliticalBusinessUnionsDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<PoliticalBusinessUnionsDialogData>(MAT_DIALOG_DATA);
+
     this.contest = dialogData.contest;
     this.cantonDefaults = dialogData.cantonDefaults;
     this.disabled = this.contest.testingPhaseEnded;

@@ -1,4 +1,4 @@
-<ng-container *ngFor="let config of configurations || []; let index = index">
+@for (config of configurations || []; track config; let index = $index) {
   <bc-text
     [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.DESCRIPTION' | translate"
     [required]="true"
@@ -23,25 +23,32 @@
     [(value)]="config.provider"
     [subscriptSizing]="'dynamic'"
   ></bc-dropdown>
+  @if (!readonly) {
+    <bc-button
+      variant="tertiary"
+      icon="plus"
+      class="pt-3"
+      [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ASSIGN_OPEN' | translate"
+      (buttonClick)="assign(config)"
+    ></bc-button>
+  } @else {
+    <div></div>
+  }
+  @if (!readonly) {
+    <bc-icon icon="trash" iconColor="error" class="pt-2 clickable" (click)="remove(index)"></bc-icon>
+  } @else {
+    <div></div>
+  }
+}
+@if (readonly) {
+  <p class="no-data">{{ 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.NO_DATA' | translate }}</p>
+}
+@if (!readonly) {
   <bc-button
-    *ngIf="!readonly; else empty"
     variant="tertiary"
     icon="plus"
-    class="pt-3"
-    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ASSIGN_OPEN' | translate"
-    (buttonClick)="assign(config)"
+    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ADD' | translate"
+    (buttonClick)="add()"
   ></bc-button>
-  <bc-icon *ngIf="!readonly; else empty" icon="trash" iconColor="error" class="pt-2 clickable" (click)="remove(index)"></bc-icon>
-</ng-container>
-<p class="no-data" *ngIf="readonly">{{ 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.NO_DATA' | translate }}</p>
-<bc-button
-  *ngIf="!readonly"
-  variant="tertiary"
-  icon="plus"
-  [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ADD' | translate"
-  (buttonClick)="add()"
-></bc-button>
+}
 
-<ng-template #empty>
-  <div></div>
-</ng-template>

@@ -53,12 +53,13 @@
                (checkedChange)="updateShowEVotingActiveFrom($event)"
                [subscriptSizing]="'dynamic'"></bc-checkbox>
 
-  <bc-date *ngIf="showEVotingActiveFrom"
-           [label]="'COUNTING_CIRCLE.E_VOTING_ACTIVE_FROM' | translate"
-           [required]="true"
-           [value]="merger.newCountingCircle.eVotingActiveFrom | date"
-           (valueChange)="updateEVotingActiveFrom($event)"
-           [subscriptSizing]="'dynamic'"></bc-date>
+  @if (showEVotingActiveFrom) {
+    <bc-date [label]="'COUNTING_CIRCLE.E_VOTING_ACTIVE_FROM' | translate"
+             [required]="true"
+             [value]="merger.newCountingCircle.eVotingActiveFrom | date"
+             (valueChange)="updateEVotingActiveFrom($event)"
+             [subscriptSizing]="'dynamic'"></bc-date>
+  }
 
   <app-authority-address-edit [authority]="merger.newCountingCircle.responsibleAuthority"
                               [readonly]="false">

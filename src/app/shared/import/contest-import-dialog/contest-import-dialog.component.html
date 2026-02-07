@@ -20,12 +20,13 @@
       </app-import-contest-edit>
     </bc-simple-step>
     <bc-simple-step [label]="'IMPORT.POLITICAL_BUSINESS_INFOS' | translate"
-                    [disabled]="step2.status !== 'complete'" [status]="step3Content?.allValid ? 'complete' : 'open'">
-      <app-import-political-businesses #step3Content
-                                       *ngIf="contestDomainOfInfluenceId"
-                                       [contestImport]="contestImport"
-                                       [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
-      </app-import-political-businesses>
+      [disabled]="step2.status !== 'complete'" [status]="step3Content?.allValid ? 'complete' : 'open'">
+      @if (contestDomainOfInfluenceId) {
+        <app-import-political-businesses #step3Content
+          [contestImport]="contestImport"
+          [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
+        </app-import-political-businesses>
+      }
     </bc-simple-step>
   </bc-simple-stepper>
 

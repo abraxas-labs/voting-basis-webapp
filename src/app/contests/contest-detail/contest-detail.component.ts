@@ -13,7 +13,7 @@ import {
   TableDataSource,
 } from '@abraxas/base-components';
 import { DialogService, EnumItemDescription, EnumUtil, SnackbarService, LanguageService } from '@abraxas/voting-lib';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -60,6 +60,25 @@ const POLITICAL_BUSINESS_TYPE_TO_EXPORT_ENTITY_TYPE: { [key in PoliticalBusiness
   standalone: false,
 })
 export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit {
+  private readonly exportService = inject(ExportService);
+  private readonly auth = inject(AuthorizationService);
+  private readonly dialogService = inject(DialogService);
+  private readonly contestService = inject(ContestService);
+  private readonly eventLogService = inject(EventLogService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly voteService = inject(VoteService);
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly majorityElectionService = inject(MajorityElectionService);
+  private readonly secondaryMajorityElectionService = inject(SecondaryMajorityElectionService);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly languageService = inject(LanguageService);
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly permissionService = inject(PermissionService);
+  private readonly bcDialogService = inject(BcDialogService);
+
   public readonly originalColumns = [
     'number',
     'politicalBusinessUnionDescription',
@@ -104,27 +123,8 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   private readonly routeSubscription: Subscription;
   private detailsChangesSubscription?: Subscription;
 
-  constructor(
-    private readonly exportService: ExportService,
-    private readonly auth: AuthorizationService,
-    private readonly dialogService: DialogService,
-    private readonly contestService: ContestService,
-    private readonly eventLogService: EventLogService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly voteService: VoteService,
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly majorityElectionService: MajorityElectionService,
-    private readonly secondaryMajorityElectionService: SecondaryMajorityElectionService,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly languageService: LanguageService,
-    private readonly enumUtil: EnumUtil,
-    private readonly permissionService: PermissionService,
-    private readonly bcDialogService: BcDialogService,
-  ) {
-    this.routeSubscription = route.params.subscribe(({ contestId }) => this.load(contestId));
+  constructor() {
+    this.routeSubscription = this.route.params.subscribe(({ contestId }) => this.load(contestId));
   }
 
   public async ngOnInit(): Promise<void> {

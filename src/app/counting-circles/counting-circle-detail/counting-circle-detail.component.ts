@@ -6,7 +6,7 @@
 
 import { AuthorizationService, Tenant } from '@abraxas/base-components';
 import { AsyncInputValidators, EnumItemDescription, EnumUtil, InputValidators, SnackbarService } from '@abraxas/voting-lib';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -29,6 +29,16 @@ import { ContactPersonForm } from '../../shared/contact-person-edit/contact-pers
   standalone: false,
 })
 export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsavedChanges {
+  private readonly countingCircleService = inject(CountingCircleService);
+  private readonly permissionService = inject(PermissionService);
+  private readonly auth = inject(AuthorizationService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+
   private eVotingActiveFromString: string = '';
 
   @HostListener('window:beforeunload')
@@ -57,18 +67,10 @@ export class CountingCircleDetailComponent implements OnInit, OnDestroy, HasUnsa
 
   private readonly routeSubscription: Subscription;
 
-  constructor(
-    private readonly countingCircleService: CountingCircleService,
-    private readonly permissionService: PermissionService,
-    private readonly auth: AuthorizationService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly formBuilder: NonNullableFormBuilder,
-    enumUtil: EnumUtil,
-  ) {
+  constructor() {
+    const route = this.route;
+    const enumUtil = inject(EnumUtil);
+
     this.routeSubscription = route.params.subscribe(async ({ countingCircleId }) => {
       await this.load(countingCircleId);
       this.buildForm();

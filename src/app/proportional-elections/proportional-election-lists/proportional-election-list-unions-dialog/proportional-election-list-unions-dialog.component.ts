@@ -4,9 +4,9 @@
  * For license information see LICENSE file.
  */
 
-import { PaginatorComponent, SelectionToggleDirective, TableDataSource } from '@abraxas/base-components';
+import { SelectionToggleDirective, TableDataSource } from '@abraxas/base-components';
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
   newProportionalElection,
@@ -32,7 +32,7 @@ import {
   ProportionalElectionListUnionMainListEditDialogResult,
 } from '../proportional-election-list-union-main-list-edit-dialog/proportional-election-list-union-main-list-edit-dialog.component';
 import { ProportionalElectionListUnionUtil } from './proportional-election-list-union-util';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-proportional-election-list-unions-dialog',
@@ -40,12 +40,17 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./proportional-election-list-unions-dialog.component.scss'],
   standalone: false,
 })
-export class ProportionalElectionListUnionsDialogComponent implements OnInit, AfterViewInit {
+export class ProportionalElectionListUnionsDialogComponent implements OnInit {
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly dialogService = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly dialogRef = inject<MatDialogRef<ProportionalElectionListUnionsDialogData>>(MatDialogRef);
+  private readonly cd = inject(ChangeDetectorRef);
+
   public readonly columns = ['number', 'description', 'listEnumeration', 'subListUnionEnumeration', 'mainListNumber', 'actions'];
 
   public readonly columnsSubList = ['number', 'description', 'listEnumeration', 'mainListNumber', 'actions'];
-
-  @ViewChild('paginator') public paginator!: PaginatorComponent;
 
   @ViewChildren(SelectionToggleDirective) public selectionToggles!: QueryList<SelectionToggleDirective<ProportionalElectionListUnion>>;
 
@@ -59,15 +64,9 @@ export class ProportionalElectionListUnionsDialogComponent implements OnInit, Af
 
   public loading: boolean = false;
 
-  constructor(
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly dialogService: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly dialogRef: MatDialogRef<ProportionalElectionListUnionsDialogData>,
-    private readonly cd: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) dialogData: ProportionalElectionListUnionsDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<ProportionalElectionListUnionsDialogData>(MAT_DIALOG_DATA);
+
     this.lists = dialogData.lists;
     this.proportionalElection = dialogData.proportionalElection;
   }
@@ -82,10 +81,6 @@ export class ProportionalElectionListUnionsDialogComponent implements OnInit, Af
     }
 
     this.reorderAndRefreshListUnions();
-  }
-
-  public ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
   }
 
   public async createListUnion(rootListUnion?: ProportionalElectionListUnion): Promise<void> {

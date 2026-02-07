@@ -1,21 +1,24 @@
 <vo-lib-page [contentLoading]="loading" header="CONTEST.TITLE">
-  <div *ngIf="canCreate" class="flex">
-    <bc-button
-      *ngIf="canAddPoliticalAssembly"
-      variant="tertiary"
-      icon="plus"
-      label="{{ 'POLITICAL_ASSEMBLY.NEW' | translate }}"
-      (buttonClick)="createPoliticalAssembly()"
-    ></bc-button>
-    <bc-button variant="tertiary" icon="plus" label="{{ 'CONTEST.NEW' | translate }}" (buttonClick)="create()"></bc-button>
-    <bc-button
-      class="ml-2"
-      variant="tertiary"
-      icon="download"
-      label="{{ 'IMPORT.IMPORT_CONTEST' | translate }}"
-      (buttonClick)="import()"
-    ></bc-button>
-  </div>
+  @if (canCreate) {
+    <div class="flex">
+      @if (canAddPoliticalAssembly) {
+        <bc-button
+          variant="tertiary"
+          icon="plus"
+          label="{{ 'POLITICAL_ASSEMBLY.NEW' | translate }}"
+          (buttonClick)="createPoliticalAssembly()"
+        ></bc-button>
+      }
+      <bc-button variant="tertiary" icon="plus" label="{{ 'CONTEST.NEW' | translate }}" (buttonClick)="create()"></bc-button>
+      <bc-button
+        class="ml-2"
+        variant="tertiary"
+        icon="download"
+        label="{{ 'IMPORT.IMPORT_CONTEST' | translate }}"
+        (buttonClick)="import()"
+      ></bc-button>
+    </div>
+  }
   <app-contest-list
     (create)="create($event.date)"
     (edit)="edit($event)"
@@ -30,7 +33,7 @@
     [canDelete]="canDelete"
     [politicalAssemblies]="politicalAssemblies"
     [showPaginator]="true"
-  >
+    >
   </app-contest-list>
 
   <h2 translate>CONTEST.PAST_CONTESTS</h2>
@@ -48,6 +51,7 @@
     [showType]="canAddPoliticalAssembly"
     [showPaginator]="true"
     [politicalAssemblies]="pastPoliticalAssemblies"
+    [dateSortDirection]="'desc'"
   ></app-contest-list>
 
   <h2 translate>CONTEST.ARCHIVED_CONTESTS</h2>
@@ -63,5 +67,6 @@
     [showType]="canAddPoliticalAssembly"
     [showState]="false"
     [politicalAssemblies]="archivedPoliticalAssemblies"
+    [dateSortDirection]="'desc'"
   ></app-contest-list>
 </vo-lib-page>

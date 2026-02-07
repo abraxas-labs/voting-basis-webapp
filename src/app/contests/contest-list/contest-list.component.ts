@@ -4,8 +4,15 @@
  * For license information see LICENSE file.
  */
 
-import { AuthorizationService, FilterDirective, PaginatorComponent, SortDirective, TableDataSource } from '@abraxas/base-components';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  AuthorizationService,
+  FilterDirective,
+  PaginatorComponent,
+  SortDirection,
+  SortDirective,
+  TableDataSource,
+} from '@abraxas/base-components';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { ContestState, ContestSummary } from '../../core/models/contest.model';
 import { ContestListType } from '../../core/models/contest-list.model';
 import { PoliticalAssembly, PoliticalAssemblyState } from '../../core/models/political-assembly.model';
@@ -20,6 +27,11 @@ import moment from 'moment';
   standalone: false,
 })
 export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
+  private readonly languageService = inject(LanguageService);
+  private readonly i18n = inject(TranslateService);
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly auth = inject(AuthorizationService);
+
   public columns: string[] = [];
   public readonly contestStates: typeof ContestState = ContestState;
   public contestStateList: EnumItemDescription<ContestState>[] = [];
@@ -62,6 +74,9 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
   public showPaginator: boolean = false;
 
+  @Input()
+  public dateSortDirection: SortDirection = 'asc';
+
   @Output()
   public view: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
 
@@ -90,13 +105,6 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @ViewChild(FilterDirective, { static: true })
   public filter!: FilterDirective;
-
-  constructor(
-    private readonly languageService: LanguageService,
-    private readonly i18n: TranslateService,
-    private readonly enumUtil: EnumUtil,
-    private readonly auth: AuthorizationService,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     this.contestStateList = this.enumUtil.getArrayWithDescriptions<ContestState>(ContestState, 'CONTEST.STATES.');

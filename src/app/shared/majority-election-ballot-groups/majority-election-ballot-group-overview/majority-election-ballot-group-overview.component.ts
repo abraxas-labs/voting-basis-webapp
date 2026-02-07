@@ -5,7 +5,7 @@
  */
 
 import { DialogService } from '@abraxas/voting-lib';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { MajorityElectionBallotGroupService } from '../../../core/majority-election-ballot-group.service';
 import { MajorityElectionBallotGroup, newMajorityElectionBallotGroup } from '../../../core/models/majority-election-ballot-group.model';
 import { MajorityElection, newMajorityElection } from '../../../core/models/majority-election.model';
@@ -24,6 +24,9 @@ import {
   standalone: false,
 })
 export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
+  private readonly ballotGroupService = inject(MajorityElectionBallotGroupService);
+  private readonly dialogService = inject(DialogService);
+
   public readonly columns = ['position', 'shortDescription', 'description', 'actions'];
 
   @Input()
@@ -64,11 +67,6 @@ export class MajorityElectionBallotGroupOverviewComponent implements OnInit {
   private get secondaryMajorityElectionsOnSameBallot(): SecondaryMajorityElection[] {
     return this.secondaryMajorityElections.filter(x => !x.isOnSeparateBallot);
   }
-
-  constructor(
-    private readonly ballotGroupService: MajorityElectionBallotGroupService,
-    private readonly dialogService: DialogService,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     try {

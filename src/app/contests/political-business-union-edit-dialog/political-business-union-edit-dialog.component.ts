@@ -6,7 +6,7 @@
 
 import { AuthorizationService } from '@abraxas/base-components';
 import { EnumItemDescription, EnumUtil, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MajorityElectionUnionService } from '../../core/majority-election-union.service';
 import { PoliticalBusinessUnion, PoliticalBusinessUnionType } from '../../core/models/political-business-union.model';
@@ -19,6 +19,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   standalone: false,
 })
 export class PoliticalBusinessUnionEditDialogComponent implements OnInit {
+  private readonly dialogRef = inject<MatDialogRef<PoliticalBusinessUnionEditDialogData>>(MatDialogRef);
+  private readonly i18n = inject(TranslateService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly proportionalElectionUnionService = inject(ProportionalElectionUnionService);
+  private readonly majorityElectionUnionService = inject(MajorityElectionUnionService);
+  private readonly enumUtil = inject(EnumUtil);
+  private readonly auth = inject(AuthorizationService);
+
   public data: PoliticalBusinessUnion;
   public isNew: boolean = false;
   public saving: boolean = false;
@@ -28,16 +36,9 @@ export class PoliticalBusinessUnionEditDialogComponent implements OnInit {
   private readonly enabledPoliticalBusinessUnionTypes: PoliticalBusinessUnionType[];
   private tenantId: string = '';
 
-  constructor(
-    private readonly dialogRef: MatDialogRef<PoliticalBusinessUnionEditDialogData>,
-    private readonly i18n: TranslateService,
-    private readonly snackbarService: SnackbarService,
-    private readonly proportionalElectionUnionService: ProportionalElectionUnionService,
-    private readonly majorityElectionUnionService: MajorityElectionUnionService,
-    private readonly enumUtil: EnumUtil,
-    private readonly auth: AuthorizationService,
-    @Inject(MAT_DIALOG_DATA) dialogData: PoliticalBusinessUnionEditDialogData,
-  ) {
+  constructor() {
+    const dialogData = inject<PoliticalBusinessUnionEditDialogData>(MAT_DIALOG_DATA);
+
     this.data = dialogData.politicalBusinessUnion;
     this.enabledPoliticalBusinessUnionTypes = dialogData.enabledPoliticalBusinessUnionTypes;
     this.isNew = !this.data.id;

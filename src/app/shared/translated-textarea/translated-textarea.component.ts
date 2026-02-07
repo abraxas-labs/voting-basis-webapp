@@ -6,7 +6,6 @@
 
 import { Component } from '@angular/core';
 import { TranslatedFieldComponent } from '../translated-field/translated-field.component';
-import { LanguageService } from '@abraxas/voting-lib';
 
 @Component({
   selector: 'app-translated-textarea',
@@ -15,7 +14,7 @@ import { LanguageService } from '@abraxas/voting-lib';
   standalone: false,
 })
 export class TranslatedTextareaComponent extends TranslatedFieldComponent {
-  constructor(languageService: LanguageService) {
-    super(languageService);
+  constructor() {
+    super();
   }
 }

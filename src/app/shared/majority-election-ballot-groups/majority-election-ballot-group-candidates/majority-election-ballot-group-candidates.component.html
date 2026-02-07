@@ -30,11 +30,11 @@
   <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
 </bc-table>
 
-<p
-  *ngIf="
-    (majorityElection && !majorityElection.individualCandidatesDisabled) ||
-    (secondaryMajorityElection && !secondaryMajorityElection.individualCandidatesDisabled)
-  "
->
-  {{ 'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate }}: {{ individualCandidatesVoteCount }}
-</p>
+@if (
+  (majorityElection && !majorityElection.individualCandidatesDisabled) ||
+  (secondaryMajorityElection && !secondaryMajorityElection.individualCandidatesDisabled)
+  ) {
+  <p>
+    {{ 'MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_COUNT' | translate }}: {{ individualCandidatesVoteCount }}
+  </p>
+}

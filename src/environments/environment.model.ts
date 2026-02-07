@@ -4,8 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { AuthorizationConfig, UserConfig } from '@abraxas/base-components';
-import { TenantConfig } from '@abraxas/base-components/lib/services/models/tenant-config.model';
+import { AuthorizationConfig, TenantConfig, UserConfig } from '@abraxas/base-components';
 import { Environments } from '@abraxas/voting-lib';
 import { AuthConfig } from 'angular-oauth2-oidc';
 

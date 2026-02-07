@@ -13,21 +13,35 @@
              (valueChange)="ballotBundleSampleSize = $event; contentChanged.emit()"
              [subscriptSizing]="'dynamic'"></bc-number>
 
-  <div class="flex-grid">
+  <div>
     <bc-label class="full-width" [label]="'PROPORTIONAL_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.TITLE' | translate"></bc-label>
-    <bc-label class="full-width" [label]="'PROPORTIONAL_ELECTION.BALLOT_NUMBER_GENERATION.TITLE' | translate"></bc-label>
-    <bc-checkbox [(checked)]="data.automaticBallotBundleNumberGeneration"
-                 [disabled]="testingPhaseEnded || locked || readonly"
-                 [label]="'PROPORTIONAL_ELECTION.BALLOT_BUNDLE_NUMBER_GENERATION.AUTOMATIC' | translate"
-                 (checkedChange)="refreshBallotNumberGenerationChoices(); contentChanged.emit()"
-                 [subscriptSizing]="'dynamic'"></bc-checkbox>
     <bc-radio-button-group orientation="vertical"
-                           [items]="ballotNumberGenerationChoices"
-                           [value]="data.ballotNumberGeneration"
-                           [disabled]="readonly || locked"
-                           (valueChange)="data.ballotNumberGeneration = $event; contentChanged.emit()"
+                           [items]="automaticBundleNumberGenerationChoices"
+                           [value]="data.automaticBallotBundleNumberGeneration"
+                           [disabled]="testingPhaseEnded || readonly || locked"
+                           (valueChange)="data.automaticBallotBundleNumberGeneration = $event; contentChanged.emit()"
                            [subscriptSizing]="'dynamic'">
     </bc-radio-button-group>
+  </div>
+
+  <div class="flex-grid">
+    <bc-label class="full-width col-span-2" [label]="'PROPORTIONAL_ELECTION.BALLOT_NUMBER_GENERATION.TITLE' | translate"></bc-label>
+    <bc-radio-button-group orientation="vertical"
+                           [items]="automaticBallotNumberGenerationChoices"
+                           [value]="data.automaticBallotNumberGeneration"
+                           [disabled]="testingPhaseEnded || readonly || locked"
+                           (valueChange)="changeAutomaticBallotNumberGeneration($event)"
+                           [subscriptSizing]="'dynamic'">
+    </bc-radio-button-group>
+    @if (data.automaticBallotNumberGeneration) {
+      <bc-radio-button-group orientation="vertical"
+                             [items]="ballotNumberGenerationChoices"
+                             [value]="data.ballotNumberGeneration"
+                             [disabled]="readonly || locked"
+                             (valueChange)="data.ballotNumberGeneration = $event; contentChanged.emit()"
+                             [subscriptSizing]="'dynamic'">
+      </bc-radio-button-group>
+    }
   </div>
 
   <div class="flex-grid">
@@ -62,17 +76,19 @@
                  [subscriptSizing]="'dynamic'"></bc-checkbox>
   </div>
 
-  <div *ngIf="useCandidateCheckDigit" class="flex-grid">
-    <bc-label class="full-width col-span-2" [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.TITLE' | translate"></bc-label>
-    <bc-checkbox [checked]="data.candidateCheckDigit"
-                 (checkedChange)="data.candidateCheckDigit = $event; contentChanged.emit()"
-                 [disabled]="testingPhaseEnded || locked || readonly"
-                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.USE' | translate"
-                 [subscriptSizing]="'dynamic'"></bc-checkbox>
-    <bc-checkbox [checked]="data.enforceCandidateCheckDigitForCountingCircles"
-                 (checkedChange)="data.enforceCandidateCheckDigitForCountingCircles = $event; contentChanged.emit()"
-                 [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.ENFORCE_FOR_COUNTING_CIRCLES' | translate"
-                 [disabled]="testingPhaseEnded || locked || readonly"
-                 [subscriptSizing]="'dynamic'"></bc-checkbox>
-  </div>
+  @if (useCandidateCheckDigit) {
+    <div class="flex-grid">
+      <bc-label class="full-width col-span-2" [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.TITLE' | translate"></bc-label>
+      <bc-checkbox [checked]="data.candidateCheckDigit"
+        (checkedChange)="data.candidateCheckDigit = $event; contentChanged.emit()"
+        [disabled]="testingPhaseEnded || locked || readonly"
+        [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.USE' | translate"
+        [subscriptSizing]="'dynamic'"></bc-checkbox>
+      <bc-checkbox [checked]="data.enforceCandidateCheckDigitForCountingCircles"
+        (checkedChange)="data.enforceCandidateCheckDigitForCountingCircles = $event; contentChanged.emit()"
+        [label]="'PROPORTIONAL_ELECTION.CANDIDATE_CHECK_DIGIT.ENFORCE_FOR_COUNTING_CIRCLES' | translate"
+        [disabled]="testingPhaseEnded || locked || readonly"
+        [subscriptSizing]="'dynamic'"></bc-checkbox>
+    </div>
+  }
 </div>

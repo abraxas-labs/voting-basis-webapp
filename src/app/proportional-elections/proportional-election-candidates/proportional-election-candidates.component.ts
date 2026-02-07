@@ -5,7 +5,7 @@
  */
 
 import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
@@ -34,6 +34,12 @@ export interface CandidateUpdated {
   standalone: false,
 })
 export class ProportionalElectionCandidatesComponent {
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly dialogService = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+
   public readonly columns = [
     'position',
     'number',
@@ -89,14 +95,6 @@ export class ProportionalElectionCandidatesComponent {
   public savingAccumulation: boolean = false;
   private currentList?: ProportionalElectionList;
   private currentDomainOfInfluence?: DomainOfInfluence;
-
-  constructor(
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly dialogService: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-  ) {}
 
   @Input()
   public set list(value: ProportionalElectionList) {

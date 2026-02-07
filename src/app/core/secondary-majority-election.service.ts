@@ -24,7 +24,7 @@ import {
 } from '@abraxas/voting-basis-service-proto/grpc/requests/majority_election_requests_pb';
 import { SexType } from '@abraxas/voting-basis-service-proto/grpc/shared/sex_pb';
 import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MajorityElectionService } from './majority-election.service';
 import {
@@ -41,7 +41,9 @@ import { fillProtoMap, toJsMap } from './utils/map.utils';
   providedIn: 'root',
 })
 export class SecondaryMajorityElectionService extends GrpcService<MajorityElectionServicePromiseClient> {
-  constructor(grpcBackend: GrpcBackendService) {
+  constructor() {
+    const grpcBackend = inject(GrpcBackendService);
+
     super(MajorityElectionServicePromiseClient, environment, grpcBackend);
   }
 

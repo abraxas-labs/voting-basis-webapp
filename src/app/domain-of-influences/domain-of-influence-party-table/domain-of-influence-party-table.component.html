@@ -1,36 +1,39 @@
-<bc-table *ngIf="parties.length > 0; else noData" class="w-full" [dataSource]="parties">
-  <ng-container columnDef="name">
-    <bc-header-cell *headerCellDef>
-      <app-truncated-value [value]="'DOMAIN_OF_INFLUENCE.PARTY.NAME' | translate"></app-truncated-value>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
-      <app-truncated-value [value]="element.name | getTranslation"></app-truncated-value>
-    </bc-data-cell>
-  </ng-container>
+@if (parties.length > 0) {
+  <bc-table class="w-full" [dataSource]="parties">
+    <ng-container columnDef="name">
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'DOMAIN_OF_INFLUENCE.PARTY.NAME' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.name | getTranslation"></app-truncated-value>
+      </bc-data-cell>
+    </ng-container>
 
-  <ng-container columnDef="shortDescription">
-    <bc-header-cell *headerCellDef>
-      <app-truncated-value [value]="'DOMAIN_OF_INFLUENCE.PARTY.SHORT_DESCRIPTION' | translate"></app-truncated-value>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
-      <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
-    </bc-data-cell>
-  </ng-container>
+    <ng-container columnDef="shortDescription">
+      <bc-header-cell *headerCellDef>
+        <app-truncated-value [value]="'DOMAIN_OF_INFLUENCE.PARTY.SHORT_DESCRIPTION' | translate"></app-truncated-value>
+      </bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
+      </bc-data-cell>
+    </ng-container>
 
-  <ng-container columnDef="actions">
-    <bc-header-cell *headerCellDef></bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
-      <div *ngIf="!disabled && !element.inherited" class="flex">
-        <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
-        <bc-icon class="clickable ml-2" (click)="delete.emit(element)" icon="trash" iconColor="error"></bc-icon>
-      </div>
-    </bc-data-cell>
-  </ng-container>
+    <ng-container columnDef="actions">
+      <bc-header-cell *headerCellDef></bc-header-cell>
+      <bc-data-cell *dataCellDef="let element">
+        @if (!disabled && !element.inherited) {
+          <div class="flex">
+            <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
+            <bc-icon class="clickable ml-2" (click)="delete.emit(element)" icon="trash" iconColor="error"></bc-icon>
+          </div>
+        }
+      </bc-data-cell>
+    </ng-container>
 
-  <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-  <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
-</bc-table>
+    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
+    <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+  </bc-table>
+} @else if (disabled) {
+  <p class="no-data mt-1" translate>DOMAIN_OF_INFLUENCE.PARTY.NO_DATA</p>
+}
 
-<ng-template #noData>
-  <p *ngIf="disabled" class="no-data mt-1" translate>DOMAIN_OF_INFLUENCE.PARTY.NO_DATA</p>
-</ng-template>

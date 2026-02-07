@@ -40,6 +40,7 @@ export type Vote = {
   ballotBundleSampleSizePercent: number;
   enforceResultEntryForCountingCircles: boolean;
   automaticBallotBundleNumberGeneration: boolean;
+  automaticBallotNumberGeneration: boolean;
   reviewProcedure: VoteReviewProcedureProto;
   enforceReviewProcedureForCountingCircles: boolean;
   type: VoteTypeProto;
@@ -92,6 +93,7 @@ export function newVote(): Vote {
     ballotBundleSampleSizePercent: 0,
     enforceResultEntryForCountingCircles: true,
     automaticBallotBundleNumberGeneration: false,
+    automaticBallotNumberGeneration: true,
     reviewProcedure: VoteReviewProcedureProto.VOTE_REVIEW_PROCEDURE_ELECTRONICALLY,
     type: VoteType.VOTE_TYPE_QUESTIONS_ON_SINGLE_BALLOT,
   } as Vote;

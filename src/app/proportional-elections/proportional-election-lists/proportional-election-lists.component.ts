@@ -4,8 +4,8 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, SnackbarService } from '@abraxas/voting-lib';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { DialogService, LanguageService, SnackbarService } from '@abraxas/voting-lib';
+import { Component, Input, OnDestroy, OnInit, inject, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
@@ -34,6 +34,7 @@ import {
 import { Subscription } from 'rxjs';
 import { EventLogService } from '../../core/event-log.service';
 import { EventType } from '../../core/models/event-log.model';
+import { SelectionDirective } from '@abraxas/base-components';
 
 @Component({
   selector: 'app-proportional-election-lists',
@@ -42,6 +43,17 @@ import { EventType } from '../../core/models/event-log.model';
   standalone: false,
 })
 export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
+  public readonly placeholderList: ProportionalElectionList = {
+    ...newProportionalElectionList(999, ''),
+    orderNumber: '999',
+  };
+  private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
+  private readonly proportionalElectionService = inject(ProportionalElectionService);
+  private readonly eventLog = inject(EventLogService);
+  private readonly dialogService = inject(DialogService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly i18n = inject(TranslateService);
+
   public columns: string[] = [];
 
   @Input()
@@ -65,6 +77,9 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   @Input()
   public hideOccupationTitle: boolean = false;
 
+  @ViewChild(SelectionDirective)
+  public tableSelection?: SelectionDirective<ProportionalElectionList>;
+
   public lists: ProportionalElectionList[] = [];
   public validListUnions: boolean = false;
   public selectedList?: ProportionalElectionList;
@@ -74,15 +89,6 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   public hasHagenbachBischoffDistribution: boolean = false;
 
   private changesSubscription?: Subscription;
-
-  constructor(
-    private readonly domainOfInfluenceService: DomainOfInfluenceService,
-    private readonly proportionalElectionService: ProportionalElectionService,
-    private readonly eventLog: EventLogService,
-    private readonly dialogService: DialogService,
-    private readonly snackbarService: SnackbarService,
-    private readonly i18n: TranslateService,
-  ) {}
 
   public async ngOnInit(): Promise<void> {
     this.loading = true;
@@ -138,6 +144,11 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   }
 
   public async moveList(previousIndex: number, newIndex: number): Promise<void> {
+    // Cannot put list into the last place, as the placeholder list is there
+    if (newIndex === this.lists.length - 1) {
+      newIndex--;
+    }
+
     if (previousIndex === newIndex) {
       return;
     }
@@ -147,7 +158,10 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
     this.lists = [...this.lists];
     this.updateListPositions();
 
-    await this.proportionalElectionService.reorderLists(this.proportionalElection.id, this.lists);
+    await this.proportionalElectionService.reorderLists(
+      this.proportionalElection.id,
+      this.lists.filter(l => l !== this.placeholderList),
+    );
     this.snackbarService.success(this.i18n.instant('APP.SAVED'));
   }
 
@@ -163,12 +177,14 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   }
 
   public selectList(row: ProportionalElectionList): void {
-    this.selectedList = row;
+    if (row !== this.placeholderList) {
+      this.selectedList = row;
+    }
   }
 
   public async manageListUnions(): Promise<void> {
     const dialogData: ProportionalElectionListUnionsDialogData = {
-      lists: this.lists,
+      lists: this.lists.filter(l => l !== this.placeholderList),
       proportionalElection: this.proportionalElection,
     };
     await this.dialogService.openForResult(ProportionalElectionListUnionsDialogComponent, dialogData);
@@ -220,6 +236,14 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   private async loadLists(): Promise<void> {
     this.lists = await this.proportionalElectionService.listLists(this.proportionalElection.id);
 
+    if (this.placeholderList.shortDescription.size === 0) {
+      const name = this.i18n.instant('PROPORTIONAL_ELECTION.LIST.EMPTY_LIST_PLACEHOLDER');
+      this.placeholderList.shortDescription = LanguageService.fillAllLanguages(name);
+    }
+
+    this.placeholderList.blankRowCount = this.proportionalElection.numberOfMandates;
+    this.lists.push(this.placeholderList);
+
     if (this.hasHagenbachBischoffDistribution) {
       const listUnions = await this.proportionalElectionService.listListUnions(this.proportionalElection.id);
       this.validListUnions = listUnions.length === 0 || listUnions.every(u => u.proportionalElectionListIds.length > 1);
@@ -229,11 +253,16 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   private handleCreateList(list: ProportionalElectionList): void {
     const existingListIndex = this.lists.findIndex(l => l.id === list.id);
     if (existingListIndex >= 0) {
+      this.selectList(this.lists[existingListIndex]);
+      this.tableSelection?.toggleSelection(this.lists[existingListIndex]);
       // list is already created
       return;
     }
 
-    this.lists = [...this.lists, list];
+    this.lists.splice(this.lists.length - 1, 0, list);
+    this.lists = [...this.lists];
+    this.selectList(list);
+    this.tableSelection?.toggleSelection(list);
     this.updateCanSave();
   }
 
@@ -267,10 +296,11 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   }
 
   private updateCanSave(): void {
+    const relevantLists = this.lists.filter(l => l !== this.placeholderList);
     this.canSave =
-      this.lists.length > 0 &&
-      this.lists.every(l => l.countOfCandidates > 0) &&
-      this.lists.every(l => l.candidateCountOk) &&
+      relevantLists.length > 0 &&
+      relevantLists.every(l => l.countOfCandidates > 0) &&
+      relevantLists.every(l => l.candidateCountOk) &&
       (!this.hasHagenbachBischoffDistribution || this.validListUnions);
   }
 

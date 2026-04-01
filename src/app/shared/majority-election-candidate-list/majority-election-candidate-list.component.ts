@@ -45,6 +45,9 @@ export class MajorityElectionCandidateListComponent {
   public readonly: boolean = false;
 
   @Input()
+  public eVotingEverApproved: boolean = false;
+
+  @Input()
   public hideActionButtons: boolean = false;
 
   @Output()

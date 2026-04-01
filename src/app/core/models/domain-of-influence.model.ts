@@ -50,6 +50,8 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     hasForeignerVoters: false,
     hasMinorVoters: false,
     stistatMunicipality: false,
+    stistatExportEnabled: false,
+    stistatExportEaiMessageType: '',
     publishResultsDisabled: false,
     votingCardFlatRateDisabled: false,
     isMainVotingCardsDomainOfInfluence: false,
@@ -73,6 +75,7 @@ export interface DomainOfInfluence
     | 'eCollectingInitiativeNumberOfMembersCommittee'
     | 'eCollectingReferendumMinSignatureCount'
     | 'eCollectingReferendumMaxElectronicSignaturePercent'
+    | 'eVoting'
   > {
   createdOn?: Date;
   modifiedOn?: Date;
@@ -82,11 +85,7 @@ export interface DomainOfInfluence
   plausibilisationConfiguration?: PlausibilisationConfiguration;
   parties: DomainOfInfluenceParty[];
   superiorAuthorityDomainOfInfluence?: DomainOfInfluence;
-  eCollectingInitiativeMinSignatureCount?: number;
-  eCollectingInitiativeMaxElectronicSignaturePercent?: number;
-  eCollectingInitiativeNumberOfMembersCommittee?: number;
-  eCollectingReferendumMinSignatureCount?: number;
-  eCollectingReferendumMaxElectronicSignaturePercent?: number;
+  eVoting?: boolean;
 }
 
 export interface DomainOfInfluenceLevel {

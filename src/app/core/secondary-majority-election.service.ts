@@ -231,6 +231,9 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
     result.setReportingType(data.reportingType);
+    result.setComment(data.comment);
+    result.setWahlvorschlagDescription(data.wahlvorschlagDescription);
+    result.setAudited(data.audited);
     return result;
   }
 
@@ -261,6 +264,9 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
     result.setReportingType(data.reportingType);
+    result.setComment(data.comment);
+    result.setWahlvorschlagDescription(data.wahlvorschlagDescription);
+    result.setAudited(data.audited);
     return result;
   }
 

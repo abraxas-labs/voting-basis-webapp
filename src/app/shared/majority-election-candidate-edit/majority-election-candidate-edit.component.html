@@ -233,5 +233,32 @@
         ></bc-text>
       </div>
     </div>
+
+    @if (enableAdditionalCandidateFields) {
+      <bc-text
+        [label]="'MAJORITY_ELECTION.CANDIDATE.WAHLVORSCHLAG_DESCRIPTION' | translate"
+        [readonly]="isCandidateReference || testingPhaseEnded"
+        [value]="candidate.wahlvorschlagDescription"
+        (valueChange)="candidate.wahlvorschlagDescription = $event; contentChanged.emit()"
+        maxlength="100"
+        subscriptSizing="dynamic"
+      ></bc-text>
+      <bc-text
+        [label]="'MAJORITY_ELECTION.CANDIDATE.COMMENT' | translate"
+        [readonly]="isCandidateReference || testingPhaseEnded"
+        [value]="candidate.comment"
+        (valueChange)="candidate.comment = $event; contentChanged.emit()"
+        maxlength="500"
+        subscriptSizing="dynamic"
+      ></bc-text>
+      <bc-checkbox
+        class="mr-3"
+        [readonly]="isCandidateReference || testingPhaseEnded"
+        [checked]="candidate.audited"
+        (checkedChange)="candidate.audited = $event; contentChanged.emit()"
+        [label]="'MAJORITY_ELECTION.CANDIDATE.AUDITED' | translate"
+        [subscriptSizing]="'dynamic'"
+      ></bc-checkbox>
+    }
   </div>
 }

@@ -46,6 +46,7 @@ import {
 import { EventLogService } from '../../core/event-log.service';
 import { EventType } from '../../core/models/event-log.model';
 import { PoliticalBusinessType } from '@abraxas/voting-basis-service-proto/grpc/shared/political_business_pb';
+import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';
 
 const POLITICAL_BUSINESS_TYPE_TO_EXPORT_ENTITY_TYPE: { [key in PoliticalBusinessType]?: ExportEntityType } = {
   [PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE]: ExportEntityType.EXPORT_ENTITY_TYPE_VOTE,
@@ -119,6 +120,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public politicalBusinessSummaries: PoliticalBusinessSummary[] = [];
   public columns = [...this.originalColumns];
   public activeToggled: boolean = false;
+  public hasOnlyEVotingDois: boolean = false;
 
   private readonly routeSubscription: Subscription;
   private detailsChangesSubscription?: Subscription;
@@ -327,6 +329,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.contest = await this.contestService.get(contestId);
       this.politicalBusinessSummaries = await this.contestService.listPoliticalBusinessSummaries(contestId);
       this.updatePoliticalBusinessesList();
+      await this.updateHasOnlyEVotingDois();
 
       this.cantonDefaults = await this.domainOfInfluenceService.getCantonDefaults(this.contest.domainOfInfluenceId);
       this.hasAdminReadPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ReadActionsTenantSameCanton);
@@ -577,6 +580,23 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       const eVotingColIndex = this.columns.indexOf('eVotingApproved');
       this.columns.splice(eVotingColIndex, 1);
     }
+  }
+
+  private async updateHasOnlyEVotingDois(): Promise<void> {
+    const tree = new DomainOfInfluenceTree(await this.domainOfInfluenceService.listTree(), this.enumUtil);
+    const hasPbAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusiness.ReadActionsTenantSameCanton);
+
+    const contestDomainOfInfluenceNode = tree.findNodeById(this.contest.domainOfInfluenceId);
+    if (!contestDomainOfInfluenceNode) {
+      throw new Error('could not access doi of contest');
+    }
+
+    const domainOfInfluences = await this.domainOfInfluenceService.filterOnlyManagedByCurrentTenantAndNotVirtualTopLevel(
+      tree.getSelfAndChildrenAsFlatList(contestDomainOfInfluenceNode),
+      hasPbAdminPermissions,
+    );
+
+    this.hasOnlyEVotingDois = domainOfInfluences.length > 0 && domainOfInfluences.every(doi => doi.eVoting);
   }
 
   // To make the table component filter work out of the box, map political businesses

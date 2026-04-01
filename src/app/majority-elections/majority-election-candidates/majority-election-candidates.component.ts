@@ -54,6 +54,9 @@ export class MajorityElectionCandidatesComponent {
   public eVotingApproved: boolean = false;
 
   @Input()
+  public eVotingEverApproved: boolean = false;
+
+  @Input()
   public candidateLocalityRequired: boolean = false;
 
   @Input()
@@ -61,6 +64,9 @@ export class MajorityElectionCandidatesComponent {
 
   @Input()
   public hideOccupationTitle: boolean = false;
+
+  @Input()
+  public enableAdditionalCandidateFields: boolean = false;
 
   @Input()
   public readonly: boolean = false;
@@ -108,6 +114,7 @@ export class MajorityElectionCandidatesComponent {
       candidateOriginRequired: this.candidateOriginRequired,
       parties: this.parties,
       hideOccupationTitle: this.hideOccupationTitle,
+      enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
       individualCandidatesDisabled: this.currentMajorityElection.individualCandidatesDisabled,
     };
 
@@ -128,6 +135,7 @@ export class MajorityElectionCandidatesComponent {
       candidateOriginRequired: this.candidateOriginRequired,
       parties: this.parties,
       hideOccupationTitle: this.hideOccupationTitle,
+      enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
       individualCandidatesDisabled: this.currentMajorityElection.individualCandidatesDisabled,
     };
     const result = await this.dialogService.openForResult(MajorityElectionCandidateEditDialogComponent, dialogData);

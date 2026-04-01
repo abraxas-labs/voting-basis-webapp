@@ -21,6 +21,7 @@ import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared
 @Component({
   selector: 'app-domain-of-influence-voting-card-data-edit',
   templateUrl: './domain-of-influence-voting-card-data-edit.component.html',
+  styleUrl: 'domain-of-influence-voting-card-data-edit.component.scss',
   standalone: false,
 })
 export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
@@ -110,5 +111,14 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
       );
 
     this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateSameCanton);
+  }
+
+  protected updateStistatExportEnabled(enabled: boolean) {
+    this.domainOfInfluence.stistatExportEnabled = enabled;
+    if (!enabled) {
+      this.domainOfInfluence.stistatExportEaiMessageType = '';
+    }
+
+    this.contentChanged.emit();
   }
 }

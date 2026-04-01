@@ -48,6 +48,9 @@ export class MajorityElectionCandidateEditComponent implements OnInit {
   public hideOccupationTitle: boolean = false;
 
   @Input()
+  public enableAdditionalCandidateFields: boolean = false;
+
+  @Input()
   public parties: DomainOfInfluenceParty[] = [];
 
   @Input()

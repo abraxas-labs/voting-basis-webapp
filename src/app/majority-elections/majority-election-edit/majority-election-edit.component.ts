@@ -61,6 +61,7 @@ export class MajorityElectionEditComponent implements OnInit, HasUnsavedChanges 
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
   public eVotingApproved: boolean = false;
+  public eVotingEverApproved: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public hasChanges: boolean = false;
   public canEdit: boolean = false;
@@ -79,6 +80,7 @@ export class MajorityElectionEditComponent implements OnInit, HasUnsavedChanges 
       const { testingPhaseEnded, locked, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
       this.eVotingApproved = !!this.data.eVotingApproved;
+      this.eVotingEverApproved = this.data.eVotingEverApproved;
       this.locked = locked;
       this.canEdit = await this.permissionService.hasPermission(Permissions.MajorityElection.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);

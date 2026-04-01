@@ -77,6 +77,9 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   @Input()
   public hideOccupationTitle: boolean = false;
 
+  @Input()
+  public enableAdditionalCandidateFields: boolean = false;
+
   @ViewChild(SelectionDirective)
   public tableSelection?: SelectionDirective<ProportionalElectionList>;
 
@@ -279,7 +282,7 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
     this.updateCanSave();
   }
 
-  private handleDeleteList(id: string): void {
+  public handleDeleteList(id: string): void {
     this.lists = this.lists.filter(l => l.id !== id);
     this.updateListPositions();
     if (this.selectedList?.id === id) {

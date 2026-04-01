@@ -25,6 +25,7 @@
                                         [testingPhaseEnded]="testingPhaseEnded"
                                         [locked]="locked || eVotingApproved"
                                         [readonly]="readonly"
+                                        [eVotingEverApproved]="eVotingEverApproved"
                                         [reordering]="reordering"
                                         (candidatesReordered)="reorderCandidates($event)"
                                         (edit)="editCandidate($event)"
@@ -35,12 +36,14 @@
     <app-secondary-majority-election-candidates
       [testingPhaseEnded]="testingPhaseEnded"
       [locked]="locked"
-      [eVotingApproved]="eVotingApproved"
+      [eVotingApproved]="secondaryMajorityElection.eVotingApproved"
+      [eVotingEverApproved]="secondaryMajorityElection.eVotingEverApproved"
       [readonly]="readonly"
       [secondaryMajorityElection]="secondaryMajorityElection"
       [candidateLocalityRequired]="candidateLocalityRequired"
       [candidateOriginRequired]="candidateOriginRequired"
       [hideOccupationTitle]="hideOccupationTitle"
+      [enableAdditionalCandidateFields]="enableAdditionalCandidateFields"
       [domainOfInfluenceType]="currentDomainOfInfluence?.type"
       [parties]="parties">
     </app-secondary-majority-election-candidates>

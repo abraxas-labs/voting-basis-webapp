@@ -1,0 +1,14 @@
+.stistat-export-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+
+  bc-checkbox {
+    width: fit-content;
+    white-space: nowrap;
+  }
+
+  bc-text {
+    max-width: 20rem;
+  }
+}

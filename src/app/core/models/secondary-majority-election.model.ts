@@ -38,6 +38,7 @@ export function newSecondaryMajorityElection(): SecondaryMajorityElection {
     active: false,
     individualCandidatesDisabled: false,
     isOnSeparateBallot: false,
+    eVotingEverApproved: false,
   };
 }
 

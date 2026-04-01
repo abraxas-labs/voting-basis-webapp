@@ -69,6 +69,9 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       houseNumber: data.getHouseNumber(),
       country: data.getCountry(),
       reportingType: data.getReportingType(),
+      comment: data.getComment(),
+      wahlvorschlagDescription: data.getWahlvorschlagDescription(),
+      audited: data.getAudited(),
     };
   }
 
@@ -272,6 +275,9 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
     result.setReportingType(data.reportingType);
+    result.setComment(data.comment);
+    result.setWahlvorschlagDescription(data.wahlvorschlagDescription);
+    result.setAudited(data.audited);
     return result;
   }
 
@@ -300,6 +306,9 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
     result.setReportingType(data.reportingType);
+    result.setComment(data.comment);
+    result.setWahlvorschlagDescription(data.wahlvorschlagDescription);
+    result.setAudited(data.audited);
     return result;
   }
 }

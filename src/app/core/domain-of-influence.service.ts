@@ -25,7 +25,7 @@ import {
 } from '@abraxas/voting-basis-service-proto/grpc/requests/domain_of_influence_requests_pb';
 import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { DomainOfInfluenceCantonDefaults } from './models/canton-settings.model';
 import { DomainOfInfluenceParty, DomainOfInfluencePartyProto } from './models/domain-of-influence-party.model';
@@ -57,7 +57,7 @@ import {
 } from './models/plausibilisation.model';
 import { mapToProtoContactPerson } from './utils/contact-person.utils';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
-import { createDoubleValue, createInt32Value } from './utils/proto.utils';
+import { createDoubleValue } from './utils/proto.utils';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -121,6 +121,8 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       electoralRegistrationEnabled: doi.getElectoralRegistrationEnabled(),
       electoralRegisterMultipleEnabled: doi.getElectoralRegisterMultipleEnabled(),
       stistatMunicipality: doi.getStistatMunicipality(),
+      stistatExportEnabled: doi.getStistatExportEnabled(),
+      stistatExportEaiMessageType: doi.getStistatExportEaiMessageType(),
       hasForeignerVoters: doi.getHasForeignerVoters(),
       hasMinorVoters: doi.getHasMinorVoters(),
       superiorAuthorityDomainOfInfluence: !!doi.getSuperiorAuthorityDomainOfInfluence()
@@ -132,12 +134,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       hasEmptyVotingCards: doi.getHasEmptyVotingCards(),
       hideLowerDomainOfInfluencesInReports: doi.getHideLowerDomainOfInfluencesInReports(),
       eCollectingEnabled: doi.getECollectingEnabled(),
-      eCollectingInitiativeMinSignatureCount: doi.getECollectingInitiativeMinSignatureCount()?.getValue(),
-      eCollectingInitiativeMaxElectronicSignaturePercent: doi.getECollectingInitiativeMaxElectronicSignaturePercent()?.getValue(),
-      eCollectingInitiativeNumberOfMembersCommittee: doi.getECollectingInitiativeNumberOfMembersCommittee()?.getValue(),
-      eCollectingReferendumMinSignatureCount: doi.getECollectingReferendumMinSignatureCount()?.getValue(),
-      eCollectingReferendumMaxElectronicSignaturePercent: doi.getECollectingReferendumMaxElectronicSignaturePercent()?.getValue(),
-      eCollectingEmail: doi.getECollectingEmail(),
+      eVoting: doi.getEVoting()?.getValue(),
     };
   }
 
@@ -374,18 +371,13 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setHasMinorVoters(data.hasMinorVoters);
     result.setSuperiorAuthorityDomainOfInfluenceId(data.superiorAuthorityDomainOfInfluence?.id ?? '');
     result.setStistatMunicipality(data.stistatMunicipality);
+    result.setStistatExportEaiMessageType(data.stistatExportEaiMessageType);
     result.setPublishResultsDisabled(data.publishResultsDisabled);
     result.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
     result.setIsMainVotingCardsDomainOfInfluence(data.isMainVotingCardsDomainOfInfluence);
     result.setHasEmptyVotingCards(data.hasEmptyVotingCards);
     result.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
     result.setECollectingEnabled(data.eCollectingEnabled);
-    result.setECollectingInitiativeMinSignatureCount(createInt32Value(data.eCollectingInitiativeMinSignatureCount));
-    result.setECollectingInitiativeMaxElectronicSignaturePercent(createInt32Value(data.eCollectingInitiativeMaxElectronicSignaturePercent));
-    result.setECollectingInitiativeNumberOfMembersCommittee(createInt32Value(data.eCollectingInitiativeNumberOfMembersCommittee));
-    result.setECollectingReferendumMinSignatureCount(createInt32Value(data.eCollectingReferendumMinSignatureCount));
-    result.setECollectingReferendumMaxElectronicSignaturePercent(createInt32Value(data.eCollectingReferendumMaxElectronicSignaturePercent));
-    result.setECollectingEmail(data.eCollectingEmail);
     return result;
   }
 
@@ -429,22 +421,13 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setHasMinorVoters(data.hasMinorVoters);
       adminRequest.setSuperiorAuthorityDomainOfInfluenceId(data.superiorAuthorityDomainOfInfluence?.id ?? '');
       adminRequest.setStistatMunicipality(data.stistatMunicipality);
+      adminRequest.setStistatExportEaiMessageType(data.stistatExportEaiMessageType);
       adminRequest.setPublishResultsDisabled(data.publishResultsDisabled);
       adminRequest.setVotingCardFlatRateDisabled(data.votingCardFlatRateDisabled);
       adminRequest.setIsMainVotingCardsDomainOfInfluence(data.isMainVotingCardsDomainOfInfluence);
       adminRequest.setHasEmptyVotingCards(data.hasEmptyVotingCards);
       adminRequest.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
       adminRequest.setECollectingEnabled(data.eCollectingEnabled);
-      adminRequest.setECollectingInitiativeMinSignatureCount(createInt32Value(data.eCollectingInitiativeMinSignatureCount));
-      adminRequest.setECollectingInitiativeMaxElectronicSignaturePercent(
-        createInt32Value(data.eCollectingInitiativeMaxElectronicSignaturePercent),
-      );
-      adminRequest.setECollectingInitiativeNumberOfMembersCommittee(createInt32Value(data.eCollectingInitiativeNumberOfMembersCommittee));
-      adminRequest.setECollectingReferendumMinSignatureCount(createInt32Value(data.eCollectingReferendumMinSignatureCount));
-      adminRequest.setECollectingReferendumMaxElectronicSignaturePercent(
-        createInt32Value(data.eCollectingReferendumMaxElectronicSignaturePercent),
-      );
-      adminRequest.setECollectingEmail(data.eCollectingEmail);
       this.mapToDomainOfInfluenceElectionAdminOrAdminRequest(data, adminRequest);
       result.setAdminRequest(adminRequest);
     } else {

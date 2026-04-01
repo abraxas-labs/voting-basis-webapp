@@ -57,6 +57,9 @@ export type MajorityElectionCandidate = {
   houseNumber: string;
   country: string;
   reportingType: MajorityElectionCandidateReportingTypeProto;
+  comment: string;
+  wahlvorschlagDescription: string;
+  audited: boolean;
 };
 
 export function newMajorityElection(): MajorityElection {
@@ -106,5 +109,8 @@ export function newMajorityElectionCandidate(
     reportingType: !hasReportingType
       ? MajorityElectionCandidateReportingTypeProto.MAJORITY_ELECTION_CANDIDATE_REPORTING_TYPE_UNSPECIFIED
       : MajorityElectionCandidateReportingTypeProto.MAJORITY_ELECTION_CANDIDATE_REPORTING_TYPE_CANDIDATE,
+    comment: '',
+    wahlvorschlagDescription: '',
+    audited: false,
   };
 }

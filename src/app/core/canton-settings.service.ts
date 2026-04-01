@@ -113,6 +113,7 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setSecondaryMajorityElectionOnSeparateBallot(data.secondaryMajorityElectionOnSeparateBallot);
     result.setDomainOfInfluencePublishResultsOptionEnabled(data.domainOfInfluencePublishResultsOptionEnabled);
     result.setHideOccupationTitle(data.hideOccupationTitle);
+    result.setEnableAdditionalCandidateFields(data.enableAdditionalCandidateFields);
     return result;
   }
 
@@ -149,6 +150,7 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setDomainOfInfluencePublishResultsOptionEnabled(data.domainOfInfluencePublishResultsOptionEnabled);
     result.setSecondaryMajorityElectionOnSeparateBallot(data.secondaryMajorityElectionOnSeparateBallot);
     result.setHideOccupationTitle(data.hideOccupationTitle);
+    result.setEnableAdditionalCandidateFields(data.enableAdditionalCandidateFields);
     return result;
   }
 

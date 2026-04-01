@@ -33,11 +33,13 @@
           [testingPhaseEnded]="testingPhaseEnded"
           [locked]="locked"
           [eVotingApproved]="eVotingApproved"
+          [eVotingEverApproved]="eVotingEverApproved"
           [readonly]="!canEdit"
           [loadDependencies]="!newlyCreated"
           [candidateLocalityRequired]="contestDomainOfInfluenceDefaults.candidateLocalityRequired"
           [candidateOriginRequired]="contestDomainOfInfluenceDefaults.candidateOriginRequired"
           [hideOccupationTitle]="contestDomainOfInfluenceDefaults.hideOccupationTitle"
+          [enableAdditionalCandidateFields]="contestDomainOfInfluenceDefaults.enableAdditionalCandidateFields"
           [majorityElection]="data"
           >
         </app-majority-election-candidates>

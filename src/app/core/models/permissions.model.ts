@@ -102,7 +102,7 @@ export class Permissions {
   private static readonly PoliticalBusinessUnionPrefix = 'PoliticalBusinessUnion';
 
   public static readonly PoliticalBusinessUnion = {
-    ActionsTenantSameCanton: Permissions.PoliticalBusinessUnionPrefix + ':actions-tenant-same-canton',
+    WriteActionsTenantSameCanton: Permissions.PoliticalBusinessUnionPrefix + ':write-actions-tenant-same-canton',
   };
 
   private static readonly VotePrefix = 'Vote';

@@ -446,6 +446,9 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       street: data.getStreet(),
       houseNumber: data.getHouseNumber(),
       country: data.getCountry(),
+      comment: data.getComment(),
+      wahlvorschlagDescription: data.getWahlvorschlagDescription(),
+      audited: data.getAudited(),
     };
   }
 
@@ -473,6 +476,9 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setStreet(data.street);
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
+    result.setComment(data.comment);
+    result.setWahlvorschlagDescription(data.wahlvorschlagDescription);
+    result.setAudited(data.audited);
     return result;
   }
 
@@ -501,6 +507,9 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setStreet(data.street);
     result.setHouseNumber(data.houseNumber);
     result.setCountry(data.country);
+    result.setComment(data.comment);
+    result.setWahlvorschlagDescription(data.wahlvorschlagDescription);
+    result.setAudited(data.audited);
     return result;
   }
 }

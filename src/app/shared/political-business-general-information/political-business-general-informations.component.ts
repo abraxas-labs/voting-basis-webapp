@@ -136,7 +136,15 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
       this.hasAdminPermissions,
     );
 
+    if (this.contest.eVotingApproved) {
+      this.domainOfInfluences = this.domainOfInfluences.filter(d => !d.eVoting);
+    }
+
     this.selectedDomainOfInfluence = this.domainOfInfluenceTree.findById(this.data.domainOfInfluenceId);
+
+    if (!!this.selectedDomainOfInfluence && !this.domainOfInfluences.includes(this.selectedDomainOfInfluence)) {
+      this.domainOfInfluences = [...this.domainOfInfluences, this.selectedDomainOfInfluence];
+    }
 
     const availableDomainOfInfluenceTypes = this.domainOfInfluences.map(d => d.type);
     this.domainOfInfluenceTypeItems = this.enumUtil

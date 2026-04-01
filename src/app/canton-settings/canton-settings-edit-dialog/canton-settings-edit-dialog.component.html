@@ -182,6 +182,14 @@
                  [subscriptSizing]="'dynamic'">
     </bc-checkbox>
 
+    <bc-checkbox [checked]="data.enableAdditionalCandidateFields"
+                 (checkedChange)="data.enableAdditionalCandidateFields = $event; contentChanged()"
+                 [disabled]="readonly"
+                 [label]="'CANTON_SETTINGS.ENABLE_ADDITIONAL_CANDIDATE_FIELDS' | translate"
+                 class="full-width"
+                 [subscriptSizing]="'dynamic'">
+    </bc-checkbox>
+
     <bc-label class="mt-2 full-width" [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.TITLE' | translate"></bc-label>
     @for (
       countingCircleResultStateDescription of data.countingCircleResultStateDescriptionsList;

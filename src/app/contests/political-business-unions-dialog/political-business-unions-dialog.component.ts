@@ -184,7 +184,9 @@ export class PoliticalBusinessUnionsDialogComponent implements OnInit {
 
   private async loadData(): Promise<void> {
     try {
-      this.hasAdminPermissions = await this.permissionService.hasPermission(Permissions.PoliticalBusinessUnion.ActionsTenantSameCanton);
+      this.hasAdminPermissions = await this.permissionService.hasPermission(
+        Permissions.PoliticalBusinessUnion.WriteActionsTenantSameCanton,
+      );
 
       this.selectableProportionalElections = this.proportionalElectionService.mapToPoliticalBusinesses(
         await this.proportionalElectionService.list(this.contest.id),

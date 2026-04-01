@@ -58,6 +58,7 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnInit,
   public isCandidateLocalityRequired: boolean = false;
   public isCandidateOriginRequired: boolean = false;
   public hideOccupationTitle: boolean = false;
+  public enableAdditionalCandidateFields: boolean = false;
   public countries: Country[] = [];
 
   public hasChanges: boolean = false;
@@ -80,6 +81,7 @@ export class ProportionalElectionCandidateEditDialogComponent implements OnInit,
     this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
     this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
     this.hideOccupationTitle = dialogData.hideOccupationTitle;
+    this.enableAdditionalCandidateFields = dialogData.enableAdditionalCandidateFields;
     this.originalCandidate = cloneDeep(this.data);
 
     this.dialogRef.disableClose = true;
@@ -226,6 +228,7 @@ export interface ProportionalElectionCandidateEditDialogData {
   candidateLocalityRequired: boolean;
   candidateOriginRequired: boolean;
   hideOccupationTitle: boolean;
+  enableAdditionalCandidateFields: boolean;
 }
 
 export interface ProportionalElectionCandidateEditDialogResult {

@@ -251,96 +251,10 @@
         [disabled]="readonly"
         [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.ENABLED' | translate"
         [checked]="data.eCollectingEnabled"
-        (checkedChange)="data.eCollectingEnabled = $event; contentChanged(); updateValidators($event)"
+        (checkedChange)="data.eCollectingEnabled = $event; contentChanged()"
         class="full-width"
         [subscriptSizing]="'dynamic'"
       ></bc-checkbox>
-      @if (data.eCollectingEnabled) {
-        @if (data.type >= knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU) {
-          <bc-number
-            [readonly]="readonly"
-            [required]="true"
-            [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.INITIATIVE_MIN_SIGNATURE_COUNT' | translate"
-            [value]="data.eCollectingInitiativeMinSignatureCount"
-            (valueChange)="data.eCollectingInitiativeMinSignatureCount = $event; contentChanged()"
-            [formControl]="form.controls.eCollectingInitiativeMinSignatureCount"
-            [showDefaultErrors]="true"
-            [error]="
-              form.controls.eCollectingInitiativeMinSignatureCount.invalid && form.controls.eCollectingInitiativeMinSignatureCount.touched
-            "
-            [subscriptSizing]="'dynamic'"
-          ></bc-number>
-        }
-        @if (data.type >= knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_MU) {
-          <bc-number
-            [readonly]="readonly"
-            [required]="true"
-            [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.INITIATIVE_MAX_ELECTRONIC_SIGNATURE_PERCENT' | translate"
-            [value]="data.eCollectingInitiativeMaxElectronicSignaturePercent"
-            (valueChange)="data.eCollectingInitiativeMaxElectronicSignaturePercent = $event; contentChanged()"
-            [formControl]="form.controls.eCollectingInitiativeMaxElectronicSignaturePercent"
-            [showDefaultErrors]="true"
-            [error]="
-              form.controls.eCollectingInitiativeMaxElectronicSignaturePercent.invalid &&
-              form.controls.eCollectingInitiativeMaxElectronicSignaturePercent.touched
-            "
-            [subscriptSizing]="'dynamic'"
-          ></bc-number>
-        }
-        <bc-number
-          [readonly]="readonly"
-          [required]="true"
-          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.INITIATIVE_NUMBER_OF_MEMBERS_COMMITTEE' | translate"
-          [value]="data.eCollectingInitiativeNumberOfMembersCommittee"
-          (valueChange)="data.eCollectingInitiativeNumberOfMembersCommittee = $event; contentChanged()"
-          [formControl]="form.controls.eCollectingInitiativeNumberOfMembersCommittee"
-          [showDefaultErrors]="true"
-          [error]="
-            form.controls.eCollectingInitiativeNumberOfMembersCommittee.invalid &&
-            form.controls.eCollectingInitiativeNumberOfMembersCommittee.touched
-          "
-          [subscriptSizing]="'dynamic'"
-        ></bc-number>
-        <bc-number
-          [readonly]="readonly"
-          [required]="true"
-          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.REFERENDUM_MIN_SIGNATURE_COUNT' | translate"
-          [value]="data.eCollectingReferendumMinSignatureCount"
-          (valueChange)="data.eCollectingReferendumMinSignatureCount = $event; contentChanged()"
-          [formControl]="form.controls.eCollectingReferendumMinSignatureCount"
-          [showDefaultErrors]="true"
-          [error]="
-            form.controls.eCollectingReferendumMinSignatureCount.invalid && form.controls.eCollectingReferendumMinSignatureCount.touched
-          "
-          [subscriptSizing]="'dynamic'"
-        ></bc-number>
-        <bc-number
-          [readonly]="readonly"
-          [required]="true"
-          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.REFERENDUM_MAX_ELECTRONIC_SIGNATURE_PERCENT' | translate"
-          [value]="data.eCollectingReferendumMaxElectronicSignaturePercent"
-          (valueChange)="data.eCollectingReferendumMaxElectronicSignaturePercent = $event; contentChanged()"
-          [formControl]="form.controls.eCollectingReferendumMaxElectronicSignaturePercent"
-          [showDefaultErrors]="true"
-          [error]="
-            form.controls.eCollectingReferendumMaxElectronicSignaturePercent.invalid &&
-            form.controls.eCollectingReferendumMaxElectronicSignaturePercent.touched
-          "
-          [subscriptSizing]="'dynamic'"
-        ></bc-number>
-        <bc-text
-          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.EMAIL' | translate"
-          type="email"
-          [readonly]="readonly"
-          [required]="true"
-          [value]="data.eCollectingEmail"
-          (valueChange)="data.eCollectingEmail = $event; contentChanged()"
-          [formControl]="form.controls.eCollectingEmail"
-          [showDefaultErrors]="true"
-          [error]="form.controls.eCollectingEmail.invalid && form.controls.eCollectingEmail.touched"
-          [subscriptSizing]="'dynamic'"
-        ></bc-text>
-      }
     }
   </div>
 

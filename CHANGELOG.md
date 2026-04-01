@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.60.1`)
+# ✨ Changelog (`v3.62.2`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.60.1
-Previous version ---- v3.54.0
+This version -------- v3.62.2
+Previous version ---- v3.60.1
 Initial version ----- v1.23.0
-Total commits ------- 28
+Total commits ------- 10
 ```
+
+## [v3.62.2] - 2026-03-13
+
+### 🔄 Changed
+
+- remove accumulation updates candidate positions
+
+## [v3.62.1] - 2026-03-12
+
+### 🔄 Changed
+
+- removing accumulated candidates preserves the order of the positions
+
+## [v3.62.0] - 2026-03-12
+
+### 🆕 Added
+
+- feat(VOTING-6623): stistat export settings
+
+## [v3.61.0] - 2026-03-11
+
+### :arrows_counterclockwise: Changed
+
+- i18n HAS_EMPTY_VOTING_CARDS
+
+- feat(VOTING-6334): rm ecollecting settings
+
+- e-voting approval fixes and prevent deletion of candidates after e-voting ever approved
+
+### 🔄 Changed
+
+- correct wording for deleting list with one candidate confirmation text
+
+### 🔄 Changed
+
+- delete list after last proportional election candidate is deleted
+
+- add additional candidate fields
 
 ## [v3.60.1] - 2026-02-06
 

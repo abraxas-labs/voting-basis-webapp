@@ -6,11 +6,14 @@
   >
   <div class="flex">
     <bc-button
-      [matMenuTriggerFor]="contest.testingPhaseEnded || !hasSameTenantWritePermissions ? null : menu"
+      [matMenuTriggerFor]="contest.testingPhaseEnded || !hasSameTenantWritePermissions || (contest.eVotingApproved && hasOnlyEVotingDois)
+        ? null : menu"
       variant="tertiary"
       icon="plus"
-      [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions"
+      [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions || (contest.eVotingApproved && hasOnlyEVotingDois)"
       [label]="'POLITICAL_BUSINESS.NEW' | translate"
+      [tooltip]="'CONTEST.PAST_E_VOTING_APPROVAL_DUE_DATE' | translate"
+      [tooltipDisabled]="!contest.eVotingApproved"
     ></bc-button>
 
     <mat-menu #menu="matMenu">
@@ -23,11 +26,13 @@
     </mat-menu>
 
     <bc-button
-      [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions"
+      [disabled]="contest.testingPhaseEnded || !hasSameTenantWritePermissions || (contest.eVotingApproved && hasOnlyEVotingDois)"
       variant="tertiary"
       icon="download"
       (buttonClick)="importPoliticalBusinesses()"
       [label]="'IMPORT.IMPORT_POLITICAL_BUSINESS' | translate"
+      [tooltip]="'CONTEST.PAST_E_VOTING_APPROVAL_DUE_DATE' | translate"
+      [tooltipDisabled]="!contest.eVotingApproved"
       class="ml-2"
     ></bc-button>
 
@@ -169,7 +174,7 @@
           [(checked)]="element.active"
           (checkedChange)="activeStateChange(element, $event)"
           [disabled]="(element.ownerId !== tenantId && !hasAdminWritePermissions)
-            || !hasSameTenantWritePermissions || contest.testingPhaseEnded"
+            || !hasSameTenantWritePermissions || contest.testingPhaseEnded || element.eVotingApproved"
           [subscriptSizing]="'dynamic'"
           >
         </bc-switch>
@@ -228,7 +233,7 @@
             } @else {
               <vo-lib-action-menu-item icon="eye" text="ACTIONS.OPEN" (click)="open(element)"></vo-lib-action-menu-item>
             }
-            @if (!contest.testingPhaseEnded && hasSameTenantWritePermissions
+            @if (!contest.testingPhaseEnded && hasSameTenantWritePermissions && !element.eVotingApproved
               && (element.ownerId === tenantId || hasAdminWritePermissions)) {
               <vo-lib-action-menu-item
                 icon="trash"
@@ -244,7 +249,8 @@
               ></vo-lib-action-menu-item>
             }
             @if (element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION
-              && (hasAdminWritePermissions || (element.ownerId === tenantId && hasSameTenantWritePermissions))) {
+              && (hasAdminWritePermissions || (element.ownerId === tenantId && hasSameTenantWritePermissions))
+              && !element.eVotingApproved) {
               <vo-lib-action-menu-item
                 icon="plus"
                 text="POLITICAL_BUSINESS.ADD_SECONDARY_ELECTION"

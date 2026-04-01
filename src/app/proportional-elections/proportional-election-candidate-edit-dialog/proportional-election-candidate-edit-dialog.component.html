@@ -157,6 +157,35 @@
                    (valueChange)="selectedPartyId = $event; contentChanged()"
                    subscriptSizing="dynamic"></bc-dropdown>
     </div>
+
+    @if (enableAdditionalCandidateFields) {
+      <div class="grid">
+        <bc-text
+          [label]="'PROPORTIONAL_ELECTION.CANDIDATE.WAHLVORSCHLAG_DESCRIPTION' | translate"
+          [readonly]="testingPhaseEnded"
+          [value]="data.wahlvorschlagDescription"
+          (valueChange)="data.wahlvorschlagDescription = $event; contentChanged()"
+          maxlength="100"
+          subscriptSizing="dynamic"
+        ></bc-text>
+        <bc-text
+          [label]="'PROPORTIONAL_ELECTION.CANDIDATE.COMMENT' | translate"
+          [readonly]="testingPhaseEnded"
+          [value]="data.comment"
+          (valueChange)="data.comment = $event; contentChanged()"
+          maxlength="500"
+          subscriptSizing="dynamic"
+        ></bc-text>
+        <bc-checkbox
+          class="mr-3"
+          [readonly]="testingPhaseEnded"
+          [checked]="data.audited"
+          (checkedChange)="data.audited = $event; contentChanged()"
+          [label]="'PROPORTIONAL_ELECTION.CANDIDATE.AUDITED' | translate"
+          [subscriptSizing]="'dynamic'"
+        ></bc-checkbox>
+      </div>
+    }
   </div>
 
   <div footer class="mr-3">

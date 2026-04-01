@@ -216,10 +216,12 @@
       "RESPONSIBLE_FOR_VOTING_CARDS": "Wahlkreis generiert Stimmrechtsausweise",
       "ELECTORAL_REGISTRATION_ENABLED": "Wahlkreis verwendet Stimmregister",
       "ELECTORAL_REGISTER_MULTIPLE_ENABLED": "Mehrere Elektorate mit selbem Versand bedienen",
+      "STISTAT_EXPORT": "STISTAT-Export",
+      "STISTAT_EXPORT_MESSAGE_TYPE": "Meldungstyp",
       "STISTAT_MUNICIPALITY": "STISTAT-Gemeinde",
       "VOTING_CARD_FLAT_RATE_OWNER": "Übernimmt Pauschalkosten für Korporation",
       "IS_MAIN_VOTING_CARDS_DOMAIN_OF_INFLUENCE": "Hauptwahlkreis (Geschäfte weiterer dem Mandanten zugeordneter Auszählungskreise werden bei diesem Wahlkreis angezeigt)",
-      "HAS_EMPTY_VOTING_CARDS": "Leere Stimmrechtsausweise für Urnengänge",
+      "HAS_EMPTY_VOTING_CARDS": "Leere Stimmrechtsausweise für Urnengänge und Versammlungen",
       "VOTING_CARD_COLOR": "Farbe des Stimmrechtsausweis",
       "VOTING_CARD_COLORS": {
         "1": "Blau",
@@ -340,13 +342,7 @@
     },
     "E_COLLECTING": {
       "TITLE": "E-Collecting",
-      "ENABLED": "Wahlkreis verwendet E-Collecting",
-      "INITIATIVE_MIN_SIGNATURE_COUNT": "Initiative - Nötige Anzahl Unterschriften",
-      "INITIATIVE_MAX_ELECTRONIC_SIGNATURE_PERCENT": "Initiative - Max. Schwellenwert für Unterschriften E-Collecting (in %)",
-      "INITIATIVE_NUMBER_OF_MEMBERS_COMMITTEE": "Initiative - Anzahl Mitglieder im Initiativkomitee",
-      "REFERENDUM_MIN_SIGNATURE_COUNT": "Referendum - Nötige Anzahl Unterschriften",
-      "REFERENDUM_MAX_ELECTRONIC_SIGNATURE_PERCENT": "Referendum - Max. Schwellenwert für Unterschriften E-Collecting (in %)",
-      "EMAIL": "E-Mail Prüfstelle"
+      "ENABLED": "Wahlkreis verwendet E-Collecting"
     }
   },
   "CONTEST": {
@@ -382,6 +378,7 @@
     "EXISTS_ON_CHILD_TENANT_QUESTION": "An diesem Datum besteht bereits ein Urnengang auf einer abhängigen, untergeordneten Geschäftsebene.",
     "EXISTS_ON_CHILD_TENANT_CONFIRMATION": "Urnengang übernehmen und Geschäfte zusammenführen",
     "POLITICAL_BUSINESS_UNION_MANAGE": "Geschäftsverbindungen verwalten",
+    "PAST_E_VOTING_APPROVAL_DUE_DATE": "Die Frist für die Einrichtung eines Geschäfts ist abgelaufen.",
     "DETAIL": {
       "FROM": "Urnengang vom "
     },
@@ -714,6 +711,7 @@
       "NEW": "Kandidat/in hinzufügen",
       "EDIT": "Kandidat/in bearbeiten",
       "CONFIRM_DELETE": "Diese Kandidat/in wirklich löschen?",
+      "CONFIRM_DELETE_LAST": "Wenn die letzte kandidierende Person gelöscht wird, wird die gesamte Liste gelöscht.",
       "POSITION": "Position",
       "NUMBER": "Kandidaten/innen-Nummer",
       "NUMBER_SHORT": "Kand-Nr.",
@@ -747,7 +745,10 @@
       "HOUSE_NUMBER": "Hausnr.",
       "COUNTRY": "Land",
       "PERSONAL_DATA": "Persönliche Angaben",
-      "ADDRESS": "Adresse"
+      "ADDRESS": "Adresse",
+      "WAHLVORSCHLAG_DESCRIPTION": "Bezeichnung Wahlvorschlag",
+      "COMMENT": "Bemerkungen",
+      "AUDITED": "Kontrolliert"
     },
     "REVIEW_PROCEDURE": {
       "TITLE": "Erfassungsweise (Kontrolle)",
@@ -852,7 +853,10 @@
         "2": "Zu Vereinzelte zählen"
       },
       "PERSONAL_DATA": "Persönliche Angaben",
-      "ADDRESS": "Adresse"
+      "ADDRESS": "Adresse",
+      "WAHLVORSCHLAG_DESCRIPTION": "Bezeichnung Wahlvorschlag",
+      "COMMENT": "Bemerkungen",
+      "AUDITED": "Kontrolliert"
     },
     "BALLOT_GROUP": {
       "TITLE": "Wahlzettel-Gruppen",
@@ -1001,6 +1005,7 @@
     "CREATE_CONTEST_ON_HIGHEST_HIERARCHICAL_LEVEL": "Urnengangseröffnung immer auf höchster Hierarchieebene",
     "INTERNAL_PLAUSIBILISATION": "Interne Plausibilisierungen",
     "DOMAIN_OF_INFLUENCE_PUBLISH_RESULTS_OPTION": "Publikation kommunaler Ergebnisse via Wahlkreise steuern (eCH-0252)",
+    "ENABLE_ADDITIONAL_CANDIDATE_FIELDS": "Zusätzliche Erfassungsfelder Kandidierendenerfassung (Kontrolliert/Bezeichnung Wahlvorschlag/Bemerkungen) verfügbar machen",
     "SWISS_ABROAD_VOTING_RIGHT": {
       "TITLE": "Auslandschweizerinnen und Auslandschweizer",
       "DOMAIN_OF_INFLUENCE_TYPES": "Stimmrecht auf folgenden Geschäftsebenen"

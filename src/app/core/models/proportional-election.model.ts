@@ -69,6 +69,9 @@ export type ProportionalElectionCandidate = {
   street: string;
   houseNumber: string;
   country: string;
+  comment: string;
+  wahlvorschlagDescription: string;
+  audited: boolean;
 };
 
 export type ProportionalElectionListUnion = {
@@ -161,6 +164,9 @@ export function newProportionalElectionCandidate(position: number, proportionalE
     street: '',
     houseNumber: '',
     country: 'CH',
+    comment: '',
+    wahlvorschlagDescription: '',
+    audited: false,
   };
 }
 

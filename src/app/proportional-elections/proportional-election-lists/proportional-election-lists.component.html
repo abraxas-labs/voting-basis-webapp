@@ -92,7 +92,7 @@
             @if (!locked && !readonly && element !== placeholderList) {
               <div class="flex">
                 <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
-                @if (!testingPhaseEnded && !locked && !readonly) {
+                @if (!testingPhaseEnded && !locked && !readonly && !proportionalElection.eVotingEverApproved) {
                   <bc-icon
                     class="ml-2"
                     (click)="deleteList(element); $event.stopPropagation()"
@@ -138,12 +138,15 @@
         [testingPhaseEnded]="testingPhaseEnded"
         [locked]="locked"
         [readonly]="readonly"
+        [eVotingEverApproved]="proportionalElection.eVotingEverApproved"
         [candidateLocalityRequired]="candidateLocalityRequired"
         [candidateOriginRequired]="candidateOriginRequired"
         [hideOccupationTitle]="hideOccupationTitle"
+        [enableAdditionalCandidateFields]="enableAdditionalCandidateFields"
         (candidateCreated)="candidateCreated(selectedList, $event)"
         (candidateDeleted)="candidateDeleted(selectedList, $event)"
         (candidateUpdated)="candidateAccumulationUpdated(selectedList, $event.candidate.accumulated, $event.wasAccumulated)"
+        (listDeleted)="handleDeleteList($event.id)"
         [maxCandidateCount]="proportionalElection.numberOfMandates - selectedList.blankRowCount"
         [parties]="parties"
         >

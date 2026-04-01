@@ -52,6 +52,9 @@ export class SecondaryMajorityElectionCandidatesComponent {
   public eVotingApproved: boolean = false;
 
   @Input()
+  public eVotingEverApproved: boolean = false;
+
+  @Input()
   public readonly: boolean = false;
 
   @Input()
@@ -62,6 +65,9 @@ export class SecondaryMajorityElectionCandidatesComponent {
 
   @Input()
   public hideOccupationTitle: boolean = false;
+
+  @Input()
+  public enableAdditionalCandidateFields: boolean = false;
 
   @Input()
   public domainOfInfluenceType?: DomainOfInfluenceType;
@@ -111,6 +117,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       hideOccupationTitle: this.hideOccupationTitle,
+      enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
       parties: this.parties,
       individualCandidatesDisabled: this.currentSecondaryMajorityElection.individualCandidatesDisabled,
     };
@@ -131,6 +138,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       hideOccupationTitle: this.hideOccupationTitle,
+      enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
       parties: this.parties,
       individualCandidatesDisabled: this.currentSecondaryMajorityElection!.individualCandidatesDisabled,
     };

@@ -28,6 +28,7 @@
                                                   [testingPhaseEnded]="testingPhaseEnded"
                                                   [locked]="locked"
                                                   [eVotingApproved]="eVotingApproved"
+                                                  [eVotingEverApproved]="eVotingEverApproved"
                                                   [readonly]="!canEdit"
                                                   [loadCandidates]="!newlyCreated"
                                                   #step2
@@ -35,6 +36,8 @@
                                                   [candidateLocalityRequired]="contestDomainOfInfluenceDefaults.candidateLocalityRequired"
                                                   [candidateOriginRequired]="contestDomainOfInfluenceDefaults.candidateOriginRequired"
                                                   [hideOccupationTitle]="contestDomainOfInfluenceDefaults.hideOccupationTitle"
+                                                  [enableAdditionalCandidateFields]="
+                                                    contestDomainOfInfluenceDefaults.enableAdditionalCandidateFields"
                                                   [domainOfInfluenceType]="domainOfInfluence?.type"
                                                   [parties]="parties">
       </app-secondary-majority-election-candidates>

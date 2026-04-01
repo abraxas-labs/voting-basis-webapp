@@ -111,7 +111,7 @@
       @if (!locked && element.id && !readonly && !hideActionButtons) {
         <div class="flex">
           <bc-icon class="clickable" (click)="edit.emit(element)" icon="edit"></bc-icon>
-          @if (!testingPhaseEnded && !locked) {
+          @if (!testingPhaseEnded && !locked && !eVotingEverApproved) {
             <bc-icon
               class="clickable ml-2"
               (click)="delete.emit(element)"

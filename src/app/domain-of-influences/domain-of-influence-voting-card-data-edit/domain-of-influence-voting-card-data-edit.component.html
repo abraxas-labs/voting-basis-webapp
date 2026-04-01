@@ -14,6 +14,27 @@
       (checkedChange)="domainOfInfluence.electoralRegisterMultipleEnabled = $event; contentChanged.emit()"
       class="full-width"
       [subscriptSizing]="'dynamic'"></bc-checkbox>
+    <div class="stistat-export-container">
+      <bc-checkbox
+        [disabled]="disabled || !canEditEverything"
+        [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.STISTAT_EXPORT' | translate"
+        [checked]="domainOfInfluence.stistatExportEnabled"
+        (checkedChange)="updateStistatExportEnabled($event)"
+        [subscriptSizing]="'dynamic'"
+      ></bc-checkbox>
+      @if (domainOfInfluence.stistatExportEnabled) {
+        <bc-text
+          [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.STISTAT_EXPORT_MESSAGE_TYPE' | translate"
+          [readonly]="disabled"
+          [required]="true"
+          [minlength]="7"
+          [maxlength]="7"
+          [showDefaultErrors]="true"
+          [value]="domainOfInfluence.stistatExportEaiMessageType"
+          (valueChange)="domainOfInfluence.stistatExportEaiMessageType = $event; contentChanged.emit()"
+          [subscriptSizing]="'dynamic'"></bc-text>
+      }
+    </div>
     <bc-checkbox
       [disabled]="disabled || !canEditEverything"
       [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.STISTAT_MUNICIPALITY' | translate"

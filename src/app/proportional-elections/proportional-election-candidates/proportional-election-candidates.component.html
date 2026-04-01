@@ -141,7 +141,7 @@
         @if (!locked && !readonly) {
           <div class="flex">
             <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
-            @if (!testingPhaseEnded && !locked && !readonly) {
+            @if (!testingPhaseEnded && !locked && !readonly && !eVotingEverApproved) {
               <bc-icon
                 class="ml-2"
                 (click)="deleteCandidate(element); $event.stopPropagation()"

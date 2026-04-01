@@ -61,6 +61,9 @@ export class ProportionalElectionCandidatesComponent {
   public locked: boolean = false;
 
   @Input()
+  public eVotingEverApproved: boolean = false;
+
+  @Input()
   public readonly: boolean = false;
 
   @Input()
@@ -71,6 +74,9 @@ export class ProportionalElectionCandidatesComponent {
 
   @Input()
   public hideOccupationTitle: boolean = false;
+
+  @Input()
+  public enableAdditionalCandidateFields: boolean = false;
 
   @Input()
   public parties: DomainOfInfluenceParty[] = [];
@@ -86,6 +92,9 @@ export class ProportionalElectionCandidatesComponent {
 
   @Output()
   public candidateDeleted: EventEmitter<ProportionalElectionCandidate> = new EventEmitter<ProportionalElectionCandidate>();
+
+  @Output()
+  public listDeleted: EventEmitter<ProportionalElectionList> = new EventEmitter<ProportionalElectionList>();
 
   public candidates: ProportionalElectionCandidate[] = [];
   public expandedCandidates: ProportionalElectionCandidate[] = [];
@@ -122,6 +131,7 @@ export class ProportionalElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       hideOccupationTitle: this.hideOccupationTitle,
+      enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleCreateCandidate(result);
@@ -142,23 +152,32 @@ export class ProportionalElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       hideOccupationTitle: this.hideOccupationTitle,
+      enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
     };
     const result = await this.dialogService.openForResult(ProportionalElectionCandidateEditDialogComponent, dialogData);
     this.handleEditCandidate(result);
   }
 
   public async deleteCandidate(candidate: ProportionalElectionCandidate): Promise<void> {
-    const shouldDelete = await this.dialogService.confirm('APP.DELETE', 'PROPORTIONAL_ELECTION.CANDIDATE.CONFIRM_DELETE', 'APP.DELETE');
+    const lastCandidate = this.candidates.length === 1;
+    const confirmationText = lastCandidate
+      ? 'PROPORTIONAL_ELECTION.CANDIDATE.CONFIRM_DELETE_LAST'
+      : 'PROPORTIONAL_ELECTION.CANDIDATE.CONFIRM_DELETE';
+    const shouldDelete = await this.dialogService.confirm('APP.DELETE', confirmationText, 'APP.DELETE');
     if (!shouldDelete) {
       return;
     }
 
     await this.proportionalElectionService.deleteCandidate(candidate.id);
     this.candidates = this.candidates.filter(c => c.id !== candidate.id);
-    this.refreshExpandedCandidates();
+    this.expandedCandidates = this.expandedCandidates.filter(c => c.id !== candidate.id);
     this.updateCandidatePositions();
+    this.refreshExpandedCandidates();
     this.snackbarService.success(this.i18n.instant('APP.DELETED'));
     this.candidateDeleted.emit(candidate);
+    if (lastCandidate) {
+      this.listDeleted.emit(this.currentList);
+    }
   }
 
   public selectCandidate(expandedCandidate: ProportionalElectionCandidate): void {
@@ -170,6 +189,8 @@ export class ProportionalElectionCandidatesComponent {
       this.savingAccumulation = true;
       candidate.accumulated = false;
       await this.proportionalElectionService.updateCandidate(candidate);
+      this.expandedCandidates = this.expandedCandidates.filter(c => c.id !== candidate.id || (c.id === candidate.id && !c.accumulated));
+      this.updateCandidatePositions();
       this.refreshExpandedCandidates();
       this.candidateUpdated.emit({ candidate, wasAccumulated: true });
     } catch (e) {

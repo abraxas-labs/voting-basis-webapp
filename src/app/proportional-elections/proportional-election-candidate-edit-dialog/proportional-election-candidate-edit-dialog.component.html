@@ -1,6 +1,7 @@
-<vo-lib-dialog>
-  <h1 header>{{!isNew ? ('PROPORTIONAL_ELECTION.CANDIDATE.EDIT' | translate) : ('PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate)}}</h1>
-
+<vo-lib-dialog
+  [header]="!isNew ? ('PROPORTIONAL_ELECTION.CANDIDATE.EDIT' | translate) : ('PROPORTIONAL_ELECTION.CANDIDATE.NEW' | translate)"
+  (dialogClose)="closeWithUnsavedChangesCheck()"
+>
   <div content class="form-grid">
     <div>
       <h2>{{ 'PROPORTIONAL_ELECTION.CANDIDATE.PERSONAL_DATA' | translate }}</h2>
@@ -188,12 +189,10 @@
     }
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [canSave]="canSave"
-                       [saving]="saving"
-                       [sticky]="false"
-                       (save)="save()"
-                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                     [canSave]="canSave"
+                     [saving]="saving"
+                     [sticky]="false"
+                     (save)="save()"
+                     (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
 </vo-lib-dialog>

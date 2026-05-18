@@ -7,7 +7,7 @@
 
 .logo-container {
   height: 10rem;
-  border: 2px dashed $color-grey-6;
+  border: 2px dashed $color-border-soft;
   border-radius: 10px;
   position: relative;
   display: flex;
@@ -50,16 +50,16 @@
 
     .upload-info {
       display: none;
-      background-color: rgba($color-grey-3, 0.7);
+      background-color: rgb(from $color-surface-bg-neutral-inverse r g b / 70%);
 
       p {
-        color: $color-white;
+        color: $color-text-inverse;
       }
     }
 
     &.dragging:not(.disabled),
     &:hover:not(.disabled) {
-      border-color: $color-grey-3;
+      border-color: $color-border-secondary;
 
       .upload-info {
         display: flex;
@@ -68,7 +68,7 @@
   }
 
   &.dragging {
-    border-color: $color-grey-3;
+    border-color: $color-border-secondary;
   }
 
   input[type='file'] {

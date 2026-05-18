@@ -28,35 +28,35 @@
 
       <bc-table selection class="w-full" [dataSource]="ballotGroups">
         <ng-container columnDef="position">
-          <bc-header-cell *headerCellDef>
+          <th bc-header-cell *headerCellDef>
             <app-truncated-value [value]="'MAJORITY_ELECTION.BALLOT_GROUP.POSITION' | translate"></app-truncated-value>
-          </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          </th>
+          <td bc-data-cell *dataCellDef="let element">
             <app-truncated-value [value]="element.position"></app-truncated-value>
-          </bc-data-cell>
+          </td>
         </ng-container>
 
         <ng-container columnDef="shortDescription">
-          <bc-header-cell *headerCellDef>
+          <th bc-header-cell *headerCellDef>
             <app-truncated-value [value]="'MAJORITY_ELECTION.BALLOT_GROUP.SHORT_DESCRIPTION' | translate"></app-truncated-value>
-          </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          </th>
+          <td bc-data-cell *dataCellDef="let element">
             <app-truncated-value [value]="element.shortDescription"></app-truncated-value>
-          </bc-data-cell>
+          </td>
         </ng-container>
 
         <ng-container columnDef="description">
-          <bc-header-cell *headerCellDef>
+          <th bc-header-cell *headerCellDef>
             <app-truncated-value [value]="'MAJORITY_ELECTION.BALLOT_GROUP.DESCRIPTION' | translate"></app-truncated-value>
-          </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          </th>
+          <td bc-data-cell *dataCellDef="let element">
             <app-truncated-value [value]="element.description"></app-truncated-value>
-          </bc-data-cell>
+          </td>
         </ng-container>
 
         <ng-container columnDef="actions">
-          <bc-header-cell *headerCellDef></bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          <th bc-header-cell *headerCellDef></th>
+          <td bc-data-cell *dataCellDef="let element">
             @if (!forSecondaryElection && !locked && !readonly) {
               <div class="flex">
                 @if (element | canEditBallotGroup: testingPhaseEnded) {
@@ -76,11 +76,11 @@
                 }
               </div>
             }
-          </bc-data-cell>
+          </td>
         </ng-container>
 
-        <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-        <bc-data-row
+        <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+        <tr bc-data-row
           *dataRowDef="let row; columns: columns; let i = index"
           #rowSelection="selectionToggle"
           selectionToggle
@@ -88,7 +88,7 @@
           selectionRow
           [selectionRowValue]="row"
           (click)="rowSelection.toggle(); selectedBallotGroup = row"
-        ></bc-data-row>
+        ></tr>
       </bc-table>
       @if (ballotGroupsWithMissingSecondaryElection.length > 0) {
         <p class="warn mt-2">

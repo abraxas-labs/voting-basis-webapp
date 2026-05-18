@@ -33,32 +33,32 @@
 
     <bc-table class="w-full" [dataSource]="dataSource">
       <ng-container columnDef="filename">
-        <bc-header-cell *headerCellDef>
+        <th bc-header-cell *headerCellDef>
           <app-truncated-value [value]="'IMPORT.FILENAME' | translate"></app-truncated-value>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <app-truncated-value [value]="element.fileName"></app-truncated-value>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container columnDef="type">
-        <bc-header-cell *headerCellDef>
+        <th bc-header-cell *headerCellDef>
           <app-truncated-value [value]="'IMPORT.E_CH_STANDARD' | translate"></app-truncated-value>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <app-truncated-value [value]="'IMPORT.TYPES.' + element.importType | translate"></app-truncated-value>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container columnDef="actions">
-        <bc-header-cell *headerCellDef></bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        <th bc-header-cell *headerCellDef></th>
+        <td bc-data-cell *dataCellDef="let element">
           <bc-icon class="clickable" (click)="removeFile(element)" icon="trash" iconColor="error"></bc-icon>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
-      <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-      <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+      <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+      <tr bc-data-row *dataRowDef="let row; columns: columns; let i = index"></tr>
     </bc-table>
   </div>
 </div>

@@ -65,6 +65,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public readonly readonly: boolean;
 
   public hasChanges: boolean = false;
+  public shortNameIsValid: boolean = true;
   public originalDomainOfInfluence: DomainOfInfluence;
   public originalSecureConnectId?: string;
   public readonly backdropClickSubscription: Subscription;
@@ -106,6 +107,7 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
   public get canSave(): boolean {
     return (
       this.form.valid &&
+      this.shortNameIsValid &&
       !!this.data &&
       !!this.data.name &&
       !!this.data.type &&
@@ -243,6 +245,15 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
       !isEqual(this.data, this.originalDomainOfInfluence) ||
       !isEqual(this.selectedTenant?.id, this.originalSecureConnectId) ||
       this.logoChanged;
+  }
+
+  public async validateShortName(): Promise<void> {
+    this.shortNameIsValid = await this.domainOfInfluenceService.isShortNameValid(
+      this.data.shortName,
+      this.data.id,
+      this.data.type,
+      this.data.responsibleForVotingCards,
+    );
   }
 
   public updateHasOtherSuperiorAuthorityDomainOfInfluence(checked: boolean) {

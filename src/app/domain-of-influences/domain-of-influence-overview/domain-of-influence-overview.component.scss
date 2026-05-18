@@ -2,7 +2,7 @@
 
 .tree-row {
   .disabled {
-    color: $color-grey-4;
+    color: $color-disabled-default;
     font-style: italic;
   }
 }
@@ -26,4 +26,9 @@
 
 bc-paginator {
   overflow: hidden;
+
+  // unset width so that it does not overlap the scroll bar
+  ::ng-deep .bc-paginator-container {
+    width: unset;
+  }
 }

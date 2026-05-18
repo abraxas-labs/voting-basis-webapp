@@ -3,9 +3,9 @@
              [showBackButton]="true"
              [backButtonNavigateCommands]="['../../']">
   <bc-simple-stepper #stepper
-                          labelPosition="bottom"
-                          linear>
-    <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
+                     [labelPosition]="'bottom'"
+                     [direction]="'horizontal'">
+    <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate" [status]="stepper.index === 0 ? 'progress' : 'complete'">
       @if (data.contestId) {
         <app-vote-general-informations #step1
           [data]="data"
@@ -25,7 +25,9 @@
       }
     </bc-simple-step>
 
-    <bc-simple-step [label]="'VOTE.BALLOT.TITLE' | translate" [disabled]="!step1?.canSave || stepLoading">
+    <bc-simple-step [label]="'VOTE.BALLOT.TITLE' | translate"
+                    [disabled]="!step1?.canSave || stepLoading"
+                    [status]="stepper.index === 0 ? 'open' : (stepper.index === 1 ? 'progress' : 'complete')">
       <app-vote-ballot #step2
                        [vote]="data"
                        [testingPhaseEnded]="testingPhaseEnded"
@@ -52,7 +54,8 @@
     </bc-simple-step>
 
     <bc-simple-step [label]="'POLITICAL_BUSINESS.RESULT_ENTRY_INFORMATION' | translate"
-                    [disabled]="!step1?.canSave || !step2.canSave || stepLoading">
+                    [disabled]="!step1?.canSave || !step2.canSave || stepLoading"
+                    [status]="stepper.index === 2 ? 'progress' : 'open'">
       <app-vote-erfassung-informations #step3
                                        [testingPhaseEnded]="testingPhaseEnded"
                                        [locked]="locked"

@@ -1,6 +1,8 @@
-<vo-lib-dialog [contentLoading]="step1Content.loading || step2Content.loading">
-  <h1 header>{{ 'IMPORT.IMPORT_CONTEST' | translate }}</h1>
-
+<vo-lib-dialog
+  [contentLoading]="step1Content.loading || step2Content.loading"
+  [header]="'IMPORT.IMPORT_CONTEST' | translate"
+  (dialogClose)="cancel()"
+>
   <bc-simple-stepper #stepper
                           content
                           labelPosition="bottom"
@@ -30,13 +32,11 @@
     </bc-simple-step>
   </bc-simple-stepper>
 
-  <div footer>
-    <vo-lib-button-bar footer
-                       [saveLabel]="(lastStep ? 'IMPORT.IMPORT_CONTEST' : 'APP.NEXT') | translate"
-                       (save)="lastStep ? save() : stepper.next()"
-                       [canSave]="firstStep ? importFiles.length > 0 : lastStep ? step3Content?.allValid : contestImport !== undefined"
-                       [saving]="saving"
-                       [cancelLabel]="(firstStep ? 'APP.CANCEL' : 'APP.BACK') | translate"
-                       (cancel)="firstStep ? cancel() : stepper.previous()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                     [saveLabel]="(lastStep ? 'IMPORT.IMPORT_CONTEST' : 'APP.NEXT') | translate"
+                     (save)="lastStep ? save() : stepper.next()"
+                     [canSave]="firstStep ? importFiles.length > 0 : lastStep ? step3Content?.allValid : contestImport !== undefined"
+                     [saving]="saving"
+                     [cancelLabel]="(firstStep ? 'APP.CANCEL' : 'APP.BACK') | translate"
+                     (cancel)="firstStep ? cancel() : stepper.previous()"></vo-lib-button-bar>
 </vo-lib-dialog>

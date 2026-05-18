@@ -1,15 +1,7 @@
 @use '@abraxas/voting-lib/style/table' as table;
 
-::ng-deep .bc-column-name {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-bfs {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-authority {
-  @include table.truncate-long-sortable-table-header();
+::ng-deep [class*='bc-column-'] {
+  @include table.truncate-long-simple-sortable-table-header();
 }
 
 ::ng-deep bc-header-cell {

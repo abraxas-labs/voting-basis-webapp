@@ -4,35 +4,35 @@
   <bc-table class="w-full" [dataSource]="dataSource">
 
     <ng-container columnDef="politicalBusinessNumber">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'POLITICAL_BUSINESS.NUMBER' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.politicalBusinessNumber"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="shortDescription">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="domainOfInfluenceName">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.domainOfInfluence.name"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
 
-    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-    <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+    <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+    <tr bc-data-row *dataRowDef="let row; columns: columns; let i = index"></tr>
   </bc-table>
 }
 <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>

@@ -1,5 +1,4 @@
-<vo-lib-dialog>
-  <h1 header translate>POLITICAL_BUSINESS_UNION.TITLE</h1>
+<vo-lib-dialog [header]="'POLITICAL_BUSINESS_UNION.TITLE' | translate" (dialogClose)="close()">
   <div content class="grid">
     <div class="pt-5">
       @if (loading) {
@@ -27,36 +26,36 @@
 
         <bc-table selection class="w-full" [dataSource]="politicalBusinessUnions">
           <ng-container columnDef="description">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'POLITICAL_BUSINESS_UNION.DESCRIPTION' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.description"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="type">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'POLITICAL_BUSINESS_UNION.TYPE' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="'POLITICAL_BUSINESS_UNION.TYPES.' + element.type | translate"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="owner">
-            <bc-header-cell *headerCellDef></bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            <th bc-header-cell *headerCellDef></th>
+            <td bc-data-cell *dataCellDef="let element">
               @if (element.secureConnectId === tenantId) {
                 <app-truncated-value
                   [value]="'POLITICAL_BUSINESS_UNION.OWN_POLITICAL_BUSINESS_UNION' | translate"
                 ></app-truncated-value>
               }
-            </bc-data-cell>
+            </td>
           </ng-container>
           <ng-container columnDef="actions">
-            <bc-header-cell *headerCellDef></bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            <th bc-header-cell *headerCellDef></th>
+            <td bc-data-cell *dataCellDef="let element">
               @if (element.secureConnectId === tenantId || hasAdminPermissions) {
                 <div class="flex">
                   <bc-icon (click)="editPoliticalBusinessUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
@@ -68,18 +67,18 @@
                   ></bc-icon>
                 </div>
               }
-            </bc-data-cell>
+            </td>
           </ng-container>
 
-          <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-          <bc-data-row
+          <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+          <tr bc-data-row
             *dataRowDef="let row; columns: columns; let i = index"
             selectionToggle
             [selectionToggleValue]="row"
             selectionRow
             [selectionRowValue]="row"
             (click)="selectPoliticalBusinessUnion(row)"
-          ></bc-data-row>
+          ></tr>
         </bc-table>
       }
     </div>
@@ -99,7 +98,5 @@
     </div>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar [sticky]="false" [saveLabel]="'APP.FINISH' | translate" (cancel)="close()" (save)="close()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer [sticky]="false" [saveLabel]="'APP.FINISH' | translate" (cancel)="close()" (save)="close()"></vo-lib-button-bar>
 </vo-lib-dialog>

@@ -1,41 +1,15 @@
 @use '@abraxas/voting-lib/style/table' as table;
 
-::ng-deep .bc-column-date {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-type {
-  @include table.truncate-long-sortable-table-header();
-}
-
 ::ng-deep .bc-column-description {
-  @include table.truncate-long-sortable-table-header();
-
   min-width: 13rem;
-}
-
-::ng-deep .bc-column-end-of-testing-phase {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-archive-per {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-state {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-political-businesses {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-owner {
-  @include table.truncate-long-sortable-table-header();
 }
 
 .bc-column-actions {
   width: 2rem;
+}
+
+::ng-deep [class*='bc-column-'] {
+  @include table.truncate-long-simple-sortable-table-header();
 }
 
 .italic {
@@ -48,4 +22,9 @@
 
 bc-paginator {
   overflow: hidden;
+
+  // unset width so that it does not overlap the scroll bar
+  ::ng-deep .bc-paginator-container {
+    width: unset;
+  }
 }

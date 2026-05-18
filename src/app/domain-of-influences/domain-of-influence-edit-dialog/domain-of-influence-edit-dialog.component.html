@@ -1,6 +1,8 @@
-<vo-lib-dialog [formGroup]="form">
-  <h1 header>{{ !isNew ? ('DOMAIN_OF_INFLUENCE.EDIT' | translate) : ('DOMAIN_OF_INFLUENCE.NEW' | translate) }}</h1>
-
+<vo-lib-dialog
+  [formGroup]="form"
+  [header]="!isNew ? ('DOMAIN_OF_INFLUENCE.EDIT' | translate) : ('DOMAIN_OF_INFLUENCE.NEW' | translate)"
+  (dialogClose)="closeWithUnsavedChangesCheck()"
+>
   <div content class="form mr-3 my-2">
     @if (!isNew) {
       <span class="modified">
@@ -17,15 +19,15 @@
       [formControl]="form.controls.name"
       [showDefaultErrors]="true"
       [subscriptSizing]="'dynamic'"
-      >
-    </bc-text>
+    ></bc-text>
 
     <bc-text
       [label]="'DOMAIN_OF_INFLUENCE.SHORT_NAME' | translate"
       [maxlength]="5"
       [readonly]="readonly || !canEditEverything"
+      [error]="!shortNameIsValid"
       [value]="data.shortName"
-      (valueChange)="data.shortName = $event; contentChanged()"
+      (valueChange)="data.shortName = $event; contentChanged(); validateShortName()"
       [formControl]="form.controls.shortName"
       [showDefaultErrors]="true"
       [subscriptSizing]="'dynamic'"
@@ -51,7 +53,7 @@
       valueExpr="value"
       [required]="true"
       [value]="data.type"
-      (valueChange)="updateDomainOfInfluenceType($event); contentChanged()"
+      (valueChange)="updateDomainOfInfluenceType($event); contentChanged(); validateShortName()"
       [subscriptSizing]="'dynamic'"
     ></bc-dropdown>
 
@@ -230,7 +232,7 @@
         [disabled]="readonly || !canEditEverything"
         [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.RESPONSIBLE_FOR_VOTING_CARDS' | translate"
         [checked]="data.responsibleForVotingCards"
-        (checkedChange)="data.responsibleForVotingCards = $event; contentChanged()"
+        (checkedChange)="data.responsibleForVotingCards = $event; contentChanged(); validateShortName()"
         class="full-width"
         [subscriptSizing]="'dynamic'"
       ></bc-checkbox>
@@ -240,8 +242,7 @@
           [domainOfInfluence]="data"
           (logoChanged)="logoChanged = true; updatedLogo = $event; contentChanged()"
           (contentChanged)="contentChanged()"
-          >
-        </app-domain-of-influence-voting-card-data-edit>
+        ></app-domain-of-influence-voting-card-data-edit>
       }
     }
 
@@ -258,15 +259,13 @@
     }
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar
-      footer
-      [canSave]="canSave"
-      [saving]="saving"
-      [sticky]="false"
-      [hasSaveButton]="!readonly"
-      (save)="save()"
-      (cancel)="closeWithUnsavedChangesCheck()"
-    ></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar
+    footer
+    [canSave]="canSave"
+    [saving]="saving"
+    [sticky]="false"
+    [hasSaveButton]="!readonly"
+    (save)="save()"
+    (cancel)="closeWithUnsavedChangesCheck()"
+  ></vo-lib-button-bar>
 </vo-lib-dialog>

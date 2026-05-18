@@ -1,27 +1,7 @@
 @use '@abraxas/voting-lib/style/table' as table;
 
-::ng-deep .bc-column-name {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-bfs {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-code {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-authority {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-modified-on {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-state {
-  @include table.truncate-long-sortable-table-header();
+::ng-deep [class*='bc-column-'] {
+  @include table.truncate-long-simple-sortable-table-header();
 }
 
 .bc-column-actions {
@@ -30,10 +10,13 @@
 
 bc-paginator {
   overflow: hidden;
+
+  // unset width so that it does not overlap the scroll bar
+  ::ng-deep .bc-paginator-container {
+    width: unset;
+  }
 }
 
 .buttons {
-  // workaround so that all counting circles fit on the page and no scrollbar is displayed
   margin-top: -1.5rem;
-  margin-bottom: -0.5rem;
 }

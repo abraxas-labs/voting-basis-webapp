@@ -119,7 +119,6 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public hasEVotingApproveRevertPermissions = false;
   public politicalBusinessSummaries: PoliticalBusinessSummary[] = [];
   public columns = [...this.originalColumns];
-  public activeToggled: boolean = false;
   public hasOnlyEVotingDois: boolean = false;
 
   private readonly routeSubscription: Subscription;
@@ -221,8 +220,6 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public async activeStateChange(row: PoliticalBusinessListType, active: boolean): Promise<void> {
-    this.activeToggled = true;
-
     try {
       switch (row.type) {
         case PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_VOTE:

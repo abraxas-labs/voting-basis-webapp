@@ -1,6 +1,4 @@
-<vo-lib-dialog [contentLoading]="step1Content.loading">
-  <h1 header translate>IMPORT.IMPORT_POLITICAL_BUSINESS</h1>
-
+<vo-lib-dialog [contentLoading]="step1Content.loading" [header]="'IMPORT.IMPORT_POLITICAL_BUSINESS' | translate" (dialogClose)="cancel()">
   <bc-simple-stepper #stepper
                           content
                           labelPosition="bottom"
@@ -22,13 +20,11 @@
     </bc-simple-step>
   </bc-simple-stepper>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [saveLabel]="(lastStep ? 'IMPORT.IMPORT_POLITICAL_BUSINESS' : 'APP.NEXT') | translate"
-                       (save)="lastStep ? save() : stepper.next()"
-                       [canSave]="firstStep ? !!contestImport : step2Content?.allValid"
-                       [saving]="saving"
-                       [cancelLabel]="(firstStep ? 'APP.CANCEL' : 'APP.BACK') | translate"
-                       (cancel)="firstStep ? cancel() : stepper.previous()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                     [saveLabel]="(lastStep ? 'IMPORT.IMPORT_POLITICAL_BUSINESS' : 'APP.NEXT') | translate"
+                     (save)="lastStep ? save() : stepper.next()"
+                     [canSave]="firstStep ? !!contestImport : step2Content?.allValid"
+                     [saving]="saving"
+                     [cancelLabel]="(firstStep ? 'APP.CANCEL' : 'APP.BACK') | translate"
+                     (cancel)="firstStep ? cancel() : stepper.previous()"></vo-lib-button-bar>
 </vo-lib-dialog>

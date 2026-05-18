@@ -1,7 +1,7 @@
 @if (!!ballot) {
-  <div class="form">
+  <div class="form mt-2">
     @for (ballotQuestion of ballot.ballotQuestions; track ballotQuestion) {
-      <div class="form-group">
+      <div>
         <div class="flex">
           <bc-dropdown
             [label]="'VOTE.QUESTION.TITLE_VARIANT' | translate: ballotQuestion"
@@ -56,12 +56,15 @@
             >
           </bc-text>
           @if (ballotQuestion.number > 2 && !testingPhaseEnded && !readonly && !locked) {
-            <bc-icon
-              class="clickable ml-1 remove-button"
-              icon="trash"
-              iconColor="error"
-              (click)="removeQuestion(ballotQuestion, ballot); contentChanged.emit()"
-            ></bc-icon>
+            <bc-icon-button
+              class="remove-button-container"
+              [icon]="'trash'"
+              [color]="'warn'"
+              [variant]="'tertiary'"
+              (buttonClick)="removeQuestion(ballotQuestion, ballot); contentChanged.emit()"
+            ></bc-icon-button>
+          } @else {
+            <div class="remove-button-container"></div>
           }
         </div>
         @if (eVoting) {
@@ -94,7 +97,7 @@
       [subscriptSizing]="'dynamic'"
     ></bc-checkbox>
     @for (ballotTieBreakQuestion of ballot.tieBreakQuestions; track ballotTieBreakQuestion) {
-      <div class="form-group">
+      <div>
         <div class="flex">
           <bc-dropdown
             [label]="'VOTE.TIE_BREAK_QUESTION.SINGLE_TITLE' | translate: ballotTieBreakQuestion"
@@ -135,6 +138,7 @@
             [subscriptSizing]="'dynamic'"
             >
           </bc-text>
+          <div class="placeholder"></div>
         </div>
         @if (eVoting) {
           <app-translated-textarea

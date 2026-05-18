@@ -20,8 +20,7 @@ export abstract class ImportPoliticalBusinessEditComponent<
   T extends {
     domainOfInfluenceId: string;
   },
-> implements OnInit
-{
+> implements OnInit {
   protected readonly enumUtil = inject(EnumUtil);
   private readonly doiReportLevelService = inject(DomainOfInfluenceReportLevelService);
   protected readonly domainOfInfluenceService = inject(DomainOfInfluenceService);

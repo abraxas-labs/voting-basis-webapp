@@ -20,6 +20,7 @@ import { DomainOfInfluenceCantonDefaults } from '../../core/models/canton-settin
 import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
 import { PermissionService } from '../../core/permission.service';
 import { Permissions } from '../../core/models/permissions.model';
+import { PermissionUiService } from '../../core/permission-ui.service';
 
 @Component({
   selector: 'app-vote-edit',
@@ -37,6 +38,7 @@ export class VoteEditComponent implements OnInit, HasUnsavedChanges {
   private readonly domainOfInfluenceService = inject(DomainOfInfluenceService);
   private readonly dialogService = inject(DialogService);
   private readonly permissionService = inject(PermissionService);
+  private readonly permissionUiService = inject(PermissionUiService);
 
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
@@ -74,9 +76,14 @@ export class VoteEditComponent implements OnInit, HasUnsavedChanges {
       this.data.contestId = this.data.contestId || this.route.snapshot.params.contestId;
       this.refreshIsVariantsBallot();
 
+      const domainOfInfluence = !this.isNew ? await this.domainOfInfluenceService.get(this.data.domainOfInfluenceId) : undefined;
+
       const { testingPhaseEnded, locked, eVoting, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
-      this.locked = locked || !!this.data.eVotingApproved;
+      this.locked =
+        Boolean(locked) ||
+        Boolean(this.data.eVotingApproved) ||
+        !(await this.permissionUiService.hasPoliticalBusinessWritePermissions(domainOfInfluence));
       this.eVoting = eVoting;
       this.voteTypeImmutable = this.data.ballots.length > 0 && this.data.ballots.some(b => !!b.id);
       this.canEdit = await this.permissionService.hasPermission(Permissions.Vote.Update);

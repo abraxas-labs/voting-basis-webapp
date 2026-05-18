@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.62.2`)
+# ✨ Changelog (`v3.64.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.62.2
-Previous version ---- v3.60.1
+This version -------- v3.64.0
+Previous version ---- v3.62.2
 Initial version ----- v1.23.0
-Total commits ------- 10
+Total commits ------- 5
 ```
+
+## [v3.64.0] - 2026-04-21
+
+### 🔄 Changed
+
+- validation for doi shortname
+
+## [v3.63.3] - 2026-04-15
+
+### 🔄 Changed
+
+- update dependencies
+
+## [v3.63.2] - 2026-04-08
+
+### 🔄 Changed
+
+- set political business edit to locked if no write permissions
+
+## [v3.63.1] - 2026-03-25
+
+### 🔄 Changed
+
+- update base components and angular lib
+
+## [v3.63.0] - 2026-03-24
+
+### 🔄 Changed
+
+- angular 21 and theming update
 
 ## [v3.62.2] - 2026-03-13
 

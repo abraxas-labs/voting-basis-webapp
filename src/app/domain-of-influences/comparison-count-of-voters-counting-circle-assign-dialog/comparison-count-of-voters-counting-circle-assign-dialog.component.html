@@ -1,24 +1,22 @@
-<vo-lib-dialog>
-  <h1 header>{{ translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.DIALOG_TITLE' | translate }}</h1>
-
+<vo-lib-dialog [header]="translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.DIALOG_TITLE' | translate" (dialogClose)="cancel()">
   <div content class="form mr-3 my-3">
     <bc-table class="w-full" [dataSource]="dataSource">
       <ng-container columnDef="name">
-        <bc-header-cell *headerCellDef>
+        <th bc-header-cell *headerCellDef>
           <app-truncated-value [value]="'COUNTING_CIRCLE.NAME' | translate"></app-truncated-value>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <app-truncated-value [value]="element.name"></app-truncated-value>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container columnDef="category">
-        <bc-header-cell *headerCellDef>
+        <th bc-header-cell *headerCellDef>
           <app-truncated-value
             [value]="translationPrefix + 'COMPARISON_COUNT_OF_VOTERS_CONFIGURATION.CATEGORY' | translate"
           ></app-truncated-value>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <bc-dropdown
             class="full-width"
             [items]="categoryItems"
@@ -30,21 +28,19 @@
             [(value)]="element.category"
             [subscriptSizing]="'dynamic'"
           ></bc-dropdown>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
-      <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-      <bc-data-row *dataRowDef="let row; columns: columns; let i = index"></bc-data-row>
+      <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+      <tr bc-data-row *dataRowDef="let row; columns: columns; let i = index"></tr>
     </bc-table>
     <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar
-      footer
-      (cancel)="cancel()"
-      (save)="apply()"
-      [saveLabel]="(readonly ? 'ACTIONS.CLOSE' : 'ACTIONS.ASSIGN') | translate"
-    ></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar
+    footer
+    (cancel)="cancel()"
+    (save)="apply()"
+    [saveLabel]="(readonly ? 'ACTIONS.CLOSE' : 'ACTIONS.ASSIGN') | translate"
+  ></vo-lib-button-bar>
 </vo-lib-dialog>

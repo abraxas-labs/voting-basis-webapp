@@ -2,43 +2,43 @@
   <bc-table class="w-full" [dataSource]="dataSource" [sticky]="true">
 
     <ng-container columnDef="eventName">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <span>{{ 'ACTIVITY.EVENT_NAME' | translate }}</span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="'ACTIVITY.EVENT.' + element.eventName | translate"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="timestamp">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <span>{{ 'ACTIVITY.TIMESTAMP' | translate }}</span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <span>{{ element.timestamp | date:'short' }}</span>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="user">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <span>{{ 'ACTIVITY.USER' | translate }}</span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <span>{{ element.eventUser.firstName + ' ' + element.eventUser.lastName }}</span>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="tenantName">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <span>{{ 'ACTIVITY.TENANT' | translate }}</span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <span>{{ element.eventTenant.tenantName }}</span>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
-    <bc-header-row *headerRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']"></bc-header-row>
-    <bc-data-row *dataRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']; let i = index"></bc-data-row>
+    <tr bc-header-row *headerRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']"></tr>
+    <tr bc-data-row *dataRowDef="let row; columns: ['eventName', 'timestamp', 'user', 'tenantName']; let i = index"></tr>
   </bc-table>
 
   <bc-paginator #paginator showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[5, 10, 15, 20, 100]"></bc-paginator>

@@ -1,6 +1,4 @@
-<vo-lib-dialog [contentLoading]="false">
-  <h1 header>{{'CONTEST.ARCHIVE.TITLE' | translate}}</h1>
-
+<vo-lib-dialog [header]="'CONTEST.ARCHIVE.TITLE' | translate" (dialogClose)="cancel()">
   <div content class="form mb-2 mr-3">
     <bc-date [label]="'CONTEST.ARCHIVE.TITLE_PER' | translate"
                   [required]="true"

@@ -1,12 +1,14 @@
-<vo-lib-dialog [contentLoading]="fileSelect.loading">
-  <h1 header translate>IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES</h1>
-
+<vo-lib-dialog
+  [contentLoading]="fileSelect.loading"
+  [header]="'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' | translate"
+  (dialogClose)="cancel()"
+>
   <bc-simple-stepper #stepper
                      content
                      labelPosition="bottom"
                      linear
                      (selectionChange)="stepChange($event)">
-    <bc-simple-step [label]="'IMPORT.FILE' | translate">
+    <bc-simple-step [label]="'IMPORT.FILE' | translate" [status]="stepper.index === 0 ? 'progress' : 'complete'">
       <app-import-file-select content
                               #fileSelect
                               [importTypes]="importTypes"
@@ -14,7 +16,11 @@
       </app-import-file-select>
     </bc-simple-step>
 
-    <bc-simple-step [label]="'IMPORT.PARTY_MAPPING.TITLE' | translate">
+    <bc-simple-step
+      [label]="'IMPORT.PARTY_MAPPING.TITLE' | translate"
+      [disabled]="!canSave"
+      [status]="stepper.index === 1 ? 'progress' : 'open'"
+    >
       <div class="party-mapping">
         @if (loadingParties) {
           <bc-spinner></bc-spinner>
@@ -27,13 +33,11 @@
     </bc-simple-step>
   </bc-simple-stepper>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [saveLabel]="(lastStep ? 'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' : 'APP.NEXT') | translate"
-                       (save)="lastStep ? save() : stepper.next()"
-                       [canSave]="canSave"
-                       [saving]="saving"
-                       [cancelLabel]="'APP.CANCEL' | translate"
-                       (cancel)="cancel()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                     [saveLabel]="(lastStep ? 'IMPORT.IMPORT_PROPORTIONAL_ELECTION_LISTS_AND_CANDIDATES' : 'APP.NEXT') | translate"
+                     (save)="lastStep ? save() : stepper.next()"
+                     [canSave]="canSave"
+                     [saving]="saving"
+                     [cancelLabel]="'APP.CANCEL' | translate"
+                     (cancel)="cancel()"></vo-lib-button-bar>
 </vo-lib-dialog>

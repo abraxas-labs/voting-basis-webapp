@@ -12,7 +12,7 @@
 }
 
 .error {
-  color: $color-error;
+  color: $color-signal-error;
 }
 
 .bc-column-position {
@@ -69,4 +69,5 @@
     0 3px 14px 2px rgb(0 0 0 / 12%);
   display: flex;
   justify-content: space-between;
+  padding: 0.5rem;
 }

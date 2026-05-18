@@ -1,6 +1,7 @@
-<vo-lib-dialog>
-  <h1 header>{{!isNew ? ('PROPORTIONAL_ELECTION.LIST.EDIT' | translate) : ('PROPORTIONAL_ELECTION.LIST.NEW' | translate)}}</h1>
-
+<vo-lib-dialog
+  [header]="!isNew ? ('PROPORTIONAL_ELECTION.LIST.EDIT' | translate) : ('PROPORTIONAL_ELECTION.LIST.NEW' | translate)"
+  (dialogClose)="closeWithUnsavedChangesCheck()"
+>
   <div content class="form mr-3">
     <bc-text [label]="'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate"
              [required]="true"
@@ -43,12 +44,10 @@
                  subscriptSizing="dynamic"></bc-dropdown>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                    [canSave]="canSave"
-                    [saving]="saving"
-                    [sticky]="false"
-                    (save)="save()"
-                    (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                  [canSave]="canSave"
+                  [saving]="saving"
+                  [sticky]="false"
+                  (save)="save()"
+                  (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
 </vo-lib-dialog>

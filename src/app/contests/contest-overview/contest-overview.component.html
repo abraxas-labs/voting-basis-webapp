@@ -1,6 +1,6 @@
 <vo-lib-page [contentLoading]="loading" header="CONTEST.TITLE">
   @if (canCreate) {
-    <div class="flex">
+    <div class="buttons">
       @if (canAddPoliticalAssembly) {
         <bc-button
           variant="tertiary"
@@ -11,7 +11,6 @@
       }
       <bc-button variant="tertiary" icon="plus" label="{{ 'CONTEST.NEW' | translate }}" (buttonClick)="create()"></bc-button>
       <bc-button
-        class="ml-2"
         variant="tertiary"
         icon="download"
         label="{{ 'IMPORT.IMPORT_CONTEST' | translate }}"

@@ -1,11 +1,9 @@
-<vo-lib-dialog>
-  <h1 header>{{ 'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.ASSIGN' | translate }}</h1>
-
+<vo-lib-dialog [header]="'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.ASSIGN' | translate" (dialogClose)="cancel()">
   <div content class="grid">
     <div>
       <bc-table selection class="w-full" [dataSource]="dataSource">
         <ng-container columnDef="select">
-          <bc-header-cell *headerCellDef>
+          <th bc-header-cell *headerCellDef>
             <bc-checkbox
               class="ml-2 mb-0"
               (checkedChange)="toggleAllRows($event)"
@@ -13,42 +11,42 @@
               [indeterminate]="selection.hasValue() && !isAllSelected"
             >
             </bc-checkbox>
-          </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          </th>
+          <td bc-data-cell *dataCellDef="let element">
             <bc-checkbox class="ml-2" (checkedChange)="toggleRowWithValue(element, $event)" [checked]="selection.isSelected(element)">
             </bc-checkbox>
-          </bc-data-cell>
+          </td>
         </ng-container>
 
         <ng-container columnDef="politicalBusinessNumber">
-          <bc-header-cell *headerCellDef>
+          <th bc-header-cell *headerCellDef>
             <app-truncated-value [value]="'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.NUMBER' | translate"></app-truncated-value>
-          </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          </th>
+          <td bc-data-cell *dataCellDef="let element">
             <app-truncated-value [value]="element.politicalBusinessNumber"></app-truncated-value>
-          </bc-data-cell>
+          </td>
         </ng-container>
 
         <ng-container columnDef="shortDescription">
-          <bc-header-cell *headerCellDef>
+          <th bc-header-cell *headerCellDef>
             <app-truncated-value
               [value]="'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.SHORT_DESCRIPTION' | translate"
             ></app-truncated-value>
-          </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          </th>
+          <td bc-data-cell *dataCellDef="let element">
             <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
-          </bc-data-cell>
+          </td>
         </ng-container>
 
-        <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-        <bc-data-row
+        <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+        <tr bc-data-row
           *dataRowDef="let row; columns: columns; let i = index"
           selectionToggle
           [selectionToggleValue]="row"
           selectionRow
           [selectionRowValue]="row"
           (click)="toggleRow(row)"
-        ></bc-data-row>
+        ></tr>
       </bc-table>
       <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>
     </div>
@@ -57,23 +55,23 @@
       <h2 translate class="mb-0">{{ 'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.SELECTED' | translate }}</h2>
       <bc-table class="w-full" [dataSource]="selection.selected">
         <ng-container columnDef="politicalBusinessNumber">
-          <bc-header-cell *headerCellDef>
+          <th bc-header-cell *headerCellDef>
             <app-truncated-value [value]="'POLITICAL_BUSINESS_UNION.POLITICAL_BUSINESSES.NUMBER' | translate"></app-truncated-value>
-          </bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          </th>
+          <td bc-data-cell *dataCellDef="let element">
             <app-truncated-value [value]="element.politicalBusinessNumber"></app-truncated-value>
-          </bc-data-cell>
+          </td>
         </ng-container>
 
         <ng-container columnDef="actions">
-          <bc-header-cell *headerCellDef></bc-header-cell>
-          <bc-data-cell *dataCellDef="let element">
+          <th bc-header-cell *headerCellDef></th>
+          <td bc-data-cell *dataCellDef="let element">
             <bc-icon class="clickable" (click)="toggleRow(element)" icon="remove"></bc-icon>
-          </bc-data-cell>
+          </td>
         </ng-container>
 
-        <bc-header-row *headerRowDef="let row; columns: columnsSelected"></bc-header-row>
-        <bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></bc-data-row>
+        <tr bc-header-row *headerRowDef="let row; columns: columnsSelected"></tr>
+        <tr bc-data-row *dataRowDef="let row; columns: columnsSelected; let i = index"></tr>
       </bc-table>
     </div>
   </div>

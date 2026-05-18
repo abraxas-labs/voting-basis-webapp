@@ -62,21 +62,20 @@ export function newDomainOfInfluence(): DomainOfInfluence {
   } as DomainOfInfluence;
 }
 
-export interface DomainOfInfluence
-  extends Omit<
-    DomainOfInfluenceProto.AsObject,
-    | 'info'
-    | 'childrenList'
-    | 'plausibilisationConfiguration'
-    | 'partiesList'
-    | 'superiorAuthorityDomainOfInfluence'
-    | 'eCollectingInitiativeMinSignatureCount'
-    | 'eCollectingInitiativeMaxElectronicSignaturePercent'
-    | 'eCollectingInitiativeNumberOfMembersCommittee'
-    | 'eCollectingReferendumMinSignatureCount'
-    | 'eCollectingReferendumMaxElectronicSignaturePercent'
-    | 'eVoting'
-  > {
+export interface DomainOfInfluence extends Omit<
+  DomainOfInfluenceProto.AsObject,
+  | 'info'
+  | 'childrenList'
+  | 'plausibilisationConfiguration'
+  | 'partiesList'
+  | 'superiorAuthorityDomainOfInfluence'
+  | 'eCollectingInitiativeMinSignatureCount'
+  | 'eCollectingInitiativeMaxElectronicSignaturePercent'
+  | 'eCollectingInitiativeNumberOfMembersCommittee'
+  | 'eCollectingReferendumMinSignatureCount'
+  | 'eCollectingReferendumMaxElectronicSignaturePercent'
+  | 'eVoting'
+> {
   createdOn?: Date;
   modifiedOn?: Date;
   deletedOn?: Date;

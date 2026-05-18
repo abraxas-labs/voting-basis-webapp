@@ -9,3 +9,10 @@
 .bc-column-first-name {
   width: 5rem;
 }
+
+bc-paginator {
+  // unset width so that it does not overlap the scroll bar
+  ::ng-deep .bc-paginator-container {
+    width: unset;
+  }
+}

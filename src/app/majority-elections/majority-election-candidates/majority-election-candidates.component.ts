@@ -30,7 +30,6 @@ import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-pa
 @Component({
   selector: 'app-majority-election-candidates',
   templateUrl: './majority-election-candidates.component.html',
-  styleUrls: ['./majority-election-candidates.component.scss'],
   standalone: false,
 })
 export class MajorityElectionCandidatesComponent {

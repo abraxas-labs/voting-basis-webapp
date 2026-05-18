@@ -1,12 +1,14 @@
-<vo-lib-dialog [contentLoading]="fileSelect.loading">
-  <h1 header translate>IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE</h1>
-
+<vo-lib-dialog
+  [contentLoading]="fileSelect.loading"
+  [header]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE' | translate"
+  (dialogClose)="cancel()"
+>
   <bc-simple-stepper #stepper
                      content
                      labelPosition="bottom"
                      linear
                      (selectionChange)="stepChange($event)">
-    <bc-simple-step #step1 [label]="'IMPORT.FILE' | translate">
+    <bc-simple-step #step1 [label]="'IMPORT.FILE' | translate" [status]="stepper.index === 0 ? 'progress' : 'complete'">
       <app-import-file-select
         content
         #fileSelect
@@ -14,7 +16,11 @@
         (importsChange)="importFilesChanged($event)"
       ></app-import-file-select>
     </bc-simple-step>
-    <bc-simple-step [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.CANDIDATE_STEP' | translate" [disabled]="!lastStep">
+    <bc-simple-step
+      [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.CANDIDATE_STEP' | translate"
+      [disabled]="!lastStep"
+      [status]="lastStep ? 'progress' : 'open'"
+    >
         <app-majority-election-candidate-list
           [candidates]="candidates"
           [hideActionButtons]="true"
@@ -24,13 +30,11 @@
     </bc-simple-step>
   </bc-simple-stepper>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [saveLabel]="(lastStep ? 'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE' : 'APP.NEXT') | translate"
-                       (save)="lastStep ? save() : stepper.next()"
-                       [canSave]="canSave"
-                       [saving]="saving"
-                       [cancelLabel]="'APP.CANCEL' | translate"
-                       (cancel)="cancel()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                     [saveLabel]="(lastStep ? 'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE' : 'APP.NEXT') | translate"
+                     (save)="lastStep ? save() : stepper.next()"
+                     [canSave]="canSave"
+                     [saving]="saving"
+                     [cancelLabel]="'APP.CANCEL' | translate"
+                     (cancel)="cancel()"></vo-lib-button-bar>
 </vo-lib-dialog>

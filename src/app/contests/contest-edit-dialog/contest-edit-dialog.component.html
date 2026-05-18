@@ -1,6 +1,8 @@
-<vo-lib-dialog [contentLoading]="loading">
-  <h1 header>{{!isNew ? ('CONTEST.EDIT' | translate) : ('CONTEST.NEW' | translate)}}</h1>
-
+<vo-lib-dialog
+  [contentLoading]="loading"
+  [header]="!isNew ? ('CONTEST.EDIT' | translate) : ('CONTEST.NEW' | translate)"
+  (dialogClose)="closeWithUnsavedChangesCheck()"
+>
   <div content class="form mr-3">
     @if (domainOfInfluences.length !== 1) {
       <bc-dropdown
@@ -67,6 +69,7 @@
                [subscriptSizing]="'dynamic'"></bc-date>
       <bc-time class="ml-2"
                [showEmptyLabel]="true"
+               [label]="' '"
                [readonly]="testingPhaseEnded"
                optionalText=""
                icon="clock-o"
@@ -107,6 +110,7 @@
                  [subscriptSizing]="'dynamic'"></bc-date>
         <bc-time class="ml-2"
                  [showEmptyLabel]="true"
+                 [label]="' '"
                  optionalText=""
                  icon="clock-o"
                  [value]="eVotingFromTimeValue"
@@ -123,6 +127,7 @@
                  [subscriptSizing]="'dynamic'"></bc-date>
         <bc-time class="ml-2"
                  [showEmptyLabel]="true"
+                 [label]="' '"
                  optionalText=""
                  icon="clock-o"
                  [value]="eVotingToTimeValue"
@@ -138,12 +143,10 @@
     }
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [canSave]="canSave"
-                       [saving]="saving"
-                       [sticky]="false"
-                       (save)="save()"
-                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                     [canSave]="canSave"
+                     [saving]="saving"
+                     [sticky]="false"
+                     (save)="save()"
+                     (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
 </vo-lib-dialog>

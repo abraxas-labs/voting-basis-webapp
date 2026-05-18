@@ -26,62 +26,62 @@
       [sticky]="true"
     >
       <ng-container [columnDef]="nameColumn">
-        <bc-header-cell filter sort *headerCellDef>
+        <th bc-header-cell filter sort *headerCellDef>
           <span truncateWithTooltip tooltip>
             {{ 'COUNTING_CIRCLE.NAME' | translate }}
           </span>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <span>{{ element.name }}</span>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container [columnDef]="bfsColumn">
-        <bc-header-cell filter sort *headerCellDef>
+        <th bc-header-cell filter sort *headerCellDef>
           <span truncateWithTooltip tooltip>
             {{ 'COUNTING_CIRCLE.BFS' | translate }}
           </span>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <span>{{ element.bfs }}</span>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container [columnDef]="codeColumn">
-        <bc-header-cell filter sort *headerCellDef>
+        <th bc-header-cell filter sort *headerCellDef>
           <span truncateWithTooltip tooltip>
             {{ 'COUNTING_CIRCLE.CODE' | translate }}
           </span>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <span>{{ element.code }}</span>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container [columnDef]="authorityColumn">
-        <bc-header-cell filter sort *headerCellDef>
+        <th bc-header-cell filter sort *headerCellDef>
           <span truncateWithTooltip tooltip>
             {{ 'COUNTING_CIRCLE.AUTHORITY' | translate }}
           </span>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <span>{{ element.responsibleAuthority.name }}</span>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container [columnDef]="modifiedOnColumn">
-        <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
+        <th bc-header-cell filter filterType="date-extended" sort *headerCellDef>
           <span truncateWithTooltip tooltip>
             {{ 'COUNTING_CIRCLE.MODIFIED_ON' | translate }}
           </span>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <span>{{ element.modifiedOn | date: 'short' }}</span>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container [columnDef]="stateColumn">
-        <bc-header-cell
+        <th bc-header-cell
           filter
           filterType="list"
           [filterItems]="stateList"
@@ -93,30 +93,30 @@
           <span truncateWithTooltip tooltip>
             {{ 'COUNTING_CIRCLE.STATE' | translate }}
           </span>
-        </bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        </th>
+        <td bc-data-cell *dataCellDef="let element">
           <span>{{ 'COUNTING_CIRCLE.STATES.' + element.state | translate }}</span>
-        </bc-data-cell>
+        </td>
       </ng-container>
 
       <ng-container [columnDef]="actionsColumn">
-        <bc-header-cell *headerCellDef></bc-header-cell>
-        <bc-data-cell *dataCellDef="let element">
+        <th bc-header-cell *headerCellDef></th>
+        <td bc-data-cell *dataCellDef="let element">
           @if (!element.deletedOn && canDelete) {
             <bc-icon (click)="delete(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
           }
-        </bc-data-cell>
+        </td>
       </ng-container>
 
-      <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-      <bc-data-row
+      <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+      <tr bc-data-row
         *dataRowDef="let row; columns: columns; let i = index"
         selectionToggle
         [selectionToggleValue]="row"
         selectionRow
         [selectionRowValue]="row"
         (click)="show(row)"
-      ></bc-data-row>
+      ></tr>
     </bc-table>
 
     <bc-paginator #paginator showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[5, 10, 15, 20, 100]"></bc-paginator>

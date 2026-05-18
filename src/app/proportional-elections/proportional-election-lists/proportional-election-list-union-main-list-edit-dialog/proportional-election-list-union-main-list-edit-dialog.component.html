@@ -1,6 +1,4 @@
-<vo-lib-dialog>
-  <h1 header translate>PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.EDIT</h1>
-
+<vo-lib-dialog [header]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.EDIT' | translate" (dialogClose)="cancel()">
   <div content class="form mr-3">
     <bc-dropdown class="full-width"
                  [label]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.TITLE' | translate"

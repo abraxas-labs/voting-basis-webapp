@@ -1,6 +1,7 @@
-<vo-lib-dialog [contentLoading]="false">
-  <h1 header>{{(isNew ? 'COUNTING_CIRCLE.MERGE.EDIT.TITLE_NEW' : 'COUNTING_CIRCLE.MERGE.EDIT.TITLE') | translate}}</h1>
-
+<vo-lib-dialog
+  [header]="(isNew ? 'COUNTING_CIRCLE.MERGE.EDIT.TITLE_NEW' : 'COUNTING_CIRCLE.MERGE.EDIT.TITLE') | translate"
+  (dialogClose)="cancel()"
+>
   <div content>
     <bc-simple-stepper #stepper
                             content

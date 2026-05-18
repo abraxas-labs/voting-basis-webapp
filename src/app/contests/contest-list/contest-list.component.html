@@ -7,67 +7,67 @@
   [dataSource]="dataSource"
 >
   <ng-container columnDef="dateString">
-    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
+    <th bc-header-cell filter filterType="date-extended" sort *headerCellDef>
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.DATE' | translate }}
       </span>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value
         [value]="
           (element.dateString | date) +
           (element.eVotingApprovalDueDateString ? ' (' + (element.eVotingApprovalDueDateString | date) + ')' : '')
         "
       ></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="type">
-    <bc-header-cell filter sort *headerCellDef>
+    <th bc-header-cell filter sort *headerCellDef>
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.TYPE.TITLE' | translate }}
       </span>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.type"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="description">
-    <bc-header-cell filter sort *headerCellDef>
+    <th bc-header-cell filter sort *headerCellDef>
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.DESCRIPTION_HEADER' | translate }}
       </span>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [class.italic]="element.isPreconfiguredDate" [value]="element.description"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="endOfTestingPhase">
-    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
+    <th bc-header-cell filter filterType="date-extended" sort *headerCellDef>
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.END_OF_TESTING_PHASE' | translate }}
       </span>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.endOfTestingPhase | date: 'short'"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="archivePer">
-    <bc-header-cell filter filterType="date-extended" sort *headerCellDef>
+    <th bc-header-cell filter filterType="date-extended" sort *headerCellDef>
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.ARCHIVE.TITLE_PER' | translate }}
       </span>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.archivePer | date: 'short'"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="state">
-    <bc-header-cell
+    <th bc-header-cell
       filter
       filterType="list"
       [filterItems]="contestStateList"
@@ -79,37 +79,37 @@
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.STATE' | translate }}
       </span>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="'CONTEST.STATES.' + (!!element.state ? element.state : 0) | translate"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="politicalBusinesses">
-    <bc-header-cell filter sort *headerCellDef>
+    <th bc-header-cell filter sort *headerCellDef>
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.POLITICAL_BUSINESSES' | translate }}
       </span>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <span class="political-businesses">{{ element.politicalBusinesses }}</span>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="owner">
-    <bc-header-cell filter sort *headerCellDef>
+    <th bc-header-cell filter sort *headerCellDef>
       <span truncateWithTooltip tooltip>
         {{ 'CONTEST.OWNER' | translate }}
       </span>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.owner"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="actions">
-    <bc-header-cell *headerCellDef></bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    <th bc-header-cell *headerCellDef></th>
+    <td bc-data-cell *dataCellDef="let element">
       @if (canCreate || !element.isPreconfiguredDate) {
         <vo-lib-action-menu>
           @if (!element.isPreconfiguredDate && !element.isPoliticalAssembly) {
@@ -175,18 +175,18 @@
           }
         </vo-lib-action-menu>
       }
-    </bc-data-cell>
+    </td>
   </ng-container>
 
-  <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-  <bc-data-row
+  <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+  <tr bc-data-row
     *dataRowDef="let row; columns: columns; let i = index"
     selectionToggle
     [selectionToggleValue]="row"
     selectionRow
     [selectionRowValue]="row"
     (click)="!row.isPreconfiguredDate && !row.isPoliticalAssembly ? view.emit(row) : undefined"
-  ></bc-data-row>
+  ></tr>
 </bc-table>
 @if (showPaginator) {
   <bc-paginator #paginator showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"></bc-paginator>

@@ -1,11 +1,7 @@
 @use '@abraxas/voting-lib/style/color' as *;
 
-.error {
-  color: $color-error;
-}
-
 .warn {
-  color: $color-warning;
+  color: $color-signal-warning;
 }
 
 .hidden {

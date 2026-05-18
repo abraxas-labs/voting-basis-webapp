@@ -1,6 +1,8 @@
-<vo-lib-dialog [contentLoading]="loading">
-  <h1 header>{{!isNew ? ('MAJORITY_ELECTION.CANDIDATE.EDIT' | translate) : ('MAJORITY_ELECTION.CANDIDATE.NEW' | translate)}}</h1>
-
+<vo-lib-dialog
+  [contentLoading]="loading"
+  [header]="!isNew ? ('MAJORITY_ELECTION.CANDIDATE.EDIT' | translate) : ('MAJORITY_ELECTION.CANDIDATE.NEW' | translate)"
+  (dialogClose)="closeWithUnsavedChangesCheck()"
+>
   <div content>
       <bc-checkbox [(checked)]="selectCandidateFromPrimaryElection"
                    (checkedChange)="updateFromPrimary($event)"
@@ -30,12 +32,10 @@
       </app-majority-election-candidate-edit>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                    [canSave]="canSave"
-                    [saving]="saving"
-                    [sticky]="false"
-                    (save)="save()"
-                    (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                  [canSave]="canSave"
+                  [saving]="saving"
+                  [sticky]="false"
+                  (save)="save()"
+                  (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
 </vo-lib-dialog>

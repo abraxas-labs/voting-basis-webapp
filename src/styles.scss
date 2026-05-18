@@ -44,20 +44,6 @@ body {
   }
 }
 
-.mat-mdc-step-header {
-  // disable material stepping by mat-mdc-step click
-  pointer-events: none !important;
-
-  .mat-mdc-step-icon {
-    color: lib.$color-white !important;
-    background-color: lib.$color-primary;
-  }
-
-  &[aria-selected='true'] ~ .mat-mdc-step-header .mat-mdc-step-icon {
-    background-color: rgb(0 0 0 / 54%) !important;
-  }
-}
-
 .stepper-footer {
   @extend .mt-4;
 
@@ -75,8 +61,4 @@ body {
 
 .snackbar {
   margin-top: 5rem !important;
-}
-
-vo-lib-dialog {
-  margin: 1.5rem;
 }

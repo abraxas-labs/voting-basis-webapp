@@ -1,10 +1,9 @@
-<vo-lib-dialog>
-  <h1 header>{{(!isNew ? 'POLITICAL_BUSINESS_UNION.EDIT' : 'POLITICAL_BUSINESS_UNION.NEW') | translate}}</h1>
-
+<vo-lib-dialog [header]="(!isNew ? 'POLITICAL_BUSINESS_UNION.EDIT' : 'POLITICAL_BUSINESS_UNION.NEW') | translate" (dialogClose)="cancel()">
   <div content class="form mr-3">
     <bc-text [label]="'PROPORTIONAL_ELECTION.LIST_UNION.DESCRIPTION' | translate"
              [required]="true"
-             [(value)]="data.description"></bc-text>
+             [(value)]="data.description"
+             [subscriptSizing]="'dynamic'"></bc-text>
 
     <bc-dropdown class="full-width"
                  [label]="'POLITICAL_BUSINESS_UNION.TYPE' | translate"
@@ -13,15 +12,14 @@
                  [required]="true"
                  displayExpr="description"
                  valueExpr="value"
-                 [(value)]="data.type"></bc-dropdown>
+                 [(value)]="data.type"
+                 [subscriptSizing]="'dynamic'"></bc-dropdown>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [canSave]="canSave"
-                       [saving]="saving"
-                       [sticky]="false"
-                       (save)="save()"
-                       (cancel)="cancel()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                     [canSave]="canSave"
+                     [saving]="saving"
+                     [sticky]="false"
+                     (save)="save()"
+                     (cancel)="cancel()"></vo-lib-button-bar>
 </vo-lib-dialog>

@@ -1,5 +1,4 @@
-<vo-lib-dialog>
-  <h1 header translate>PROPORTIONAL_ELECTION.LIST_UNION.TITLE</h1>
+<vo-lib-dialog [header]="'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate" (dialogClose)="close()">
   <div class="grid" content>
     <div class="pt-5">
       @if (loading) {
@@ -38,64 +37,64 @@
           [height]="'30rem'"
           >
           <ng-container columnDef="number">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST_UNION.NUMBER' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.number"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="description">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST_UNION.DESCRIPTION' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.description | getTranslation"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="listEnumeration">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST_UNION.LIST_ENUMERATION' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.proportionalElectionListEnumeration"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="subListUnionEnumeration">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value
                 [value]="'PROPORTIONAL_ELECTION.LIST_UNION.SUB_LIST_UNION_ENUMERATION' | translate"
               ></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.proportionalElectionSubListUnionEnumeration"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="mainListNumber">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST_UNION.MAIN_LIST.TITLE' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.proportionalElectionMainListNumber"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="actions">
-            <bc-header-cell *headerCellDef></bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            <th bc-header-cell *headerCellDef></th>
+            <td bc-data-cell *dataCellDef="let element">
               <div class="flex">
                 <bc-icon (click)="editListUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
                 <bc-icon class="ml-2" (click)="deleteListUnion(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
               </div>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
-          <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-          <bc-data-row
+          <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+          <tr bc-data-row
             *dataRowDef="let row; columns: columns; let i = index"
             #rowSelection="selectionToggle"
             selectionToggle
@@ -105,7 +104,7 @@
             (click)="rowSelection.toggle(); selectListUnion(row)"
             cdkDrag
             [cdkDragData]="row"
-          ></bc-data-row>
+          ></tr>
         </bc-table>
       }
     </div>
@@ -146,53 +145,53 @@
           (cdkDropListDropped)="moveListUnion($event.previousIndex, $event.currentIndex, selectedListUnion)"
           >
           <ng-container columnDef="number">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.NUMBER' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.number"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="description">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.DESCRIPTION' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.description | getTranslation"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="listEnumeration">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.LIST_ENUMERATION' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.proportionalElectionListEnumeration"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="mainListNumber">
-            <bc-header-cell *headerCellDef>
+            <th bc-header-cell *headerCellDef>
               <app-truncated-value [value]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.MAIN_LIST.TITLE' | translate"></app-truncated-value>
-            </bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
               <app-truncated-value [value]="element.proportionalElectionMainListNumber"></app-truncated-value>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
           <ng-container columnDef="actions">
-            <bc-header-cell *headerCellDef></bc-header-cell>
-            <bc-data-cell *dataCellDef="let element">
+            <th bc-header-cell *headerCellDef></th>
+            <td bc-data-cell *dataCellDef="let element">
               <div class="flex">
                 <bc-icon (click)="editListUnion(element); $event.stopPropagation()" icon="edit"></bc-icon>
                 <bc-icon class="ml-2" (click)="deleteListUnion(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
               </div>
-            </bc-data-cell>
+            </td>
           </ng-container>
 
-          <bc-header-row *headerRowDef="let row; columns: columnsSubList"></bc-header-row>
-          <bc-data-row
+          <tr bc-header-row *headerRowDef="let row; columns: columnsSubList"></tr>
+          <tr bc-data-row
             *dataRowDef="let row; columns: columnsSubList; let i = index"
             #rowSelection="selectionToggle"
             selectionToggle
@@ -202,13 +201,11 @@
             (click)="rowSelection.toggle(); selectSubListUnion(row)"
             cdkDrag
             [cdkDragData]="row"
-          ></bc-data-row>
+          ></tr>
         </bc-table>
       }
     </div>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar [sticky]="false" [saveLabel]="'APP.FINISH' | translate" (cancel)="close()" (save)="close()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer [sticky]="false" [saveLabel]="'APP.FINISH' | translate" (cancel)="close()" (save)="close()"></vo-lib-button-bar>
 </vo-lib-dialog>

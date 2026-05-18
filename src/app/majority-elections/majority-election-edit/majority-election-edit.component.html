@@ -5,7 +5,7 @@
   [backButtonNavigateCommands]="['../../']"
   >
   <bc-simple-stepper #stepper labelPosition="bottom" linear>
-    <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
+    <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate" [status]="stepper.index === 0 ? 'progress' : 'complete'">
       @if (data.contestId) {
         <app-majority-election-general-informations
           #step1
@@ -26,7 +26,11 @@
         </div>
       }
     </bc-simple-step>
-    <bc-simple-step [label]="'MAJORITY_ELECTION.CANDIDATE_STEP' | translate" [disabled]="!step1?.canSave">
+    <bc-simple-step
+      [label]="'MAJORITY_ELECTION.CANDIDATE_STEP' | translate"
+      [disabled]="!step1?.canSave"
+      [status]="stepper.index === 0 ? 'open' : stepper.index === 1 ? 'progress' : 'complete'"
+    >
       @if (data.id && stepper.selectedIndex === 1) {
         <app-majority-election-candidates
           #step2
@@ -58,6 +62,7 @@
     <bc-simple-step
       [label]="'POLITICAL_BUSINESS.RESULT_ENTRY_INFORMATION' | translate"
       [disabled]="stepper.selectedIndex !== 2 && (!step1?.canSave || !step2?.canSave)"
+      [status]="stepper.index === 2 ? 'progress' : 'open'"
       >
       <app-majority-election-erfassung-informations
         #step3

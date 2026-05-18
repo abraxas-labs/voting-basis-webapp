@@ -33,8 +33,10 @@ export interface ComparisonCountOfVotersConfiguration extends Omit<ComparisonCou
   thresholdPercent?: number;
 }
 
-export interface ComparisonVoterParticipationConfiguration
-  extends Omit<ComparisonVoterParticipationConfigurationProto.AsObject, 'thresholdPercent'> {
+export interface ComparisonVoterParticipationConfiguration extends Omit<
+  ComparisonVoterParticipationConfigurationProto.AsObject,
+  'thresholdPercent'
+> {
   thresholdPercent?: number;
 }
 

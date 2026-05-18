@@ -1,62 +1,62 @@
 <bc-table selection class="w-full" [dataSource]="dataSource">
 
   <ng-container columnDef="select">
-    <bc-header-cell *headerCellDef></bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    <th bc-header-cell *headerCellDef></th>
+    <td bc-data-cell *dataCellDef="let element">
       <bc-checkbox class="ml-2" (checkedChange)="setSelected(element, $event)"
         [checked]="selection.isSelected(element)">
       </bc-checkbox>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="filename">
-    <bc-header-cell *headerCellDef>
+    <th bc-header-cell *headerCellDef>
       <app-truncated-value [value]="'IMPORT.FILENAME' | translate"></app-truncated-value>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.fileName"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="date">
-    <bc-header-cell *headerCellDef>
+    <th bc-header-cell *headerCellDef>
       <app-truncated-value [value]="'CONTEST.CONTEST_DATE' | translate"></app-truncated-value>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.contestDate | date"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="description">
-    <bc-header-cell *headerCellDef>
+    <th bc-header-cell *headerCellDef>
       <app-truncated-value [value]="'CONTEST.DESCRIPTION' | translate"></app-truncated-value>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.description | getTranslation"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="eVotingFrom">
-    <bc-header-cell *headerCellDef>
+    <th bc-header-cell *headerCellDef>
       <app-truncated-value [value]="'CONTEST.E_VOTING_FROM' | translate"></app-truncated-value>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.eVotingFrom | date:'short'"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
   <ng-container columnDef="eVotingTo">
-    <bc-header-cell *headerCellDef>
+    <th bc-header-cell *headerCellDef>
       <app-truncated-value [value]="'CONTEST.E_VOTING_FROM' | translate"></app-truncated-value>
-    </bc-header-cell>
-    <bc-data-cell *dataCellDef="let element">
+    </th>
+    <td bc-data-cell *dataCellDef="let element">
       <app-truncated-value [value]="element.eVotingTo | date:'short'"></app-truncated-value>
-    </bc-data-cell>
+    </td>
   </ng-container>
 
-  <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-  <bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
-  selectionRow [selectionRowValue]="row" (click)="setSelected(row, true)"></bc-data-row>
+  <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+  <tr bc-data-row *dataRowDef="let row; columns: columns; let i = index" selectionToggle [selectionToggleValue]="row"
+  selectionRow [selectionRowValue]="row" (click)="setSelected(row, true)"></tr>
 </bc-table>
 
 <div class="mt-4">

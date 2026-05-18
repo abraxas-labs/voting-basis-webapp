@@ -1,6 +1,7 @@
-<vo-lib-dialog>
-  <h1 header>{{!isNew ? ('CANTON_SETTINGS.EDIT' | translate) : ('CANTON_SETTINGS.NEW' | translate)}}</h1>
-
+<vo-lib-dialog
+  [header]="!isNew ? ('CANTON_SETTINGS.EDIT' | translate) : ('CANTON_SETTINGS.NEW' | translate)"
+  (dialogClose)="closeWithUnsavedChangesCheck()"
+>
   <div content class="form mr-3 my-2">
     <bc-dropdown class="full-width"
                  [label]="'DOMAIN_OF_INFLUENCE.CANTON' | translate"
@@ -212,7 +213,8 @@
                 [checked]="!data.statePlausibilisedDisabled"
                 (checkedChange)="data.statePlausibilisedDisabled = !$event; contentChanged()"
                 [disabled]="readonly"
-                [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.USE_STATE' | translate">
+                [label]="'CANTON_SETTINGS.COUNTING_CIRCLE_RESULT_STATE.USE_STATE' | translate"
+                [subscriptSizing]="'dynamic'">
               </bc-checkbox>
             }
           </div>
@@ -287,13 +289,11 @@
              [subscriptSizing]="'dynamic'"></bc-text>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [canSave]="canSave"
-                       [saving]="saving"
-                       [sticky]="false"
-                       [hasSaveButton]="!readonly"
-                       (save)="save()"
-                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer
+                     [canSave]="canSave"
+                     [saving]="saving"
+                     [sticky]="false"
+                     [hasSaveButton]="!readonly"
+                     (save)="save()"
+                     (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
 </vo-lib-dialog>

@@ -23,6 +23,7 @@ import { ProportionalElectionUnionService } from '../../core/proportional-electi
 import { ProportionalElectionUnion } from '../../core/models/proportional-election-union.model';
 import { PermissionService } from '../../core/permission.service';
 import { Permissions } from '../../core/models/permissions.model';
+import { PermissionUiService } from '../../core/permission-ui.service';
 
 @Component({
   selector: 'app-proportional-election-edit',
@@ -41,6 +42,7 @@ export class ProportionalElectionEditComponent implements OnInit, HasUnsavedChan
   private readonly proportionalElectionUnionService = inject(ProportionalElectionUnionService);
   private readonly dialogService = inject(DialogService);
   private readonly permissionService = inject(PermissionService);
+  private readonly permissionUiService = inject(PermissionUiService);
 
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
@@ -78,9 +80,14 @@ export class ProportionalElectionEditComponent implements OnInit, HasUnsavedChan
       this.data = cloneDeep(this.persistedData);
       this.data.contestId = this.data.contestId || this.route.snapshot.params.contestId;
 
+      const domainOfInfluence = !this.isNew ? await this.domainOfInfluenceService.get(this.data.domainOfInfluenceId) : undefined;
+
       const { testingPhaseEnded, locked, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
-      this.locked = locked || !!this.data.eVotingApproved;
+      this.locked =
+        Boolean(locked) ||
+        Boolean(this.data.eVotingApproved) ||
+        !(await this.permissionUiService.hasPoliticalBusinessWritePermissions(domainOfInfluence));
       this.canEdit = await this.permissionService.hasPermission(Permissions.ProportionalElection.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
 

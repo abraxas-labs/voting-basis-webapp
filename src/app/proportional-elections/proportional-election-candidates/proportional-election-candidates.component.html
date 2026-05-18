@@ -44,100 +44,100 @@
     [height]="'31rem'"
     >
     <ng-container columnDef="position">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.POSITION' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.position"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="number">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.NUMBER_SHORT' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.number"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="lastName">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         {{ 'PROPORTIONAL_ELECTION.CANDIDATE.LAST_NAME' | translate }}
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.lastName"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="firstName">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         {{ 'PROPORTIONAL_ELECTION.CANDIDATE.FIRST_NAME' | translate }}
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.firstName"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="dateOfBirth">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.DATE_OF_BIRTH' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.dateOfBirth | date"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="sex">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.SEX' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="'SEX_TYPE.' + element.sex | translate"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="title">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.TITLE' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.title"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="incumbent">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.INCUMBENT' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         @if (element.incumbent) {
           <bc-icon icon="checkmark"></bc-icon>
         }
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="zipCode">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.ZIP_CODE' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.zipCode"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="locality">
-      <bc-header-cell *headerCellDef>
+      <th bc-header-cell *headerCellDef>
         <app-truncated-value [value]="'PROPORTIONAL_ELECTION.CANDIDATE.LOCALITY' | translate"></app-truncated-value>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.locality"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="actions">
-      <bc-header-cell *headerCellDef></bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      <th bc-header-cell *headerCellDef></th>
+      <td bc-data-cell *dataCellDef="let element">
         @if (!locked && !readonly) {
           <div class="flex">
             <bc-icon (click)="editCandidate(element); $event.stopPropagation()" icon="edit"></bc-icon>
@@ -151,11 +151,11 @@
             }
           </div>
         }
-      </bc-data-cell>
+      </td>
     </ng-container>
 
-    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-    <bc-data-row
+    <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+    <tr bc-data-row
       *dataRowDef="let row; columns: columns; let i = index"
       #rowSelection="selectionToggle"
       selectionToggle
@@ -166,7 +166,7 @@
       cdkDrag
       [cdkDragDisabled]="testingPhaseEnded || locked || readonly"
       [cdkDragData]="row"
-    ></bc-data-row>
+    ></tr>
   </bc-table>
   @if (expandedCandidates.length === maxCandidateCount && maxCandidateCount > 0) {
     <p translate>

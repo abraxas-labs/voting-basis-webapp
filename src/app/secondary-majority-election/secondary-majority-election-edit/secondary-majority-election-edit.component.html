@@ -5,7 +5,7 @@
   <bc-simple-stepper #stepper
                           labelPosition="bottom"
                           linear>
-    <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate">
+    <bc-simple-step [label]="'POLITICAL_BUSINESS.GENERAL_INFORMATION' | translate" [status]="stepper.index === 0 ? 'progress' : 'complete'">
       <ng-container>
         <app-secondary-majority-election-general-informations #step1
                                                               [data]="data"
@@ -23,7 +23,11 @@
         </div>
       </ng-container>
     </bc-simple-step>
-    <bc-simple-step [label]="'MAJORITY_ELECTION.CANDIDATE_STEP' | translate" [disabled]="!step1.canSave">
+    <bc-simple-step
+      [label]="'MAJORITY_ELECTION.CANDIDATE_STEP' | translate"
+      [disabled]="!step1.canSave"
+      [status]="stepper.index === 1 ? 'progress' : 'open'"
+    >
       <app-secondary-majority-election-candidates [showBallotGroups]="true"
                                                   [testingPhaseEnded]="testingPhaseEnded"
                                                   [locked]="locked"

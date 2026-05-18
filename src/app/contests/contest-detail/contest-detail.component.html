@@ -4,7 +4,7 @@
   [showBackButton]="true"
   [backButtonNavigateCommands]="['../']"
   >
-  <div class="flex">
+  <div class="buttons">
     <bc-button
       [matMenuTriggerFor]="contest.testingPhaseEnded || !hasSameTenantWritePermissions || (contest.eVotingApproved && hasOnlyEVotingDois)
         ? null : menu"
@@ -33,7 +33,6 @@
       [label]="'IMPORT.IMPORT_POLITICAL_BUSINESS' | translate"
       [tooltip]="'CONTEST.PAST_E_VOTING_APPROVAL_DUE_DATE' | translate"
       [tooltipDisabled]="!contest.eVotingApproved"
-      class="ml-2"
     ></bc-button>
 
     @if (cantonDefaults && cantonDefaults.enabledPoliticalBusinessUnionTypesList.length > 0) {
@@ -63,51 +62,51 @@
     [sticky]="true"
     >
     <ng-container columnDef="number">
-      <bc-header-cell filter sort *headerCellDef class="small-filter-component">
+      <th bc-header-cell filter sort *headerCellDef class="small-filter-component">
         <span [tooltip]="'POLITICAL_BUSINESS.NUMBER' | translate">
           {{ 'POLITICAL_BUSINESS.NUMBER_SHORT' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.number"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="politicalBusinessUnionDescription">
-      <bc-header-cell filter sort *headerCellDef class="small-filter-component">
+      <th bc-header-cell filter sort *headerCellDef class="small-filter-component">
         <span [tooltip]="'POLITICAL_BUSINESS.POLITICAL_BUSINESS_UNION_DESCRIPTION.LONG' | translate">
           {{ 'POLITICAL_BUSINESS.POLITICAL_BUSINESS_UNION_DESCRIPTION.SHORT' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.politicalBusinessUnionDescription"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="electionGroupNumber">
-      <bc-header-cell filter sort *headerCellDef class="small-filter-component">
+      <th bc-header-cell filter sort *headerCellDef class="small-filter-component">
         <span [tooltip]="'POLITICAL_BUSINESS.ELECTION_GROUP_NUMBER.LONG' | translate">
           {{ 'POLITICAL_BUSINESS.ELECTION_GROUP_NUMBER.SHORT' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.electionGroupNumber"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="shortDescription">
-      <bc-header-cell filter sort *headerCellDef>
+      <th bc-header-cell filter sort *headerCellDef>
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.SHORT_DESCRIPTION' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.shortDescription"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="domainOfInfluenceType">
-      <bc-header-cell
+      <th bc-header-cell
         filter
         filterType="list"
         [filterItems]="domainOfInfluenceTypeList"
@@ -119,25 +118,25 @@
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE_TYPE' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="'DOMAIN_OF_INFLUENCE.TYPES.' + element.domainOfInfluenceType | translate"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="domainOfInfluenceName">
-      <bc-header-cell filter sort *headerCellDef>
+      <th bc-header-cell filter sort *headerCellDef>
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.DOMAIN_OF_INFLUENCE' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.domainOfInfluenceName"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="primaryType">
-      <bc-header-cell
+      <th bc-header-cell
         filter
         filterType="list"
         [filterItems]="primaryPoliticalBusinessTypeList"
@@ -149,8 +148,8 @@
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.TYPE.TITLE' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value
           [value]="
             (element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_VOTE
@@ -159,16 +158,16 @@
             ) | translate
           "
         ></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="active">
-      <bc-header-cell filter filterType="bool" sort *headerCellDef>
+      <th bc-header-cell filter filterType="bool" sort *headerCellDef>
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.ENABLE_TITLE' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <bc-switch
           class="ml-2"
           [(checked)]="element.active"
@@ -178,16 +177,16 @@
           [subscriptSizing]="'dynamic'"
           >
         </bc-switch>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="eVotingApproved">
-      <bc-header-cell filter filterType="bool" sort *headerCellDef>
+      <th bc-header-cell filter filterType="bool" sort *headerCellDef>
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.E_VOTING_APPROVED' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         @if (element.eVotingApproved !== undefined) {
           <bc-switch
             class="ml-2"
@@ -205,23 +204,23 @@
               : ''"
           ></bc-switch>
         }
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="owner">
-      <bc-header-cell filter sort *headerCellDef>
+      <th bc-header-cell filter sort *headerCellDef>
         <span truncateWithTooltip tooltip>
           {{ 'POLITICAL_BUSINESS.OWNER' | translate }}
         </span>
-      </bc-header-cell>
-      <bc-data-cell *dataCellDef="let element">
+      </th>
+      <td bc-data-cell *dataCellDef="let element">
         <app-truncated-value [value]="element.owner"></app-truncated-value>
-      </bc-data-cell>
+      </td>
     </ng-container>
 
     <ng-container columnDef="actions">
-      <bc-header-cell *headerCellDef></bc-header-cell>
-      <bc-data-cell *dataCellDef="let element; let i = index">
+      <th bc-header-cell *headerCellDef></th>
+      <td bc-data-cell *dataCellDef="let element; let i = index">
         @if ((element.ownerId === tenantId && hasSameTenantReadPermissions) || hasAdminReadPermissions) {
           <vo-lib-action-menu>
             @if (!contest.locked) {
@@ -264,11 +263,11 @@
             ></vo-lib-action-menu-item>
           </vo-lib-action-menu>
         }
-      </bc-data-cell>
+      </td>
     </ng-container>
 
-    <bc-header-row *headerRowDef="let row; columns: columns"></bc-header-row>
-    <bc-data-row
+    <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+    <tr bc-data-row
       *dataRowDef="let row; columns: columns; let i = index"
       selectionToggle
       [selectionToggleValue]="row"
@@ -276,7 +275,7 @@
       selectionRow
       [selectionRowValue]="row"
       (click)="open(row)"
-    ></bc-data-row>
+    ></tr>
   </bc-table>
   <bc-paginator #paginator showFirstLastButtons [pageSize]="20" [pageSizeOptions]="[5, 10, 15, 20]"></bc-paginator>
 </vo-lib-page>

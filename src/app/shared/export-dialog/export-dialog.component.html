@@ -1,6 +1,4 @@
-<vo-lib-dialog [contentLoading]="loading">
-  <h1 header translate>EXPORTS.TITLE</h1>
-
+<vo-lib-dialog [contentLoading]="loading" [header]="'EXPORTS.TITLE' | translate" (dialogClose)="cancel()">
   <div content class="export-container">
     @for (exportTemplate of exportTemplates; track exportTemplate) {
       <bc-button
@@ -14,9 +12,5 @@
     }
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-      [hasSaveButton]="false"
-    (cancel)="cancel()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar footer [hasSaveButton]="false" (cancel)="cancel()"></vo-lib-button-bar>
 </vo-lib-dialog>

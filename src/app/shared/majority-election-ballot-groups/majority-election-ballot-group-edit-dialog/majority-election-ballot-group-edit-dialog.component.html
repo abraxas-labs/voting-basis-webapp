@@ -1,14 +1,13 @@
-<vo-lib-dialog>
-  <h1 header>{{('MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.' + (isNew ? 'NEW' : 'EDIT' )) | translate }}</h1>
-
+<vo-lib-dialog
+  [header]="'MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.' + (isNew ? 'NEW' : 'EDIT') | translate"
+  (dialogClose)="closeWithUnsavedChangesCheck()"
+>
   <div content>
-    <bc-simple-stepper #stepper
-                       content
-                       labelPosition="bottom"
-                       (selectItem)="handleStepperIndexUpdate($event)"
-                       linear>
-
-      <bc-simple-step [label]="'MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.STEP_1.LABEL' | translate">
+    <bc-simple-stepper #stepper content labelPosition="bottom" (selectItem)="handleStepperIndexUpdate($event)" linear>
+      <bc-simple-step
+        [label]="'MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.STEP_1.LABEL' | translate"
+        [status]="stepper.index === 0 ? 'progress' : 'complete'"
+      >
         <ng-container>
           <app-majority-election-ballot-group-general-informations
             [elections]="elections"
@@ -18,7 +17,11 @@
         </ng-container>
       </bc-simple-step>
 
-      <bc-simple-step [label]="'MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.STEP_2.LABEL' | translate" [disabled]="step === 1 && !canSave">
+      <bc-simple-step
+        [label]="'MAJORITY_ELECTION.BALLOT_GROUP.EDIT_DIALOG.STEP_2.LABEL' | translate"
+        [disabled]="step === 1 && !canSave"
+        [status]="stepper.index === 1 ? 'progress' : 'open'"
+      >
         <ng-container>
           <app-majority-election-ballot-group-assign-candidates
             [ballotGroup]="ballotGroup"
@@ -27,16 +30,15 @@
           ></app-majority-election-ballot-group-assign-candidates>
         </ng-container>
       </bc-simple-step>
-
     </bc-simple-stepper>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar footer
-                       [canSave]="canSave"
-                       (save)="save()"
-                       [saving]="saving"
-                       [saveLabel]="(step === 1 ? 'APP.NEXT' : 'ACTIONS.SAVE') | translate"
-                       (cancel)="closeWithUnsavedChangesCheck()"></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar
+    footer
+    [canSave]="canSave"
+    (save)="save()"
+    [saving]="saving"
+    [saveLabel]="(step === 1 ? 'APP.NEXT' : 'ACTIONS.SAVE') | translate"
+    (cancel)="closeWithUnsavedChangesCheck()"
+  ></vo-lib-button-bar>
 </vo-lib-dialog>

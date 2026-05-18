@@ -22,6 +22,7 @@ import {
   UpdateDomainOfInfluenceForAdminRequest,
   UpdateDomainOfInfluenceForElectionAdminRequest,
   UpdateDomainOfInfluenceRequest,
+  ValidateShortNameDomainOfInfluenceRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/domain_of_influence_requests_pb';
 import { GrpcBackendService, GrpcService, TimestampUtil } from '@abraxas/voting-lib';
 import { HttpClient } from '@angular/common/http';
@@ -41,7 +42,7 @@ import {
   DomainOfInfluenceVotingCardSwissPostData,
   DomainOfInfluenceVotingCardSwissPostDataProto,
 } from './models/domain-of-influence-voting-card-swiss-post-data.model';
-import { DomainOfInfluence, DomainOfInfluenceProto } from './models/domain-of-influence.model';
+import { DomainOfInfluence, DomainOfInfluenceProto, DomainOfInfluenceType } from './models/domain-of-influence.model';
 import { ExportConfiguration, ExportConfigurationProto } from './models/export.model';
 import {
   ComparisonCountOfVotersConfiguration,
@@ -335,6 +336,26 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       c => c.listParties,
       req,
       r => r.getPartiesList()!.map(x => DomainOfInfluenceService.mapToParty(x, domainOfInfluenceId)!),
+    );
+  }
+
+  public isShortNameValid(
+    shortName: string,
+    domainOfInflunceId: string,
+    type: DomainOfInfluenceType,
+    isResponsibleForVotingCards: boolean,
+  ): Promise<boolean> {
+    if (!isResponsibleForVotingCards) {
+      return Promise.resolve(true);
+    }
+    const req = new ValidateShortNameDomainOfInfluenceRequest();
+    req.setId(domainOfInflunceId);
+    req.setShortName(shortName);
+    req.setType(type);
+    return this.request(
+      c => c.validateShortName,
+      req,
+      r => r.getValue(),
     );
   }
 

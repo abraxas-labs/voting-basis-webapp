@@ -21,6 +21,7 @@ import { MajorityElectionService } from '../../core/majority-election.service';
 import { Permissions } from '../../core/models/permissions.model';
 import { PermissionService } from '../../core/permission.service';
 import { DomainOfInfluenceParty } from '../../core/models/domain-of-influence-party.model';
+import { PermissionUiService } from '../../core/permission-ui.service';
 
 @Component({
   selector: 'app-secondary-majority-election-edit',
@@ -38,6 +39,7 @@ export class SecondaryMajorityElectionEditComponent implements OnInit {
   private readonly contestService = inject(ContestService);
   private readonly doiService = inject(DomainOfInfluenceService);
   private readonly permissionService = inject(PermissionService);
+  private readonly permissionUiService = inject(PermissionUiService);
 
   @ViewChild(SimpleStepperComponent, { static: true })
   public stepper!: SimpleStepperComponent;
@@ -72,16 +74,17 @@ export class SecondaryMajorityElectionEditComponent implements OnInit {
       }
 
       const { testingPhaseEnded, locked, eVoting } = await this.contestService.get(contestId);
+      const primaryMajorityElection = await this.majorityElectionService.get(this.persistedData.primaryMajorityElectionId);
+      this.domainOfInfluence = await this.doiService.get(primaryMajorityElection.domainOfInfluenceId);
+
       this.testingPhaseEnded = testingPhaseEnded;
       this.eVotingApproved = !!this.persistedData.eVotingApproved;
       this.eVotingEverApproved = this.persistedData.eVotingEverApproved;
-      this.locked = locked;
+      this.locked = Boolean(locked) || !(await this.permissionUiService.hasPoliticalBusinessWritePermissions(this.domainOfInfluence));
       this.canEdit = await this.permissionService.hasPermission(Permissions.SecondaryMajorityElection.Update);
       this.eVoting = eVoting;
 
-      const primaryMajorityElection = await this.majorityElectionService.get(this.persistedData.primaryMajorityElectionId);
       this.contestDomainOfInfluenceDefaults = await this.doiService.getCantonDefaults(primaryMajorityElection.domainOfInfluenceId);
-      this.domainOfInfluence = await this.doiService.get(primaryMajorityElection.domainOfInfluenceId);
       this.parties = this.domainOfInfluence.parties;
       if (this.isNew) {
         this.persistedData.isOnSeparateBallot = this.contestDomainOfInfluenceDefaults.secondaryMajorityElectionOnSeparateBallot;

@@ -18,11 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
             // required by the base components
-            "allowedCommonJsDependencies": [
-              "moment/locale/de",
-              "js-sha256",
-              "lodash"
-            ],
+            "allowedCommonJsDependencies": ["moment/locale/de", "js-sha256", "lodash"],
             "outputPath": {
               "base": "dist/voting-basis"
             },
@@ -43,9 +39,10 @@
                 "output": "assets"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["./node_modules/@abraxas/base-components/src/lib/styles/predefined/default.theme.scss", "src/styles.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["node_modules/", "src/"]
+            },
             "loader": {
               ".ttf": "file",
               ".woff": "file",

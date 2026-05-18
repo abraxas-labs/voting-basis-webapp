@@ -8,4 +8,9 @@
 
 bc-paginator {
   overflow: hidden;
+
+  // unset width so that it does not overlap the scroll bar
+  ::ng-deep .bc-paginator-container {
+    width: unset;
+  }
 }

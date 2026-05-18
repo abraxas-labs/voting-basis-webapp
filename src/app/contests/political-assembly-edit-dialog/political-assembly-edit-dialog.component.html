@@ -1,6 +1,8 @@
-<vo-lib-dialog [contentLoading]="loading">
-  <h1 header>{{ !isNew ? ('POLITICAL_ASSEMBLY.EDIT' | translate) : ('POLITICAL_ASSEMBLY.NEW' | translate) }}</h1>
-
+<vo-lib-dialog
+  [contentLoading]="loading"
+  [header]="!isNew ? ('POLITICAL_ASSEMBLY.EDIT' | translate) : ('POLITICAL_ASSEMBLY.NEW' | translate)"
+  (dialogClose)="closeWithUnsavedChangesCheck()"
+>
   <div content class="form mr-3">
     @if (domainOfInfluences.length !== 1) {
       <bc-dropdown
@@ -61,14 +63,12 @@
     ></app-translated-formfield>
   </div>
 
-  <div footer class="mr-3">
-    <vo-lib-button-bar
-      footer
-      [canSave]="canSave"
-      [saving]="saving"
-      [sticky]="false"
-      (save)="save()"
-      (cancel)="closeWithUnsavedChangesCheck()"
-    ></vo-lib-button-bar>
-  </div>
+  <vo-lib-button-bar
+    footer
+    [canSave]="canSave"
+    [saving]="saving"
+    [sticky]="false"
+    (save)="save()"
+    (cancel)="closeWithUnsavedChangesCheck()"
+  ></vo-lib-button-bar>
 </vo-lib-dialog>

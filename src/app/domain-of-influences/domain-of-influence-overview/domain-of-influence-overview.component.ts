@@ -6,7 +6,7 @@
 
 import { AuthorizationService, PaginatorComponent, TableDataSource, Tenant } from '@abraxas/base-components';
 import { DialogService, EnumUtil, SnackbarService, TreeNode } from '@abraxas/voting-lib';
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CountingCircleService } from '../../core/counting-circle.service';
 import { DomainOfInfluenceTree } from '../../core/domain-of-influence-tree';

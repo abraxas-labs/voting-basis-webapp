@@ -1,51 +1,31 @@
 @use '@abraxas/voting-lib/style/table' as table;
 
-::ng-deep .bc-column-number {
+::ng-deep [class*='bc-column-'] {
   @include table.truncate-long-sortable-table-header();
+}
 
+::ng-deep .bc-column-number {
   width: 5rem;
 }
 
 ::ng-deep .bc-column-political-business-union-description {
-  @include table.truncate-long-sortable-table-header();
-
   width: 4.5rem;
 }
 
 ::ng-deep .bc-column-election-group-number {
-  @include table.truncate-long-sortable-table-header();
-
   width: 4.5rem;
 }
 
 ::ng-deep .bc-column-domain-of-influence-type {
-  @include table.truncate-long-sortable-table-header();
-
   width: 10rem;
 }
 
-::ng-deep .bc-column-short-description {
-  @include table.truncate-long-sortable-table-header();
-}
-
-::ng-deep .bc-column-domain-of-influence-name {
-  @include table.truncate-long-sortable-table-header();
-}
-
 ::ng-deep .bc-column-type {
-  @include table.truncate-long-sortable-table-header();
-
   width: 11rem;
 }
 
 ::ng-deep .bc-column-active {
-  @include table.truncate-long-sortable-table-header();
-
   width: 7rem;
-}
-
-::ng-deep .bc-column-owner {
-  @include table.truncate-long-sortable-table-header();
 }
 
 .bc-column-actions {
@@ -54,6 +34,11 @@
 
 bc-paginator {
   overflow: hidden;
+
+  // unset width so that it does not overlap the scroll bar
+  ::ng-deep .bc-paginator-container {
+    width: unset;
+  }
 }
 
 ::ng-deep .small-filter-component {
@@ -68,4 +53,10 @@ bc-paginator {
 
 ::ng-deep bc-header-cell {
   z-index: 100; // without this, the switch component would be visible inside the header during scrolling
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
 }

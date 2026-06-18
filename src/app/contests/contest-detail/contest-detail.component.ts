@@ -573,7 +573,7 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.columns.splice(1, 1);
     }
 
-    if (!hasEVoting) {
+    if (!hasEVoting || this.contest.testingPhaseEnded) {
       const eVotingColIndex = this.columns.indexOf('eVotingApproved');
       this.columns.splice(eVotingColIndex, 1);
     }

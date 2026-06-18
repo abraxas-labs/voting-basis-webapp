@@ -70,7 +70,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
       ...election.toObject(),
       shortDescription: toJsMap(election.getShortDescriptionMap()),
       officialDescription: toJsMap(election.getOfficialDescriptionMap()),
-      federalIdentification: election.getFederalIdentification()?.getValue(),
+      federalIdentification: election.getFederalIdentification(),
       eVotingApproved: election.getEVotingApproved()?.getValue(),
     };
   }
@@ -349,7 +349,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
-    result.setFederalIdentification(createInt32Value(data.federalIdentification));
+    result.setFederalIdentification(data.federalIdentification);
     return result;
   }
 
@@ -373,7 +373,7 @@ export class ProportionalElectionService extends GrpcService<ProportionalElectio
     result.setContestId(data.contestId);
     result.setReviewProcedure(data.reviewProcedure);
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
-    result.setFederalIdentification(createInt32Value(data.federalIdentification));
+    result.setFederalIdentification(data.federalIdentification);
     return result;
   }
 

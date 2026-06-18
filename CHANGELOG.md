@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.64.0`)
+# ✨ Changelog (`v3.65.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.64.0
-Previous version ---- v3.62.2
+This version -------- v3.65.0
+Previous version ---- v3.64.0
 Initial version ----- v1.23.0
-Total commits ------- 5
+Total commits ------- 12
 ```
+
+## [v3.65.0] - 2026-06-16
+
+### 🔄 Changed
+
+- e-voting approval fixes and prevent deletion of candidates after e-voting ever approved
+
+### 🆕 Added
+
+- overflow for sticky tables
+
+### 🔄 Changed
+
+- move stistat export eai message type to domain of influence event data
+
+### 🔄 Changed
+
+- update lib
+
+### 🆕 Added
+
+- show cc-id and doi-id in UI
+
+### 🆕 Added
+
+- add federal identification for ct political businesses
+
+### 🔄 Changed
+
+- translate all activity logs and export entity types
+
+### 🔄 Changed
+
+- ignore e-voting approved after testing phase ended
+
+## [v3.64.3] - 2026-06-10
+
+### 🔄 Changed
+
+- update lib
+
+## [v3.64.2] - 2026-06-09
+
+### 🔄 Changed
+
+- set theme correct after relogin
+
+## [v3.64.1] - 2026-05-19
+
+### 🆕 Added
+
+- add ecollecting import root flag
 
 ## [v3.64.0] - 2026-04-21
 

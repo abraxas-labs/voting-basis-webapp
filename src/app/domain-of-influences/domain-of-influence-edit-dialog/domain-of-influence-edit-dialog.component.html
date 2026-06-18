@@ -4,10 +4,17 @@
   (dialogClose)="closeWithUnsavedChangesCheck()"
 >
   <div content class="form mr-3 my-2">
+
     @if (!isNew) {
-      <span class="modified">
-        {{ 'HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.ACTIVE' | translate: { modifiedOn: data.modifiedOn | date: 'yyyy-MM-dd / HH:mm' } }}
-      </span>
+      <div class="flex split-row">
+        <span class="modified">
+          {{ 'HISTORIZATION.DOMAIN_OF_INFLUENCE.SUFFIX.ACTIVE' | translate: { modifiedOn: data.modifiedOn | date: 'yyyy-MM-dd / HH:mm' } }}
+        </span>
+
+        <bc-readonly [label]="'DOMAIN_OF_INFLUENCE.ID' | translate">
+          {{ data.id }}
+        </bc-readonly>
+      </div>
     }
     <bc-text
       [label]="'DOMAIN_OF_INFLUENCE.NAME' | translate"
@@ -228,6 +235,27 @@
 
     @if (canEditEverything || data.responsibleForVotingCards) {
       <h2 class="mb-1" translate>DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.TITLE</h2>
+      <div class="stistat-export-container">
+        <bc-checkbox
+          [disabled]="readonly || !canEditEverything"
+          [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.STISTAT_EXPORT' | translate"
+          [checked]="data.stistatExportEnabled"
+          (checkedChange)="updateStistatExportEnabled($event)"
+          [subscriptSizing]="'dynamic'"
+        ></bc-checkbox>
+        @if (data.stistatExportEnabled) {
+          <bc-text
+            [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.STISTAT_EXPORT_MESSAGE_TYPE' | translate"
+            [readonly]="readonly"
+            [required]="true"
+            [minlength]="7"
+            [maxlength]="7"
+            [showDefaultErrors]="true"
+            [value]="data.stistatExportEaiMessageType"
+            (valueChange)="data.stistatExportEaiMessageType = $event; contentChanged()"
+            [subscriptSizing]="'dynamic'"></bc-text>
+        }
+      </div>
       <bc-checkbox
         [disabled]="readonly || !canEditEverything"
         [label]="'DOMAIN_OF_INFLUENCE.STIMMUNTERLAGEN.RESPONSIBLE_FOR_VOTING_CARDS' | translate"
@@ -256,6 +284,16 @@
         class="full-width"
         [subscriptSizing]="'dynamic'"
       ></bc-checkbox>
+      @if (data.type === knownDomainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH) {
+        <bc-checkbox
+          [disabled]="readonly"
+          [label]="'DOMAIN_OF_INFLUENCE.E_COLLECTING.IMPORT_ROOT' | translate"
+          [checked]="data.eCollectingImportRoot"
+          (checkedChange)="data.eCollectingImportRoot = $event; contentChanged()"
+          class="full-width"
+          [subscriptSizing]="'dynamic'"
+        ></bc-checkbox>
+      }
     }
   </div>
 

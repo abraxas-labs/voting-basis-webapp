@@ -32,7 +32,6 @@ export abstract class PoliticalBusinessGeneralInformationsComponent<T extends Po
   private readonly dialogService = inject(DialogService);
 
   public readonly domainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
-  public readonly federalIdentificationMaxValue: number = 2147483647;
 
   public loading: boolean = true;
 

@@ -8,6 +8,7 @@ import { EnumItemDescription } from '@abraxas/voting-lib';
 import { Component, OnInit } from '@angular/core';
 import { MajorityElection, MajorityElectionMandateAlgorithm, newMajorityElection } from '../../core/models/majority-election.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
+import { DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-majority-election-general-informations',
@@ -36,5 +37,14 @@ export class MajorityElectionGeneralInformationsComponent
       MajorityElectionMandateAlgorithm,
       'MAJORITY_ELECTION.MANDATE_ALGORITHM.TYPES.',
     );
+  }
+
+  protected domainOfInfluenceTypeChange(domainOfInfluenceType: DomainOfInfluenceType): void {
+    if (domainOfInfluenceType === DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_MU) {
+      this.data.federalIdentification = '';
+    }
+
+    this.selectedDomainOfInfluenceType = domainOfInfluenceType;
+    this.contentChanged.emit();
   }
 }

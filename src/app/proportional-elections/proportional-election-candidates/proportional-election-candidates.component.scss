@@ -11,6 +11,11 @@
   }
 }
 
+.table-container {
+  height: 31rem;
+  overflow-y: auto;
+}
+
 .error {
   color: $color-signal-error;
 }

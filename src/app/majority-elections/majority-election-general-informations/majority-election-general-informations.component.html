@@ -37,17 +37,19 @@
         displayExpr="description"
         valueExpr="value"
         [value]="selectedDomainOfInfluenceType"
-        (valueChange)="selectedDomainOfInfluenceType = $event; contentChanged.emit()"
+        (valueChange)="domainOfInfluenceTypeChange($event)"
         [subscriptSizing]="'dynamic'"></bc-dropdown>
     }
-    @if (selectedDomainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH) {
-      <bc-number
+    @if (
+      selectedDomainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH ||
+      selectedDomainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CT
+      ) {
+      <bc-text
         [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
         [readonly]="contest.testingPhaseEnded || locked || readonly"
         [value]="data.federalIdentification"
         (valueChange)="data.federalIdentification = $event; contentChanged.emit()"
-        [max]="federalIdentificationMaxValue"
-        [subscriptSizing]="'dynamic'"></bc-number>
+        [subscriptSizing]="'dynamic'"></bc-text>
     }
     <div class="container">
       @if (selectedDomainOfInfluenceType) {

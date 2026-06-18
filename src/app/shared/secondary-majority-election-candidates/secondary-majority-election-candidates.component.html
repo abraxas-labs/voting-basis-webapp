@@ -10,14 +10,14 @@
   <div class="flex">
     <bc-button variant="tertiary"
                icon="plus"
-               [disabled]="locked || eVotingApproved || readonly"
+               [disabled]="locked || eVotingApprovedAndInTestingPhase || readonly"
                [label]="'MAJORITY_ELECTION.CANDIDATE.NEW' | translate"
                (buttonClick)="createCandidate()"></bc-button>
   </div>
 
   <app-majority-election-candidate-list [candidates]="expandedCandidates"
                                         [testingPhaseEnded]="testingPhaseEnded"
-                                        [locked]="locked || eVotingApproved"
+                                        [locked]="locked || eVotingApprovedAndInTestingPhase"
                                         [reordering]="reordering"
                                         [readonly]="readonly"
                                         [eVotingEverApproved]="eVotingEverApproved"

@@ -71,7 +71,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
       number: question.getNumber(),
       question: toJsMap(question.getQuestionMap()),
       type: question.getType(),
-      federalIdentification: question.getFederalIdentification()?.getValue(),
+      federalIdentification: question.getFederalIdentification(),
     };
   }
 
@@ -81,7 +81,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
       question1Number: question.getQuestion1Number(),
       question2Number: question.getQuestion2Number(),
       question: toJsMap(question.getQuestionMap()),
-      federalIdentification: question.getFederalIdentification()?.getValue(),
+      federalIdentification: question.getFederalIdentification(),
     };
   }
 
@@ -209,7 +209,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     result.setNumber(data.number);
     fillProtoMap(result.getQuestionMap(), data.question);
     result.setType(data.type);
-    result.setFederalIdentification(createInt32Value(data.federalIdentification));
+    result.setFederalIdentification(data.federalIdentification);
     return result;
   }
 
@@ -219,7 +219,7 @@ export class VoteService extends GrpcService<VoteServicePromiseClient> {
     fillProtoMap(result.getQuestionMap(), data.question);
     result.setQuestion1Number(data.question1Number);
     result.setQuestion2Number(data.question2Number);
-    result.setFederalIdentification(createInt32Value(data.federalIdentification));
+    result.setFederalIdentification(data.federalIdentification);
     return result;
   }
 }

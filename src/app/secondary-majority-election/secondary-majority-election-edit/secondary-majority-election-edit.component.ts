@@ -52,7 +52,7 @@ export class SecondaryMajorityElectionEditComponent implements OnInit {
   public testingPhaseEnded: boolean = false;
   public eVoting: boolean = false;
   public locked: boolean = false;
-  public eVotingApproved: boolean = false;
+  public eVotingApprovedAndInTestingPhase: boolean = false;
   public eVotingEverApproved: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public domainOfInfluence?: DomainOfInfluence;
@@ -78,7 +78,7 @@ export class SecondaryMajorityElectionEditComponent implements OnInit {
       this.domainOfInfluence = await this.doiService.get(primaryMajorityElection.domainOfInfluenceId);
 
       this.testingPhaseEnded = testingPhaseEnded;
-      this.eVotingApproved = !!this.persistedData.eVotingApproved;
+      this.eVotingApprovedAndInTestingPhase = !!this.persistedData.eVotingApproved && !testingPhaseEnded;
       this.eVotingEverApproved = this.persistedData.eVotingEverApproved;
       this.locked = Boolean(locked) || !(await this.permissionUiService.hasPoliticalBusinessWritePermissions(this.domainOfInfluence));
       this.canEdit = await this.permissionService.hasPermission(Permissions.SecondaryMajorityElection.Update);

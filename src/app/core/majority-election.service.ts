@@ -80,7 +80,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
       ...election.toObject(),
       shortDescription: toJsMap(election.getShortDescriptionMap()),
       officialDescription: toJsMap(election.getOfficialDescriptionMap()),
-      federalIdentification: election.getFederalIdentification()?.getValue(),
+      federalIdentification: election.getFederalIdentification(),
       eVotingApproved: election.getEVotingApproved()?.getValue(),
     };
   }
@@ -218,7 +218,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
     result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
-    result.setFederalIdentification(createInt32Value(data.federalIdentification));
+    result.setFederalIdentification(data.federalIdentification);
     return result;
   }
 
@@ -247,7 +247,7 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setEnforceReviewProcedureForCountingCircles(data.enforceReviewProcedureForCountingCircles);
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
     result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
-    result.setFederalIdentification(createInt32Value(data.federalIdentification));
+    result.setFederalIdentification(data.federalIdentification);
     return result;
   }
 

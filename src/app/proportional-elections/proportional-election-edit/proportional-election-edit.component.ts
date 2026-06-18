@@ -86,7 +86,7 @@ export class ProportionalElectionEditComponent implements OnInit, HasUnsavedChan
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked =
         Boolean(locked) ||
-        Boolean(this.data.eVotingApproved) ||
+        (Boolean(this.data.eVotingApproved) && !testingPhaseEnded) ||
         !(await this.permissionUiService.hasPoliticalBusinessWritePermissions(domainOfInfluence));
       this.canEdit = await this.permissionService.hasPermission(Permissions.ProportionalElection.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);

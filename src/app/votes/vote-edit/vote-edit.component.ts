@@ -82,7 +82,7 @@ export class VoteEditComponent implements OnInit, HasUnsavedChanges {
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked =
         Boolean(locked) ||
-        Boolean(this.data.eVotingApproved) ||
+        (Boolean(this.data.eVotingApproved) && !testingPhaseEnded) ||
         !(await this.permissionUiService.hasPoliticalBusinessWritePermissions(domainOfInfluence));
       this.eVoting = eVoting;
       this.voteTypeImmutable = this.data.ballots.length > 0 && this.data.ballots.some(b => !!b.id);

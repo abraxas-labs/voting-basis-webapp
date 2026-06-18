@@ -269,6 +269,15 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
     this.data.contactPerson = this.form.getRawValue().contactPerson;
   }
 
+  protected updateStistatExportEnabled(enabled: boolean) {
+    this.data.stistatExportEnabled = enabled;
+    if (!enabled) {
+      this.data.stistatExportEaiMessageType = '';
+    }
+
+    this.contentChanged();
+  }
+
   private async leaveDialogOpen(): Promise<boolean> {
     return this.hasChanges && !(await this.dialogService.confirm('APP.CHANGES.TITLE', this.i18n.instant('APP.CHANGES.MSG'), 'APP.YES'));
   }

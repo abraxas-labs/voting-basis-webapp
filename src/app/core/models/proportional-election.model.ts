@@ -28,7 +28,7 @@ export type ProportionalElection = Omit<
 > & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
-  federalIdentification?: number;
+  federalIdentification: string;
   eVotingApproved?: boolean;
 };
 export { ProportionalElectionMandateAlgorithmProto as ProportionalElectionMandateAlgorithm };

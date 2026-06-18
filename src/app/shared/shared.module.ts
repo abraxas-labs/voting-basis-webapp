@@ -34,6 +34,7 @@ import {
   TooltipModule,
   TruncateWithTooltipModule,
   ErrorModule,
+  ReadonlyModule,
 } from '@abraxas/base-components';
 import { VotingLibModule } from '@abraxas/voting-lib';
 import { CommonModule } from '@angular/common';
@@ -174,6 +175,7 @@ const modules = [
   MatDialogClose,
   ReactiveFormsModule,
   ErrorModule,
+  ReadonlyModule,
 ];
 
 @NgModule({

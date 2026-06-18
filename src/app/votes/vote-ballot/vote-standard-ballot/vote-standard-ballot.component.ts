@@ -20,7 +20,6 @@ export class VoteStandardBallotComponent {
   private readonly i18n = inject(TranslateService);
 
   public readonly domainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
-  public readonly federalIdentificationMaxValue: number = 2147483647;
 
   @Input()
   public locked: boolean = false;

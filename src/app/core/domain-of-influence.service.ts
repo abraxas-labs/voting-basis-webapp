@@ -135,6 +135,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       hasEmptyVotingCards: doi.getHasEmptyVotingCards(),
       hideLowerDomainOfInfluencesInReports: doi.getHideLowerDomainOfInfluencesInReports(),
       eCollectingEnabled: doi.getECollectingEnabled(),
+      eCollectingImportRoot: doi.getECollectingImportRoot(),
       eVoting: doi.getEVoting()?.getValue(),
     };
   }
@@ -399,6 +400,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setHasEmptyVotingCards(data.hasEmptyVotingCards);
     result.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
     result.setECollectingEnabled(data.eCollectingEnabled);
+    result.setECollectingImportRoot(data.eCollectingImportRoot);
     return result;
   }
 
@@ -449,6 +451,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setHasEmptyVotingCards(data.hasEmptyVotingCards);
       adminRequest.setHideLowerDomainOfInfluencesInReports(data.hideLowerDomainOfInfluencesInReports);
       adminRequest.setECollectingEnabled(data.eCollectingEnabled);
+      adminRequest.setECollectingImportRoot(data.eCollectingImportRoot);
       this.mapToDomainOfInfluenceElectionAdminOrAdminRequest(data, adminRequest);
       result.setAdminRequest(adminRequest);
     } else {

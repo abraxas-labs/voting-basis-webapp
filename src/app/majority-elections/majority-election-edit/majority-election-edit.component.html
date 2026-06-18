@@ -11,7 +11,7 @@
           #step1
           [data]="data"
           [isNew]="isNew"
-          [locked]="locked || eVotingApproved"
+          [locked]="locked || eVotingApprovedAndInTestingPhase"
           (contentChanged)="contentChanged()"
         ></app-majority-election-general-informations>
         <div class="stepper-footer">
@@ -36,7 +36,7 @@
           #step2
           [testingPhaseEnded]="testingPhaseEnded"
           [locked]="locked"
-          [eVotingApproved]="eVotingApproved"
+          [eVotingApprovedAndInTestingPhase]="eVotingApprovedAndInTestingPhase"
           [eVotingEverApproved]="eVotingEverApproved"
           [readonly]="!canEdit"
           [loadDependencies]="!newlyCreated"
@@ -67,7 +67,7 @@
       <app-majority-election-erfassung-informations
         #step3
         [testingPhaseEnded]="testingPhaseEnded"
-        [locked]="locked || eVotingApproved"
+        [locked]="locked || eVotingApprovedAndInTestingPhase"
         [readonly]="!canEdit"
         [data]="data"
         [useCandidateCheckDigit]="contestDomainOfInfluenceDefaults.majorityElectionUseCandidateCheckDigit"

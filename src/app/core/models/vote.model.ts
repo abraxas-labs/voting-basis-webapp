@@ -66,7 +66,7 @@ export type BallotQuestion = {
   number: number;
   question: Map<string, string>;
   type: BallotQuestionTypeProto;
-  federalIdentification?: number;
+  federalIdentification: string;
 };
 export { TieBreakQuestionProto };
 export type TieBreakQuestion = {
@@ -74,7 +74,7 @@ export type TieBreakQuestion = {
   question: Map<string, string>;
   question1Number: number;
   question2Number: number;
-  federalIdentification?: number;
+  federalIdentification: string;
 };
 export { BallotTypeProto as BallotType };
 export { BallotSubTypeProto as BallotSubType };
@@ -114,6 +114,7 @@ export function newBallot(existingBallotCount: number): Ballot {
         number: 1,
         question: new Map<string, string>(),
         type: BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT,
+        federalIdentification: '',
       },
     ],
     tieBreakQuestions: [],

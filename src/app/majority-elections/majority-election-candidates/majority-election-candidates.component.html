@@ -8,14 +8,14 @@
     <bc-button variant="tertiary"
       icon="plus"
       [label]="'MAJORITY_ELECTION.CANDIDATE.NEW' | translate"
-      [disabled]="locked || eVotingApproved || readonly"
+      [disabled]="locked || eVotingApprovedAndInTestingPhase || readonly"
     (buttonClick)="createCandidate()"></bc-button>
     @if (currentMajorityElection) {
       <bc-button
         variant="tertiary"
         icon="download"
         [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.TITLE' | translate"
-        [disabled]="testingPhaseEnded || locked || eVotingApproved || readonly"
+        [disabled]="testingPhaseEnded || locked || eVotingApprovedAndInTestingPhase || readonly"
         (buttonClick)="importCandidates()"
       class="ml-2"></bc-button>
     }
@@ -23,7 +23,7 @@
 
   <app-majority-election-candidate-list [candidates]="expandedCandidates"
                                         [testingPhaseEnded]="testingPhaseEnded"
-                                        [locked]="locked || eVotingApproved"
+                                        [locked]="locked || eVotingApprovedAndInTestingPhase"
                                         [readonly]="readonly"
                                         [eVotingEverApproved]="eVotingEverApproved"
                                         [reordering]="reordering"
@@ -36,7 +36,7 @@
     <app-secondary-majority-election-candidates
       [testingPhaseEnded]="testingPhaseEnded"
       [locked]="locked"
-      [eVotingApproved]="secondaryMajorityElection.eVotingApproved"
+      [eVotingApprovedAndInTestingPhase]="secondaryMajorityElection.eVotingApproved && !testingPhaseEnded"
       [eVotingEverApproved]="secondaryMajorityElection.eVotingEverApproved"
       [readonly]="readonly"
       [secondaryMajorityElection]="secondaryMajorityElection"

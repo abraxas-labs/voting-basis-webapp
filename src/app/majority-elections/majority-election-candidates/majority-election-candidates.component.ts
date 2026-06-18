@@ -50,7 +50,7 @@ export class MajorityElectionCandidatesComponent {
   public locked: boolean = false;
 
   @Input()
-  public eVotingApproved: boolean = false;
+  public eVotingApprovedAndInTestingPhase: boolean = false;
 
   @Input()
   public eVotingEverApproved: boolean = false;

@@ -34,16 +34,18 @@
             [subscriptSizing]="'dynamic'"
             >
           </bc-dropdown>
-          @if (domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH) {
-            <bc-number
+          @if (
+            domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH ||
+            domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CT
+            ) {
+            <bc-text
               class="ml-4"
               [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
               [readonly]="testingPhaseEnded || readonly || locked"
               [value]="ballotQuestion.federalIdentification"
               (valueChange)="ballotQuestion.federalIdentification = $event; contentChanged.emit()"
-              [max]="federalIdentificationMaxValue"
               [subscriptSizing]="'dynamic'"
-            ></bc-number>
+            ></bc-text>
           }
           <!-- This id has to match the definition of the eCH-0252 export in Ausmittlung -->
           <bc-text
@@ -117,16 +119,18 @@
             [subscriptSizing]="'dynamic'"
             >
           </bc-dropdown>
-          @if (domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH) {
-            <bc-number
+          @if (
+            domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH ||
+            domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CT
+            ) {
+            <bc-text
               class="ml-4"
               [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
               [readonly]="testingPhaseEnded || readonly || locked"
               [value]="ballotTieBreakQuestion.federalIdentification"
               (valueChange)="ballotTieBreakQuestion.federalIdentification = $event; contentChanged.emit()"
-              [max]="federalIdentificationMaxValue"
               [subscriptSizing]="'dynamic'"
-            ></bc-number>
+            ></bc-text>
           }
           <!-- This id has to match the definition of the eCH-0252 export in Ausmittlung -->
           <bc-text

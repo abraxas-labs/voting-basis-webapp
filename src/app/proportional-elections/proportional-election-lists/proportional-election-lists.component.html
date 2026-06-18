@@ -28,102 +28,101 @@
           ></bc-button>
         }
       </div>
-      <bc-table
-        selection
-        class="w-full"
-        [dataSource]="lists"
-        cdkDropList
-        [cdkDropListData]="lists"
-        [cdkDropListDisabled]="testingPhaseEnded || locked || readonly"
-        (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)"
-        [sticky]="true"
-        [height]="'34rem'"
+      <div class="table-container">
+        <bc-table
+          selection
+          class="w-full"
+          [dataSource]="lists"
+          cdkDropList
+          [cdkDropListData]="lists"
+          [cdkDropListDisabled]="testingPhaseEnded || locked || readonly"
+          (cdkDropListDropped)="moveList($event.previousIndex, $event.currentIndex)"
+          [sticky]="true"
         >
-        <ng-container columnDef="orderNumber">
-          <th bc-header-cell *headerCellDef>
-            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate"></app-truncated-value>
-          </th>
-          <td bc-data-cell *dataCellDef="let element">
-            <app-truncated-value [value]="element.orderNumber"></app-truncated-value>
-          </td>
-        </ng-container>
+          <ng-container columnDef="orderNumber">
+            <th bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.ORDER_NUMBER' | translate"></app-truncated-value>
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
+              <app-truncated-value [value]="element.orderNumber"></app-truncated-value>
+            </td>
+          </ng-container>
 
-        <ng-container columnDef="shortDescription">
-          <th bc-header-cell *headerCellDef [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
-            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate"></app-truncated-value>
-          </th>
-          <td bc-data-cell *dataCellDef="let element">
-            <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
-          </td>
-        </ng-container>
+          <ng-container columnDef="shortDescription">
+            <th bc-header-cell *headerCellDef [class.hagenbach-bischoff]="hasHagenbachBischoffDistribution">
+              <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.SHORT_DESCRIPTION' | translate"></app-truncated-value>
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
+              <app-truncated-value [value]="element.shortDescription | getTranslation"></app-truncated-value>
+            </td>
+          </ng-container>
 
-        <ng-container columnDef="blankRowCount">
-          <th bc-header-cell *headerCellDef>
-            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate"></app-truncated-value>
-          </th>
-          <td bc-data-cell *dataCellDef="let element">
-            <app-truncated-value [value]="element.blankRowCount"></app-truncated-value>
-          </td>
-        </ng-container>
+          <ng-container columnDef="blankRowCount">
+            <th bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST.BLANK_ROW_COUNT' | translate"></app-truncated-value>
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
+              <app-truncated-value [value]="element.blankRowCount"></app-truncated-value>
+            </td>
+          </ng-container>
 
-        <ng-container columnDef="listUnionDescription">
-          <th bc-header-cell *headerCellDef>
-            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate"></app-truncated-value>
-          </th>
-          <td bc-data-cell *dataCellDef="let element">
-            <ng-container *ngTemplateOutlet="listUnionDescriptionCol; context: { $implicit: element.listUnionDescription }"></ng-container>
-          </td>
-        </ng-container>
+          <ng-container columnDef="listUnionDescription">
+            <th bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'PROPORTIONAL_ELECTION.LIST_UNION.TITLE' | translate"></app-truncated-value>
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
+              <ng-container
+                *ngTemplateOutlet="listUnionDescriptionCol; context: { $implicit: element.listUnionDescription }"
+              ></ng-container>
+            </td>
+          </ng-container>
 
-        <ng-container columnDef="subListUnionDescription">
-          <th bc-header-cell *headerCellDef>
-            <app-truncated-value [value]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate"></app-truncated-value>
-          </th>
-          <td bc-data-cell *dataCellDef="let element">
-            <ng-container
-              *ngTemplateOutlet="listUnionDescriptionCol; context: { $implicit: element.subListUnionDescription }"
-            ></ng-container>
-          </td>
-        </ng-container>
+          <ng-container columnDef="subListUnionDescription">
+            <th bc-header-cell *headerCellDef>
+              <app-truncated-value [value]="'PROPORTIONAL_ELECTION.SUB_LIST_UNION.TITLE' | translate"></app-truncated-value>
+            </th>
+            <td bc-data-cell *dataCellDef="let element">
+              <ng-container
+                *ngTemplateOutlet="listUnionDescriptionCol; context: { $implicit: element.subListUnionDescription }"
+              ></ng-container>
+            </td>
+          </ng-container>
 
-        <ng-container columnDef="actions">
-          <th bc-header-cell *headerCellDef></th>
-          <td bc-data-cell *dataCellDef="let element">
-            @if (!locked && !readonly && element !== placeholderList) {
-              <div class="flex">
-                <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
-                @if (!testingPhaseEnded && !locked && !readonly && !proportionalElection.eVotingEverApproved) {
-                  <bc-icon
-                    class="ml-2"
-                    (click)="deleteList(element); $event.stopPropagation()"
-                    icon="trash"
-                    iconColor="error"
-                  ></bc-icon>
-                }
-              </div>
-            }
-          </td>
-        </ng-container>
+          <ng-container columnDef="actions">
+            <th bc-header-cell *headerCellDef></th>
+            <td bc-data-cell *dataCellDef="let element">
+              @if (!locked && !readonly && element !== placeholderList) {
+                <div class="flex">
+                  <bc-icon (click)="editList(element); $event.stopPropagation()" icon="edit"></bc-icon>
+                  @if (!testingPhaseEnded && !locked && !readonly && !proportionalElection.eVotingEverApproved) {
+                    <bc-icon class="ml-2" (click)="deleteList(element); $event.stopPropagation()" icon="trash" iconColor="error"></bc-icon>
+                  }
+                </div>
+              }
+            </td>
+          </ng-container>
 
-        <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
-        <tr bc-data-row
-          *dataRowDef="let row; columns: columns; let i = index"
-          #rowSelection="selectionToggle"
-          selectionToggle
-          [selectionToggleValue]="row"
-          selectionRow
-          [selectionRowValue]="row"
-          (click)="rowSelection.toggle(); selectList(row)"
-          cdkDrag
-          [cdkDragDisabled]="testingPhaseEnded || locked || row === placeholderList"
-          [cdkDragData]="row"
-        ></tr>
-        <ng-template #listUnionDescriptionCol let-element>
-          <!-- 'List union descriptions are validated on the server, they do not contain user-controlled HTML.
-          It is safe to display the description directly as HTML' -->
-          <div class="list-union-description" [innerHTML]="element | safeHtml"></div>
-        </ng-template>
-      </bc-table>
+          <tr bc-header-row *headerRowDef="let row; columns: columns"></tr>
+          <tr
+            bc-data-row
+            *dataRowDef="let row; columns: columns; let i = index"
+            #rowSelection="selectionToggle"
+            selectionToggle
+            [selectionToggleValue]="row"
+            selectionRow
+            [selectionRowValue]="row"
+            (click)="rowSelection.toggle(); selectList(row)"
+            cdkDrag
+            [cdkDragDisabled]="testingPhaseEnded || locked || row === placeholderList"
+            [cdkDragData]="row"
+          ></tr>
+          <ng-template #listUnionDescriptionCol let-element>
+            <!-- 'List union descriptions are validated on the server, they do not contain user-controlled HTML.
+            It is safe to display the description directly as HTML' -->
+            <div class="list-union-description" [innerHTML]="element | safeHtml"></div>
+          </ng-template>
+        </bc-table>
+      </div>
     }
   </div>
 
@@ -149,7 +148,7 @@
         (listDeleted)="handleDeleteList($event.id)"
         [maxCandidateCount]="proportionalElection.numberOfMandates - selectedList.blankRowCount"
         [parties]="parties"
-        >
+      >
       </app-proportional-election-candidates>
     } @else {
       <p class="no-items-message" translate>PROPORTIONAL_ELECTION.LIST.NO_LIST_SELECTED</p>

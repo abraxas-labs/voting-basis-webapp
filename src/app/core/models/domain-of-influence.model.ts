@@ -58,23 +58,13 @@ export function newDomainOfInfluence(): DomainOfInfluence {
     hasEmptyVotingCards: false,
     hideLowerDomainOfInfluencesInReports: false,
     eCollectingEnabled: false,
-    eCollectingEmail: '',
+    eCollectingImportRoot: false,
   } as DomainOfInfluence;
 }
 
 export interface DomainOfInfluence extends Omit<
   DomainOfInfluenceProto.AsObject,
-  | 'info'
-  | 'childrenList'
-  | 'plausibilisationConfiguration'
-  | 'partiesList'
-  | 'superiorAuthorityDomainOfInfluence'
-  | 'eCollectingInitiativeMinSignatureCount'
-  | 'eCollectingInitiativeMaxElectronicSignaturePercent'
-  | 'eCollectingInitiativeNumberOfMembersCommittee'
-  | 'eCollectingReferendumMinSignatureCount'
-  | 'eCollectingReferendumMaxElectronicSignaturePercent'
-  | 'eVoting'
+  'info' | 'childrenList' | 'plausibilisationConfiguration' | 'partiesList' | 'superiorAuthorityDomainOfInfluence' | 'eVoting'
 > {
   createdOn?: Date;
   modifiedOn?: Date;

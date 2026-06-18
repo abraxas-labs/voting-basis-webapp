@@ -24,7 +24,7 @@ export type MajorityElection = Omit<
 > & {
   shortDescription: Map<string, string>;
   officialDescription: Map<string, string>;
-  federalIdentification?: number;
+  federalIdentification: string;
   eVotingApproved?: boolean;
 };
 export { MajorityElectionMandateAlgorithmProto as MajorityElectionMandateAlgorithm };

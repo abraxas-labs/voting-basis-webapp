@@ -1,14 +1,16 @@
 @if (!!ballotQuestion) {
   <div>
-    @if (domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH) {
-      <bc-number
+    @if (
+      domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CH ||
+      domainOfInfluenceType === domainOfInfluenceTypes.DOMAIN_OF_INFLUENCE_TYPE_CT
+      ) {
+      <bc-text
         [label]="'POLITICAL_BUSINESS.FEDERAL_IDENTIFICATION' | translate"
         [readonly]="testingPhaseEnded || readonly || locked"
         [value]="ballotQuestion.federalIdentification"
         (valueChange)="ballotQuestion.federalIdentification = $event; contentChanged.emit()"
-        [max]="federalIdentificationMaxValue"
         [subscriptSizing]="'dynamic'"
-      ></bc-number>
+      ></bc-text>
     }
     @if (eVoting) {
       <div class="form-group">

@@ -8,6 +8,12 @@
       </div>
       <h2 translate>COUNTING_CIRCLE.DOMAIN_OF_INFLUENCE.ASSIGNMENT</h2>
       <div class="form">
+        @if (!isNew) {
+          <bc-readonly [label]="'COUNTING_CIRCLE.ID' | translate">
+            {{ data.id }}
+          </bc-readonly>
+        }
+
         <bc-text
           [label]="'COUNTING_CIRCLE.NAME' | translate"
           [required]="true"

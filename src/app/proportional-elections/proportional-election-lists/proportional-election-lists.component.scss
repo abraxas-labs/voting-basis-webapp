@@ -22,6 +22,11 @@ div.buttons {
   grid-template-columns: 41.5% 4rem 1fr;
 }
 
+.table-container {
+  overflow-y: auto;
+  height: 34rem;
+}
+
 .bc-column-order-number {
   width: 14%;
 }

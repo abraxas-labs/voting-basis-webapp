@@ -249,7 +249,8 @@
             }
             @if (element.type === politicalBusinessTypes.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION
               && (hasAdminWritePermissions || (element.ownerId === tenantId && hasSameTenantWritePermissions))
-              && !element.eVotingApproved) {
+              && !element.eVotingApproved
+              && !contest.testingPhaseEnded) {
               <vo-lib-action-menu-item
                 icon="plus"
                 text="POLITICAL_BUSINESS.ADD_SECONDARY_ELECTION"

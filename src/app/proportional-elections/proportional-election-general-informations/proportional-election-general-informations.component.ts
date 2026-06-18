@@ -11,7 +11,7 @@ import {
   ProportionalElectionMandateAlgorithm,
 } from '../../core/models/proportional-election.model';
 import { PoliticalBusinessGeneralInformationsComponent } from '../../shared/political-business-general-information/political-business-general-informations.component';
-import { DomainOfInfluenceCanton } from '../../core/models/domain-of-influence.model';
+import { DomainOfInfluenceCanton, DomainOfInfluenceType } from '../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-proportional-election-general-informations',
@@ -35,5 +35,14 @@ export class ProportionalElectionGeneralInformationsComponent
 
   public get canSave(): boolean {
     return this.isValid && this.data.numberOfMandates > 0 && !!this.data.mandateAlgorithm;
+  }
+
+  protected domainOfInfluenceTypeChange(domainOfInfluenceType: DomainOfInfluenceType): void {
+    if (domainOfInfluenceType === DomainOfInfluenceType.DOMAIN_OF_INFLUENCE_TYPE_MU) {
+      this.data.federalIdentification = '';
+    }
+
+    this.selectedDomainOfInfluenceType = domainOfInfluenceType;
+    this.contentChanged.emit();
   }
 }

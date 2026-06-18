@@ -23,7 +23,6 @@ export class VoteVariantsOnSingleBallotComponent implements OnInit {
 
   public readonly domainOfInfluenceTypes: typeof DomainOfInfluenceType = DomainOfInfluenceType;
   public readonly maxVariantBallotQuestions: number = 3;
-  public readonly federalIdentificationMaxValue: number = 2147483647;
 
   public ballotQuestionType: typeof BallotQuestionType = BallotQuestionType;
   public mainBallotQuestionTypes: EnumItemDescription<BallotQuestionType>[] = [];
@@ -63,6 +62,7 @@ export class VoteVariantsOnSingleBallotComponent implements OnInit {
         number: 2,
         question: new Map<string, string>(),
         type: BallotQuestionType.BALLOT_QUESTION_TYPE_COUNTER_PROPOSAL,
+        federalIdentification: '',
       });
       this.contentChanged.emit();
     }
@@ -107,6 +107,7 @@ export class VoteVariantsOnSingleBallotComponent implements OnInit {
         nextQuestionNumber === 1
           ? BallotQuestionType.BALLOT_QUESTION_TYPE_MAIN_BALLOT
           : BallotQuestionType.BALLOT_QUESTION_TYPE_COUNTER_PROPOSAL,
+      federalIdentification: '',
     });
     this.updateTieBreakQuestions(ballot);
     this.tryPrefillQuestions();
@@ -140,7 +141,7 @@ export class VoteVariantsOnSingleBallotComponent implements OnInit {
           question: existingQuestions.length > idx ? existingQuestions[idx].question : LanguageService.fillAllLanguages(''),
           question1Number: i + 1,
           question2Number: j + 1,
-          federalIdentification: existingQuestions.length > idx ? existingQuestions[idx].federalIdentification : undefined,
+          federalIdentification: existingQuestions.length > idx ? existingQuestions[idx].federalIdentification : '',
         });
         idx++;
       }

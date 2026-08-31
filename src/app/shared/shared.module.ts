@@ -88,6 +88,9 @@ import { MatDialogClose } from '@angular/material/dialog';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ProportionalElectionMandateAlgorithmSelectionComponent } from './proportional-election-mandate-algorithm-selection/proportional-election-mandate-algorithm-selection.component';
 import { VoteResultAlgorithmSelectionComponent } from './vote-result-algorithm-selection/vote-result-algorithm-selection.component';
+import { CertificatesComponent } from './certificates/certificates.component';
+import { CertificateCardComponent } from './certificates/certificate-card/certificate-card.component';
+import { UploadCertificateDialogComponent } from './certificates/upload-certificate-dialog/upload-certificate-dialog.component';
 
 const components = [
   ContactPersonEditComponent,
@@ -126,6 +129,9 @@ const components = [
   AssignedCountingCirclesDialogComponent,
   ProportionalElectionMandateAlgorithmSelectionComponent,
   VoteResultAlgorithmSelectionComponent,
+  CertificatesComponent,
+  CertificateCardComponent,
+  UploadCertificateDialogComponent,
 ];
 
 const pipes = [GetTranslationPipe, SafeHtmlPipe, CanEditBallotGroupPipe];

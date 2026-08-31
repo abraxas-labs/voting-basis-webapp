@@ -22,6 +22,7 @@
     #editComponent
     (applied)="checkAllValid()"
     [majorityElection]="majorityElection"
+    [secondaryMajorityElections]="secondaryMajorityElectionsByPrimaryElectionId[majorityElection.getElection()!.getId()] ?? []"
     [contestDomainOfInfluenceId]="contestDomainOfInfluenceId">
   </app-import-majority-election-edit>
 }

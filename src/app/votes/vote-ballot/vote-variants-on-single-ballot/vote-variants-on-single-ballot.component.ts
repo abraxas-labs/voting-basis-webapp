@@ -43,7 +43,7 @@ export class VoteVariantsOnSingleBallotComponent implements OnInit {
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   public ballot?: Ballot;
-  private _eVoting?: boolean;
+  private _showQuestion?: boolean;
 
   @Input()
   public set vote(value: Vote) {
@@ -72,13 +72,13 @@ export class VoteVariantsOnSingleBallotComponent implements OnInit {
   }
 
   @Input()
-  public set eVoting(value: boolean | undefined) {
-    this._eVoting = value;
+  public set showQuestion(value: boolean | undefined) {
+    this._showQuestion = value;
     this.tryPrefillQuestions();
   }
 
-  public get eVoting(): boolean | undefined {
-    return this._eVoting;
+  public get showQuestion(): boolean | undefined {
+    return this._showQuestion;
   }
 
   public get canSave(): boolean {
@@ -149,7 +149,7 @@ export class VoteVariantsOnSingleBallotComponent implements OnInit {
   }
 
   public tryPrefillQuestions(): void {
-    if (!this.ballot || this._eVoting === undefined || this._eVoting) {
+    if (!this.ballot || this._showQuestion === undefined || this._showQuestion) {
       return;
     }
 

@@ -75,7 +75,9 @@ export class MajorityElectionCandidatesImportDialogComponent {
 
     for (let i = 1; i <= this.candidates.length; i++) {
       candidates[i - 1].position = i;
-      candidates[i - 1].number = '' + i;
+
+      // add leading zeros if they exist
+      candidates[i - 1].number = String(i).padStart(candidates[i - 1].number.length, '0');
     }
 
     for (const importCandidate of this.importCandidates) {

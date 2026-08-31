@@ -137,6 +137,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       eCollectingEnabled: doi.getECollectingEnabled(),
       eCollectingImportRoot: doi.getECollectingImportRoot(),
       eVoting: doi.getEVoting()?.getValue(),
+      eCounting: doi.getECounting()?.getValue(),
     };
   }
 

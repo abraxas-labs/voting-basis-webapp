@@ -69,7 +69,7 @@
             <div class="remove-button-container"></div>
           }
         </div>
-        @if (eVoting) {
+        @if (showQuestion) {
           <app-translated-textarea
             [readonly]="locked || readonly"
             [maxlength]="700"
@@ -144,7 +144,7 @@
           </bc-text>
           <div class="placeholder"></div>
         </div>
-        @if (eVoting) {
+        @if (showQuestion) {
           <app-translated-textarea
             [readonly]="locked || readonly"
             [maxlength]="700"

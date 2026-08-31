@@ -7,6 +7,7 @@
 import {
   ContestImport,
   MajorityElectionImport,
+  SecondaryMajorityElectionImport,
   ProportionalElectionImport,
   ProportionalElectionListImport,
   VoteImport,
@@ -17,6 +18,7 @@ export { ImportType };
 export { ContestImport };
 export { ProportionalElectionImport };
 export { MajorityElectionImport };
+export { SecondaryMajorityElectionImport };
 export { VoteImport };
 export { ProportionalElectionListImport };
 

@@ -7,6 +7,8 @@
 import { Component, Input, QueryList, ViewChildren } from '@angular/core';
 import { ContestImport, MajorityElectionImport, ProportionalElectionImport, VoteImport } from '../../../core/models/import.model';
 import { ImportPoliticalBusinessEditComponent } from '../import-political-business-edit/import-political-business-edit.component';
+import { SecondaryMajorityElectionImport } from '@abraxas/voting-basis-service-proto/grpc/models/import_pb';
+import { groupBy } from '../../../core/utils/array.utils';
 
 @Component({
   selector: 'app-import-political-businesses',
@@ -16,6 +18,7 @@ import { ImportPoliticalBusinessEditComponent } from '../import-political-busine
 })
 export class ImportPoliticalBusinessesComponent {
   public majorityElections: MajorityElectionImport[] = [];
+  public secondaryMajorityElectionsByPrimaryElectionId: Record<string, SecondaryMajorityElectionImport[]> = {};
   public proportionalElections: ProportionalElectionImport[] = [];
   public votes: VoteImport[] = [];
   public allValid: boolean = false;
@@ -29,6 +32,11 @@ export class ImportPoliticalBusinessesComponent {
   @Input()
   public set contestImport(contestImport: ContestImport) {
     this.majorityElections = contestImport.getMajorityElectionsList();
+    this.secondaryMajorityElectionsByPrimaryElectionId = groupBy(
+      contestImport.getSecondaryMajorityElectionsList(),
+      x => x.getElection()!.getPrimaryMajorityElectionId(),
+      x => x,
+    );
     this.proportionalElections = contestImport.getProportionalElectionsList();
     this.votes = contestImport.getVotesList();
   }

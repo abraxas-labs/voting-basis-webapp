@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.65.0`)
+# ✨ Changelog (`v3.69.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.65.0
-Previous version ---- v3.64.0
+This version -------- v3.69.0
+Previous version ---- v3.65.0
 Initial version ----- v1.23.0
-Total commits ------- 12
+Total commits ------- 6
 ```
+
+## [v3.69.0] - 2026-08-12
+
+### 🆕 Added
+
+- add monitoring canton settings
+
+## [v3.68.2] - 2026-08-11
+
+### 🔄 Changed
+
+- handle import live updates correctly for secondary majority elections
+
+## [v3.68.1] - 2026-07-29
+
+### 🔄 Changed
+
+- show no question on e-voting and e-counting votes
+
+## [v3.68.0] - 2026-07-22
+
+### 🆕 Added
+
+- support custom header color
+
+## [v3.67.0] - 2026-07-01
+
+### 🆕 Added
+
+- add canton settings e-counting certificate upload
+
+## [v3.66.0] - 2026-06-30
+
+### 🆕 Added
+
+- support secondary majority election imports
 
 ## [v3.65.0] - 2026-06-16
 

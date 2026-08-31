@@ -61,11 +61,13 @@ export class PoliticalBusinessImportDialogComponent {
     }
 
     const majorityElections = flatMap(files.map(c => c.contest.getMajorityElectionsList()));
+    const secondaryMajorityElections = flatMap(files.map(c => c.contest.getSecondaryMajorityElectionsList()));
     const proportionalElections = flatMap(files.map(c => c.contest.getProportionalElectionsList()));
     const votes = flatMap(files.map(c => c.contest.getVotesList()));
 
     this.contestImport = new ContestImport();
     this.contestImport.setMajorityElectionsList(majorityElections);
+    this.contestImport.setSecondaryMajorityElectionsList(secondaryMajorityElections);
     this.contestImport.setProportionalElectionsList(proportionalElections);
     this.contestImport.setVotesList(votes);
   }

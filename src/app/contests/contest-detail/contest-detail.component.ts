@@ -549,8 +549,13 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       case 'ProportionalElectionUnionDeleted':
       case 'ElectionGroupCreated':
       case 'ElectionGroupDeleted': {
-        this.contest = await this.contestService.get(this.contest.id);
-        this.politicalBusinessSummaries = await this.contestService.listPoliticalBusinessSummaries(this.contest.id);
+        // only the primary election needs to be updated,
+        // since the election group number is already updated for the secondary election during creation / deletion
+        const election = await this.contestService.getPoliticalBusinessSummary(
+          PoliticalBusinessType.POLITICAL_BUSINESS_TYPE_MAJORITY_ELECTION,
+          politicalBusinessId,
+        );
+        this.replacePoliticalBusinessInUi(election);
         this.updatePoliticalBusinessesList();
         break;
       }

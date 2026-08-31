@@ -85,7 +85,7 @@
           (valueChange)="ballot.officialDescription = $event; contentChanged.emit()"
           [singleLanguageInput]="!eVoting"
         ></app-translated-textarea>
-        @if (eVoting) {
+        @if (showQuestion) {
           <app-translated-textarea
             [label]="'VOTE.QUESTION.TITLE_STANDARD' | translate"
             [readonly]="locked || readonly"

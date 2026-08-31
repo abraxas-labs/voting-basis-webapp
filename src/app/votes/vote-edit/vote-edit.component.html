@@ -35,7 +35,8 @@
                        [readonly]="!canEdit"
                        [voteTypeImmutable]="voteTypeImmutable"
                        [multipleVoteBallotsEnabled]="contestDomainOfInfluenceDefaults.multipleVoteBallotsEnabled"
-                       [eVoting]="eVoting"
+                       [eVoting]="!!contestEVoting"
+                       [showQuestion]="!!((contestEVoting && voteDomainOfInfluence?.eVoting) || voteDomainOfInfluence?.eCounting)"
                        [domainOfInfluenceType]="step1?.selectedDomainOfInfluenceType"
                        (contentChanged)="contentChanged()">
       </app-vote-ballot>

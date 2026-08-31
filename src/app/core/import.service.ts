@@ -75,12 +75,14 @@ export class ImportService extends GrpcService<ImportServicePromiseClient> {
   public async importPoliticalBusinesses(contestId: string, contestImport: ContestImport): Promise<void> {
     const votes = contestImport.getVotesList();
     const majorityElections = contestImport.getMajorityElectionsList();
+    const secondaryMajorityElections = contestImport.getSecondaryMajorityElectionsList();
     const proportionalElections = contestImport.getProportionalElectionsList();
 
     const req = new ImportPoliticalBusinessesRequest();
     req.setContestId(contestId);
     req.setVotesList(votes);
     req.setMajorityElectionsList(majorityElections);
+    req.setSecondaryMajorityElectionsList(secondaryMajorityElections);
     req.setProportionalElectionsList(proportionalElections);
 
     await this.request(

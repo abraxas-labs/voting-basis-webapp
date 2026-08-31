@@ -21,6 +21,7 @@ import { HasUnsavedChanges } from '../../core/guards/has-unsaved-changes.guard';
 import { PermissionService } from '../../core/permission.service';
 import { Permissions } from '../../core/models/permissions.model';
 import { PermissionUiService } from '../../core/permission-ui.service';
+import { DomainOfInfluence } from '../../core/models/domain-of-influence.model';
 
 @Component({
   selector: 'app-vote-edit',
@@ -57,12 +58,13 @@ export class VoteEditComponent implements OnInit, HasUnsavedChanges {
   public isNew: boolean = false;
   public testingPhaseEnded: boolean = false;
   public locked: boolean = false;
-  public eVoting?: boolean;
+  public contestEVoting: boolean = false;
   public voteTypeImmutable: boolean = false;
   public isVariantsBallot: boolean = false;
   public contestDomainOfInfluenceDefaults: DomainOfInfluenceCantonDefaults = {} as DomainOfInfluenceCantonDefaults;
   public hasChanges: boolean = false;
   public canEdit: boolean = false;
+  public voteDomainOfInfluence?: DomainOfInfluence;
 
   private persistedData: Vote = {} as Vote;
 
@@ -76,15 +78,15 @@ export class VoteEditComponent implements OnInit, HasUnsavedChanges {
       this.data.contestId = this.data.contestId || this.route.snapshot.params.contestId;
       this.refreshIsVariantsBallot();
 
-      const domainOfInfluence = !this.isNew ? await this.domainOfInfluenceService.get(this.data.domainOfInfluenceId) : undefined;
+      this.voteDomainOfInfluence = !this.isNew ? await this.domainOfInfluenceService.get(this.data.domainOfInfluenceId) : undefined;
 
       const { testingPhaseEnded, locked, eVoting, domainOfInfluenceId } = await this.contestService.get(this.data.contestId);
       this.testingPhaseEnded = testingPhaseEnded;
       this.locked =
         Boolean(locked) ||
         (Boolean(this.data.eVotingApproved) && !testingPhaseEnded) ||
-        !(await this.permissionUiService.hasPoliticalBusinessWritePermissions(domainOfInfluence));
-      this.eVoting = eVoting;
+        !(await this.permissionUiService.hasPoliticalBusinessWritePermissions(this.voteDomainOfInfluence));
+      this.contestEVoting = eVoting;
       this.voteTypeImmutable = this.data.ballots.length > 0 && this.data.ballots.some(b => !!b.id);
       this.canEdit = await this.permissionService.hasPermission(Permissions.Vote.Update);
       this.contestDomainOfInfluenceDefaults = await this.domainOfInfluenceService.getCantonDefaults(domainOfInfluenceId);
@@ -114,6 +116,11 @@ export class VoteEditComponent implements OnInit, HasUnsavedChanges {
 
       const newlyCreated = this.isNew;
       this.isNew = false;
+
+      if (this.voteDomainOfInfluence?.id != this.data.domainOfInfluenceId) {
+        this.voteDomainOfInfluence = await this.domainOfInfluenceService.get(this.data.domainOfInfluenceId);
+      }
+
       this.stepper.next();
 
       // change URL from '/new' to '/{id}' without reloading the view

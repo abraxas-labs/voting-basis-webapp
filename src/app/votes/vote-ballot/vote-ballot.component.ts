@@ -34,7 +34,10 @@ export class VoteBallotComponent {
   public readonly: boolean = false;
 
   @Input()
-  public eVoting?: boolean;
+  public showQuestion: boolean = false;
+
+  @Input()
+  public eVoting: boolean = false;
 
   @Input()
   public domainOfInfluenceType?: DomainOfInfluenceType;

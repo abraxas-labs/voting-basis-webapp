@@ -26,7 +26,8 @@
       "MSG": "Sind Sie sicher, dass Sie die Seite ohne zu Speichern verlassen wollen?"
     },
     "RELOAD": "Neu laden",
-    "NO_PERMISSIONS": "Keine Berechtigung"
+    "NO_PERMISSIONS": "Keine Berechtigung",
+    "IMPORT": "Importieren"
   },
   "ACTIONS": {
     "EDIT": "Bearbeiten",
@@ -65,7 +66,8 @@
     "SecondaryMajorityElectionCreateWithActiveElectionsAndBallotGroupsException": "Es darf nur eine Nebenwahl erstellt werden, wenn die Hauptwahl und deren Nebenwahlen nicht aktiv sind oder keine Wahlzettel-Gruppen existieren.",
     "SecondaryMajorityElectionCandidateNotSelectedInPrimaryElectionException": "Wenn ein Kandidat aus der Hauptwahl in der Nebenwahl ausgewählt wird, muss er auch in der Hauptwahl ausgewählt sein.",
     "MajorityElectionActiveBallotGroupCreateException": "Es darf nur eine Wahlzettel-Gruppe erstellt werden, wenn die Hauptwahl und deren Nebenwahlen nicht aktiv sind.",
-    "PoliticalBusinessNotCompleteException": "Das Geschäft wurde noch nicht vollständig erfasst."
+    "PoliticalBusinessNotCompleteException": "Das Geschäft wurde noch nicht vollständig erfasst.",
+    "X509ChainBuilderException": "Die kryptografische Zertifikatskette des E-Counting Imports konnte nicht validiert werden."
   },
   "CONTACT_PERSON": {
     "PHONE": "Telefon",
@@ -976,14 +978,14 @@
     "AUTHORITY": "Zuständige Behörde",
     "NEW": "Kantonale Einstellungen erstellen",
     "EDIT": "Kantonale Einstellungen bearbeiten",
-    "VOTE":  {
+    "VOTE": {
       "TITLE": "Abstimmung",
       "MULTIPLE_VOTE_BALLOTS_ENABLED": {
         "TITLE": "Mehrfachvorlagen auf separaten Stimmzetteln",
         "INFO": "Wenn aktiviert, kann die Vorlage auf mehrere Stimmzettel verteilt werden (separate Auszählung je Frage möglich)."
       }
     },
-    "PROPORTIONAL_ELECTION":  {
+    "PROPORTIONAL_ELECTION": {
       "TITLE": "Proporzwahl",
       "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden",
       "MANDATE_ALGORITHM": "Sitzverteilungsverfahren"
@@ -1032,9 +1034,18 @@
         "5": "AR"
       }
     },
+    "AUSMITTLUNG": {
+      "TITLE": "Ausmittlung",
+      "MONITORING_AUTO_SHOW_POLITICAL_BUSINESSES": "Monitoring: Bei Kontrollansicht alle Geschäfte aufklappen",
+      "MONITORING_USE_IMPROVED_UI": "Monitoring: Ansichtsoptimierungen (Header Sticky / Keine Überschriften)"
+    },
     "VOTING_CARDS": {
       "TITLE": "Erfassung Stimmrechtsausweise",
       "NONE_SELECTED": "Mind. eine von Art Stimmrechtsausweise muss erfasst werden."
+    },
+    "E_COUNTING": {
+      "TITLE": "E-Counting",
+      "IMPORT_CERTIFICATE": "Zertifikat importieren"
     },
     "VOTING_DOCUMENTS": {
       "TITLE": "Stimmunterlagen",
@@ -1073,6 +1084,24 @@
     "2_INVALID": "Brieflich ungültig",
     "3": "Elektronisch",
     "4": "Vorzeitig"
+  },
+  "CERTIFICATE": {
+    "TITLE": "Zertifikat",
+    "ROOT_TITLE": "Stammzertifikat",
+    "INTERMEDIATE_TITLE": "Zwischenzertifikat",
+    "DIALOG_TITLE": "Zertifikat importieren",
+    "IMPORT": "Zertifikat importieren",
+    "IMPORTED": "Zertifikat erfolgreich importiert",
+    "NOT_AFTER": "Gültig bis",
+    "THUMBPRINT": "Fingerprint",
+    "CA_THUMBPRINT": "CA Fingerprint",
+    "SUBJECT": "Distinguished Name",
+    "DAYS_REMAINING": "Noch {{daysRemaining}} Tage gültig",
+    "DAYS_REMAINING_0": "Nicht mehr gültig",
+    "COPY": "KOPIEREN FINGERPRINT ZERTIFIKAT",
+    "COPIED": "Fingerprint kopiert",
+    "IMPORTED_BY": "Importiert durch",
+    "IMPORTED_AT": "Importiert am"
   },
   "ACTIVITY": {
     "TITLE": "Aktivitäten",

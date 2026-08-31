@@ -13,6 +13,7 @@ import {
   CreateCantonSettingsRequest,
   GetCantonSettingsRequest,
   ListCantonSettingsRequest,
+  SetCantonSettingsECountingCertificateChainRequest,
   UpdateCantonSettingsRequest,
 } from '@abraxas/voting-basis-service-proto/grpc/requests/canton_settings_requests_pb';
 import { GrpcBackendService, GrpcService } from '@abraxas/voting-lib';
@@ -20,10 +21,12 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
   CantonSettings,
+  CantonSettingsProto,
   CantonSettingsVotingCardChannel,
   CountingCircleResultStateDescription,
   DomainOfInfluenceCantonDefaults,
 } from './models/canton-settings.model';
+import { CertificateChain, mapToCertificateChain } from './models/certificate.model';
 
 @Injectable({
   providedIn: 'root',
@@ -47,13 +50,25 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     return this.requestEmptyResp(c => c.update, this.mapToUpdateCantonSettingsRequest(data));
   }
 
+  public setECountingCertificateChain(id: string, rawPem: string): Promise<CertificateChain> {
+    const req = new SetCantonSettingsECountingCertificateChainRequest();
+    req.setId(id);
+    req.setRawPem(rawPem);
+
+    return this.request(
+      c => c.setECountingCertificateChain,
+      req,
+      r => mapToCertificateChain(r),
+    );
+  }
+
   public get(id: string): Promise<CantonSettings> {
     const req = new GetCantonSettingsRequest();
     req.setId(id);
     return this.request(
       c => c.get,
       req,
-      r => r.toObject(),
+      r => this.mapToCantonSettings(r),
     );
   }
 
@@ -62,7 +77,7 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     return this.request(
       c => c.list,
       req,
-      r => r.getCantonSettingsListList().map(c => c.toObject()),
+      r => r.getCantonSettingsListList().map(c => this.mapToCantonSettings(c)),
     );
   }
 
@@ -114,6 +129,8 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setDomainOfInfluencePublishResultsOptionEnabled(data.domainOfInfluencePublishResultsOptionEnabled);
     result.setHideOccupationTitle(data.hideOccupationTitle);
     result.setEnableAdditionalCandidateFields(data.enableAdditionalCandidateFields);
+    result.setMonitoringAutoShowPoliticalBusinesses(data.monitoringAutoShowPoliticalBusinesses);
+    result.setMonitoringUseImprovedUi(data.monitoringUseImprovedUi);
     return result;
   }
 
@@ -151,6 +168,8 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setSecondaryMajorityElectionOnSeparateBallot(data.secondaryMajorityElectionOnSeparateBallot);
     result.setHideOccupationTitle(data.hideOccupationTitle);
     result.setEnableAdditionalCandidateFields(data.enableAdditionalCandidateFields);
+    result.setMonitoringAutoShowPoliticalBusinesses(data.monitoringAutoShowPoliticalBusinesses);
+    result.setMonitoringUseImprovedUi(data.monitoringUseImprovedUi);
     return result;
   }
 
@@ -174,5 +193,14 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
         obj.setDescription(x.description);
         return obj;
       });
+  }
+
+  private mapToCantonSettings(proto: CantonSettingsProto): CantonSettings {
+    return {
+      ...proto.toObject(),
+      eCountingCertificateChain: proto.getECountingCertificateChain()
+        ? mapToCertificateChain(proto.getECountingCertificateChain()!)
+        : undefined,
+    };
   }
 }

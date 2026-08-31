@@ -1,0 +1,48 @@
+@use '@abraxas/voting-lib/style/color' as *;
+@use '@abraxas/voting-lib/style/spacing' as *;
+
+.file-container {
+  min-height: 15rem;
+  border: 2px dashed $color-border-soft;
+  border-radius: 10px;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.dragging {
+    border-color: $color-border-secondary;
+  }
+
+  div {
+    text-align: center;
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 4rem 1fr;
+}
+
+.bc-column-actions {
+  width: 2rem;
+}
+
+.file-chip {
+  @extend .my-1;
+
+  display: inline-block;
+  padding: 0.25rem 0.25rem 0.25rem 1rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5rem;
+  background-color: $color-surface-bg-neutral;
+
+  .file-label {
+    padding-right: 0.25rem;
+  }
+}

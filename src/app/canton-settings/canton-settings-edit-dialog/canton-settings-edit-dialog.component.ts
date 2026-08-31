@@ -28,6 +28,10 @@ import { Subscription } from 'rxjs';
 import { cloneDeep, isEqual } from 'lodash';
 import { groupBySingle } from '../../core/utils/array.utils';
 import { CountingCircleResultState } from '@abraxas/voting-basis-service-proto/grpc/shared/counting_circle_pb';
+import {
+  UploadCertificateDialogComponent,
+  UploadCertificateDialogData,
+} from '../../shared/certificates/upload-certificate-dialog/upload-certificate-dialog.component';
 
 const availableVotingCardChannels: CantonSettingsVotingCardChannel[] = [
   { votingChannel: VotingChannel.VOTING_CHANNEL_BY_MAIL, valid: true },
@@ -185,12 +189,29 @@ export class CantonSettingsEditDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  public async importECountingCertificate(): Promise<void> {
+    const dialogData: UploadCertificateDialogData = {
+      saveAction: async rawPem => {
+        const certificateChain = await this.cantonSettingsService.setECountingCertificateChain(this.data.id, rawPem);
+        this.data.eCountingCertificateChain = certificateChain;
+        this.snackbarService.success(this.i18n.instant('CERTIFICATE.IMPORTED'));
+      },
+    };
+    this.dialogService.open(UploadCertificateDialogComponent, dialogData);
+  }
+
   public async closeWithUnsavedChangesCheck(): Promise<void> {
     if (await this.leaveDialogOpen()) {
       return;
     }
 
-    this.dialogRef.close();
+    // certificates are imported outside of the normal update flow.
+    const cantonSettings = cloneDeep(this.originalCantonSettings);
+    cantonSettings.eCountingCertificateChain = this.data.eCountingCertificateChain;
+
+    this.dialogRef.close({
+      cantonSettings,
+    });
   }
 
   public contentChanged(): void {

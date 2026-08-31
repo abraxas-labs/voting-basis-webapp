@@ -12,7 +12,7 @@
         [subscriptSizing]="'dynamic'"
       ></bc-text>
     }
-    @if (eVoting) {
+    @if (showQuestion) {
       <div class="form-group">
         <bc-label [label]="'VOTE.QUESTION.TITLE_STANDARD' | translate: ballotQuestion"></bc-label>
         <app-translated-textarea

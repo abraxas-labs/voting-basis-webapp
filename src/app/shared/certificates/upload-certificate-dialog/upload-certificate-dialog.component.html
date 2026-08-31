@@ -1,0 +1,41 @@
+<vo-lib-dialog [header]="'CERTIFICATE.DIALOG_TITLE' | translate" (dialogClose)="close()">
+  <div content>
+    <div class="file-container" [class.dragging]="draggingFiles">
+      <div>
+        <p translate>IMPORT.DRAG_FILE</p>
+        <p translate>IMPORT.OR</p>
+        <input #fileInput
+               type="file"
+               (change)="addFilesFromEvent($event); fileInput.value = '';"
+               accept=".pem"
+               [multiple]="false">
+        <bc-button (buttonClick)="fileInput.click()"
+                   [label]="'IMPORT.CHOOSE_FILE' | translate"
+                   variant="tertiary"
+                   icon="upload"></bc-button>
+
+        @if (!!file && !!file.name) {
+          <div class="file-chip-container">
+            <div class="file-chip">
+              <span class="file-label">{{ file.name }}</span>
+              <bc-icon-button
+                class="remove"
+                [icon]="'remove'"
+                (buttonClick)="removeFile()"
+                [disabled]="saving"
+                [variant]="'tertiary'"></bc-icon-button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <vo-lib-button-bar footer
+                     [saveLabel]="'APP.IMPORT' | translate"
+                     (save)="save()"
+                     [saving]="saving"
+                     [canSave]="!!file"
+                     [cancelLabel]="'APP.CANCEL' | translate"
+                     (cancel)="close()"></vo-lib-button-bar>
+</vo-lib-dialog>

@@ -20,11 +20,15 @@ import { VotingChannel } from '@abraxas/voting-basis-service-proto/grpc/shared/v
 import { DomainOfInfluenceCanton } from './domain-of-influence.model';
 import { PoliticalBusinessUnionType } from './political-business-union.model';
 import { CountingCircleResultState } from '@abraxas/voting-basis-service-proto/grpc/shared/counting_circle_pb';
+import { CertificateChain } from './certificate.model';
 
 export { CantonSettingsProto };
 export { SwissAbroadVotingRightProto as SwissAbroadVotingRight };
 
-export type CantonSettings = CantonSettingsProto.AsObject;
+export interface CantonSettings extends Omit<CantonSettingsProto.AsObject, 'eCountingCertificateChain'> {
+  eCountingCertificateChain?: CertificateChain;
+}
+
 export type DomainOfInfluenceCantonDefaults = DomainOfInfluenceCantonDefaultsProto.AsObject;
 export {
   CantonMajorityElectionAbsoluteMajorityAlgorithmProto as CantonMajorityElectionAbsoluteMajorityAlgorithm,
@@ -88,6 +92,8 @@ export function newCantonSettings(): CantonSettings {
     secondaryMajorityElectionOnSeparateBallot: false,
     hideOccupationTitle: false,
     enableAdditionalCandidateFields: false,
+    monitoringAutoShowPoliticalBusinesses: false,
+    monitoringUseImprovedUi: false,
   };
 }
 

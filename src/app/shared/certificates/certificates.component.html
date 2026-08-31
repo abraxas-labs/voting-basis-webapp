@@ -1,0 +1,46 @@
+@if (certificateChain) {
+  <div class="container">
+    @for(certificateInfo of certificateChain.infos; track certificateInfo) {
+    <app-certificate-card
+      [notAfter]="certificateInfo.notAfter"
+      [numberOfDaysWarning]="14"
+      [numberOfDaysError]="5"
+      [label]="!certificateInfo.caThumbprint
+        ? 'CERTIFICATE.ROOT_TITLE'
+        : 'CERTIFICATE.INTERMEDIATE_TITLE'"
+    >
+      <bc-label [label]="'CERTIFICATE.NOT_AFTER' | translate"></bc-label>
+      <span class="detail">{{ certificateInfo.notAfter | date: 'dd.MM.yyyy HH:mm:ss' }}</span>
+
+      @if (certificateInfo.caThumbprint) {
+        <bc-label [label]="'CERTIFICATE.CA_THUMBPRINT' | translate"></bc-label>
+        <span class="detail">{{ certificateInfo.caThumbprint }}</span>
+      }
+
+      <bc-label [label]="'CERTIFICATE.SUBJECT' | translate"></bc-label>
+      <span class="detail">{{ certificateInfo.subject }}</span>
+      <bc-label [label]="'CERTIFICATE.THUMBPRINT' | translate"></bc-label>
+      <span class="detail">{{ certificateInfo.thumbprint }}</span>
+      <bc-label [label]="'CERTIFICATE.IMPORTED_AT' | translate"></bc-label>
+      <span class="detail">{{ certificateChain.importedAt | date: 'dd.MM.yyyy HH:mm:ss' }}</span>
+      <bc-label [label]="'CERTIFICATE.IMPORTED_BY' | translate"></bc-label>
+      <span class="detail">{{ certificateChain.importedBy.fullName }}</span>
+
+      <bc-button footer
+                 icon="copy"
+                 variant="tertiary"
+                 (buttonClick)="copy(certificateInfo.thumbprint)"
+                 [label]="'CERTIFICATE.COPY' | translate"></bc-button>
+    </app-certificate-card>
+    }
+  </div>
+}
+
+<bc-button
+  icon="plus"
+  class="block mt-2"
+  variant="tertiary"
+  (buttonClick)="importClick.emit()"
+  [disabled]="disabled"
+  [label]="'CERTIFICATE.IMPORT' | translate"
+></bc-button>

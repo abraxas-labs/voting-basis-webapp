@@ -264,6 +264,22 @@
       </bc-checkbox>
     }
 
+    <h2 class="title" translate>CANTON_SETTINGS.AUSMITTLUNG.TITLE</h2>
+    <bc-checkbox [checked]="data.monitoringAutoShowPoliticalBusinesses"
+                 (checkedChange)="data.monitoringAutoShowPoliticalBusinesses = $event; contentChanged()"
+                 [disabled]="readonly"
+                 class="full-width"
+                 [label]="'CANTON_SETTINGS.AUSMITTLUNG.MONITORING_AUTO_SHOW_POLITICAL_BUSINESSES' | translate"
+                 [subscriptSizing]="'dynamic'">
+    </bc-checkbox>
+    <bc-checkbox [checked]="data.monitoringUseImprovedUi"
+                 (checkedChange)="data.monitoringUseImprovedUi = $event; contentChanged()"
+                 [disabled]="readonly"
+                 class="full-width"
+                 [label]="'CANTON_SETTINGS.AUSMITTLUNG.MONITORING_USE_IMPROVED_UI' | translate"
+                 [subscriptSizing]="'dynamic'">
+    </bc-checkbox>
+
     <h2 class="title" translate>CANTON_SETTINGS.VOTING_CARDS.TITLE</h2>
     @if (!votingCardChannels.atLeastOneChecked) {
       <p
@@ -278,6 +294,16 @@
         class="full-width"
         [subscriptSizing]="'dynamic'">
       </bc-checkbox>
+    }
+
+    @if(!isNew) {
+      <h2 class="title" translate>CANTON_SETTINGS.E_COUNTING.TITLE</h2>
+
+      <app-certificates
+        [certificateChain]="data.eCountingCertificateChain"
+        (importClick)="importECountingCertificate()"
+        [disabled]="readonly"
+      ></app-certificates>
     }
 
     <h2 class="title" translate>CANTON_SETTINGS.VOTING_DOCUMENTS.TITLE</h2>

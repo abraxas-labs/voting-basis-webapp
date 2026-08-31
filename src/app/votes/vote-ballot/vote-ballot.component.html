@@ -16,7 +16,7 @@
       @case (userVoteTypes.StandardVote) {
         <app-vote-standard-ballot
           (contentChanged)="contentChanged.emit()"
-          [eVoting]="eVoting"
+          [showQuestion]="showQuestion"
           [locked]="locked"
           [readonly]="readonly"
           [testingPhaseEnded]="testingPhaseEnded"
@@ -26,7 +26,7 @@
       @case (userVoteTypes.VariantQuestionsOnSingleBallot) {
         <app-vote-variants-on-single-ballot
           (contentChanged)="contentChanged.emit()"
-          [eVoting]="eVoting"
+          [showQuestion]="showQuestion"
           [locked]="locked"
           [readonly]="readonly"
           [testingPhaseEnded]="testingPhaseEnded"
@@ -36,6 +36,7 @@
       @case (userVoteTypes.VariantQuestionsOnMultipleBallots) {
         <app-vote-variants-on-multiple-ballots
           (contentChanged)="contentChanged.emit()"
+          [showQuestion]="showQuestion"
           [eVoting]="eVoting"
           [locked]="locked"
           [readonly]="readonly"

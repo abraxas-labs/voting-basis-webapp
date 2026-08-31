@@ -85,12 +85,14 @@ export class ImportContestEditComponent implements OnInit {
     contest.setEndOfTestingPhase(endOfTestingPhase);
 
     const majorityElections = flatMap(this._importFiles.map(c => c.contest.getMajorityElectionsList()));
+    const secondaryMajorityElections = flatMap(this._importFiles.map(c => c.contest.getSecondaryMajorityElectionsList()));
     const proportionalElections = flatMap(this._importFiles.map(c => c.contest.getProportionalElectionsList()));
     const votes = flatMap(this._importFiles.map(c => c.contest.getVotesList()));
 
     const contestImport = new ContestImport();
     contestImport.setContest(contest);
     contestImport.setMajorityElectionsList(majorityElections);
+    contestImport.setSecondaryMajorityElectionsList(secondaryMajorityElections);
     contestImport.setProportionalElectionsList(proportionalElections);
     contestImport.setVotesList(votes);
     this.contestImport.emit(contestImport);

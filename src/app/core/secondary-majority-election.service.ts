@@ -47,13 +47,22 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     super(MajorityElectionServicePromiseClient, environment, grpcBackend);
   }
 
+  public static mapToSecondaryMajorityElection(election: SecondaryMajorityElectionProto): SecondaryMajorityElection {
+    return {
+      ...election.toObject(),
+      shortDescription: toJsMap(election.getShortDescriptionMap()),
+      officialDescription: toJsMap(election.getOfficialDescriptionMap()),
+      eVotingApproved: election.getEVotingApproved()?.getValue(),
+    };
+  }
+
   public get(id: string): Promise<SecondaryMajorityElection> {
     const request = new GetSecondaryMajorityElectionRequest();
     request.setId(id);
     return this.request(
       c => c.getSecondaryMajorityElection,
       request,
-      r => this.mapToSecondaryMajorityElection(r),
+      r => SecondaryMajorityElectionService.mapToSecondaryMajorityElection(r),
     );
   }
 
@@ -63,7 +72,7 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
     return this.request(
       c => c.listSecondaryMajorityElections,
       request,
-      r => r.getSecondaryMajorityElectionsList().map(e => this.mapToSecondaryMajorityElection(e)),
+      r => r.getSecondaryMajorityElectionsList().map(e => SecondaryMajorityElectionService.mapToSecondaryMajorityElection(e)),
     );
   }
 
@@ -160,15 +169,6 @@ export class SecondaryMajorityElectionService extends GrpcService<MajorityElecti
       req,
       x => x,
     );
-  }
-
-  private mapToSecondaryMajorityElection(election: SecondaryMajorityElectionProto): SecondaryMajorityElection {
-    return {
-      ...election.toObject(),
-      shortDescription: toJsMap(election.getShortDescriptionMap()),
-      officialDescription: toJsMap(election.getOfficialDescriptionMap()),
-      eVotingApproved: election.getEVotingApproved()?.getValue(),
-    };
   }
 
   private mapToSecondaryMajorityElectionCandidate(data: SecondaryMajorityElectionCandidateProto): SecondaryMajorityElectionCandidate {

@@ -64,7 +64,7 @@ export function newDomainOfInfluence(): DomainOfInfluence {
 
 export interface DomainOfInfluence extends Omit<
   DomainOfInfluenceProto.AsObject,
-  'info' | 'childrenList' | 'plausibilisationConfiguration' | 'partiesList' | 'superiorAuthorityDomainOfInfluence' | 'eVoting'
+  'info' | 'childrenList' | 'plausibilisationConfiguration' | 'partiesList' | 'superiorAuthorityDomainOfInfluence' | 'eVoting' | 'eCounting'
 > {
   createdOn?: Date;
   modifiedOn?: Date;
@@ -75,6 +75,7 @@ export interface DomainOfInfluence extends Omit<
   parties: DomainOfInfluenceParty[];
   superiorAuthorityDomainOfInfluence?: DomainOfInfluence;
   eVoting?: boolean;
+  eCounting?: boolean;
 }
 
 export interface DomainOfInfluenceLevel {

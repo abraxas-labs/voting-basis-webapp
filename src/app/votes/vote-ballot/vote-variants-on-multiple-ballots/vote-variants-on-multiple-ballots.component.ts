@@ -34,6 +34,9 @@ export class VoteVariantsOnMultipleBallotsComponent {
   @Input()
   public readonly: boolean = false;
 
+  @Input()
+  public eVoting: boolean = false;
+
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
@@ -41,7 +44,7 @@ export class VoteVariantsOnMultipleBallotsComponent {
   public tieBreakQuestionCountDescriptions: EnumItemDescription<number>[] = [];
 
   private _vote?: Vote;
-  private _eVoting?: boolean;
+  private _showQuestion?: boolean;
 
   constructor() {
     this.ballotSubTypeDescriptions = this.enumUtil.getArrayWithDescriptions<BallotSubType>(BallotSubType, 'VOTE.BALLOT_SUB_TYPE.TYPES.');
@@ -89,13 +92,13 @@ export class VoteVariantsOnMultipleBallotsComponent {
   }
 
   @Input()
-  public set eVoting(value: boolean | undefined) {
-    this._eVoting = value;
+  public set showQuestion(value: boolean | undefined) {
+    this._showQuestion = value;
     this.tryPrefillQuestions();
   }
 
-  public get eVoting(): boolean | undefined {
-    return this._eVoting;
+  public get showQuestion(): boolean | undefined {
+    return this._showQuestion;
   }
 
   public get canSave(): boolean {
@@ -207,7 +210,7 @@ export class VoteVariantsOnMultipleBallotsComponent {
   }
 
   public tryPrefillQuestions(): void {
-    if (!this._vote?.ballots || this._eVoting === undefined || this._eVoting) {
+    if (!this._vote?.ballots || this._showQuestion === undefined || this._showQuestion) {
       return;
     }
 

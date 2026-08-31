@@ -37,7 +37,7 @@ export class VoteStandardBallotComponent {
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 
   public ballotQuestion?: BallotQuestion;
-  private _eVoting?: boolean;
+  private _showQuestion?: boolean;
 
   @Input()
   public set vote(value: Vote) {
@@ -59,13 +59,13 @@ export class VoteStandardBallotComponent {
   }
 
   @Input()
-  public set eVoting(value: boolean | undefined) {
-    this._eVoting = value;
+  public set showQuestion(value: boolean | undefined) {
+    this._showQuestion = value;
     this.tryPrefillQuestion();
   }
 
-  public get eVoting(): boolean | undefined {
-    return this._eVoting;
+  public get showQuestion(): boolean | undefined {
+    return this._showQuestion;
   }
 
   public get canSave(): boolean {
@@ -73,11 +73,11 @@ export class VoteStandardBallotComponent {
   }
 
   private tryPrefillQuestion(): void {
-    if (!this.ballotQuestion || this._eVoting === undefined) {
+    if (!this.ballotQuestion || this._showQuestion === undefined) {
       return;
     }
 
-    if (!this._eVoting && !LanguageService.allLanguagesPresent(this.ballotQuestion.question)) {
+    if (!this._showQuestion && !LanguageService.allLanguagesPresent(this.ballotQuestion.question)) {
       this.ballotQuestion.question = LanguageService.fillAllLanguages(this.i18n.instant('VOTE.QUESTION.TITLE_STANDARD'));
       this.contentChanged.emit();
     }

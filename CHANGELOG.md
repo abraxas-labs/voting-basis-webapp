@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.69.0`)
+# ✨ Changelog (`v3.70.0`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.69.0
-Previous version ---- v3.65.0
+This version -------- v3.70.0
+Previous version ---- v3.69.0
 Initial version ----- v1.23.0
-Total commits ------- 6
+Total commits ------- 1
 ```
+
+## [v3.70.0] - 2026-09-16
+
+### :arrows_counterclockwise: Changed
+
+- domain-of-influnece-voting-card-data-edit component: filter outdated colors
+- i18n: adjust VOTING_CARD_COLORS according new colors
 
 ## [v3.69.0] - 2026-08-12
 

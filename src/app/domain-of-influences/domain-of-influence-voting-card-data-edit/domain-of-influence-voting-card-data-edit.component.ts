@@ -106,7 +106,9 @@ export class DomainOfInfluenceVotingCardDataEditComponent implements OnInit {
         c =>
           c.value !== VotingCardColor.VOTING_CARD_COLOR_UNSPECIFIED &&
           c.value !== VotingCardColor.VOTING_CARD_COLOR_CHAMOIS &&
-          c.value !== VotingCardColor.VOTING_CARD_COLOR_GOLD,
+          c.value !== VotingCardColor.VOTING_CARD_COLOR_GOLD &&
+          c.value !== VotingCardColor.VOTING_CARD_COLOR_GREY &&
+          c.value !== VotingCardColor.VOTING_CARD_COLOR_RED,
       );
 
     this.canEditEverything = await this.permissionService.hasPermission(Permissions.DomainOfInfluence.UpdateSameCanton);

@@ -230,10 +230,10 @@
       "VOTING_CARD_COLORS": {
         "1": "Blau",
         "3": "Gelb",
-        "5": "Grau",
         "6": "Rosa",
-        "7": "Rot",
-        "8": "Grün"
+        "8": "Grün",
+        "9": "Orange",
+        "10": "Lila"
       },
       "VOTING_CARD_SHIPPING_FRANKING": {
         "1": "B1 Post",

@@ -47,6 +47,7 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
   public isCandidateLocalityRequired: boolean;
   public isCandidateOriginRequired: boolean;
   public hideOccupationTitle: boolean;
+  public disableNumber: boolean;
   public enableAdditionalCandidateFields: boolean;
   public parties: DomainOfInfluenceParty[];
   public individualCandidatesDisabled: boolean = false;
@@ -64,6 +65,7 @@ export class MajorityElectionCandidateEditDialogComponent implements OnDestroy {
     this.isCandidateLocalityRequired = dialogData.candidateLocalityRequired && !isCommunalDoiType(dialogData.doiType);
     this.isCandidateOriginRequired = dialogData.candidateOriginRequired && !isCommunalDoiType(dialogData.doiType);
     this.hideOccupationTitle = dialogData.hideOccupationTitle;
+    this.disableNumber = dialogData.disableNumber;
     this.enableAdditionalCandidateFields = dialogData.enableAdditionalCandidateFields;
     this.parties = dialogData.parties;
     this.individualCandidatesDisabled = dialogData.individualCandidatesDisabled;
@@ -150,6 +152,7 @@ export interface MajorityElectionCandidateEditDialogData {
   candidateLocalityRequired: boolean;
   candidateOriginRequired: boolean;
   hideOccupationTitle: boolean;
+  disableNumber: boolean;
   enableAdditionalCandidateFields: boolean;
   parties: DomainOfInfluenceParty[];
   individualCandidatesDisabled: boolean;

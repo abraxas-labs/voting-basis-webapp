@@ -32,6 +32,7 @@
     [canDelete]="canDelete"
     [politicalAssemblies]="politicalAssemblies"
     [showPaginator]="true"
+    tableName="contest-overview-active"
     >
   </app-contest-list>
 
@@ -51,6 +52,7 @@
     [showPaginator]="true"
     [politicalAssemblies]="pastPoliticalAssemblies"
     [dateSortDirection]="'desc'"
+    tableName="contest-overview-past"
   ></app-contest-list>
 
   <h2 translate>CONTEST.ARCHIVED_CONTESTS</h2>
@@ -67,5 +69,6 @@
     [showState]="false"
     [politicalAssemblies]="archivedPoliticalAssemblies"
     [dateSortDirection]="'desc'"
+    tableName="contest-overview-archived"
   ></app-contest-list>
 </vo-lib-page>

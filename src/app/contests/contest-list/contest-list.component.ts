@@ -77,6 +77,9 @@ export class ContestListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
   public dateSortDirection: SortDirection = 'asc';
 
+  @Input({ required: true })
+  public tableName: string = '';
+
   @Output()
   public view: EventEmitter<ContestListType> = new EventEmitter<ContestListType>();
 

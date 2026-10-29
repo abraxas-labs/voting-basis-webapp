@@ -40,6 +40,9 @@ export class MajorityElectionErfassungInformationsComponent implements OnInit {
   @Input()
   public useCandidateCheckDigit: boolean = false;
 
+  @Input()
+  public bundlesWithBallotGroupEnabled: boolean = false;
+
   @Output()
   public contentChanged: EventEmitter<void> = new EventEmitter<void>();
 

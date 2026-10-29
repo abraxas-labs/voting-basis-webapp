@@ -233,7 +233,7 @@
         "6": "Rosa",
         "8": "Grün",
         "9": "Orange",
-        "10": "Lila"
+        "10": "Violett"
       },
       "VOTING_CARD_SHIPPING_FRANKING": {
         "1": "B1 Post",
@@ -301,9 +301,12 @@
         "DESCRIPTION": "Bezeichnung",
         "EAI_MESSAGE_TYPE": "Meldungstyp",
         "PROVIDER": "Drittanbieter",
+        "SEDEX_SENDER_ID": "Sender ID",
+        "SEDEX_RECIPIENT_IDS": "Empfänger IDs (kommagetrennt)",
         "PROVIDERS": {
           "1": "Standard",
-          "2": "Seantis"
+          "2": "Seantis",
+          "3": "Sedex"
         },
         "ASSIGN_OPEN": "Exports zuordnen…",
         "ASSIGN": "Exports zuordnen",
@@ -545,7 +548,7 @@
       "TITLE": "Vorlage",
       "ADD": "Weitere Vorlage hinzufügen"
     },
-    "BALLOT_SUB_TYPE":{
+    "BALLOT_SUB_TYPE": {
       "TITLE": "Geschäftsart",
       "TYPES": {
         "1": "Hauptvorlage (A)",
@@ -566,8 +569,8 @@
     },
     "MAIN_QUESTION_ID": "Geschäfts-Nr.",
     "QUESTION": {
-      "TITLE_STANDARD" : "Frage",
-      "TITLE_VARIANT" : "Frage {{number}}",
+      "TITLE_STANDARD": "Frage",
+      "TITLE_VARIANT": "Frage {{number}}",
       "ADD": "weitere Frage hinzufügen"
     },
     "TIE_BREAK_QUESTION": {
@@ -789,7 +792,8 @@
     },
     "FINISH_CANDIDATE_EDIT_STEP_NOTE": {
       "TITLE": "Hinweis Erfassung Kandidierende",
-      "TEXT": "Alle vor dem Urnengang erfassten und publizierten Kandidierenden müssen am Wahltag einzeln ausgezählt und ausgewiesen werden."
+      "TEXT": "Alle vor dem Urnengang erfassten und publizierten Kandidierenden müssen am Wahltag einzeln ausgezählt und ausgewiesen werden.",
+      "TEXT_HIDE_POSITION": "Alle vor dem Urnengang erfassten und publizierten Kandidierenden müssen am Wahltag einzeln ausgezählt und ausgewiesen werden.\n\nBitte prüfen Sie, ob die Reihenfolge der Kandidierenden derjenigen auf der Namenliste/dem Wahlzettel entspricht. Falls nicht, können Sie die Reihenfolge per Drag & Drop anpassen."
     },
     "AUTOMATIC_EMPTY_VOTE_COUNTING": {
       "TITLE": "Erfassung leere Zeilen",
@@ -900,6 +904,11 @@
       "TITLE": "Prüfziffer",
       "USE": "Prüfziffer verwenden",
       "ENFORCE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
+    },
+    "BUNDLES_WITH_BALLOT_GROUP": {
+      "TITLE": "Bunderfassung mit Auswahl von Wahlzettelgruppe",
+      "ENABLED": "Aktiviert",
+      "ENFORCE_FOR_COUNTING_CIRCLES": "Für Auszählungskreise erzwingen"
     }
   },
   "SECONDARY_ELECTION": {
@@ -950,6 +959,7 @@
     "POLITICAL_BUSINESS_INFOS": "Geschäftsinformationen",
     "CONTEST_INFOS": "Urnenganginformationen",
     "IMPORT_SUCCESSFUL": "Die importierten Daten werden verarbeitet. Dies kann etwas Zeit in Anspruch nehmen.",
+    "IMPORT_SUCCESSFUL_HIDE_POSITION": "Import erfolgreich. Bitte prüfen Sie, ob die Reihenfolge der Kandidierenden auf der Namenliste / dem Wahlzettel entspricht. Falls nicht, können Sie die Reihenfolge per Drag & Drop anpassen.",
     "PARTY_MAPPING": {
       "TITLE": "Parteien",
       "FROM_IMPORT_TITLE": "Listen / Parteien aus Import",
@@ -1001,7 +1011,9 @@
       "USE_CANDIDATE_CHECK_DIGIT": "Prüfziffer verwenden",
       "CANDIDATE_LOCALITY_AND_ORIGIN_REQUIRED": "Heimat- / Wohnort Pflicht (bei Geschäftsebene eidg./kant./bez.) - Gilt auch für Proporzwahlen",
       "SECONDARY_MAJORITY_ELECTION_ON_SEPARATE_BALLOT": "Nebenwahlen auf getrennten Wahlzetteln",
-      "SHOW_OCCUPATION_TITLE": "Feld 'Titel und Berufsbezeichnung' anzeigen - Gilt auch für Proporzwahlen"
+      "SHOW_OCCUPATION_TITLE": "Feld 'Titel und Berufsbezeichnung' anzeigen - Gilt auch für Proporzwahlen",
+      "BUNDLES_WITH_BALLOT_GROUP_ENABLED": "Bunderfassung mit Auswahl von Wahlzettelgruppe",
+      "DISABLE_CANDIDATE_NUMBER": "Importdialog und Positionsnummer deaktivieren"
     },
     "GENERAL": "Allgemein",
     "MANUAL_PUBLISH_RESULTS": "Status publizieren manuell (eCH-0252)",

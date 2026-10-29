@@ -33,6 +33,7 @@ export class MajorityElectionCandidatesImportDialogComponent {
   private readonly majorityElectionId: string;
   public lastStep: boolean = false;
   public candidates?: MajorityElectionCandidate[];
+  public skipReordering: boolean = false;
 
   private importCandidates?: MajorityElectionCandidateProto[];
 
@@ -43,6 +44,7 @@ export class MajorityElectionCandidatesImportDialogComponent {
     const dialogData = inject<MajorityElectionCandidatesImportDialogData>(MAT_DIALOG_DATA);
 
     this.majorityElectionId = dialogData.majorityElection.id;
+    this.skipReordering = dialogData.skipReordering;
   }
 
   public get canSave(): boolean {
@@ -53,7 +55,7 @@ export class MajorityElectionCandidatesImportDialogComponent {
     this.lastStep = event.selectedIndex === this.stepper.steps.length - 1;
   }
 
-  public importFilesChanged(files: ImportFileContent[]): void {
+  public async importFilesChanged(files: ImportFileContent[]): Promise<void> {
     if (files.length === 0) {
       delete this.importCandidates;
       delete this.candidates;
@@ -63,6 +65,11 @@ export class MajorityElectionCandidatesImportDialogComponent {
     const majorityElections = flatMap(files.map(c => c.contest.getMajorityElectionsList()));
     this.importCandidates = flatMap(majorityElections.map(m => m.getCandidatesList()));
     this.candidates = this.importCandidates.map(MajorityElectionService.mapToMajorityElectionCandidate);
+
+    if (this.skipReordering) {
+      await this.save();
+      return;
+    }
 
     // trigger an initial reorder which sets the position to a non-zero distinct integer.
     this.reorderCandidates(this.candidates);
@@ -97,7 +104,8 @@ export class MajorityElectionCandidatesImportDialogComponent {
     this.saving = true;
     try {
       await this.importService.importMajorityElectionCandidates(this.majorityElectionId, this.importCandidates!);
-      const message = this.i18n.instant('IMPORT.IMPORT_SUCCESSFUL');
+      const messageKey = this.skipReordering ? 'IMPORT.IMPORT_SUCCESSFUL_HIDE_POSITION' : 'IMPORT.IMPORT_SUCCESSFUL';
+      const message = this.i18n.instant(messageKey);
       this.snackbarService.success(message);
 
       const result: MajorityElectionCandidatesImportDialogResult = { success: true };
@@ -114,6 +122,7 @@ export class MajorityElectionCandidatesImportDialogComponent {
 
 export interface MajorityElectionCandidatesImportDialogData {
   majorityElection: MajorityElection;
+  skipReordering: boolean;
 }
 
 export interface MajorityElectionCandidatesImportDialogResult {

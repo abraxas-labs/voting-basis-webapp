@@ -133,6 +133,22 @@
                  [subscriptSizing]="'dynamic'">
     </bc-checkbox>
 
+    <bc-checkbox [checked]="data.majorityElectionBundlesWithBallotGroupEnabled"
+                 (checkedChange)="data.majorityElectionBundlesWithBallotGroupEnabled = $event; contentChanged()"
+                 [disabled]="readonly"
+                 class="full-width"
+                 [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.BUNDLES_WITH_BALLOT_GROUP_ENABLED' | translate"
+                 [subscriptSizing]="'dynamic'">
+    </bc-checkbox>
+
+    <bc-checkbox [checked]="data.majorityElectionCandidateNumberDisabled"
+                 (checkedChange)="data.majorityElectionCandidateNumberDisabled = $event; contentChanged()"
+                 [disabled]="readonly"
+                 class="full-width"
+                 [label]="'CANTON_SETTINGS.MAJORITY_ELECTION.DISABLE_CANDIDATE_NUMBER' | translate"
+                 [subscriptSizing]="'dynamic'">
+    </bc-checkbox>
+
     <h2 class="title" translate>CANTON_SETTINGS.GENERAL</h2>
 
     <bc-checkbox [checked]="data.manualPublishResultsEnabled"

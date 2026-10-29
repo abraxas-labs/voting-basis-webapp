@@ -14,7 +14,7 @@ import { MajorityElectionCandidate } from '../../core/models/majority-election.m
   standalone: false,
 })
 export class MajorityElectionCandidateListComponent {
-  public readonly columns = [
+  private readonly allColumns = [
     'position',
     'number',
     'lastName',
@@ -28,6 +28,8 @@ export class MajorityElectionCandidateListComponent {
     'locality',
     'actions',
   ];
+
+  public columns = this.allColumns;
 
   @Input()
   public candidates: MajorityElectionCandidate[] = [];
@@ -49,6 +51,24 @@ export class MajorityElectionCandidateListComponent {
 
   @Input()
   public hideActionButtons: boolean = false;
+
+  private _hidePosition: boolean = false;
+
+  @Input()
+  public set hidePosition(v: boolean) {
+    this._hidePosition = v;
+
+    if (!v) {
+      this.columns = this.allColumns;
+      return;
+    }
+
+    this.columns = this.allColumns.filter(x => x !== 'position');
+  }
+
+  public get hidePosition(): boolean {
+    return this._hidePosition;
+  }
 
   @Output()
   public edit: EventEmitter<MajorityElectionCandidate> = new EventEmitter<MajorityElectionCandidate>();

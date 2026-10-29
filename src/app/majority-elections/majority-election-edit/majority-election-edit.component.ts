@@ -146,10 +146,10 @@ export class MajorityElectionEditComponent implements OnInit, HasUnsavedChanges 
   }
 
   public async confirmCandidateCreateNote(): Promise<void> {
-    const confirm = await this.dialogService.confirm(
-      'MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TITLE',
-      'MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TEXT',
-    );
+    const textMessage = this.contestDomainOfInfluenceDefaults.majorityElectionCandidateNumberDisabled
+      ? 'MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TEXT_HIDE_POSITION'
+      : 'MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TEXT';
+    const confirm = await this.dialogService.confirm('MAJORITY_ELECTION.FINISH_CANDIDATE_EDIT_STEP_NOTE.TITLE', textMessage);
 
     if (!confirm) {
       return;

@@ -70,6 +70,9 @@ export class MajorityElectionCandidatesComponent {
   @Input()
   public readonly: boolean = false;
 
+  @Input()
+  public hidePosition: boolean = false;
+
   @ViewChild(MajorityElectionBallotGroupOverviewComponent, { static: false })
   public ballotGroupOverview?: MajorityElectionBallotGroupOverviewComponent;
 
@@ -106,6 +109,7 @@ export class MajorityElectionCandidatesComponent {
         this.candidates.length + 1,
         this.currentMajorityElection.id,
         this.testingPhaseEnded && !this.currentMajorityElection.individualCandidatesDisabled,
+        this.hidePosition,
       ),
       testingPhaseEnded: this.testingPhaseEnded,
       doiType: this.currentDomainOfInfluence.type,
@@ -113,6 +117,7 @@ export class MajorityElectionCandidatesComponent {
       candidateOriginRequired: this.candidateOriginRequired,
       parties: this.parties,
       hideOccupationTitle: this.hideOccupationTitle,
+      disableNumber: this.hidePosition,
       enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
       individualCandidatesDisabled: this.currentMajorityElection.individualCandidatesDisabled,
     };
@@ -134,6 +139,7 @@ export class MajorityElectionCandidatesComponent {
       candidateOriginRequired: this.candidateOriginRequired,
       parties: this.parties,
       hideOccupationTitle: this.hideOccupationTitle,
+      disableNumber: this.hidePosition,
       enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
       individualCandidatesDisabled: this.currentMajorityElection.individualCandidatesDisabled,
     };
@@ -184,6 +190,7 @@ export class MajorityElectionCandidatesComponent {
 
     const dialogData: MajorityElectionCandidatesImportDialogData = {
       majorityElection: this.currentMajorityElection,
+      skipReordering: this.hidePosition,
     };
 
     const result = await this.dialogService.openForResult<
@@ -255,7 +262,7 @@ export class MajorityElectionCandidatesComponent {
     const candidateList: MajorityElectionCandidate[] = [...this.candidates];
 
     if (!this.currentMajorityElection!.individualCandidatesDisabled) {
-      const individualPlaceholderCandidate = newMajorityElectionCandidate(999, '', false);
+      const individualPlaceholderCandidate = newMajorityElectionCandidate(999, '', false, this.hidePosition);
       individualPlaceholderCandidate.lastName = this.i18n.instant('MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_PLACEHOLDER');
       candidateList.push(individualPlaceholderCandidate);
     }
@@ -267,6 +274,10 @@ export class MajorityElectionCandidatesComponent {
   private updateCandidatePositions(): void {
     for (let i = 1; i <= this.candidates.length; i++) {
       this.candidates[i - 1].position = i;
+
+      if (this.hidePosition) {
+        this.candidates[i - 1].number = String(i);
+      }
     }
   }
 

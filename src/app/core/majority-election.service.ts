@@ -219,6 +219,8 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
     result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
     result.setFederalIdentification(data.federalIdentification);
+    result.setBundlesWithBallotGroupEnabled(data.bundlesWithBallotGroupEnabled);
+    result.setEnforceBundlesWithBallotGroupEnabledForCountingCircles(data.enforceBundlesWithBallotGroupEnabledForCountingCircles);
     return result;
   }
 
@@ -248,6 +250,8 @@ export class MajorityElectionService extends GrpcService<MajorityElectionService
     result.setEnforceCandidateCheckDigitForCountingCircles(data.enforceCandidateCheckDigitForCountingCircles);
     result.setIndividualCandidatesDisabled(data.individualCandidatesDisabled);
     result.setFederalIdentification(data.federalIdentification);
+    result.setBundlesWithBallotGroupEnabled(data.bundlesWithBallotGroupEnabled);
+    result.setEnforceBundlesWithBallotGroupEnabledForCountingCircles(data.enforceBundlesWithBallotGroupEnabledForCountingCircles);
     return result;
   }
 

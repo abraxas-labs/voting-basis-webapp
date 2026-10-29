@@ -1,4 +1,4 @@
-# ✨ Changelog (`v3.70.0`)
+# ✨ Changelog (`v3.72.3`)
 
 All notable changes to this project will be documented in this file.
 
@@ -8,11 +8,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Info
 
 ```text
-This version -------- v3.70.0
-Previous version ---- v3.69.0
+This version -------- v3.72.3
+Previous version ---- v3.70.0
 Initial version ----- v1.23.0
-Total commits ------- 1
+Total commits ------- 13
 ```
+
+## [v3.72.3] - 2026-10-27
+
+### 🔄 Changed
+
+- removed MajorityElectionUnion handlers since these don't have a politicalBusinessId and therefore no effect for refreshing list items
+
+## [v3.72.2] - 2026-10-27
+
+### :arrows_counterclockwise: Changed
+
+- removed handler ProportionalElectionUnionCreated, ProportionalElectionUnionUpdated, ProportionalElectionUnionEntriesUpdated and ProportionalElectionUnionDeleted since this this handlers don't have a politicalBusinessId.
+
+  Refresh whole list of political businesses after closing the proportional election union edit dialog.
+
+## [v3.72.1] - 2026-10-20
+
+### 🔄 Changed
+
+- improve hint message
+
+## [v3.72.0] - 2026-10-16
+
+### 🆕 Added
+
+- add sedex export provider
+
+## [v3.71.1] - 2026-10-07
+
+### 🔄 Changed
+
+- change voting card purple color label
+
+## [v3.71.0] - 2026-10-01
+
+### 🆕 Added
+
+- store active table filters during session
+
+### 🔄 Changed
+
+- correctly handle case where proportional election created event is not yet processed
+
+### 🔄 Changed
+
+- improve majority election candidate import flow
+
+### 🔄 Changed
+
+- optional majority election candidate numbers
+
+### 🆕 Added
+
+- add bundles with ballot group enabled option
+
+### 🔄 Changed
+
+- The previous-contest dropdown in the contest create/edit dialog now displays "date – description" and only lists past locked/archived contests, sorted newest first.
 
 ## [v3.70.0] - 2026-09-16
 

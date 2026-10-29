@@ -70,6 +70,9 @@ export class SecondaryMajorityElectionCandidatesComponent {
   public enableAdditionalCandidateFields: boolean = false;
 
   @Input()
+  public hidePosition: boolean = false;
+
+  @Input()
   public domainOfInfluenceType?: DomainOfInfluenceType;
 
   @Input()
@@ -110,6 +113,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
         this.candidates.length + 1,
         this.currentSecondaryMajorityElection.id,
         this.testingPhaseEnded && !this.currentSecondaryMajorityElection.individualCandidatesDisabled,
+        this.hidePosition,
       ),
       secondaryMajorityElection: this.currentSecondaryMajorityElection,
       testingPhaseEnded: this.testingPhaseEnded,
@@ -117,6 +121,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       hideOccupationTitle: this.hideOccupationTitle,
+      disableNumber: this.hidePosition,
       enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
       parties: this.parties,
       individualCandidatesDisabled: this.currentSecondaryMajorityElection.individualCandidatesDisabled,
@@ -138,6 +143,7 @@ export class SecondaryMajorityElectionCandidatesComponent {
       candidateLocalityRequired: this.candidateLocalityRequired,
       candidateOriginRequired: this.candidateOriginRequired,
       hideOccupationTitle: this.hideOccupationTitle,
+      disableNumber: this.hidePosition,
       enableAdditionalCandidateFields: this.enableAdditionalCandidateFields,
       parties: this.parties,
       individualCandidatesDisabled: this.currentSecondaryMajorityElection!.individualCandidatesDisabled,
@@ -246,7 +252,12 @@ export class SecondaryMajorityElectionCandidatesComponent {
     const candidateList: SecondaryMajorityElectionCandidate[] = [...this.candidates];
 
     if (!this.currentSecondaryMajorityElection!.individualCandidatesDisabled) {
-      const individualPlaceholderCandidate: SecondaryMajorityElectionCandidate = newSecondaryMajorityElectionCandidate(999, '', false);
+      const individualPlaceholderCandidate: SecondaryMajorityElectionCandidate = newSecondaryMajorityElectionCandidate(
+        999,
+        '',
+        false,
+        this.hidePosition,
+      );
       individualPlaceholderCandidate.lastName = this.i18n.instant('MAJORITY_ELECTION.CANDIDATE.INDIVIDUAL_PLACEHOLDER');
       candidateList.push(individualPlaceholderCandidate);
     }
@@ -258,6 +269,10 @@ export class SecondaryMajorityElectionCandidatesComponent {
   private updateCandidatePositions(): void {
     for (let i = 1; i <= this.candidates.length; i++) {
       this.candidates[i - 1].position = i;
+
+      if (this.hidePosition) {
+        this.candidates[i - 1].number = String(i);
+      }
     }
   }
 }

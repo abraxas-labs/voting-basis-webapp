@@ -21,6 +21,7 @@ import { isCommunalDoiType } from '../../core/utils/domain-of-influence.utils';
 import { FormControl, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { ContactPersonForm } from '../../shared/contact-person-edit/contact-person-edit.component';
 import { CantonSettingsService } from '../../core/canton-settings.service';
+import { ExportProvider } from '@abraxas/voting-basis-service-proto/grpc/shared/export_pb';
 
 @Component({
   selector: 'app-domain-of-influence-edit-dialog',
@@ -115,7 +116,14 @@ export class DomainOfInfluenceEditDialogComponent implements OnInit, OnDestroy {
       !!this.selectedTenant &&
       !!this.selectedTenant.id &&
       (!!this.data.parentId || !!this.data.canton) &&
-      this.data.exportConfigurationsList.every(e => !!e.description && !!e.eaiMessageType && !!e.provider) &&
+      this.data.exportConfigurations.every(
+        e =>
+          !!e.description &&
+          !!e.eaiMessageType &&
+          !!e.provider &&
+          (e.provider !== ExportProvider.EXPORT_PROVIDER_SEDEX ||
+            (!!e.sedexConfiguration && !!e.sedexConfiguration.senderId && !!e.sedexConfiguration.recipientIds)),
+      ) &&
       (!this.hasOtherSuperiorAuthorityDomainOfInfluence || !!this.data.superiorAuthorityDomainOfInfluence) &&
       (!this.data.responsibleForVotingCards ||
         (!!this.data.printData &&

@@ -8,7 +8,7 @@
           <bc-text
             [label]="'MAJORITY_ELECTION.CANDIDATE.NUMBER' | translate"
             [required]="true"
-            [readonly]="testingPhaseEnded && !!candidate.id"
+            [readonly]="(testingPhaseEnded && !!candidate.id) || disableNumber"
             [value]="candidate.number"
             (valueChange)="candidate.number = $event; contentChanged.emit()"
             subscriptSizing="dynamic"

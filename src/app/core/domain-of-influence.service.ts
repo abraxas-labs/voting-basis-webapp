@@ -43,7 +43,12 @@ import {
   DomainOfInfluenceVotingCardSwissPostDataProto,
 } from './models/domain-of-influence-voting-card-swiss-post-data.model';
 import { DomainOfInfluence, DomainOfInfluenceProto, DomainOfInfluenceType } from './models/domain-of-influence.model';
-import { ExportConfiguration, ExportConfigurationProto } from './models/export.model';
+import {
+  ExportConfiguration,
+  ExportConfigurationProto,
+  ExportSedexConfiguration,
+  ExportSedexConfigurationProto,
+} from './models/export.model';
 import {
   ComparisonCountOfVotersConfiguration,
   ComparisonCountOfVotersConfigurationProto,
@@ -60,6 +65,7 @@ import { mapToProtoContactPerson } from './utils/contact-person.utils';
 import { fillProtoMap, toJsMap } from './utils/map.utils';
 import { createDoubleValue } from './utils/proto.utils';
 import { firstValueFrom } from 'rxjs';
+import { ExportProvider } from '@abraxas/voting-basis-service-proto/grpc/shared/export_pb';
 
 @Injectable({
   providedIn: 'root',
@@ -105,7 +111,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       bfs: doi.getBfs(),
       code: doi.getCode(),
       sortNumber: doi.getSortNumber(),
-      exportConfigurationsList: doi.getExportConfigurationsList().map(x => x.toObject()),
+      exportConfigurations: doi.getExportConfigurationsList().map(x => DomainOfInfluenceService.mapToExportConfiguration(x)),
       returnAddress: doi.getReturnAddress()?.toObject(),
       printData: doi.getPrintData()?.toObject(),
       swissPostData: doi.getSwissPostData()?.toObject(),
@@ -376,7 +382,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     result.setCode(data.code);
     result.setSortNumber(data.sortNumber);
     result.setNameForProtocol(data.nameForProtocol);
-    result.setExportConfigurationsList(data.exportConfigurationsList.map(x => this.mapToExportConfigurationRequest(x)));
+    result.setExportConfigurationsList(data.exportConfigurations.map(x => this.mapToExportConfigurationRequest(x)));
     result.setReturnAddress(this.mapToVotingCardReturnAddressProto(data.returnAddress));
     result.setPrintData(this.mapToVotingCardPrintDataProto(data.printData));
     result.setSwissPostData(this.mapToVotingCardSwissPostDataProto(data.swissPostData));
@@ -405,6 +411,29 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     return result;
   }
 
+  private static mapToExportConfiguration(data: ExportConfigurationProto): ExportConfiguration {
+    return {
+      id: data.getId(),
+      domainOfInfluenceId: data.getDomainOfInfluenceId(),
+      description: data.getDescription(),
+      eaiMessageType: data.getEaiMessageType(),
+      provider: data.getProvider(),
+      exportKeysList: data.getExportKeysList(),
+      sedexConfiguration: DomainOfInfluenceService.mapToExportSedexConfiguration(data.getSedexConfiguration()),
+    };
+  }
+
+  private static mapToExportSedexConfiguration(data?: ExportSedexConfigurationProto): ExportSedexConfiguration | undefined {
+    if (!data) {
+      return undefined;
+    }
+
+    return {
+      senderId: data.getSenderId(),
+      recipientIds: data.getRecipientIdsList().join(','),
+    };
+  }
+
   private mapToExportConfigurationRequest(data: ExportConfiguration): ExportConfigurationProto {
     const req = new ExportConfigurationProto();
     req.setId(data.id);
@@ -412,6 +441,12 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
     req.setExportKeysList(data.exportKeysList);
     req.setEaiMessageType(data.eaiMessageType);
     req.setProvider(data.provider);
+    if (data.provider === ExportProvider.EXPORT_PROVIDER_SEDEX && data.sedexConfiguration) {
+      const sedexReq = new ExportSedexConfigurationProto();
+      sedexReq.setSenderId(data.sedexConfiguration.senderId);
+      sedexReq.setRecipientIdsList(data.sedexConfiguration.recipientIds.split(','));
+      req.setSedexConfiguration(sedexReq);
+    }
     return req;
   }
 
@@ -435,7 +470,7 @@ export class DomainOfInfluenceService extends GrpcService<DomainOfInfluenceServi
       adminRequest.setExternalPrintingCenter(data.externalPrintingCenter);
       adminRequest.setExternalPrintingCenterEaiMessageType(data.externalPrintingCenterEaiMessageType);
       adminRequest.setSapCustomerOrderNumber(data.sapCustomerOrderNumber);
-      adminRequest.setExportConfigurationsList(data.exportConfigurationsList.map(x => this.mapToExportConfigurationRequest(x)));
+      adminRequest.setExportConfigurationsList(data.exportConfigurations.map(x => this.mapToExportConfigurationRequest(x)));
       adminRequest.setSwissPostData(this.mapToVotingCardSwissPostDataProto(data.swissPostData));
       adminRequest.setVirtualTopLevel(data.virtualTopLevel);
       adminRequest.setViewCountingCirclePartialResults(data.viewCountingCirclePartialResults);

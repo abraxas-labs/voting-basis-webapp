@@ -7,7 +7,12 @@
     @if (loading) {
       <bc-spinner></bc-spinner>
     }
-    <bc-table filter sort [sortActive]="[{ id: nameColumn, direction: 'asc' }]" class="w-full" [dataSource]="dataSource">
+    <bc-table filter
+              sort
+              [sortActive]="[{ id: nameColumn, direction: 'asc' }]"
+              class="w-full"
+              [dataSource]="dataSource"
+              appStoreActiveFilter="assigned-counting-circles-dialog">
       <ng-container columnDef="name">
         <th bc-header-cell *headerCellDef filter sort>
           <app-truncated-value [value]="'COUNTING_CIRCLE.NAME' | translate"></app-truncated-value>

@@ -45,6 +45,7 @@
           [hideOccupationTitle]="contestDomainOfInfluenceDefaults.hideOccupationTitle"
           [enableAdditionalCandidateFields]="contestDomainOfInfluenceDefaults.enableAdditionalCandidateFields"
           [majorityElection]="data"
+          [hidePosition]="contestDomainOfInfluenceDefaults.majorityElectionCandidateNumberDisabled"
           >
         </app-majority-election-candidates>
         <div class="stepper-footer">
@@ -71,6 +72,7 @@
         [readonly]="!canEdit"
         [data]="data"
         [useCandidateCheckDigit]="contestDomainOfInfluenceDefaults.majorityElectionUseCandidateCheckDigit"
+        [bundlesWithBallotGroupEnabled]="contestDomainOfInfluenceDefaults.majorityElectionBundlesWithBallotGroupEnabled"
         (contentChanged)="contentChanged()"
       ></app-majority-election-erfassung-informations>
 

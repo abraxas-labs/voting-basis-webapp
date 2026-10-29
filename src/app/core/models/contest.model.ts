@@ -52,6 +52,7 @@ export type PreconfiguredContestDate = {
 export type ContestSimple = {
   id: string;
   date: Date;
+  description: Map<string, string>;
 };
 
 export function newContest(): Contest {

@@ -34,6 +34,7 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
   private readonly dialogService = inject(DialogService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly datePipe = inject(DatePipe);
+  private readonly languageService = inject(LanguageService);
 
   @HostListener('window:beforeunload')
   public beforeUnload(): boolean {
@@ -294,10 +295,13 @@ export class ContestEditDialogComponent implements OnInit, OnDestroy {
 
     try {
       this.pastContestsLoading = true;
-      this.pastContests = (await this.contestService.listPast(this.data)).map(c => ({
-        id: c.id,
-        dateString: this.datePipe.transform(c.date, 'dd.MM.yyyy')!,
-      }));
+      this.pastContests = (await this.contestService.listPast(this.data)).map(c => {
+        const description = this.languageService.getTranslationForCurrentLang(c.description);
+        return {
+          id: c.id,
+          displayText: `${this.datePipe.transform(c.date, 'dd.MM.yyyy')} - ${description}`,
+        };
+      });
 
       if (!this.pastContests.find(c => c.id === this.data.previousContestId)) {
         this.data.previousContestId = undefined;
@@ -411,5 +415,5 @@ export interface DisplayPreconfiguredDate {
 
 export type ContestPastDropdownItem = {
   id: string;
-  dateString: string;
+  displayText: string;
 };

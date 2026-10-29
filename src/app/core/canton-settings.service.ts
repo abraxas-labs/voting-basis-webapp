@@ -131,6 +131,8 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setEnableAdditionalCandidateFields(data.enableAdditionalCandidateFields);
     result.setMonitoringAutoShowPoliticalBusinesses(data.monitoringAutoShowPoliticalBusinesses);
     result.setMonitoringUseImprovedUi(data.monitoringUseImprovedUi);
+    result.setMajorityElectionBundlesWithBallotGroupEnabled(data.majorityElectionBundlesWithBallotGroupEnabled);
+    result.setMajorityElectionCandidateNumberDisabled(data.majorityElectionCandidateNumberDisabled);
     return result;
   }
 
@@ -170,6 +172,8 @@ export class CantonSettingsService extends GrpcService<CantonSettingsServiceProm
     result.setEnableAdditionalCandidateFields(data.enableAdditionalCandidateFields);
     result.setMonitoringAutoShowPoliticalBusinesses(data.monitoringAutoShowPoliticalBusinesses);
     result.setMonitoringUseImprovedUi(data.monitoringUseImprovedUi);
+    result.setMajorityElectionBundlesWithBallotGroupEnabled(data.majorityElectionBundlesWithBallotGroupEnabled);
+    result.setMajorityElectionCandidateNumberDisabled(data.majorityElectionCandidateNumberDisabled);
     return result;
   }
 

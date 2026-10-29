@@ -4,7 +4,7 @@
  * For license information see LICENSE file.
  */
 
-import { DialogService, LanguageService, SnackbarService } from '@abraxas/voting-lib';
+import { DialogService, GRPC_NOT_FOUND_STATUS_CODE, isErrorCode, LanguageService, SnackbarService } from '@abraxas/voting-lib';
 import { Component, Input, OnDestroy, OnInit, inject, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomainOfInfluenceService } from '../../core/domain-of-influence.service';
@@ -15,6 +15,7 @@ import {
   ProportionalElection,
   ProportionalElectionCandidate,
   ProportionalElectionList,
+  ProportionalElectionListUnion,
   ProportionalElectionMandateAlgorithm,
   updateProportionalElectionListCandidateCountOk,
 } from '../../core/models/proportional-election.model';
@@ -237,7 +238,16 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
   }
 
   private async loadLists(): Promise<void> {
-    this.lists = await this.proportionalElectionService.listLists(this.proportionalElection.id);
+    try {
+      this.lists = await this.proportionalElectionService.listLists(this.proportionalElection.id);
+    } catch (e) {
+      if (!isErrorCode(e, GRPC_NOT_FOUND_STATUS_CODE)) {
+        throw e;
+      }
+
+      // Could not load lists because of NOT_FOUND -> the election has just been created and the events are not processed yet
+      this.lists = [];
+    }
 
     if (this.placeholderList.shortDescription.size === 0) {
       const name = this.i18n.instant('PROPORTIONAL_ELECTION.LIST.EMPTY_LIST_PLACEHOLDER');
@@ -248,7 +258,18 @@ export class ProportionalElectionListsComponent implements OnInit, OnDestroy {
     this.lists.push(this.placeholderList);
 
     if (this.hasHagenbachBischoffDistribution) {
-      const listUnions = await this.proportionalElectionService.listListUnions(this.proportionalElection.id);
+      let listUnions: ProportionalElectionListUnion[] = [];
+
+      try {
+        listUnions = await this.proportionalElectionService.listListUnions(this.proportionalElection.id);
+      } catch (e) {
+        if (!isErrorCode(e, GRPC_NOT_FOUND_STATUS_CODE)) {
+          throw e;
+        }
+
+        // Could not load list unions because of NOT_FOUND -> the election has just been created and the events are not processed yet
+      }
+
       this.validListUnions = listUnions.length === 0 || listUnions.every(u => u.proportionalElectionListIds.length > 1);
     }
   }

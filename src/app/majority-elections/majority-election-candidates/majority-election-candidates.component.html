@@ -27,6 +27,7 @@
                                         [readonly]="readonly"
                                         [eVotingEverApproved]="eVotingEverApproved"
                                         [reordering]="reordering"
+                                        [hidePosition]="hidePosition"
                                         (candidatesReordered)="reorderCandidates($event)"
                                         (edit)="editCandidate($event)"
                                         (delete)="deleteCandidate($event)"
@@ -43,6 +44,7 @@
       [candidateLocalityRequired]="candidateLocalityRequired"
       [candidateOriginRequired]="candidateOriginRequired"
       [hideOccupationTitle]="hideOccupationTitle"
+      [hidePosition]="hidePosition"
       [enableAdditionalCandidateFields]="enableAdditionalCandidateFields"
       [domainOfInfluenceType]="currentDomainOfInfluence?.type"
       [parties]="parties">

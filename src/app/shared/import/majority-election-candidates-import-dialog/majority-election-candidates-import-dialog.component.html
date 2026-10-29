@@ -16,18 +16,20 @@
         (importsChange)="importFilesChanged($event)"
       ></app-import-file-select>
     </bc-simple-step>
-    <bc-simple-step
-      [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.CANDIDATE_STEP' | translate"
-      [disabled]="!lastStep"
-      [status]="lastStep ? 'progress' : 'open'"
-    >
+    @if (!skipReordering) {
+      <bc-simple-step
+        [label]="'IMPORT.IMPORT_MAJORITY_ELECTION_CANDIDATES.CANDIDATE_STEP' | translate"
+        [disabled]="!lastStep"
+        [status]="lastStep ? 'progress' : 'open'"
+      >
         <app-majority-election-candidate-list
           [candidates]="candidates"
           [hideActionButtons]="true"
           (candidatesReordered)="reorderCandidates($event)"
           class="mb-2">
         </app-majority-election-candidate-list>
-    </bc-simple-step>
+      </bc-simple-step>
+    }
   </bc-simple-stepper>
 
   <vo-lib-button-bar footer

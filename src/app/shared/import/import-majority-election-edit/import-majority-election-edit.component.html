@@ -54,6 +54,7 @@
 
   <app-majority-election-candidate-list [candidates]="candidates"
                                         [hideActionButtons]="true"
+                                        [hidePosition]="domainOfInfluenceDefaults?.majorityElectionCandidateNumberDisabled ?? false"
                                         (candidatesReordered)="reorderCandidates($event)"
                                         class="mb-2">
   </app-majority-election-candidate-list>
@@ -78,6 +79,7 @@
 
         <app-majority-election-candidate-list [candidates]="secondaryMajorityElectionCandidatesByElectionId[secondaryMajorityElection.id]"
                                               [hideActionButtons]="true"
+                                              [hidePosition]="domainOfInfluenceDefaults?.majorityElectionCandidateNumberDisabled ?? false"
                                               (candidatesReordered)="
                                                 reorderSecondaryElectionCandidates($event, secondaryMajorityElection.id)
                                               "

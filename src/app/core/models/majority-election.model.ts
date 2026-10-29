@@ -83,6 +83,7 @@ export function newMajorityElectionCandidate(
   position: number,
   majorityElectionId: string,
   hasReportingType: boolean,
+  useNumberAsPosition: boolean,
 ): MajorityElectionCandidate {
   return {
     id: '',
@@ -92,7 +93,7 @@ export function newMajorityElectionCandidate(
     politicalLastName: '',
     incumbent: false,
     locality: '',
-    number: '',
+    number: useNumberAsPosition ? String(position) : '',
     occupation: new Map<string, string>(),
     title: '',
     occupationTitle: new Map<string, string>(),

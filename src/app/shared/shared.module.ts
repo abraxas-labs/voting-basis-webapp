@@ -91,6 +91,7 @@ import { VoteResultAlgorithmSelectionComponent } from './vote-result-algorithm-s
 import { CertificatesComponent } from './certificates/certificates.component';
 import { CertificateCardComponent } from './certificates/certificate-card/certificate-card.component';
 import { UploadCertificateDialogComponent } from './certificates/upload-certificate-dialog/upload-certificate-dialog.component';
+import { StoreActiveFiltersDirective } from './store-active-filters/store-active-filters.directive';
 
 const components = [
   ContactPersonEditComponent,
@@ -132,6 +133,7 @@ const components = [
   CertificatesComponent,
   CertificateCardComponent,
   UploadCertificateDialogComponent,
+  StoreActiveFiltersDirective,
 ];
 
 const pipes = [GetTranslationPipe, SafeHtmlPipe, CanEditBallotGroupPipe];

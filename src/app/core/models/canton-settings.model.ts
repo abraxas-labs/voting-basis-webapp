@@ -94,6 +94,8 @@ export function newCantonSettings(): CantonSettings {
     enableAdditionalCandidateFields: false,
     monitoringAutoShowPoliticalBusinesses: false,
     monitoringUseImprovedUi: false,
+    majorityElectionBundlesWithBallotGroupEnabled: false,
+    majorityElectionCandidateNumberDisabled: false,
   };
 }
 

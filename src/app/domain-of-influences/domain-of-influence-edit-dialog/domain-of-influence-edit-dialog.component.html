@@ -218,8 +218,8 @@
     <h3 class="mb-1" translate>DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.TITLE</h3>
     <app-export-configurations
       [readonly]="readonly || !canEditEverything"
-      [configurations]="data.exportConfigurationsList"
-      (configurationsChange)="data.exportConfigurationsList = $event; contentChanged()"
+      [configurations]="data.exportConfigurations"
+      (configurationsChange)="data.exportConfigurations = $event; contentChanged()"
       class="mb-4"
     ></app-export-configurations>
 

@@ -107,5 +107,21 @@
           [subscriptSizing]="'dynamic'"></bc-checkbox>
       </div>
     }
+
+    @if (bundlesWithBallotGroupEnabled) {
+      <div class="flex-grid">
+        <bc-label class="full-width col-span-2" [label]="'MAJORITY_ELECTION.BUNDLES_WITH_BALLOT_GROUP.TITLE' | translate"></bc-label>
+        <bc-checkbox [checked]="data.bundlesWithBallotGroupEnabled"
+                     (checkedChange)="data.bundlesWithBallotGroupEnabled = $event; contentChanged.emit()"
+                     [disabled]="testingPhaseEnded || locked || readonly"
+                     [label]="'MAJORITY_ELECTION.BUNDLES_WITH_BALLOT_GROUP.ENABLED' | translate"
+                     [subscriptSizing]="'dynamic'"></bc-checkbox>
+        <bc-checkbox [checked]="data.enforceBundlesWithBallotGroupEnabledForCountingCircles"
+                     (checkedChange)="data.enforceBundlesWithBallotGroupEnabledForCountingCircles = $event; contentChanged.emit()"
+                     [label]="'MAJORITY_ELECTION.BUNDLES_WITH_BALLOT_GROUP.ENFORCE_FOR_COUNTING_CIRCLES' | translate"
+                     [disabled]="testingPhaseEnded || locked || readonly"
+                     [subscriptSizing]="'dynamic'"></bc-checkbox>
+      </div>
+    }
   }
 </div>

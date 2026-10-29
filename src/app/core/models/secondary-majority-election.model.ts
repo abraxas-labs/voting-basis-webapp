@@ -46,9 +46,10 @@ export function newSecondaryMajorityElectionCandidate(
   position: number,
   majorityElectionId: string,
   hasReportingType: boolean,
+  useNumberAsPosition: boolean,
 ): SecondaryMajorityElectionCandidate {
   return {
-    ...newMajorityElectionCandidate(position, majorityElectionId, hasReportingType),
+    ...newMajorityElectionCandidate(position, majorityElectionId, hasReportingType, useNumberAsPosition),
     isReferenced: true,
     referencedCandidateId: '',
   };

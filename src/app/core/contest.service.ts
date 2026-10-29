@@ -185,6 +185,7 @@ export class ContestService extends GrpcService<ContestServicePromiseClient> {
     return {
       id: data.getId(),
       date: data.getDate()!.toDate(),
+      description: toJsMap(data.getDescriptionMap()),
     };
   }
 

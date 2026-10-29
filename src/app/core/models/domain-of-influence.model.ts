@@ -14,6 +14,7 @@ import { DomainOfInfluenceCountingCircle } from './counting-circle.model';
 import { DomainOfInfluenceParty } from './domain-of-influence-party.model';
 import { PlausibilisationConfiguration } from './plausibilisation.model';
 import { VotingCardColor } from '@abraxas/voting-basis-service-proto/grpc/shared/voting_card_color_pb';
+import { ExportConfiguration } from './export.model';
 
 export { DomainOfInfluenceProto };
 export { DomainOfInfluenceTypeProto as DomainOfInfluenceType };
@@ -23,7 +24,7 @@ export function newDomainOfInfluence(): DomainOfInfluence {
   return {
     canton: DomainOfInfluenceCantonProto.DOMAIN_OF_INFLUENCE_CANTON_UNSPECIFIED,
     contactPerson: newContactPerson(),
-    exportConfigurationsList: [],
+    exportConfigurations: [],
     code: '',
     bfs: '',
     type: DomainOfInfluenceTypeProto.DOMAIN_OF_INFLUENCE_TYPE_UNSPECIFIED,
@@ -64,7 +65,14 @@ export function newDomainOfInfluence(): DomainOfInfluence {
 
 export interface DomainOfInfluence extends Omit<
   DomainOfInfluenceProto.AsObject,
-  'info' | 'childrenList' | 'plausibilisationConfiguration' | 'partiesList' | 'superiorAuthorityDomainOfInfluence' | 'eVoting' | 'eCounting'
+  | 'info'
+  | 'childrenList'
+  | 'plausibilisationConfiguration'
+  | 'partiesList'
+  | 'superiorAuthorityDomainOfInfluence'
+  | 'eVoting'
+  | 'eCounting'
+  | 'exportConfigurationsList'
 > {
   createdOn?: Date;
   modifiedOn?: Date;
@@ -76,6 +84,7 @@ export interface DomainOfInfluence extends Omit<
   superiorAuthorityDomainOfInfluence?: DomainOfInfluence;
   eVoting?: boolean;
   eCounting?: boolean;
+  exportConfigurations: ExportConfiguration[];
 }
 
 export interface DomainOfInfluenceLevel {

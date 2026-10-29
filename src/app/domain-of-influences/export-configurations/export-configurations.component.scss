@@ -1,6 +1,10 @@
 :host {
+  display: block;
+}
+
+.configs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr) repeat(2, max-content);
+  grid-template-columns: repeat(3, 1fr) repeat(4, max-content);
   gap: 0.5rem;
   align-items: center;
 }

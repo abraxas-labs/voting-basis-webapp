@@ -288,7 +288,10 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       contest: this.contest,
       cantonDefaults: this.cantonDefaults,
     };
-    this.dialogService.open(PoliticalBusinessUnionsDialogComponent, dialogData);
+    const dialogRef = this.dialogService.open(PoliticalBusinessUnionsDialogComponent, dialogData);
+    dialogRef.afterClosed().subscribe(() => {
+      this.load(this.route.snapshot.params['contestId']);
+    });
   }
 
   public importPoliticalBusinesses(): void {
@@ -405,10 +408,6 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           'ProportionalElectionEVotingApprovalUpdated',
           'ProportionalElectionAfterTestingPhaseUpdated',
           'ProportionalElectionDeleted',
-          'ProportionalElectionUnionCreated',
-          'ProportionalElectionUnionUpdated',
-          'ProportionalElectionUnionEntriesUpdated',
-          'ProportionalElectionUnionDeleted',
 
           'MajorityElectionCreated',
           'MajorityElectionUpdated',
@@ -416,10 +415,6 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           'MajorityElectionEVotingApprovalUpdated',
           'MajorityElectionDeleted',
           'MajorityElectionAfterTestingPhaseUpdated',
-          'MajorityElectionUnionCreated',
-          'MajorityElectionUnionUpdated',
-          'MajorityElectionUnionEntriesUpdated',
-          'MajorityElectionUnionDeleted',
 
           'SecondaryMajorityElectionCreated',
           'SecondaryMajorityElectionUpdated',
@@ -539,14 +534,6 @@ export class ContestDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.replacePoliticalBusinessInUi(election);
         break;
       }
-      case 'MajorityElectionUnionCreated':
-      case 'MajorityElectionUnionUpdated':
-      case 'MajorityElectionUnionEntriesUpdated':
-      case 'MajorityElectionUnionDeleted':
-      case 'ProportionalElectionUnionCreated':
-      case 'ProportionalElectionUnionUpdated':
-      case 'ProportionalElectionUnionEntriesUpdated':
-      case 'ProportionalElectionUnionDeleted':
       case 'ElectionGroupCreated':
       case 'ElectionGroupDeleted': {
         // only the primary election needs to be updated,

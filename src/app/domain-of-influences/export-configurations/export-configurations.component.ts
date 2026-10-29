@@ -22,6 +22,7 @@ import { ExportProvider } from '@abraxas/voting-basis-service-proto/grpc/shared/
 export class ExportConfigurationsComponent {
   private readonly dialogService = inject(DialogService);
   private readonly enumUtil = inject(EnumUtil);
+  public readonly exportProviders: typeof ExportProvider = ExportProvider;
 
   public providers: EnumItemDescription<ExportProvider>[] = [];
 
@@ -41,6 +42,16 @@ export class ExportConfigurationsComponent {
       ExportProvider,
       'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDERS.',
     );
+  }
+
+  public changeProvider(config: ExportConfiguration, provider: ExportProvider): void {
+    config.provider = provider;
+    if (provider === ExportProvider.EXPORT_PROVIDER_SEDEX && !config.sedexConfiguration) {
+      config.sedexConfiguration = {
+        senderId: '',
+        recipientIds: '',
+      };
+    }
   }
 
   public async assign(config: ExportConfiguration): Promise<void> {

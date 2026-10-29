@@ -1,45 +1,68 @@
-@for (config of configurations || []; track config; let index = $index) {
-  <bc-text
-    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.DESCRIPTION' | translate"
-    [required]="true"
-    [readonly]="readonly"
-    [(value)]="config.description"
-    [subscriptSizing]="'dynamic'"
-  ></bc-text>
-  <bc-text
-    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.EAI_MESSAGE_TYPE' | translate"
-    [required]="true"
-    [readonly]="readonly"
-    [(value)]="config.eaiMessageType"
-    [subscriptSizing]="'dynamic'"
-  ></bc-text>
-  <bc-dropdown
-    [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDER' | translate"
-    [items]="providers"
-    displayExpr="description"
-    valueExpr="value"
-    [required]="true"
-    [readonly]="readonly"
-    [(value)]="config.provider"
-    [subscriptSizing]="'dynamic'"
-  ></bc-dropdown>
-  @if (!readonly) {
-    <bc-button
-      variant="tertiary"
-      icon="plus"
-      class="pt-3"
-      [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ASSIGN_OPEN' | translate"
-      (buttonClick)="assign(config)"
-    ></bc-button>
-  } @else {
-    <div></div>
+<div class="configs">
+  @for (config of configurations || []; track config; let index = $index) {
+    <bc-text
+      [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.DESCRIPTION' | translate"
+      [required]="true"
+      [readonly]="readonly"
+      [(value)]="config.description"
+      [subscriptSizing]="'dynamic'"
+    ></bc-text>
+    <bc-text
+      [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.EAI_MESSAGE_TYPE' | translate"
+      [required]="true"
+      [readonly]="readonly"
+      [(value)]="config.eaiMessageType"
+      [subscriptSizing]="'dynamic'"
+    ></bc-text>
+    <bc-dropdown
+      [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.PROVIDER' | translate"
+      [items]="providers"
+      displayExpr="description"
+      valueExpr="value"
+      [required]="true"
+      [readonly]="readonly"
+      [value]="config.provider"
+      (valueChange)="changeProvider(config, $event)"
+      [subscriptSizing]="'dynamic'"
+    ></bc-dropdown>
+    @if (config.provider === exportProviders.EXPORT_PROVIDER_SEDEX && config.sedexConfiguration) {
+      <bc-text
+        [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.SEDEX_SENDER_ID' | translate"
+        [required]="true"
+        [readonly]="readonly"
+        [(value)]="config.sedexConfiguration.senderId"
+        [subscriptSizing]="'dynamic'"
+      ></bc-text>
+      <bc-text
+        [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.SEDEX_RECIPIENT_IDS' | translate"
+        [required]="true"
+        [readonly]="readonly"
+        [(value)]="config.sedexConfiguration.recipientIds"
+        [subscriptSizing]="'dynamic'"
+      ></bc-text>
+    } @else {
+      <div></div>
+      <div></div>
+    }
+    @if (!readonly) {
+      <bc-button
+        variant="tertiary"
+        icon="plus"
+        class="pt-3"
+        [label]="'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.ASSIGN_OPEN' | translate"
+        (buttonClick)="assign(config)"
+      ></bc-button>
+    } @else {
+      <div></div>
+    }
+    @if (!readonly) {
+      <bc-icon icon="trash" iconColor="error" class="pt-3 clickable" (click)="remove(index)"></bc-icon>
+    } @else {
+      <div></div>
+    }
   }
-  @if (!readonly) {
-    <bc-icon icon="trash" iconColor="error" class="pt-2 clickable" (click)="remove(index)"></bc-icon>
-  } @else {
-    <div></div>
-  }
-}
+</div>
+
 @if (readonly) {
   <p class="no-data">{{ 'DOMAIN_OF_INFLUENCE.AUSMITTLUNG.EXPORT_CONFIGURATION.NO_DATA' | translate }}</p>
 }
